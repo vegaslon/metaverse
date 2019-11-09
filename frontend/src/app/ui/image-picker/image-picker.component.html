@@ -1,0 +1,49 @@
+<table>
+	<tr style="vertical-align: top;">
+		<td>
+			<input
+				hidden
+				(change)="onImageChanged($event)"
+				#imageInput
+				type="file"
+				[accept]="accept"
+			/>
+			<button
+				type="button"
+				mat-flat-button
+				color="primary"
+				(click)="imageInput.click()"
+				[disabled]="disabled"
+			>
+				<mat-icon>photo</mat-icon> Choose {{ name }}
+			</button>
+			<button
+				type="button"
+				mat-flat-button
+				*ngIf="imageInput.value"
+				(click)="onImageClear()"
+				[disabled]="disabled"
+			>
+				Clear {{ name }}
+			</button>
+		</td>
+		<td style="width: 100%;">
+			<p style="margin-left: 8px; margin-top: 8px;" class="image-text">
+				{{
+					imageInput.value
+						? imageInput.files[0].name
+						: "No " + name + " selected"
+				}}
+			</p>
+		</td>
+		<td>
+			<div
+				class="image-preview"
+				[class.circle]="circle"
+				[ngStyle]="{
+					backgroundImage: 'url(' + imagePreview + ')'
+				}"
+			></div>
+		</td>
+	</tr>
+</table>

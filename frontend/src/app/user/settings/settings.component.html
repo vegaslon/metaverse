@@ -1,0 +1,128 @@
+<div class="container">
+	<h1 style="padding: 16px 0;">User settings</h1>
+	<div class="row">
+		<div class="col-md-6">
+			<mat-card>
+				<h2>Update details</h2>
+
+				<mat-card
+					*ngIf="imageFormError"
+					class="bg-warn"
+					style="
+						margin-bottom: 16px; color: #fff;
+						display: flex; vertical-align: middle;
+					"
+				>
+					<mat-icon style="margin-top: -3px; margin-right: 8px;">
+						error_outline
+					</mat-icon>
+					{{ imageFormError }}
+				</mat-card>
+
+				<form [formGroup]="userForm" (ngSubmit)="onUserFormSubmit()">
+					<mat-form-field style="width: 100%;">
+						<input
+							matInput
+							type="email"
+							placeholder="Email"
+							formControlName="email"
+						/>
+						<mat-error *ngIf="userForm.hasError('email', 'email')">
+							Email is invalid
+						</mat-error>
+						<mat-error
+							*ngIf="userForm.hasError('maxlength', 'email')"
+						>
+							Email is too long
+						</mat-error>
+					</mat-form-field>
+
+					<mat-form-field style="width: 100%;">
+						<input
+							matInput
+							type="password"
+							placeholder="Password"
+							formControlName="password"
+						/>
+						<mat-error
+							*ngIf="userForm.hasError('minlength', 'password')"
+						>
+							Password is too short
+						</mat-error>
+						<mat-error
+							*ngIf="userForm.hasError('maxlength', 'password')"
+						>
+							Password is too long
+						</mat-error>
+					</mat-form-field>
+
+					<button
+						type="submit"
+						mat-stroked-button
+						[disabled]="
+							userForm.pristine ||
+							userForm.invalid ||
+							userForm.disabled
+						"
+					>
+						<mat-icon>save</mat-icon> Save changes
+					</button>
+				</form>
+
+				<div *ngIf="userForm.disabled">
+					<br />
+					<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+				</div>
+			</mat-card>
+		</div>
+		<div class="col-md-6">
+			<mat-card>
+				<table style="width: 100%">
+					<tr style="vertical-align: top;">
+						<td>
+							<h2 style="margin: 0">Update image</h2>
+						</td>
+						<td style="text-align: right;">
+							<img class="user-image" [src]="userImageSrc" />
+						</td>
+					</tr>
+				</table>
+
+				<mat-card
+					*ngIf="imageFormError"
+					class="bg-warn"
+					style="
+						margin-bottom: 16px; color: #fff;
+						display: flex; vertical-align: middle;
+					"
+				>
+					<mat-icon style="margin-top: -3px; margin-right: 8px;">
+						error_outline
+					</mat-icon>
+					{{ imageFormError }}
+				</mat-card>
+
+				<form [formGroup]="imageForm" (ngSubmit)="onImageFormSubmit()">
+					<app-image-picker
+						circle="true"
+						name="image"
+						formControlName="image"
+					></app-image-picker>
+
+					<button
+						type="submit"
+						mat-stroked-button
+						[disabled]="imageForm.invalid || imageForm.disabled"
+					>
+						<mat-icon>save</mat-icon> Save changes
+					</button>
+				</form>
+
+				<div *ngIf="imageForm.disabled">
+					<br />
+					<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+				</div>
+			</mat-card>
+		</div>
+	</div>
+</div>

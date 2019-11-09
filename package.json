@@ -1,0 +1,10 @@
+{
+	"name": "tivoli-cloud",
+	"scripts": {
+		"format": "prettier --write **/*.ts **/*.json **/*.html **/*.scss",
+		"start:server": "cd server && npm run start",
+		"start:frontend": "cd frontend && npm run start",
+		"build:server": "cd server && npm run build",
+		"build:frontend": "cd frontend && npm run build"
+	}
+}

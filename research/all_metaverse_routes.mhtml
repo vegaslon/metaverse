@@ -1,0 +1,5134 @@
+From: <Saved by Blink>
+Snapshot-Content-Location: https://staging.highfidelity.com/vendor/bundle/ruby/2.3.0/bin/unicorn_rails
+Subject: Action Controller: Exception caught
+Date: Sat, 9 Nov 2019 12:38:26 -0000
+MIME-Version: 1.0
+Content-Type: multipart/related;
+	type="text/html";
+	boundary="----MultipartBoundary--Dq9sQVEGwg2hR5yktPzDHb9k4LFmx4okRx7Yg4llep----"
+
+
+------MultipartBoundary--Dq9sQVEGwg2hR5yktPzDHb9k4LFmx4okRx7Yg4llep----
+Content-Type: text/html
+Content-ID: <frame-61143B89C789DD3A6F732C2F22D2BF65@mhtml.blink>
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://staging.highfidelity.com/vendor/bundle/ruby/2.3.0/bin/unicorn_rails
+
+<!DOCTYPE html><html lang=3D"en"><head><meta http-equiv=3D"Content-Type" co=
+ntent=3D"text/html; charset=3DUTF-8"><link rel=3D"stylesheet" type=3D"text/=
+css" href=3D"cid:css-9e994026-9c3e-456b-9441-ca92aa93ae47@mhtml.blink" />
+ =20
+  <title>Action Controller: Exception caught</title>
+ =20
+
+ =20
+</head>
+<body cz-shortcut-listen=3D"true">
+
+<header>
+  <h1>Routing Error</h1>
+</header>
+<div id=3D"container">
+  <h2>No route matches [GET] "/vendor/bundle/ruby/2.3.0/bin/unicorn_rails"<=
+/h2>
+
+ =20
+<p><code>Rails.root: /usr/share/hifi/metaverse</code></p>
+
+<div id=3D"traces">
+    <a href=3D"https://staging.highfidelity.com/vendor/bundle/ruby/2.3.0/bi=
+n/unicorn_rails#">Application Trace</a> |
+    <a href=3D"https://staging.highfidelity.com/vendor/bundle/ruby/2.3.0/bi=
+n/unicorn_rails#">Framework Trace</a> |
+    <a href=3D"https://staging.highfidelity.com/vendor/bundle/ruby/2.3.0/bi=
+n/unicorn_rails#">Full Trace</a>=20
+
+    <div id=3D"Application-Trace" style=3D"display: block;">
+      <pre><code></code></pre>
+    </div>
+    <div id=3D"Framework-Trace" style=3D"display: none;">
+      <pre><code><a class=3D"trace-frames" data-frame-id=3D"0" href=3D"http=
+s://staging.highfidelity.com/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">v=
+endor/bundle/ruby/2.3.0/gems/actionpack-4.2.11.1/lib/action_dispatch/middle=
+ware/debug_exceptions.rb:21:in `call'</a><br><a class=3D"trace-frames" data=
+-frame-id=3D"1" href=3D"https://staging.highfidelity.com/vendor/bundle/ruby=
+/2.3.0/bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/gems/newrelic_rpm-3.18.=
+0.329/lib/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call=
+'</a><br><a class=3D"trace-frames" data-frame-id=3D"2" href=3D"https://stag=
+ing.highfidelity.com/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor/bu=
+ndle/ruby/2.3.0/gems/actionpack-4.2.11.1/lib/action_dispatch/middleware/sho=
+w_exceptions.rb:30:in `call'</a><br><a class=3D"trace-frames" data-frame-id=
+=3D"3" href=3D"https://staging.highfidelity.com/vendor/bundle/ruby/2.3.0/bi=
+n/unicorn_rails#">vendor/bundle/ruby/2.3.0/gems/newrelic_rpm-3.18.0.329/lib=
+/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call'</a><br>=
+<a class=3D"trace-frames" data-frame-id=3D"4" href=3D"https://staging.highf=
+idelity.com/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor/bundle/ruby=
+/2.3.0/gems/lograge-0.3.6/lib/lograge/rails_ext/rack/logger.rb:15:in `call_=
+app'</a><br><a class=3D"trace-frames" data-frame-id=3D"5" href=3D"https://s=
+taging.highfidelity.com/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor=
+/bundle/ruby/2.3.0/gems/railties-4.2.11.1/lib/rails/rack/logger.rb:20:in `b=
+lock in call'</a><br><a class=3D"trace-frames" data-frame-id=3D"6" href=3D"=
+https://staging.highfidelity.com/vendor/bundle/ruby/2.3.0/bin/unicorn_rails=
+#">vendor/bundle/ruby/2.3.0/gems/activesupport-4.2.11.1/lib/active_support/=
+tagged_logging.rb:68:in `block in tagged'</a><br><a class=3D"trace-frames" =
+data-frame-id=3D"7" href=3D"https://staging.highfidelity.com/vendor/bundle/=
+ruby/2.3.0/bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/gems/activesupport-=
+4.2.11.1/lib/active_support/tagged_logging.rb:26:in `tagged'</a><br><a clas=
+s=3D"trace-frames" data-frame-id=3D"8" href=3D"https://staging.highfidelity=
+.com/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/=
+gems/activesupport-4.2.11.1/lib/active_support/tagged_logging.rb:68:in `tag=
+ged'</a><br><a class=3D"trace-frames" data-frame-id=3D"9" href=3D"https://s=
+taging.highfidelity.com/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor=
+/bundle/ruby/2.3.0/gems/railties-4.2.11.1/lib/rails/rack/logger.rb:20:in `c=
+all'</a><br><a class=3D"trace-frames" data-frame-id=3D"10" href=3D"https://=
+staging.highfidelity.com/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendo=
+r/bundle/ruby/2.3.0/gems/newrelic_rpm-3.18.0.329/lib/new_relic/agent/instru=
+mentation/middleware_tracing.rb:96:in `call'</a><br><a class=3D"trace-frame=
+s" data-frame-id=3D"11" href=3D"https://staging.highfidelity.com/vendor/bun=
+dle/ruby/2.3.0/bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/gems/actionpack=
+-4.2.11.1/lib/action_dispatch/middleware/request_id.rb:21:in `call'</a><br>=
+<a class=3D"trace-frames" data-frame-id=3D"12" href=3D"https://staging.high=
+fidelity.com/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor/bundle/rub=
+y/2.3.0/gems/newrelic_rpm-3.18.0.329/lib/new_relic/agent/instrumentation/mi=
+ddleware_tracing.rb:96:in `call'</a><br><a class=3D"trace-frames" data-fram=
+e-id=3D"13" href=3D"https://staging.highfidelity.com/vendor/bundle/ruby/2.3=
+.0/bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/gems/rack-1.6.11/lib/rack/m=
+ethodoverride.rb:22:in `call'</a><br><a class=3D"trace-frames" data-frame-i=
+d=3D"14" href=3D"https://staging.highfidelity.com/vendor/bundle/ruby/2.3.0/=
+bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/gems/newrelic_rpm-3.18.0.329/l=
+ib/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call'</a><b=
+r><a class=3D"trace-frames" data-frame-id=3D"15" href=3D"https://staging.hi=
+ghfidelity.com/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor/bundle/r=
+uby/2.3.0/gems/rack-1.6.11/lib/rack/runtime.rb:18:in `call'</a><br><a class=
+=3D"trace-frames" data-frame-id=3D"16" href=3D"https://staging.highfidelity=
+.com/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/=
+gems/newrelic_rpm-3.18.0.329/lib/new_relic/agent/instrumentation/middleware=
+_tracing.rb:96:in `call'</a><br><a class=3D"trace-frames" data-frame-id=3D"=
+17" href=3D"https://staging.highfidelity.com/vendor/bundle/ruby/2.3.0/bin/u=
+nicorn_rails#">vendor/bundle/ruby/2.3.0/gems/activesupport-4.2.11.1/lib/act=
+ive_support/cache/strategy/local_cache_middleware.rb:28:in `call'</a><br><a=
+ class=3D"trace-frames" data-frame-id=3D"18" href=3D"https://staging.highfi=
+delity.com/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor/bundle/ruby/=
+2.3.0/gems/newrelic_rpm-3.18.0.329/lib/new_relic/agent/instrumentation/midd=
+leware_tracing.rb:96:in `call'</a><br><a class=3D"trace-frames" data-frame-=
+id=3D"19" href=3D"https://staging.highfidelity.com/vendor/bundle/ruby/2.3.0=
+/bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/gems/rack-1.6.11/lib/rack/sen=
+dfile.rb:113:in `call'</a><br><a class=3D"trace-frames" data-frame-id=3D"20=
+" href=3D"https://staging.highfidelity.com/vendor/bundle/ruby/2.3.0/bin/uni=
+corn_rails#">vendor/bundle/ruby/2.3.0/gems/newrelic_rpm-3.18.0.329/lib/new_=
+relic/agent/instrumentation/middleware_tracing.rb:96:in `call'</a><br><a cl=
+ass=3D"trace-frames" data-frame-id=3D"21" href=3D"https://staging.highfidel=
+ity.com/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor/bundle/ruby/2.3=
+.0/gems/actionpack-4.2.11.1/lib/action_dispatch/middleware/ssl.rb:24:in `ca=
+ll'</a><br><a class=3D"trace-frames" data-frame-id=3D"22" href=3D"https://s=
+taging.highfidelity.com/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor=
+/bundle/ruby/2.3.0/gems/newrelic_rpm-3.18.0.329/lib/new_relic/agent/instrum=
+entation/middleware_tracing.rb:96:in `call'</a><br><a class=3D"trace-frames=
+" data-frame-id=3D"23" href=3D"https://staging.highfidelity.com/vendor/bund=
+le/ruby/2.3.0/bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/gems/rack-cors-1=
+.0.3/lib/rack/cors.rb:95:in `call'</a><br><a class=3D"trace-frames" data-fr=
+ame-id=3D"24" href=3D"https://staging.highfidelity.com/vendor/bundle/ruby/2=
+.3.0/bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/gems/newrelic_rpm-3.18.0.=
+329/lib/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call'<=
+/a><br><a class=3D"trace-frames" data-frame-id=3D"25" href=3D"https://stagi=
+ng.highfidelity.com/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor/bun=
+dle/ruby/2.3.0/gems/rack-mini-profiler-0.10.6/lib/mini_profiler/profiler.rb=
+:171:in `call'</a><br><a class=3D"trace-frames" data-frame-id=3D"26" href=
+=3D"https://staging.highfidelity.com/vendor/bundle/ruby/2.3.0/bin/unicorn_r=
+ails#">vendor/bundle/ruby/2.3.0/gems/newrelic_rpm-3.18.0.329/lib/new_relic/=
+agent/instrumentation/middleware_tracing.rb:96:in `call'</a><br><a class=3D=
+"trace-frames" data-frame-id=3D"27" href=3D"https://staging.highfidelity.co=
+m/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/gem=
+s/railties-4.2.11.1/lib/rails/engine.rb:518:in `call'</a><br><a class=3D"tr=
+ace-frames" data-frame-id=3D"28" href=3D"https://staging.highfidelity.com/v=
+endor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/gems/r=
+ailties-4.2.11.1/lib/rails/application.rb:165:in `call'</a><br><a class=3D"=
+trace-frames" data-frame-id=3D"29" href=3D"https://staging.highfidelity.com=
+/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/gems=
+/newrelic_rpm-3.18.0.329/lib/new_relic/agent/instrumentation/middleware_tra=
+cing.rb:96:in `call'</a><br><a class=3D"trace-frames" data-frame-id=3D"30" =
+href=3D"https://staging.highfidelity.com/vendor/bundle/ruby/2.3.0/bin/unico=
+rn_rails#">vendor/bundle/ruby/2.3.0/gems/unicorn-5.0.1/lib/unicorn/http_ser=
+ver.rb:562:in `process_client'</a><br><a class=3D"trace-frames" data-frame-=
+id=3D"31" href=3D"https://staging.highfidelity.com/vendor/bundle/ruby/2.3.0=
+/bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/gems/unicorn-5.0.1/lib/unicor=
+n/http_server.rb:658:in `worker_loop'</a><br><a class=3D"trace-frames" data=
+-frame-id=3D"32" href=3D"https://staging.highfidelity.com/vendor/bundle/rub=
+y/2.3.0/bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/gems/unicorn-5.0.1/lib=
+/unicorn/http_server.rb:508:in `spawn_missing_workers'</a><br><a class=3D"t=
+race-frames" data-frame-id=3D"33" href=3D"https://staging.highfidelity.com/=
+vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/gems/=
+unicorn-5.0.1/lib/unicorn/http_server.rb:132:in `start'</a><br><a class=3D"=
+trace-frames" data-frame-id=3D"34" href=3D"https://staging.highfidelity.com=
+/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/gems=
+/unicorn-5.0.1/bin/unicorn_rails:209:in `&lt;top (required)&gt;'</a><br><a =
+class=3D"trace-frames" data-frame-id=3D"35" href=3D"https://staging.highfid=
+elity.com/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor/bundle/ruby/2=
+.3.0/bin/unicorn_rails:23:in `load'</a><br><a class=3D"trace-frames" data-f=
+rame-id=3D"36" href=3D"https://staging.highfidelity.com/vendor/bundle/ruby/=
+2.3.0/bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/bin/unicorn_rails:23:in =
+`&lt;main&gt;'</a><br></code></pre>
+    </div>
+    <div id=3D"Full-Trace" style=3D"display: none;">
+      <pre><code><a class=3D"trace-frames" data-frame-id=3D"0" href=3D"http=
+s://staging.highfidelity.com/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">v=
+endor/bundle/ruby/2.3.0/gems/actionpack-4.2.11.1/lib/action_dispatch/middle=
+ware/debug_exceptions.rb:21:in `call'</a><br><a class=3D"trace-frames" data=
+-frame-id=3D"1" href=3D"https://staging.highfidelity.com/vendor/bundle/ruby=
+/2.3.0/bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/gems/newrelic_rpm-3.18.=
+0.329/lib/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call=
+'</a><br><a class=3D"trace-frames" data-frame-id=3D"2" href=3D"https://stag=
+ing.highfidelity.com/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor/bu=
+ndle/ruby/2.3.0/gems/actionpack-4.2.11.1/lib/action_dispatch/middleware/sho=
+w_exceptions.rb:30:in `call'</a><br><a class=3D"trace-frames" data-frame-id=
+=3D"3" href=3D"https://staging.highfidelity.com/vendor/bundle/ruby/2.3.0/bi=
+n/unicorn_rails#">vendor/bundle/ruby/2.3.0/gems/newrelic_rpm-3.18.0.329/lib=
+/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call'</a><br>=
+<a class=3D"trace-frames" data-frame-id=3D"4" href=3D"https://staging.highf=
+idelity.com/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor/bundle/ruby=
+/2.3.0/gems/lograge-0.3.6/lib/lograge/rails_ext/rack/logger.rb:15:in `call_=
+app'</a><br><a class=3D"trace-frames" data-frame-id=3D"5" href=3D"https://s=
+taging.highfidelity.com/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor=
+/bundle/ruby/2.3.0/gems/railties-4.2.11.1/lib/rails/rack/logger.rb:20:in `b=
+lock in call'</a><br><a class=3D"trace-frames" data-frame-id=3D"6" href=3D"=
+https://staging.highfidelity.com/vendor/bundle/ruby/2.3.0/bin/unicorn_rails=
+#">vendor/bundle/ruby/2.3.0/gems/activesupport-4.2.11.1/lib/active_support/=
+tagged_logging.rb:68:in `block in tagged'</a><br><a class=3D"trace-frames" =
+data-frame-id=3D"7" href=3D"https://staging.highfidelity.com/vendor/bundle/=
+ruby/2.3.0/bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/gems/activesupport-=
+4.2.11.1/lib/active_support/tagged_logging.rb:26:in `tagged'</a><br><a clas=
+s=3D"trace-frames" data-frame-id=3D"8" href=3D"https://staging.highfidelity=
+.com/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/=
+gems/activesupport-4.2.11.1/lib/active_support/tagged_logging.rb:68:in `tag=
+ged'</a><br><a class=3D"trace-frames" data-frame-id=3D"9" href=3D"https://s=
+taging.highfidelity.com/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor=
+/bundle/ruby/2.3.0/gems/railties-4.2.11.1/lib/rails/rack/logger.rb:20:in `c=
+all'</a><br><a class=3D"trace-frames" data-frame-id=3D"10" href=3D"https://=
+staging.highfidelity.com/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendo=
+r/bundle/ruby/2.3.0/gems/newrelic_rpm-3.18.0.329/lib/new_relic/agent/instru=
+mentation/middleware_tracing.rb:96:in `call'</a><br><a class=3D"trace-frame=
+s" data-frame-id=3D"11" href=3D"https://staging.highfidelity.com/vendor/bun=
+dle/ruby/2.3.0/bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/gems/actionpack=
+-4.2.11.1/lib/action_dispatch/middleware/request_id.rb:21:in `call'</a><br>=
+<a class=3D"trace-frames" data-frame-id=3D"12" href=3D"https://staging.high=
+fidelity.com/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor/bundle/rub=
+y/2.3.0/gems/newrelic_rpm-3.18.0.329/lib/new_relic/agent/instrumentation/mi=
+ddleware_tracing.rb:96:in `call'</a><br><a class=3D"trace-frames" data-fram=
+e-id=3D"13" href=3D"https://staging.highfidelity.com/vendor/bundle/ruby/2.3=
+.0/bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/gems/rack-1.6.11/lib/rack/m=
+ethodoverride.rb:22:in `call'</a><br><a class=3D"trace-frames" data-frame-i=
+d=3D"14" href=3D"https://staging.highfidelity.com/vendor/bundle/ruby/2.3.0/=
+bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/gems/newrelic_rpm-3.18.0.329/l=
+ib/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call'</a><b=
+r><a class=3D"trace-frames" data-frame-id=3D"15" href=3D"https://staging.hi=
+ghfidelity.com/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor/bundle/r=
+uby/2.3.0/gems/rack-1.6.11/lib/rack/runtime.rb:18:in `call'</a><br><a class=
+=3D"trace-frames" data-frame-id=3D"16" href=3D"https://staging.highfidelity=
+.com/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/=
+gems/newrelic_rpm-3.18.0.329/lib/new_relic/agent/instrumentation/middleware=
+_tracing.rb:96:in `call'</a><br><a class=3D"trace-frames" data-frame-id=3D"=
+17" href=3D"https://staging.highfidelity.com/vendor/bundle/ruby/2.3.0/bin/u=
+nicorn_rails#">vendor/bundle/ruby/2.3.0/gems/activesupport-4.2.11.1/lib/act=
+ive_support/cache/strategy/local_cache_middleware.rb:28:in `call'</a><br><a=
+ class=3D"trace-frames" data-frame-id=3D"18" href=3D"https://staging.highfi=
+delity.com/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor/bundle/ruby/=
+2.3.0/gems/newrelic_rpm-3.18.0.329/lib/new_relic/agent/instrumentation/midd=
+leware_tracing.rb:96:in `call'</a><br><a class=3D"trace-frames" data-frame-=
+id=3D"19" href=3D"https://staging.highfidelity.com/vendor/bundle/ruby/2.3.0=
+/bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/gems/rack-1.6.11/lib/rack/sen=
+dfile.rb:113:in `call'</a><br><a class=3D"trace-frames" data-frame-id=3D"20=
+" href=3D"https://staging.highfidelity.com/vendor/bundle/ruby/2.3.0/bin/uni=
+corn_rails#">vendor/bundle/ruby/2.3.0/gems/newrelic_rpm-3.18.0.329/lib/new_=
+relic/agent/instrumentation/middleware_tracing.rb:96:in `call'</a><br><a cl=
+ass=3D"trace-frames" data-frame-id=3D"21" href=3D"https://staging.highfidel=
+ity.com/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor/bundle/ruby/2.3=
+.0/gems/actionpack-4.2.11.1/lib/action_dispatch/middleware/ssl.rb:24:in `ca=
+ll'</a><br><a class=3D"trace-frames" data-frame-id=3D"22" href=3D"https://s=
+taging.highfidelity.com/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor=
+/bundle/ruby/2.3.0/gems/newrelic_rpm-3.18.0.329/lib/new_relic/agent/instrum=
+entation/middleware_tracing.rb:96:in `call'</a><br><a class=3D"trace-frames=
+" data-frame-id=3D"23" href=3D"https://staging.highfidelity.com/vendor/bund=
+le/ruby/2.3.0/bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/gems/rack-cors-1=
+.0.3/lib/rack/cors.rb:95:in `call'</a><br><a class=3D"trace-frames" data-fr=
+ame-id=3D"24" href=3D"https://staging.highfidelity.com/vendor/bundle/ruby/2=
+.3.0/bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/gems/newrelic_rpm-3.18.0.=
+329/lib/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call'<=
+/a><br><a class=3D"trace-frames" data-frame-id=3D"25" href=3D"https://stagi=
+ng.highfidelity.com/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor/bun=
+dle/ruby/2.3.0/gems/rack-mini-profiler-0.10.6/lib/mini_profiler/profiler.rb=
+:171:in `call'</a><br><a class=3D"trace-frames" data-frame-id=3D"26" href=
+=3D"https://staging.highfidelity.com/vendor/bundle/ruby/2.3.0/bin/unicorn_r=
+ails#">vendor/bundle/ruby/2.3.0/gems/newrelic_rpm-3.18.0.329/lib/new_relic/=
+agent/instrumentation/middleware_tracing.rb:96:in `call'</a><br><a class=3D=
+"trace-frames" data-frame-id=3D"27" href=3D"https://staging.highfidelity.co=
+m/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/gem=
+s/railties-4.2.11.1/lib/rails/engine.rb:518:in `call'</a><br><a class=3D"tr=
+ace-frames" data-frame-id=3D"28" href=3D"https://staging.highfidelity.com/v=
+endor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/gems/r=
+ailties-4.2.11.1/lib/rails/application.rb:165:in `call'</a><br><a class=3D"=
+trace-frames" data-frame-id=3D"29" href=3D"https://staging.highfidelity.com=
+/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/gems=
+/newrelic_rpm-3.18.0.329/lib/new_relic/agent/instrumentation/middleware_tra=
+cing.rb:96:in `call'</a><br><a class=3D"trace-frames" data-frame-id=3D"30" =
+href=3D"https://staging.highfidelity.com/vendor/bundle/ruby/2.3.0/bin/unico=
+rn_rails#">vendor/bundle/ruby/2.3.0/gems/unicorn-5.0.1/lib/unicorn/http_ser=
+ver.rb:562:in `process_client'</a><br><a class=3D"trace-frames" data-frame-=
+id=3D"31" href=3D"https://staging.highfidelity.com/vendor/bundle/ruby/2.3.0=
+/bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/gems/unicorn-5.0.1/lib/unicor=
+n/http_server.rb:658:in `worker_loop'</a><br><a class=3D"trace-frames" data=
+-frame-id=3D"32" href=3D"https://staging.highfidelity.com/vendor/bundle/rub=
+y/2.3.0/bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/gems/unicorn-5.0.1/lib=
+/unicorn/http_server.rb:508:in `spawn_missing_workers'</a><br><a class=3D"t=
+race-frames" data-frame-id=3D"33" href=3D"https://staging.highfidelity.com/=
+vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/gems/=
+unicorn-5.0.1/lib/unicorn/http_server.rb:132:in `start'</a><br><a class=3D"=
+trace-frames" data-frame-id=3D"34" href=3D"https://staging.highfidelity.com=
+/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/gems=
+/unicorn-5.0.1/bin/unicorn_rails:209:in `&lt;top (required)&gt;'</a><br><a =
+class=3D"trace-frames" data-frame-id=3D"35" href=3D"https://staging.highfid=
+elity.com/vendor/bundle/ruby/2.3.0/bin/unicorn_rails#">vendor/bundle/ruby/2=
+.3.0/bin/unicorn_rails:23:in `load'</a><br><a class=3D"trace-frames" data-f=
+rame-id=3D"36" href=3D"https://staging.highfidelity.com/vendor/bundle/ruby/=
+2.3.0/bin/unicorn_rails#">vendor/bundle/ruby/2.3.0/bin/unicorn_rails:23:in =
+`&lt;main&gt;'</a><br></code></pre>
+    </div>
+
+ =20
+</div>
+
+
+    <h2>
+      Routes
+    </h2>
+
+    <p>
+      Routes match in priority from top to bottom
+    </p>
+
+   =20
+<table id=3D"route_table" class=3D"route_table">
+  <thead>
+    <tr>
+      <th>Helper</th>
+      <th>HTTP Verb</th>
+      <th>Path</th>
+      <th>Controller#Action</th>
+    </tr>
+    <tr class=3D"bottom">
+      <th>
+        <a data-route-helper=3D"_path" title=3D"Returns a relative path (wi=
+thout the http or domain)" href=3D"https://staging.highfidelity.com/vendor/=
+bundle/ruby/2.3.0/bin/unicorn_rails#">Path</a> /
+        <a data-route-helper=3D"_url" title=3D"Returns an absolute url (wit=
+h the http and domain)" href=3D"https://staging.highfidelity.com/vendor/bun=
+dle/ruby/2.3.0/bin/unicorn_rails#">Url</a>
+      </th>
+      <th>
+      </th>
+      <th>
+        <input id=3D"search" placeholder=3D"Path Match" type=3D"search" nam=
+e=3D"path[]">
+      </th>
+      <th>
+      </th>
+    </tr>
+  </thead>
+  <tbody class=3D"exact_matches" id=3D"exact_matches">
+  </tbody>
+  <tbody class=3D"fuzzy_matches" id=3D"fuzzy_matches">
+  </tbody>
+  <tbody>
+    <tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"rails_admin">
+      rails_admin<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"">
+   =20
+  </td>
+  <td data-route-path=3D"/admin" data-regexp=3D"^\/admin">
+    /admin
+  </td>
+  <td data-route-reqs=3D"RailsAdmin::Engine">
+    RailsAdmin::Engine
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"native_oauth_authorization">
+      native_oauth_authorization<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/oauth/authorize/native(.:format)" data-regexp=3D"=
+^\/oauth\/authorize\/native(?:\.([^\/.?]+))?$">
+    /oauth/authorize/native(.:format)
+  </td>
+  <td data-route-reqs=3D"doorkeeper/authorizations#show">
+    doorkeeper/authorizations#show
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"oauth_authorization">
+      oauth_authorization<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/oauth/authorize(.:format)" data-regexp=3D"^\/oaut=
+h\/authorize(?:\.([^\/.?]+))?$">
+    /oauth/authorize(.:format)
+  </td>
+  <td data-route-reqs=3D"doorkeeper/authorizations#new">
+    doorkeeper/authorizations#new
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/oauth/authorize(.:format)" data-regexp=3D"^\/oaut=
+h\/authorize(?:\.([^\/.?]+))?$">
+    /oauth/authorize(.:format)
+  </td>
+  <td data-route-reqs=3D"doorkeeper/authorizations#create">
+    doorkeeper/authorizations#create
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"DELETE">
+    DELETE
+  </td>
+  <td data-route-path=3D"/oauth/authorize(.:format)" data-regexp=3D"^\/oaut=
+h\/authorize(?:\.([^\/.?]+))?$">
+    /oauth/authorize(.:format)
+  </td>
+  <td data-route-reqs=3D"doorkeeper/authorizations#destroy">
+    doorkeeper/authorizations#destroy
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"oauth_token">
+      oauth_token<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/oauth/token(.:format)" data-regexp=3D"^\/oauth\/t=
+oken(?:\.([^\/.?]+))?$">
+    /oauth/token(.:format)
+  </td>
+  <td data-route-reqs=3D"doorkeeper/tokens#create">
+    doorkeeper/tokens#create
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"oauth_revoke">
+      oauth_revoke<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/oauth/revoke(.:format)" data-regexp=3D"^\/oauth\/=
+revoke(?:\.([^\/.?]+))?$">
+    /oauth/revoke(.:format)
+  </td>
+  <td data-route-reqs=3D"doorkeeper/tokens#revoke">
+    doorkeeper/tokens#revoke
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"oauth_introspect">
+      oauth_introspect<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/oauth/introspect(.:format)" data-regexp=3D"^\/oau=
+th\/introspect(?:\.([^\/.?]+))?$">
+    /oauth/introspect(.:format)
+  </td>
+  <td data-route-reqs=3D"doorkeeper/tokens#introspect">
+    doorkeeper/tokens#introspect
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"oauth_applications">
+      oauth_applications<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/oauth/applications(.:format)" data-regexp=3D"^\/o=
+auth\/applications(?:\.([^\/.?]+))?$">
+    /oauth/applications(.:format)
+  </td>
+  <td data-route-reqs=3D"doorkeeper/applications#index">
+    doorkeeper/applications#index
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/oauth/applications(.:format)" data-regexp=3D"^\/o=
+auth\/applications(?:\.([^\/.?]+))?$">
+    /oauth/applications(.:format)
+  </td>
+  <td data-route-reqs=3D"doorkeeper/applications#create">
+    doorkeeper/applications#create
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"new_oauth_application">
+      new_oauth_application<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/oauth/applications/new(.:format)" data-regexp=3D"=
+^\/oauth\/applications\/new(?:\.([^\/.?]+))?$">
+    /oauth/applications/new(.:format)
+  </td>
+  <td data-route-reqs=3D"doorkeeper/applications#new">
+    doorkeeper/applications#new
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"edit_oauth_application">
+      edit_oauth_application<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/oauth/applications/:id/edit(.:format)" data-regex=
+p=3D"^\/oauth\/applications\/([^\/.?]+)\/edit(?:\.([^\/.?]+))?$">
+    /oauth/applications/:id/edit(.:format)
+  </td>
+  <td data-route-reqs=3D"doorkeeper/applications#edit">
+    doorkeeper/applications#edit
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"oauth_application">
+      oauth_application<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/oauth/applications/:id(.:format)" data-regexp=3D"=
+^\/oauth\/applications\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /oauth/applications/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"doorkeeper/applications#show">
+    doorkeeper/applications#show
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PATCH">
+    PATCH
+  </td>
+  <td data-route-path=3D"/oauth/applications/:id(.:format)" data-regexp=3D"=
+^\/oauth\/applications\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /oauth/applications/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"doorkeeper/applications#update">
+    doorkeeper/applications#update
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/oauth/applications/:id(.:format)" data-regexp=3D"=
+^\/oauth\/applications\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /oauth/applications/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"doorkeeper/applications#update">
+    doorkeeper/applications#update
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"DELETE">
+    DELETE
+  </td>
+  <td data-route-path=3D"/oauth/applications/:id(.:format)" data-regexp=3D"=
+^\/oauth\/applications\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /oauth/applications/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"doorkeeper/applications#destroy">
+    doorkeeper/applications#destroy
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"oauth_authorized_applications">
+      oauth_authorized_applications<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/oauth/authorized_applications(.:format)" data-reg=
+exp=3D"^\/oauth\/authorized_applications(?:\.([^\/.?]+))?$">
+    /oauth/authorized_applications(.:format)
+  </td>
+  <td data-route-reqs=3D"doorkeeper/authorized_applications#index">
+    doorkeeper/authorized_applications#index
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"oauth_authorized_application">
+      oauth_authorized_application<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"DELETE">
+    DELETE
+  </td>
+  <td data-route-path=3D"/oauth/authorized_applications/:id(.:format)" data=
+-regexp=3D"^\/oauth\/authorized_applications\/([^\/.?]+)(?:\.([^\/.?]+))?$"=
+>
+    /oauth/authorized_applications/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"doorkeeper/authorized_applications#destroy">
+    doorkeeper/authorized_applications#destroy
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"oauth_token_info">
+      oauth_token_info<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/oauth/token/info(.:format)" data-regexp=3D"^\/oau=
+th\/token\/info(?:\.([^\/.?]+))?$">
+    /oauth/token/info(.:format)
+  </td>
+  <td data-route-reqs=3D"doorkeeper/token_info#show">
+    doorkeeper/token_info#show
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"root">
+      root<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/" data-regexp=3D"^\/$">
+    /
+  </td>
+  <td data-route-reqs=3D"pages#home">
+    pages#home
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"user_steam_omniauth_authorize">
+      user_steam_omniauth_authorize<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET|POST">
+    GET|POST
+  </td>
+  <td data-route-path=3D"/users/auth/steam(.:format)" data-regexp=3D"^\/use=
+rs\/auth\/steam(?:\.([^\/.?]+))?$">
+    /users/auth/steam(.:format)
+  </td>
+  <td data-route-reqs=3D"users/omniauth_callbacks#passthru">
+    users/omniauth_callbacks#passthru
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"user_steam_omniauth_callback">
+      user_steam_omniauth_callback<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET|POST">
+    GET|POST
+  </td>
+  <td data-route-path=3D"/users/auth/steam/callback(.:format)" data-regexp=
+=3D"^\/users\/auth\/steam\/callback(?:\.([^\/.?]+))?$">
+    /users/auth/steam/callback(.:format)
+  </td>
+  <td data-route-reqs=3D"users/omniauth_callbacks#steam">
+    users/omniauth_callbacks#steam
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"user_password">
+      user_password<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/users/password(.:format)" data-regexp=3D"^\/users=
+\/password(?:\.([^\/.?]+))?$">
+    /users/password(.:format)
+  </td>
+  <td data-route-reqs=3D"users/passwords#create">
+    users/passwords#create
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"new_user_password">
+      new_user_password<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/users/password/new(.:format)" data-regexp=3D"^\/u=
+sers\/password\/new(?:\.([^\/.?]+))?$">
+    /users/password/new(.:format)
+  </td>
+  <td data-route-reqs=3D"users/passwords#new">
+    users/passwords#new
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"edit_user_password">
+      edit_user_password<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/users/password/edit(.:format)" data-regexp=3D"^\/=
+users\/password\/edit(?:\.([^\/.?]+))?$">
+    /users/password/edit(.:format)
+  </td>
+  <td data-route-reqs=3D"users/passwords#edit">
+    users/passwords#edit
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PATCH">
+    PATCH
+  </td>
+  <td data-route-path=3D"/users/password(.:format)" data-regexp=3D"^\/users=
+\/password(?:\.([^\/.?]+))?$">
+    /users/password(.:format)
+  </td>
+  <td data-route-reqs=3D"users/passwords#update">
+    users/passwords#update
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/users/password(.:format)" data-regexp=3D"^\/users=
+\/password(?:\.([^\/.?]+))?$">
+    /users/password(.:format)
+  </td>
+  <td data-route-reqs=3D"users/passwords#update">
+    users/passwords#update
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"cancel_user_registration">
+      cancel_user_registration<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/users/cancel(.:format)" data-regexp=3D"^\/users\/=
+cancel(?:\.([^\/.?]+))?$">
+    /users/cancel(.:format)
+  </td>
+  <td data-route-reqs=3D"users/registrations#cancel">
+    users/registrations#cancel
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"user_registration">
+      user_registration<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/users(.:format)" data-regexp=3D"^\/users(?:\.([^\=
+/.?]+))?$">
+    /users(.:format)
+  </td>
+  <td data-route-reqs=3D"users/registrations#create">
+    users/registrations#create
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"new_user_registration">
+      new_user_registration<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/users(.:format)" data-regexp=3D"^\/users(?:\.([^\=
+/.?]+))?$">
+    /users(.:format)
+  </td>
+  <td data-route-reqs=3D"users/registrations#new">
+    users/registrations#new
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"edit_user_registration">
+      edit_user_registration<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/users/edit(.:format)" data-regexp=3D"^\/users\/ed=
+it(?:\.([^\/.?]+))?$">
+    /users/edit(.:format)
+  </td>
+  <td data-route-reqs=3D"users/registrations#edit">
+    users/registrations#edit
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PATCH">
+    PATCH
+  </td>
+  <td data-route-path=3D"/users(.:format)" data-regexp=3D"^\/users(?:\.([^\=
+/.?]+))?$">
+    /users(.:format)
+  </td>
+  <td data-route-reqs=3D"users/registrations#update">
+    users/registrations#update
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/users(.:format)" data-regexp=3D"^\/users(?:\.([^\=
+/.?]+))?$">
+    /users(.:format)
+  </td>
+  <td data-route-reqs=3D"users/registrations#update">
+    users/registrations#update
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"DELETE">
+    DELETE
+  </td>
+  <td data-route-path=3D"/users(.:format)" data-regexp=3D"^\/users(?:\.([^\=
+/.?]+))?$">
+    /users(.:format)
+  </td>
+  <td data-route-reqs=3D"users/registrations#destroy">
+    users/registrations#destroy
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"user_confirmation">
+      user_confirmation<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/users/confirmation(.:format)" data-regexp=3D"^\/u=
+sers\/confirmation(?:\.([^\/.?]+))?$">
+    /users/confirmation(.:format)
+  </td>
+  <td data-route-reqs=3D"devise/confirmations#create">
+    devise/confirmations#create
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"new_user_confirmation">
+      new_user_confirmation<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/users/confirmation/new(.:format)" data-regexp=3D"=
+^\/users\/confirmation\/new(?:\.([^\/.?]+))?$">
+    /users/confirmation/new(.:format)
+  </td>
+  <td data-route-reqs=3D"devise/confirmations#new">
+    devise/confirmations#new
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/users/confirmation(.:format)" data-regexp=3D"^\/u=
+sers\/confirmation(?:\.([^\/.?]+))?$">
+    /users/confirmation(.:format)
+  </td>
+  <td data-route-reqs=3D"devise/confirmations#show">
+    devise/confirmations#show
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"user_unlock">
+      user_unlock<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/users/unlock(.:format)" data-regexp=3D"^\/users\/=
+unlock(?:\.([^\/.?]+))?$">
+    /users/unlock(.:format)
+  </td>
+  <td data-route-reqs=3D"devise/unlocks#create">
+    devise/unlocks#create
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"new_user_unlock">
+      new_user_unlock<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/users/unlock/new(.:format)" data-regexp=3D"^\/use=
+rs\/unlock\/new(?:\.([^\/.?]+))?$">
+    /users/unlock/new(.:format)
+  </td>
+  <td data-route-reqs=3D"devise/unlocks#new">
+    devise/unlocks#new
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/users/unlock(.:format)" data-regexp=3D"^\/users\/=
+unlock(?:\.([^\/.?]+))?$">
+    /users/unlock(.:format)
+  </td>
+  <td data-route-reqs=3D"devise/unlocks#show">
+    devise/unlocks#show
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"sign_up">
+      sign_up<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/signup(.:format)" data-regexp=3D"^\/signup(?:\.([=
+^\/.?]+))?$">
+    /signup(.:format)
+  </td>
+  <td data-route-reqs=3D"users/registrations#new">
+    users/registrations#new
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"promo_sign_up">
+      promo_sign_up<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/signup/:invite_code(.:format)" data-regexp=3D"^\/=
+signup\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /signup/:invite_code(.:format)
+  </td>
+  <td data-route-reqs=3D"users/registrations#new">
+    users/registrations#new
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"profile_edit">
+      profile_edit<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/profile/edit(.:format)" data-regexp=3D"^\/profile=
+\/edit(?:\.([^\/.?]+))?$">
+    /profile/edit(.:format)
+  </td>
+  <td data-route-reqs=3D"users/registrations#edit">
+    users/registrations#edit
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"profile_reset_password">
+      profile_reset_password<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/profile/reset_password(.:format)" data-regexp=3D"=
+^\/profile\/reset_password(?:\.([^\/.?]+))?$">
+    /profile/reset_password(.:format)
+  </td>
+  <td data-route-reqs=3D"users/registrations#reset_password">
+    users/registrations#reset_password
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"profile_remove_identity">
+      profile_remove_identity<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/profile/remove_identity(.:format)" data-regexp=3D=
+"^\/profile\/remove_identity(?:\.([^\/.?]+))?$">
+    /profile/remove_identity(.:format)
+  </td>
+  <td data-route-reqs=3D"users/registrations#remove_identity">
+    users/registrations#remove_identity
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"new_user_session">
+      new_user_session<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/login(.:format)" data-regexp=3D"^\/login(?:\.([^\=
+/.?]+))?$">
+    /login(.:format)
+  </td>
+  <td data-route-reqs=3D"users/sessions#new">
+    users/sessions#new
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"user_session">
+      user_session<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/login(.:format)" data-regexp=3D"^\/login(?:\.([^\=
+/.?]+))?$">
+    /login(.:format)
+  </td>
+  <td data-route-reqs=3D"users/sessions#create">
+    users/sessions#create
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"destroy_user_session">
+      destroy_user_session<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"DELETE">
+    DELETE
+  </td>
+  <td data-route-path=3D"/logout(.:format)" data-regexp=3D"^\/logout(?:\.([=
+^\/.?]+))?$">
+    /logout(.:format)
+  </td>
+  <td data-route-reqs=3D"users/sessions#destroy">
+    users/sessions#destroy
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"logout">
+      logout<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/logout(.:format)" data-regexp=3D"^\/logout(?:\.([=
+^\/.?]+))?$">
+    /logout(.:format)
+  </td>
+  <td data-route-reqs=3D"users/sessions#destroy">
+    users/sessions#destroy
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/404(.:format)" data-regexp=3D"^\/404(?:\.([^\/.?]=
++))?$">
+    /404(.:format)
+  </td>
+  <td data-route-reqs=3D"redirect(301, //www.highfidelity.com/404)">
+    redirect(301, //www.highfidelity.com/404)
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/500(.:format)" data-regexp=3D"^\/500(?:\.([^\/.?]=
++))?$">
+    /500(.:format)
+  </td>
+  <td data-route-reqs=3D"redirect(301, /500.html)">
+    redirect(301, /500.html)
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"invites">
+      invites<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/invites(.:format)" data-regexp=3D"^\/invites(?:\.=
+([^\/.?]+))?$">
+    /invites(.:format)
+  </td>
+  <td data-route-reqs=3D"invites#create">
+    invites#create
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"new_invite">
+      new_invite<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/invites/new(.:format)" data-regexp=3D"^\/invites\=
+/new(?:\.([^\/.?]+))?$">
+    /invites/new(.:format)
+  </td>
+  <td data-route-reqs=3D"invites#new">
+    invites#new
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"directory_index">
+      directory_index<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/directory(.:format)" data-regexp=3D"^\/directory(=
+?:\.([^\/.?]+))?$">
+    /directory(.:format)
+  </td>
+  <td data-route-reqs=3D"directory#index">
+    directory#index
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"home">
+      home<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/home(.:format)" data-regexp=3D"^\/home(?:\.([^\/.=
+?]+))?$">
+    /home(.:format)
+  </td>
+  <td data-route-reqs=3D"pages#home">
+    pages#home
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"explore">
+      explore<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/explore(.:format)" data-regexp=3D"^\/explore(?:\.=
+([^\/.?]+))?$">
+    /explore(.:format)
+  </td>
+  <td data-route-reqs=3D"pages#explore">
+    pages#explore
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"download">
+      download<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/download(.:format)" data-regexp=3D"^\/download(?:=
+\.([^\/.?]+))?$">
+    /download(.:format)
+  </td>
+  <td data-route-reqs=3D"pages#download">
+    pages#download
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"dev_download">
+      dev_download<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/dev-download(.:format)" data-regexp=3D"^\/dev\-do=
+wnload(?:\.([^\/.?]+))?$">
+    /dev-download(.:format)
+  </td>
+  <td data-route-reqs=3D"pages#dev_download">
+    pages#dev_download
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"direct_download">
+      direct_download<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/direct-download(.:format)" data-regexp=3D"^\/dire=
+ct\-download(?:\.([^\/.?]+))?$">
+    /direct-download(.:format)
+  </td>
+  <td data-route-reqs=3D"pages#direct_download">
+    pages#direct_download
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"press">
+      press<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/press(.:format)" data-regexp=3D"^\/press(?:\.([^\=
+/.?]+))?$">
+    /press(.:format)
+  </td>
+  <td data-route-reqs=3D"pages#press">
+    pages#press
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"jobs">
+      jobs<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/jobs(.:format)" data-regexp=3D"^\/jobs(?:\.([^\/.=
+?]+))?$">
+    /jobs(.:format)
+  </td>
+  <td data-route-reqs=3D"pages#jobs">
+    pages#jobs
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"team">
+      team<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/team(.:format)" data-regexp=3D"^\/team(?:\.([^\/.=
+?]+))?$">
+    /team(.:format)
+  </td>
+  <td data-route-reqs=3D"pages#team">
+    pages#team
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"docs">
+      docs<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/docs(.:format)" data-regexp=3D"^\/docs(?:\.([^\/.=
+?]+))?$">
+    /docs(.:format)
+  </td>
+  <td data-route-reqs=3D"pages#docs">
+    pages#docs
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"contest_july2016">
+      contest_july2016<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/contest-july2016(.:format)" data-regexp=3D"^\/con=
+test\-july2016(?:\.([^\/.?]+))?$">
+    /contest-july2016(.:format)
+  </td>
+  <td data-route-reqs=3D"pages#contest">
+    pages#contest
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"learn">
+      learn<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/learn(.:format)" data-regexp=3D"^\/learn(?:\.([^\=
+/.?]+))?$">
+    /learn(.:format)
+  </td>
+  <td data-route-reqs=3D"pages#learn">
+    pages#learn
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"jimjamz">
+      jimjamz<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/jimjamz(.:format)" data-regexp=3D"^\/jimjamz(?:\.=
+([^\/.?]+))?$">
+    /jimjamz(.:format)
+  </td>
+  <td data-route-reqs=3D"pages#jimjamz">
+    pages#jimjamz
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"health">
+      health<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/health(.:format)" data-regexp=3D"^\/health(?:\.([=
+^\/.?]+))?$">
+    /health(.:format)
+  </td>
+  <td data-route-reqs=3D"pages#health">
+    pages#health
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"cloud_hosted_domains">
+      cloud_hosted_domains<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/cloud-hosted-domains(.:format)" data-regexp=3D"^\=
+/cloud\-hosted\-domains(?:\.([^\/.?]+))?$">
+    /cloud-hosted-domains(.:format)
+  </td>
+  <td data-route-reqs=3D"pages#cloud_hosted_domains">
+    pages#cloud_hosted_domains
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"commerce_is_here">
+      commerce_is_here<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/commerce-is-here(.:format)" data-regexp=3D"^\/com=
+merce\-is\-here(?:\.([^\/.?]+))?$">
+    /commerce-is-here(.:format)
+  </td>
+  <td data-route-reqs=3D"pages#commerce_is_here">
+    pages#commerce_is_here
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"avatar_island">
+      avatar_island<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/avatar-island(.:format)" data-regexp=3D"^\/avatar=
+\-island(?:\.([^\/.?]+))?$">
+    /avatar-island(.:format)
+  </td>
+  <td data-route-reqs=3D"pages#avatar_island">
+    pages#avatar_island
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"rust">
+      rust<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/rust(.:format)" data-regexp=3D"^\/rust(?:\.([^\/.=
+?]+))?$">
+    /rust(.:format)
+  </td>
+  <td data-route-reqs=3D"pages#rust">
+    pages#rust
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"contact">
+      contact<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/contact(.:format)" data-regexp=3D"^\/contact(?:\.=
+([^\/.?]+))?$">
+    /contact(.:format)
+  </td>
+  <td data-route-reqs=3D"pages#contact">
+    pages#contact
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"user_groups_check_name">
+      user_groups_check_name<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user/groups/check_name/:name(.:format)" data-rege=
+xp=3D"^\/user\/groups\/check_name\/([^\/.?]+)(?:\.(json))?$">
+    /user/groups/check_name/:name(.:format)
+  </td>
+  <td data-route-reqs=3D"user/groups#check_name {:format=3D>:json}">
+    user/groups#check_name {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"user_gifting">
+      user_gifting<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user/gifting(.:format)" data-regexp=3D"^\/user\/g=
+ifting(?:\.([^\/.?]+))?$">
+    /user/gifting(.:format)
+  </td>
+  <td data-route-reqs=3D"user/gifting#index">
+    user/gifting#index
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/user/gifting(.:format)" data-regexp=3D"^\/user\/g=
+ifting(?:\.([^\/.?]+))?$">
+    /user/gifting(.:format)
+  </td>
+  <td data-route-reqs=3D"user/gifting#create">
+    user/gifting#create
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"user_gifting_redeem_form">
+      user_gifting_redeem_form<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user/gifting/redeem_form(.:format)" data-regexp=
+=3D"^\/user\/gifting\/redeem_form(?:\.([^\/.?]+))?$">
+    /user/gifting/redeem_form(.:format)
+  </td>
+  <td data-route-reqs=3D"user/gifting#redeem_form">
+    user/gifting#redeem_form
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"user_channel_user">
+      user_channel_user<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user/channel_user(.:format)" data-regexp=3D"^\/us=
+er\/channel_user(?:\.([^\/.?]+))?$">
+    /user/channel_user(.:format)
+  </td>
+  <td data-route-reqs=3D"user/channel_user#index">
+    user/channel_user#index
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/user/channel_user(.:format)" data-regexp=3D"^\/us=
+er\/channel_user(?:\.([^\/.?]+))?$">
+    /user/channel_user(.:format)
+  </td>
+  <td data-route-reqs=3D"user/channel_user#create">
+    user/channel_user#create
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"setup_user_group">
+      setup_user_group<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user/groups/:name/setup(.:format)" data-regexp=3D=
+"^\/user\/groups\/([^\/.?]+)\/setup(?:\.([^\/.?]+))?$">
+    /user/groups/:name/setup(.:format)
+  </td>
+  <td data-route-reqs=3D"user/groups#setup">
+    user/groups#setup
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PATCH">
+    PATCH
+  </td>
+  <td data-route-path=3D"/user/groups/:name/setup(.:format)" data-regexp=3D=
+"^\/user\/groups\/([^\/.?]+)\/setup(?:\.([^\/.?]+))?$">
+    /user/groups/:name/setup(.:format)
+  </td>
+  <td data-route-reqs=3D"user/groups#perform_setup">
+    user/groups#perform_setup
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"renew_user_group">
+      renew_user_group<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user/groups/:name/renew(.:format)" data-regexp=3D=
+"^\/user\/groups\/([^\/.?]+)\/renew(?:\.([^\/.?]+))?$">
+    /user/groups/:name/renew(.:format)
+  </td>
+  <td data-route-reqs=3D"user/groups#renew">
+    user/groups#renew
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PATCH">
+    PATCH
+  </td>
+  <td data-route-path=3D"/user/groups/:name/renew(.:format)" data-regexp=3D=
+"^\/user\/groups\/([^\/.?]+)\/renew(?:\.([^\/.?]+))?$">
+    /user/groups/:name/renew(.:format)
+  </td>
+  <td data-route-reqs=3D"user/groups#perform_renewal">
+    user/groups#perform_renewal
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"accept_user_group">
+      accept_user_group<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user/groups/:name/accept(.:format)" data-regexp=
+=3D"^\/user\/groups\/([^\/.?]+)\/accept(?:\.([^\/.?]+))?$">
+    /user/groups/:name/accept(.:format)
+  </td>
+  <td data-route-reqs=3D"user/groups#perform_accept">
+    user/groups#perform_accept
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PATCH">
+    PATCH
+  </td>
+  <td data-route-path=3D"/user/groups/:name/accept(.:format)" data-regexp=
+=3D"^\/user\/groups\/([^\/.?]+)\/accept(?:\.([^\/.?]+))?$">
+    /user/groups/:name/accept(.:format)
+  </td>
+  <td data-route-reqs=3D"user/groups#perform_accept">
+    user/groups#perform_accept
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"reject_user_group">
+      reject_user_group<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user/groups/:name/reject(.:format)" data-regexp=
+=3D"^\/user\/groups\/([^\/.?]+)\/reject(?:\.([^\/.?]+))?$">
+    /user/groups/:name/reject(.:format)
+  </td>
+  <td data-route-reqs=3D"user/groups#perform_reject">
+    user/groups#perform_reject
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PATCH">
+    PATCH
+  </td>
+  <td data-route-path=3D"/user/groups/:name/reject(.:format)" data-regexp=
+=3D"^\/user\/groups\/([^\/.?]+)\/reject(?:\.([^\/.?]+))?$">
+    /user/groups/:name/reject(.:format)
+  </td>
+  <td data-route-reqs=3D"user/groups#perform_reject">
+    user/groups#perform_reject
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"leave_user_group">
+      leave_user_group<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user/groups/:name/leave(.:format)" data-regexp=3D=
+"^\/user\/groups\/([^\/.?]+)\/leave(?:\.([^\/.?]+))?$">
+    /user/groups/:name/leave(.:format)
+  </td>
+  <td data-route-reqs=3D"user/groups#perform_leave">
+    user/groups#perform_leave
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"user_groups">
+      user_groups<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user/groups(.:format)" data-regexp=3D"^\/user\/gr=
+oups(?:\.([^\/.?]+))?$">
+    /user/groups(.:format)
+  </td>
+  <td data-route-reqs=3D"user/groups#index">
+    user/groups#index
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/user/groups(.:format)" data-regexp=3D"^\/user\/gr=
+oups(?:\.([^\/.?]+))?$">
+    /user/groups(.:format)
+  </td>
+  <td data-route-reqs=3D"user/groups#create">
+    user/groups#create
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"new_user_group">
+      new_user_group<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user/groups/new(.:format)" data-regexp=3D"^\/user=
+\/groups\/new(?:\.([^\/.?]+))?$">
+    /user/groups/new(.:format)
+  </td>
+  <td data-route-reqs=3D"user/groups#new">
+    user/groups#new
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"edit_user_group">
+      edit_user_group<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user/groups/:name/edit(.:format)" data-regexp=3D"=
+^\/user\/groups\/([^\/.?]+)\/edit(?:\.([^\/.?]+))?$">
+    /user/groups/:name/edit(.:format)
+  </td>
+  <td data-route-reqs=3D"user/groups#edit">
+    user/groups#edit
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"user_group">
+      user_group<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user/groups/:name(.:format)" data-regexp=3D"^\/us=
+er\/groups\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /user/groups/:name(.:format)
+  </td>
+  <td data-route-reqs=3D"user/groups#show">
+    user/groups#show
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PATCH">
+    PATCH
+  </td>
+  <td data-route-path=3D"/user/groups/:name(.:format)" data-regexp=3D"^\/us=
+er\/groups\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /user/groups/:name(.:format)
+  </td>
+  <td data-route-reqs=3D"user/groups#update">
+    user/groups#update
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/user/groups/:name(.:format)" data-regexp=3D"^\/us=
+er\/groups\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /user/groups/:name(.:format)
+  </td>
+  <td data-route-reqs=3D"user/groups#update">
+    user/groups#update
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"user_places_check_name">
+      user_places_check_name<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user/places/check_name/:name(.:format)" data-rege=
+xp=3D"^\/user\/places\/check_name\/([^\/.?]+)(?:\.(json))?$">
+    /user/places/check_name/:name(.:format)
+  </td>
+  <td data-route-reqs=3D"user/places#check_name {:format=3D>:json}">
+    user/places#check_name {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"renew_user_place">
+      renew_user_place<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user/places/:name/renew(.:format)" data-regexp=3D=
+"^\/user\/places\/([^\/.?]+)\/renew(?:\.([^\/.?]+))?$">
+    /user/places/:name/renew(.:format)
+  </td>
+  <td data-route-reqs=3D"user/places#renew">
+    user/places#renew
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PATCH">
+    PATCH
+  </td>
+  <td data-route-path=3D"/user/places/:name/renew(.:format)" data-regexp=3D=
+"^\/user\/places\/([^\/.?]+)\/renew(?:\.([^\/.?]+))?$">
+    /user/places/:name/renew(.:format)
+  </td>
+  <td data-route-reqs=3D"user/places#perform_renewal">
+    user/places#perform_renewal
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"user_places">
+      user_places<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user/places(.:format)" data-regexp=3D"^\/user\/pl=
+aces(?:\.([^\/.?]+))?$">
+    /user/places(.:format)
+  </td>
+  <td data-route-reqs=3D"user/places#index">
+    user/places#index
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/user/places(.:format)" data-regexp=3D"^\/user\/pl=
+aces(?:\.([^\/.?]+))?$">
+    /user/places(.:format)
+  </td>
+  <td data-route-reqs=3D"user/places#create">
+    user/places#create
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"new_user_place">
+      new_user_place<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user/places/new(.:format)" data-regexp=3D"^\/user=
+\/places\/new(?:\.([^\/.?]+))?$">
+    /user/places/new(.:format)
+  </td>
+  <td data-route-reqs=3D"user/places#new">
+    user/places#new
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"edit_user_place">
+      edit_user_place<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user/places/:name/edit(.:format)" data-regexp=3D"=
+^\/user\/places\/([^\/.?]+)\/edit(?:\.([^\/.?]+))?$">
+    /user/places/:name/edit(.:format)
+  </td>
+  <td data-route-reqs=3D"user/places#edit">
+    user/places#edit
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"user_place">
+      user_place<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user/places/:name(.:format)" data-regexp=3D"^\/us=
+er\/places\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /user/places/:name(.:format)
+  </td>
+  <td data-route-reqs=3D"user/places#show">
+    user/places#show
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PATCH">
+    PATCH
+  </td>
+  <td data-route-path=3D"/user/places/:name(.:format)" data-regexp=3D"^\/us=
+er\/places\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /user/places/:name(.:format)
+  </td>
+  <td data-route-reqs=3D"user/places#update">
+    user/places#update
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/user/places/:name(.:format)" data-regexp=3D"^\/us=
+er\/places\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /user/places/:name(.:format)
+  </td>
+  <td data-route-reqs=3D"user/places#update">
+    user/places#update
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"user_friends">
+      user_friends<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user/friends(.:format)" data-regexp=3D"^\/user\/f=
+riends(?:\.([^\/.?]+))?$">
+    /user/friends(.:format)
+  </td>
+  <td data-route-reqs=3D"user/friends#index">
+    user/friends#index
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/user/friends(.:format)" data-regexp=3D"^\/user\/f=
+riends(?:\.([^\/.?]+))?$">
+    /user/friends(.:format)
+  </td>
+  <td data-route-reqs=3D"user/friends#create">
+    user/friends#create
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"user_friend">
+      user_friend<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"DELETE">
+    DELETE
+  </td>
+  <td data-route-path=3D"/user/friends/:username(.:format)" data-regexp=3D"=
+^\/user\/friends\/(([a-zA-Z0-9_\.]+))(?:\.([^\/.?]+))?$">
+    /user/friends/:username(.:format)
+  </td>
+  <td data-route-reqs=3D"user/friends#destroy {:username=3D>/[a-zA-Z0-9_\.]=
++/}">
+    user/friends#destroy {:username=3D&gt;/[a-zA-Z0-9_\.]+/}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"user_cloud_domains">
+      user_cloud_domains<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user/cloud_domains(.:format)" data-regexp=3D"^\/u=
+ser\/cloud_domains(?:\.([^\/.?]+))?$">
+    /user/cloud_domains(.:format)
+  </td>
+  <td data-route-reqs=3D"user/cloud_domains#index">
+    user/cloud_domains#index
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/user/cloud_domains(.:format)" data-regexp=3D"^\/u=
+ser\/cloud_domains(?:\.([^\/.?]+))?$">
+    /user/cloud_domains(.:format)
+  </td>
+  <td data-route-reqs=3D"user/cloud_domains#create">
+    user/cloud_domains#create
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"new_user_cloud_domain">
+      new_user_cloud_domain<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user/cloud_domains/new(.:format)" data-regexp=3D"=
+^\/user\/cloud_domains\/new(?:\.([^\/.?]+))?$">
+    /user/cloud_domains/new(.:format)
+  </td>
+  <td data-route-reqs=3D"user/cloud_domains#new">
+    user/cloud_domains#new
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"user_applications_connect">
+      user_applications_connect<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user/applications/connect/:provider(.:format)" da=
+ta-regexp=3D"^\/user\/applications\/connect\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /user/applications/connect/:provider(.:format)
+  </td>
+  <td data-route-reqs=3D"user/connected_applications#connect">
+    user/connected_applications#connect
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"user_applications_disconnect">
+      user_applications_disconnect<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/user/applications/disconnect/:provider(.:format)"=
+ data-regexp=3D"^\/user\/applications\/disconnect\/([^\/.?]+)(?:\.([^\/.?]+=
+))?$">
+    /user/applications/disconnect/:provider(.:format)
+  </td>
+  <td data-route-reqs=3D"user/connected_applications#disconnect">
+    user/connected_applications#disconnect
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"user_sso_canny">
+      user_sso_canny<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user/sso/canny(.:format)" data-regexp=3D"^\/user\=
+/sso\/canny(?:\.([^\/.?]+))?$">
+    /user/sso/canny(.:format)
+  </td>
+  <td data-route-reqs=3D"user/sso#canny">
+    user/sso#canny
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"domains">
+      domains<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user/domains(.:format)" data-regexp=3D"^\/user\/d=
+omains(?:\.([^\/.?]+))?$">
+    /user/domains(.:format)
+  </td>
+  <td data-route-reqs=3D"domains#index">
+    domains#index
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/user/domains(.:format)" data-regexp=3D"^\/user\/d=
+omains(?:\.([^\/.?]+))?$">
+    /user/domains(.:format)
+  </td>
+  <td data-route-reqs=3D"domains#create">
+    domains#create
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"new_domain">
+      new_domain<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user/domains/new(.:format)" data-regexp=3D"^\/use=
+r\/domains\/new(?:\.([^\/.?]+))?$">
+    /user/domains/new(.:format)
+  </td>
+  <td data-route-reqs=3D"domains#new">
+    domains#new
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"edit_domain">
+      edit_domain<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user/domains/:id/edit(.:format)" data-regexp=3D"^=
+\/user\/domains\/([^\/.?]+)\/edit(?:\.([^\/.?]+))?$">
+    /user/domains/:id/edit(.:format)
+  </td>
+  <td data-route-reqs=3D"domains#edit">
+    domains#edit
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"domain">
+      domain<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user/domains/:id(.:format)" data-regexp=3D"^\/use=
+r\/domains\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /user/domains/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"domains#show">
+    domains#show
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PATCH">
+    PATCH
+  </td>
+  <td data-route-path=3D"/user/domains/:id(.:format)" data-regexp=3D"^\/use=
+r\/domains\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /user/domains/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"domains#update">
+    domains#update
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/user/domains/:id(.:format)" data-regexp=3D"^\/use=
+r\/domains\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /user/domains/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"domains#update">
+    domains#update
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"DELETE">
+    DELETE
+  </td>
+  <td data-route-path=3D"/user/domains/:id(.:format)" data-regexp=3D"^\/use=
+r\/domains\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /user/domains/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"domains#destroy">
+    domains#destroy
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"public_key">
+      public_key<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/user/public_key(.:format)" data-regexp=3D"^\/user=
+\/public_key(?:\.([^\/.?]+))?$">
+    /user/public_key(.:format)
+  </td>
+  <td data-route-reqs=3D"public_keys#create">
+    public_keys#create
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"DELETE">
+    DELETE
+  </td>
+  <td data-route-path=3D"/user/public_key(.:format)" data-regexp=3D"^\/user=
+\/public_key(?:\.([^\/.?]+))?$">
+    /user/public_key(.:format)
+  </td>
+  <td data-route-reqs=3D"public_keys#destroy">
+    public_keys#destroy
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"security_index">
+      security_index<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user/security(.:format)" data-regexp=3D"^\/user\/=
+security(?:\.([^\/.?]+))?$">
+    /user/security(.:format)
+  </td>
+  <td data-route-reqs=3D"security#index">
+    security#index
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"tokens">
+      tokens<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user/tokens(.:format)" data-regexp=3D"^\/user\/to=
+kens(?:\.([^\/.?]+))?$">
+    /user/tokens(.:format)
+  </td>
+  <td data-route-reqs=3D"personal_tokens#index">
+    personal_tokens#index
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/user/tokens(.:format)" data-regexp=3D"^\/user\/to=
+kens(?:\.([^\/.?]+))?$">
+    /user/tokens(.:format)
+  </td>
+  <td data-route-reqs=3D"personal_tokens#create">
+    personal_tokens#create
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"new_token">
+      new_token<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user/tokens/new(.:format)" data-regexp=3D"^\/user=
+\/tokens\/new(?:\.([^\/.?]+))?$">
+    /user/tokens/new(.:format)
+  </td>
+  <td data-route-reqs=3D"personal_tokens#new">
+    personal_tokens#new
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"token">
+      token<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"DELETE">
+    DELETE
+  </td>
+  <td data-route-path=3D"/user/tokens/:id(.:format)" data-regexp=3D"^\/user=
+\/tokens\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /user/tokens/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"personal_tokens#destroy">
+    personal_tokens#destroy
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"user_stories">
+      user_stories<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user_stories(.:format)" data-regexp=3D"^\/user_st=
+ories(?:\.([^\/.?]+))?$">
+    /user_stories(.:format)
+  </td>
+  <td data-route-reqs=3D"user_stories#index">
+    user_stories#index
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/user_stories(.:format)" data-regexp=3D"^\/user_st=
+ories(?:\.([^\/.?]+))?$">
+    /user_stories(.:format)
+  </td>
+  <td data-route-reqs=3D"user_stories#create">
+    user_stories#create
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"new_user_story">
+      new_user_story<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user_stories/new(.:format)" data-regexp=3D"^\/use=
+r_stories\/new(?:\.([^\/.?]+))?$">
+    /user_stories/new(.:format)
+  </td>
+  <td data-route-reqs=3D"user_stories#new">
+    user_stories#new
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"edit_user_story">
+      edit_user_story<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user_stories/:id/edit(.:format)" data-regexp=3D"^=
+\/user_stories\/([^\/.?]+)\/edit(?:\.([^\/.?]+))?$">
+    /user_stories/:id/edit(.:format)
+  </td>
+  <td data-route-reqs=3D"user_stories#edit">
+    user_stories#edit
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"user_story">
+      user_story<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/user_stories/:id(.:format)" data-regexp=3D"^\/use=
+r_stories\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /user_stories/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"user_stories#show">
+    user_stories#show
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PATCH">
+    PATCH
+  </td>
+  <td data-route-path=3D"/user_stories/:id(.:format)" data-regexp=3D"^\/use=
+r_stories\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /user_stories/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"user_stories#update">
+    user_stories#update
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/user_stories/:id(.:format)" data-regexp=3D"^\/use=
+r_stories\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /user_stories/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"user_stories#update">
+    user_stories#update
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"user">
+      user<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/users/:name(.:format)" data-regexp=3D"^\/users\/(=
+([a-zA-Z0-9_\.]+))(?:\.([^\/.?]+))?$">
+    /users/:name(.:format)
+  </td>
+  <td data-route-reqs=3D"users#show {:name=3D>/[a-zA-Z0-9_\.]+/}">
+    users#show {:name=3D&gt;/[a-zA-Z0-9_\.]+/}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PATCH">
+    PATCH
+  </td>
+  <td data-route-path=3D"/users/:name(.:format)" data-regexp=3D"^\/users\/(=
+([a-zA-Z0-9_\.]+))(?:\.([^\/.?]+))?$">
+    /users/:name(.:format)
+  </td>
+  <td data-route-reqs=3D"users#update {:name=3D>/[a-zA-Z0-9_\.]+/}">
+    users#update {:name=3D&gt;/[a-zA-Z0-9_\.]+/}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/users/:name(.:format)" data-regexp=3D"^\/users\/(=
+([a-zA-Z0-9_\.]+))(?:\.([^\/.?]+))?$">
+    /users/:name(.:format)
+  </td>
+  <td data-route-reqs=3D"users#update {:name=3D>/[a-zA-Z0-9_\.]+/}">
+    users#update {:name=3D&gt;/[a-zA-Z0-9_\.]+/}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"place">
+      place<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/places/:name(.:format)" data-regexp=3D"^\/places\=
+/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /places/:name(.:format)
+  </td>
+  <td data-route-reqs=3D"places#show">
+    places#show
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PATCH">
+    PATCH
+  </td>
+  <td data-route-path=3D"/places/:name(.:format)" data-regexp=3D"^\/places\=
+/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /places/:name(.:format)
+  </td>
+  <td data-route-reqs=3D"places#update">
+    places#update
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/places/:name(.:format)" data-regexp=3D"^\/places\=
+/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /places/:name(.:format)
+  </td>
+  <td data-route-reqs=3D"places#update">
+    places#update
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"marketplace_index">
+      marketplace_index<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/marketplace(.:format)" data-regexp=3D"^\/marketpl=
+ace(?:\.([^\/.?]+))?$">
+    /marketplace(.:format)
+  </td>
+  <td data-route-reqs=3D"marketplace#index">
+    marketplace#index
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"examples">
+      examples<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/examples(.:format)" data-regexp=3D"^\/examples(?:=
+\.([^\/.?]+))?$">
+    /examples(.:format)
+  </td>
+  <td data-route-reqs=3D"marketplace#index">
+    marketplace#index
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"marketplace_upload">
+      marketplace_upload<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/marketplace/upload(.:format)" data-regexp=3D"^\/m=
+arketplace\/upload(?:\.([^\/.?]+))?$">
+    /marketplace/upload(.:format)
+  </td>
+  <td data-route-reqs=3D"marketplace/items#new">
+    marketplace/items#new
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"marketplace_api">
+      marketplace_api<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/marketplace/api(.:format)" data-regexp=3D"^\/mark=
+etplace\/api(?:\.([^\/.?]+))?$">
+    /marketplace/api(.:format)
+  </td>
+  <td data-route-reqs=3D"marketplace#api">
+    marketplace#api
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"marketplace_item_assets_zip">
+      marketplace_item_assets_zip<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/marketplace/items/:item_id/assets.zip(.:format)" =
+data-regexp=3D"^\/marketplace\/items\/((?i-mx:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a=
+-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}))\/assets\.zip(?:\.([^\/.?]+))?$">
+    /marketplace/items/:item_id/assets.zip(.:format)
+  </td>
+  <td data-route-reqs=3D"marketplace/items#assets {:item_id=3D>/[0-9a-f]{8}=
+-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}">
+    marketplace/items#assets {:item_id=3D&gt;/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a=
+-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"marketplace_items">
+      marketplace_items<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/marketplace/items(.:format)" data-regexp=3D"^\/ma=
+rketplace\/items(?:\.([^\/.?]+))?$">
+    /marketplace/items(.:format)
+  </td>
+  <td data-route-reqs=3D"marketplace/items#create">
+    marketplace/items#create
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"new_marketplace_item">
+      new_marketplace_item<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/marketplace/items/new(.:format)" data-regexp=3D"^=
+\/marketplace\/items\/new(?:\.([^\/.?]+))?$">
+    /marketplace/items/new(.:format)
+  </td>
+  <td data-route-reqs=3D"marketplace/items#new">
+    marketplace/items#new
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"edit_marketplace_item">
+      edit_marketplace_item<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/marketplace/items/:id/edit(.:format)" data-regexp=
+=3D"^\/marketplace\/items\/((?i-mx:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9=
+a-f]{4}-[0-9a-f]{12}))\/edit(?:\.([^\/.?]+))?$">
+    /marketplace/items/:id/edit(.:format)
+  </td>
+  <td data-route-reqs=3D"marketplace/items#edit {:id=3D>/[0-9a-f]{8}-[0-9a-=
+f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}">
+    marketplace/items#edit {:id=3D&gt;/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-=
+[0-9a-f]{4}-[0-9a-f]{12}/i}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"marketplace_item">
+      marketplace_item<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/marketplace/items/:id(.:format)" data-regexp=3D"^=
+\/marketplace\/items\/((?i-mx:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{=
+4}-[0-9a-f]{12}))(?:\.([^\/.?]+))?$">
+    /marketplace/items/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"marketplace/items#show {:id=3D>/[0-9a-f]{8}-[0-9a-=
+f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}">
+    marketplace/items#show {:id=3D&gt;/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-=
+[0-9a-f]{4}-[0-9a-f]{12}/i}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PATCH">
+    PATCH
+  </td>
+  <td data-route-path=3D"/marketplace/items/:id(.:format)" data-regexp=3D"^=
+\/marketplace\/items\/((?i-mx:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{=
+4}-[0-9a-f]{12}))(?:\.([^\/.?]+))?$">
+    /marketplace/items/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"marketplace/items#update {:id=3D>/[0-9a-f]{8}-[0-9=
+a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}">
+    marketplace/items#update {:id=3D&gt;/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4=
+}-[0-9a-f]{4}-[0-9a-f]{12}/i}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/marketplace/items/:id(.:format)" data-regexp=3D"^=
+\/marketplace\/items\/((?i-mx:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{=
+4}-[0-9a-f]{12}))(?:\.([^\/.?]+))?$">
+    /marketplace/items/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"marketplace/items#update {:id=3D>/[0-9a-f]{8}-[0-9=
+a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}">
+    marketplace/items#update {:id=3D&gt;/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4=
+}-[0-9a-f]{4}-[0-9a-f]{12}/i}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"DELETE">
+    DELETE
+  </td>
+  <td data-route-path=3D"/marketplace/items/:id(.:format)" data-regexp=3D"^=
+\/marketplace\/items\/((?i-mx:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{=
+4}-[0-9a-f]{12}))(?:\.([^\/.?]+))?$">
+    /marketplace/items/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"marketplace/items#destroy {:id=3D>/[0-9a-f]{8}-[0-=
+9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}">
+    marketplace/items#destroy {:id=3D&gt;/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{=
+4}-[0-9a-f]{4}-[0-9a-f]{12}/i}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"transactions_data">
+      transactions_data<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/transactions/data(.:format)" data-regexp=3D"^\/tr=
+ansactions\/data(?:\.([^\/.?]+))?$">
+    /transactions/data(.:format)
+  </td>
+  <td data-route-reqs=3D"transactions#data">
+    transactions#data
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"transactions_stats">
+      transactions_stats<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/transactions/stats(.:format)" data-regexp=3D"^\/t=
+ransactions\/stats(?:\.([^\/.?]+))?$">
+    /transactions/stats(.:format)
+  </td>
+  <td data-route-reqs=3D"transactions#stats">
+    transactions#stats
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_user_public_key">
+      api_v1_user_public_key<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/users/:user_username/public_key(.:format)"=
+ data-regexp=3D"^\/api\/v1\/users\/(([a-zA-Z0-9_\.]+))\/public_key(?:\.([^\=
+/.?]+))?$">
+    /api/v1/users/:user_username/public_key(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/users/public_key#show {:format=3D>:json, :u=
+ser_username=3D>/[a-zA-Z0-9_\.]+/}">
+    api/v1/users/public_key#show {:format=3D&gt;:json, :user_username=3D&gt=
+;/[a-zA-Z0-9_\.]+/}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_user_location">
+      api_v1_user_location<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/users/:user_username/location(.:format)" d=
+ata-regexp=3D"^\/api\/v1\/users\/(([a-zA-Z0-9_\.]+))\/location(?:\.([^\/.?]=
++))?$">
+    /api/v1/users/:user_username/location(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/users/location#show {:format=3D>:json, :use=
+r_username=3D>/[a-zA-Z0-9_\.]+/}">
+    api/v1/users/location#show {:format=3D&gt;:json, :user_username=3D&gt;/=
+[a-zA-Z0-9_\.]+/}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"autocomplete_username_api_v1_users">
+      autocomplete_username_api_v1_users<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/users/autocomplete_username(.:format)" dat=
+a-regexp=3D"^\/api\/v1\/users\/autocomplete_username(?:\.([^\/.?]+))?$">
+    /api/v1/users/autocomplete_username(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/users#autocomplete_username {:format=3D>:js=
+on}">
+    api/v1/users#autocomplete_username {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_users">
+      api_v1_users<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/users(.:format)" data-regexp=3D"^\/api\/v1=
+\/users(?:\.([^\/.?]+))?$">
+    /api/v1/users(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/users#index {:format=3D>:json}">
+    api/v1/users#index {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/api/v1/users(.:format)" data-regexp=3D"^\/api\/v1=
+\/users(?:\.([^\/.?]+))?$">
+    /api/v1/users(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/users#create {:format=3D>:json}">
+    api/v1/users#create {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_users_connections">
+      api_v1_users_connections<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/users/connections(.:format)" data-regexp=
+=3D"^\/api\/v1\/users\/connections(?:\.([^\/.?]+))?$">
+    /api/v1/users/connections(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/users#connections {:format=3D>:json}">
+    api/v1/users#connections {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_marketplace_item_root_file_key">
+      api_v1_marketplace_item_root_file_key<span class=3D"helper">_path</sp=
+an>
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/api/v1/marketplace/items/:item_id/root_file_key(.=
+:format)" data-regexp=3D"^\/api\/v1\/marketplace\/items\/((?i-mx:[0-9a-f]{8=
+}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}))\/root_file_key(?:\.([^=
+\/.?]+))?$">
+    /api/v1/marketplace/items/:item_id/root_file_key(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/marketplace/items#update_root_file_key {:fo=
+rmat=3D>:json, :item_id=3D>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}=
+-[0-9a-f]{12}/i}">
+    api/v1/marketplace/items#update_root_file_key {:format=3D&gt;:json, :it=
+em_id=3D&gt;/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i=
+}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"DELETE">
+    DELETE
+  </td>
+  <td data-route-path=3D"/api/v1/marketplace/items/:item_id/root_file_key(.=
+:format)" data-regexp=3D"^\/api\/v1\/marketplace\/items\/((?i-mx:[0-9a-f]{8=
+}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}))\/root_file_key(?:\.([^=
+\/.?]+))?$">
+    /api/v1/marketplace/items/:item_id/root_file_key(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/marketplace/items#delete_root_file_key {:fo=
+rmat=3D>:json, :item_id=3D>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}=
+-[0-9a-f]{12}/i}">
+    api/v1/marketplace/items#delete_root_file_key {:format=3D&gt;:json, :it=
+em_id=3D&gt;/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i=
+}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_marketplace_item_admin">
+      api_v1_marketplace_item_admin<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"PATCH">
+    PATCH
+  </td>
+  <td data-route-path=3D"/api/v1/marketplace/items/:item_id/admin(.:format)=
+" data-regexp=3D"^\/api\/v1\/marketplace\/items\/((?i-mx:[0-9a-f]{8}-[0-9a-=
+f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}))\/admin(?:\.([^\/.?]+))?$">
+    /api/v1/marketplace/items/:item_id/admin(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/marketplace/items/admin#update {:format=3D>=
+:json, :item_id=3D>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f=
+]{12}/i}">
+    api/v1/marketplace/items/admin#update {:format=3D&gt;:json, :item_id=3D=
+&gt;/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/api/v1/marketplace/items/:item_id/admin(.:format)=
+" data-regexp=3D"^\/api\/v1\/marketplace\/items\/((?i-mx:[0-9a-f]{8}-[0-9a-=
+f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}))\/admin(?:\.([^\/.?]+))?$">
+    /api/v1/marketplace/items/:item_id/admin(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/marketplace/items/admin#update {:format=3D>=
+:json, :item_id=3D>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f=
+]{12}/i}">
+    api/v1/marketplace/items/admin#update {:format=3D&gt;:json, :item_id=3D=
+&gt;/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_marketplace_item_like">
+      api_v1_marketplace_item_like<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/api/v1/marketplace/items/:item_id/like(.:format)"=
+ data-regexp=3D"^\/api\/v1\/marketplace\/items\/((?i-mx:[0-9a-f]{8}-[0-9a-f=
+]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}))\/like(?:\.([^\/.?]+))?$">
+    /api/v1/marketplace/items/:item_id/like(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/marketplace/items/likes#create {:format=3D>=
+:json, :item_id=3D>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f=
+]{12}/i}">
+    api/v1/marketplace/items/likes#create {:format=3D&gt;:json, :item_id=3D=
+&gt;/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"DELETE">
+    DELETE
+  </td>
+  <td data-route-path=3D"/api/v1/marketplace/items/:item_id/like(.:format)"=
+ data-regexp=3D"^\/api\/v1\/marketplace\/items\/((?i-mx:[0-9a-f]{8}-[0-9a-f=
+]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}))\/like(?:\.([^\/.?]+))?$">
+    /api/v1/marketplace/items/:item_id/like(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/marketplace/items/likes#destroy {:format=3D=
+>:json, :item_id=3D>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-=
+f]{12}/i}">
+    api/v1/marketplace/items/likes#destroy {:format=3D&gt;:json, :item_id=
+=3D&gt;/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_marketplace_items">
+      api_v1_marketplace_items<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/marketplace/items(.:format)" data-regexp=
+=3D"^\/api\/v1\/marketplace\/items(?:\.([^\/.?]+))?$">
+    /api/v1/marketplace/items(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/marketplace/items#index {:format=3D>:json}"=
+>
+    api/v1/marketplace/items#index {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/api/v1/marketplace/items(.:format)" data-regexp=
+=3D"^\/api\/v1\/marketplace\/items(?:\.([^\/.?]+))?$">
+    /api/v1/marketplace/items(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/marketplace/items#create {:format=3D>:json}=
+">
+    api/v1/marketplace/items#create {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_marketplace_item">
+      api_v1_marketplace_item<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/marketplace/items/:id(.:format)" data-rege=
+xp=3D"^\/api\/v1\/marketplace\/items\/((?i-mx:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a=
+-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}))(?:\.([^\/.?]+))?$">
+    /api/v1/marketplace/items/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/marketplace/items#show {:format=3D>:json, :=
+id=3D>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}">
+    api/v1/marketplace/items#show {:format=3D&gt;:json, :id=3D&gt;/[0-9a-f]=
+{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PATCH">
+    PATCH
+  </td>
+  <td data-route-path=3D"/api/v1/marketplace/items/:id(.:format)" data-rege=
+xp=3D"^\/api\/v1\/marketplace\/items\/((?i-mx:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a=
+-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}))(?:\.([^\/.?]+))?$">
+    /api/v1/marketplace/items/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/marketplace/items#update {:format=3D>:json,=
+ :id=3D>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}">
+    api/v1/marketplace/items#update {:format=3D&gt;:json, :id=3D&gt;/[0-9a-=
+f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/api/v1/marketplace/items/:id(.:format)" data-rege=
+xp=3D"^\/api\/v1\/marketplace\/items\/((?i-mx:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a=
+-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}))(?:\.([^\/.?]+))?$">
+    /api/v1/marketplace/items/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/marketplace/items#update {:format=3D>:json,=
+ :id=3D>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}">
+    api/v1/marketplace/items#update {:format=3D&gt;:json, :id=3D&gt;/[0-9a-=
+f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_marketplace_categories">
+      api_v1_marketplace_categories<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/marketplace/categories(.:format)" data-reg=
+exp=3D"^\/api\/v1\/marketplace\/categories(?:\.([^\/.?]+))?$">
+    /api/v1/marketplace/categories(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/marketplace/categories#index {:format=3D>:j=
+son}">
+    api/v1/marketplace/categories#index {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_user_stories">
+      api_v1_user_stories<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/user_stories(.:format)" data-regexp=3D"^\/=
+api\/v1\/user_stories(?:\.([^\/.?]+))?$">
+    /api/v1/user_stories(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/user_stories#index {:format=3D>:json}">
+    api/v1/user_stories#index {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/api/v1/user_stories(.:format)" data-regexp=3D"^\/=
+api\/v1\/user_stories(?:\.([^\/.?]+))?$">
+    /api/v1/user_stories(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/user_stories#create {:format=3D>:json}">
+    api/v1/user_stories#create {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_user_story">
+      api_v1_user_story<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/user_stories/:id(.:format)" data-regexp=3D=
+"^\/api\/v1\/user_stories\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /api/v1/user_stories/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/user_stories#show {:format=3D>:json}">
+    api/v1/user_stories#show {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PATCH">
+    PATCH
+  </td>
+  <td data-route-path=3D"/api/v1/user_stories/:id(.:format)" data-regexp=3D=
+"^\/api\/v1\/user_stories\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /api/v1/user_stories/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/user_stories#update {:format=3D>:json}">
+    api/v1/user_stories#update {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/api/v1/user_stories/:id(.:format)" data-regexp=3D=
+"^\/api\/v1\/user_stories\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /api/v1/user_stories/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/user_stories#update {:format=3D>:json}">
+    api/v1/user_stories#update {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"DELETE">
+    DELETE
+  </td>
+  <td data-route-path=3D"/api/v1/user_stories/:id(.:format)" data-regexp=3D=
+"^\/api\/v1\/user_stories\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /api/v1/user_stories/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/user_stories#destroy {:format=3D>:json}">
+    api/v1/user_stories#destroy {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_notifications">
+      api_v1_notifications<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/notifications(.:format)" data-regexp=3D"^\=
+/api\/v1\/notifications(?:\.([^\/.?]+))?$">
+    /api/v1/notifications(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/notifications#index {:format=3D>:json}">
+    api/v1/notifications#index {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_user">
+      api_v1_user<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"DELETE">
+    DELETE
+  </td>
+  <td data-route-path=3D"/api/v1/user/connections/:username(.:format)" data=
+-regexp=3D"^\/api\/v1\/user\/connections\/(([a-zA-Z0-9_\.]+))(?:\.([^\/.?]+=
+))?$">
+    /api/v1/user/connections/:username(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/user#delete_connection {:format=3D>:json, :=
+username=3D>/[a-zA-Z0-9_\.]+/}">
+    api/v1/user#delete_connection {:format=3D&gt;:json, :username=3D&gt;/[a=
+-zA-Z0-9_\.]+/}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_user_connection_request">
+      api_v1_user_connection_request<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/api/v1/user/connection_request(.:format)" data-re=
+gexp=3D"^\/api\/v1\/user\/connection_request(?:\.([^\/.?]+))?$">
+    /api/v1/user/connection_request(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/user/user_connection_request#create {:forma=
+t=3D>:json}">
+    api/v1/user/user_connection_request#create {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/user/connection_request(.:format)" data-re=
+gexp=3D"^\/api\/v1\/user\/connection_request(?:\.([^\/.?]+))?$">
+    /api/v1/user/connection_request(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/user/user_connection_request#show {:format=
+=3D>:json}">
+    api/v1/user/user_connection_request#show {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"DELETE">
+    DELETE
+  </td>
+  <td data-route-path=3D"/api/v1/user/connection_request(.:format)" data-re=
+gexp=3D"^\/api\/v1\/user\/connection_request(?:\.([^\/.?]+))?$">
+    /api/v1/user/connection_request(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/user/user_connection_request#destroy {:form=
+at=3D>:json}">
+    api/v1/user/user_connection_request#destroy {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_user_friends">
+      api_v1_user_friends<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/user/friends(.:format)" data-regexp=3D"^\/=
+api\/v1\/user\/friends(?:\.([^\/.?]+))?$">
+    /api/v1/user/friends(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/user/user_friendship#index {:format=3D>:jso=
+n}">
+    api/v1/user/user_friendship#index {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/api/v1/user/friends(.:format)" data-regexp=3D"^\/=
+api\/v1\/user\/friends(?:\.([^\/.?]+))?$">
+    /api/v1/user/friends(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/user/user_friendship#create {:format=3D>:js=
+on}">
+    api/v1/user/user_friendship#create {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_user_friend">
+      api_v1_user_friend<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"DELETE">
+    DELETE
+  </td>
+  <td data-route-path=3D"/api/v1/user/friends/:username(.:format)" data-reg=
+exp=3D"^\/api\/v1\/user\/friends\/(([a-zA-Z0-9_\.]+))(?:\.([^\/.?]+))?$">
+    /api/v1/user/friends/:username(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/user/user_friendship#destroy {:format=3D>:j=
+son, :username=3D>/[a-zA-Z0-9_\.]+/}">
+    api/v1/user/user_friendship#destroy {:format=3D&gt;:json, :username=3D&=
+gt;/[a-zA-Z0-9_\.]+/}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_user_places">
+      api_v1_user_places<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/user/places(.:format)" data-regexp=3D"^\/a=
+pi\/v1\/user\/places(?:\.([^\/.?]+))?$">
+    /api/v1/user/places(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/user/places#index {:format=3D>:json}">
+    api/v1/user/places#index {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_user_cloud_domain_restart">
+      api_v1_user_cloud_domain_restart<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/api/v1/user/cloud_domains/:cloud_domain_id/restar=
+t(.:format)" data-regexp=3D"^\/api\/v1\/user\/cloud_domains\/([^\/.?]+)\/re=
+start(?:\.([^\/.?]+))?$">
+    /api/v1/user/cloud_domains/:cloud_domain_id/restart(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/user/cloud_domains#restart {:format=3D>:jso=
+n}">
+    api/v1/user/cloud_domains#restart {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_user_cloud_domain_update_server">
+      api_v1_user_cloud_domain_update_server<span class=3D"helper">_path</s=
+pan>
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/api/v1/user/cloud_domains/:cloud_domain_id/update=
+_server(.:format)" data-regexp=3D"^\/api\/v1\/user\/cloud_domains\/([^\/.?]=
++)\/update_server(?:\.([^\/.?]+))?$">
+    /api/v1/user/cloud_domains/:cloud_domain_id/update_server(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/user/cloud_domains#update_server {:format=
+=3D>:json}">
+    api/v1/user/cloud_domains#update_server {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_user_cloud_domain_reset_password">
+      api_v1_user_cloud_domain_reset_password<span class=3D"helper">_path</=
+span>
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/api/v1/user/cloud_domains/:cloud_domain_id/reset_=
+password(.:format)" data-regexp=3D"^\/api\/v1\/user\/cloud_domains\/([^\/.?=
+]+)\/reset_password(?:\.([^\/.?]+))?$">
+    /api/v1/user/cloud_domains/:cloud_domain_id/reset_password(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/user/cloud_domains#reset_password {:format=
+=3D>:json}">
+    api/v1/user/cloud_domains#reset_password {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_user_cloud_domains">
+      api_v1_user_cloud_domains<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/user/cloud_domains(.:format)" data-regexp=
+=3D"^\/api\/v1\/user\/cloud_domains(?:\.([^\/.?]+))?$">
+    /api/v1/user/cloud_domains(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/user/cloud_domains#index {:format=3D>:json}=
+">
+    api/v1/user/cloud_domains#index {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_user_cloud_domain">
+      api_v1_user_cloud_domain<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/user/cloud_domains/:id(.:format)" data-reg=
+exp=3D"^\/api\/v1\/user\/cloud_domains\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /api/v1/user/cloud_domains/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/user/cloud_domains#show {:format=3D>:json}"=
+>
+    api/v1/user/cloud_domains#show {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"DELETE">
+    DELETE
+  </td>
+  <td data-route-path=3D"/api/v1/user/cloud_domains/:id(.:format)" data-reg=
+exp=3D"^\/api\/v1\/user\/cloud_domains\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /api/v1/user/cloud_domains/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/user/cloud_domains#destroy {:format=3D>:jso=
+n}">
+    api/v1/user/cloud_domains#destroy {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_marketplace_key">
+      api_v1_marketplace_key<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/commerce/marketplace_key(.:format)" data-r=
+egexp=3D"^\/api\/v1\/commerce\/marketplace_key(?:\.([^\/.?]+))?$">
+    /api/v1/commerce/marketplace_key(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/commerce#marketplace_key {:format=3D>:json}=
+">
+    api/v1/commerce#marketplace_key {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_status">
+      api_v1_status<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/commerce/status(.:format)" data-regexp=3D"=
+^\/api\/v1\/commerce\/status(?:\.([^\/.?]+))?$">
+    /api/v1/commerce/status(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/commerce#status {:format=3D>:json}">
+    api/v1/commerce#status {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_inventory">
+      api_v1_inventory<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/api/v1/commerce/inventory(.:format)" data-regexp=
+=3D"^\/api\/v1\/commerce\/inventory(?:\.([^\/.?]+))?$">
+    /api/v1/commerce/inventory(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/commerce#inventory {:format=3D>:json}">
+    api/v1/commerce#inventory {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_balance">
+      api_v1_balance<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/api/v1/commerce/balance(.:format)" data-regexp=3D=
+"^\/api\/v1\/commerce\/balance(?:\.([^\/.?]+))?$">
+    /api/v1/commerce/balance(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/commerce#balance {:format=3D>:json}">
+    api/v1/commerce#balance {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_history">
+      api_v1_history<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/commerce/history(.:format)" data-regexp=3D=
+"^\/api\/v1\/commerce\/history(?:\.([^\/.?]+))?$">
+    /api/v1/commerce/history(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/commerce#history {:format=3D>:json}">
+    api/v1/commerce#history {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/api/v1/commerce/history(.:format)" data-regexp=3D=
+"^\/api\/v1\/commerce\/history(?:\.([^\/.?]+))?$">
+    /api/v1/commerce/history(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/commerce#history {:format=3D>:json}">
+    api/v1/commerce#history {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_already_owned">
+      api_v1_already_owned<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/api/v1/commerce/already_owned(.:format)" data-reg=
+exp=3D"^\/api\/v1\/commerce\/already_owned(?:\.([^\/.?]+))?$">
+    /api/v1/commerce/already_owned(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/commerce#already_owned {:format=3D>:json}">
+    api/v1/commerce#already_owned {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_available_updates">
+      api_v1_available_updates<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/commerce/available_updates(.:format)" data=
+-regexp=3D"^\/api\/v1\/commerce\/available_updates(?:\.([^\/.?]+))?$">
+    /api/v1/commerce/available_updates(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/commerce#available_updates {:format=3D>:jso=
+n}">
+    api/v1/commerce#available_updates {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/api/v1/commerce/available_updates(.:format)" data=
+-regexp=3D"^\/api\/v1\/commerce\/available_updates(?:\.([^\/.?]+))?$">
+    /api/v1/commerce/available_updates(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/commerce#available_updates {:format=3D>:jso=
+n}">
+    api/v1/commerce#available_updates {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_update_item">
+      api_v1_update_item<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/api/v1/commerce/update_item(.:format)" data-regex=
+p=3D"^\/api\/v1\/commerce\/update_item(?:\.([^\/.?]+))?$">
+    /api/v1/commerce/update_item(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/commerce#update_item {:format=3D>:json}">
+    api/v1/commerce#update_item {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_buy">
+      api_v1_buy<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/api/v1/commerce/buy(.:format)" data-regexp=3D"^\/=
+api\/v1\/commerce\/buy(?:\.([^\/.?]+))?$">
+    /api/v1/commerce/buy(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/commerce#buy {:format=3D>:json}">
+    api/v1/commerce#buy {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_receive_at">
+      api_v1_receive_at<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/api/v1/commerce/receive_at(.:format)" data-regexp=
+=3D"^\/api\/v1\/commerce\/receive_at(?:\.([^\/.?]+))?$">
+    /api/v1/commerce/receive_at(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/commerce#receive_at {:format=3D>:json}">
+    api/v1/commerce#receive_at {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_hfc_account">
+      api_v1_hfc_account<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/api/v1/commerce/hfc_account(.:format)" data-regex=
+p=3D"^\/api\/v1\/commerce\/hfc_account(?:\.([^\/.?]+))?$">
+    /api/v1/commerce/hfc_account(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/commerce#hfc_account {:format=3D>:json}">
+    api/v1/commerce#hfc_account {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_entity_edition">
+      api_v1_entity_edition<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/commerce/entity_edition/:marketplace_item_=
+id.json(.:format)" data-regexp=3D"^\/api\/v1\/commerce\/entity_edition\/([^=
+\/.?]+)\.json(?:\.([^\/.?]+))?$">
+    /api/v1/commerce/entity_edition/:marketplace_item_id.json(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/commerce#entity_edition {:format=3D>:json}"=
+>
+    api/v1/commerce#entity_edition {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_entity_edition_gz">
+      api_v1_entity_edition_gz<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/commerce/entity_edition/:marketplace_item_=
+id.json.gz(.:format)" data-regexp=3D"^\/api\/v1\/commerce\/entity_edition\/=
+([^\/.?]+)\.json\.gz(?:\.([^\/.?]+))?$">
+    /api/v1/commerce/entity_edition/:marketplace_item_id.json.gz(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/commerce#entity_edition {:format=3D>:json}"=
+>
+    api/v1/commerce#entity_edition {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_entity_edition_fst">
+      api_v1_entity_edition_fst<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/commerce/entity_edition/:marketplace_item_=
+id.fst(.:format)" data-regexp=3D"^\/api\/v1\/commerce\/entity_edition\/([^\=
+/.?]+)\.fst(?:\.([^\/.?]+))?$">
+    /api/v1/commerce/entity_edition/:marketplace_item_id.fst(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/commerce#entity_edition {:format=3D>:json}"=
+>
+    api/v1/commerce#entity_edition {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_entity_edition_app">
+      api_v1_entity_edition_app<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/commerce/entity_edition/:marketplace_item_=
+id.app.json(.:format)" data-regexp=3D"^\/api\/v1\/commerce\/entity_edition\=
+/([^\/.?]+)\.app\.json(?:\.([^\/.?]+))?$">
+    /api/v1/commerce/entity_edition/:marketplace_item_id.app.json(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/commerce#entity_edition {:format=3D>:json}"=
+>
+    api/v1/commerce#entity_edition {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_entity_edition_zip">
+      api_v1_entity_edition_zip<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/commerce/entity_edition/:marketplace_item_=
+id.content.zip(.:format)" data-regexp=3D"^\/api\/v1\/commerce\/entity_editi=
+on\/([^\/.?]+)\.content\.zip(?:\.([^\/.?]+))?$">
+    /api/v1/commerce/entity_edition/:marketplace_item_id.content.zip(.:form=
+at)
+  </td>
+  <td data-route-reqs=3D"api/v1/commerce#entity_edition {:format=3D>:json}"=
+>
+    api/v1/commerce#entity_edition {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1">
+      api_v1<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/api/v1/commerce/proof_of_purchase_status/:transac=
+tion_type(.:format)" data-regexp=3D"^\/api\/v1\/commerce\/proof_of_purchase=
+_status\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /api/v1/commerce/proof_of_purchase_status/:transaction_type(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/commerce#proof_of_purchase_status {:format=
+=3D>:json}">
+    api/v1/commerce#proof_of_purchase_status {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_location">
+      api_v1_location<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/api/v1/commerce/location(.:format)" data-regexp=
+=3D"^\/api\/v1\/commerce\/location(?:\.([^\/.?]+))?$">
+    /api/v1/commerce/location(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/commerce#location {:format=3D>:json}">
+    api/v1/commerce#location {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_transfer_asset_to_node">
+      api_v1_transfer_asset_to_node<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/api/v1/commerce/transfer_asset_to_node(.:format)"=
+ data-regexp=3D"^\/api\/v1\/commerce\/transfer_asset_to_node(?:\.([^\/.?]+)=
+)?$">
+    /api/v1/commerce/transfer_asset_to_node(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/commerce#transfer_asset_to_node {:format=3D=
+>:json}">
+    api/v1/commerce#transfer_asset_to_node {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_transfer_asset_to_user">
+      api_v1_transfer_asset_to_user<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/api/v1/commerce/transfer_asset_to_user(.:format)"=
+ data-regexp=3D"^\/api\/v1\/commerce\/transfer_asset_to_user(?:\.([^\/.?]+)=
+)?$">
+    /api/v1/commerce/transfer_asset_to_user(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/commerce#transfer_asset_to_user {:format=3D=
+>:json}">
+    api/v1/commerce#transfer_asset_to_user {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_transfer_hfc_to_node">
+      api_v1_transfer_hfc_to_node<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/api/v1/commerce/transfer_hfc_to_node(.:format)" d=
+ata-regexp=3D"^\/api\/v1\/commerce\/transfer_hfc_to_node(?:\.([^\/.?]+))?$"=
+>
+    /api/v1/commerce/transfer_hfc_to_node(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/commerce#transfer_hfc_to_node {:format=3D>:=
+json}">
+    api/v1/commerce#transfer_hfc_to_node {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_transfer_hfc_to_user">
+      api_v1_transfer_hfc_to_user<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/api/v1/commerce/transfer_hfc_to_user(.:format)" d=
+ata-regexp=3D"^\/api\/v1\/commerce\/transfer_hfc_to_user(?:\.([^\/.?]+))?$"=
+>
+    /api/v1/commerce/transfer_hfc_to_user(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/commerce#transfer_hfc_to_user {:format=3D>:=
+json}">
+    api/v1/commerce#transfer_hfc_to_user {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_transfer_assets">
+      api_v1_transfer_assets<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/api/v1/commerce/transfer_assets(.:format)" data-r=
+egexp=3D"^\/api\/v1\/commerce\/transfer_assets(?:\.([^\/.?]+))?$">
+    /api/v1/commerce/transfer_assets(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/commerce#transfer_assets {:format=3D>:json}=
+">
+    api/v1/commerce#transfer_assets {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_authorize">
+      api_v1_authorize<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/api/v1/commerce/authorize(.:format)" data-regexp=
+=3D"^\/api\/v1\/commerce\/authorize(?:\.([^\/.?]+))?$">
+    /api/v1/commerce/authorize(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/commerce#authorize {:format=3D>:json}">
+    api/v1/commerce#authorize {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_redeem">
+      api_v1_redeem<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/api/v1/commerce/redeem(.:format)" data-regexp=3D"=
+^\/api\/v1\/commerce\/redeem(?:\.([^\/.?]+))?$">
+    /api/v1/commerce/redeem(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/commerce#redeem {:format=3D>:json}">
+    api/v1/commerce#redeem {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_profile">
+      api_v1_profile<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/user/profile(.:format)" data-regexp=3D"^\/=
+api\/v1\/user\/profile(?:\.([^\/.?]+))?$">
+    /api/v1/user/profile(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/user#profile {:format=3D>:json}">
+    api/v1/user#profile {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_locker">
+      api_v1_locker<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/user/locker(.:format)" data-regexp=3D"^\/a=
+pi\/v1\/user\/locker(?:\.([^\/.?]+))?$">
+    /api/v1/user/locker(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/user#get_locker {:format=3D>:json}">
+    api/v1/user#get_locker {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/api/v1/user/locker(.:format)" data-regexp=3D"^\/a=
+pi\/v1\/user\/locker(?:\.([^\/.?]+))?$">
+    /api/v1/user/locker(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/user#set_locker {:format=3D>:json}">
+    api/v1/user#set_locker {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_public_key">
+      api_v1_public_key<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/api/v1/user/public_key(.:format)" data-regexp=3D"=
+^\/api\/v1\/user\/public_key(?:\.([^\/.?]+))?$">
+    /api/v1/user/public_key(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/users/public_key#update {:format=3D>:json}"=
+>
+    api/v1/users/public_key#update {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_channel_user">
+      api_v1_channel_user<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/api/v1/user/channel_user(.:format)" data-regexp=
+=3D"^\/api\/v1\/user\/channel_user(?:\.([^\/.?]+))?$">
+    /api/v1/user/channel_user(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/users/channel_user#update {:format=3D>:json=
+}">
+    api/v1/users/channel_user#update {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/api/v1/user/location(.:format)" data-regexp=3D"^\=
+/api\/v1\/user\/location(?:\.([^\/.?]+))?$">
+    /api/v1/user/location(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/users/location#update {:format=3D>:json}">
+    api/v1/users/location#update {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"DELETE">
+    DELETE
+  </td>
+  <td data-route-path=3D"/api/v1/user/location(.:format)" data-regexp=3D"^\=
+/api\/v1\/user\/location(?:\.([^\/.?]+))?$">
+    /api/v1/user/location(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/users/location#delete {:format=3D>:json}">
+    api/v1/users/location#delete {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_heartbeat">
+      api_v1_heartbeat<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/api/v1/user/heartbeat(.:format)" data-regexp=3D"^=
+\/api\/v1\/user\/heartbeat(?:\.([^\/.?]+))?$">
+    /api/v1/user/heartbeat(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/users/heartbeat#update {:format=3D>:json}">
+    api/v1/users/heartbeat#update {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_steam_link">
+      api_v1_steam_link<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/api/v1/user/steam/link(.:format)" data-regexp=3D"=
+^\/api\/v1\/user\/steam\/link(?:\.([^\/.?]+))?$">
+    /api/v1/user/steam/link(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/users/steam#link {:format=3D>:json}">
+    api/v1/users/steam#link {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_steam_create">
+      api_v1_steam_create<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/api/v1/user/steam/create(.:format)" data-regexp=
+=3D"^\/api\/v1\/user\/steam\/create(?:\.([^\/.?]+))?$">
+    /api/v1/user/steam/create(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/users/steam#create {:format=3D>:json}">
+    api/v1/users/steam#create {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_oculus_link">
+      api_v1_oculus_link<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/api/v1/user/oculus/link(.:format)" data-regexp=3D=
+"^\/api\/v1\/user\/oculus\/link(?:\.([^\/.?]+))?$">
+    /api/v1/user/oculus/link(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/users/oculus#link {:format=3D>:json}">
+    api/v1/users/oculus#link {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_oculus_create">
+      api_v1_oculus_create<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/api/v1/user/oculus/create(.:format)" data-regexp=
+=3D"^\/api\/v1\/user\/oculus\/create(?:\.([^\/.?]+))?$">
+    /api/v1/user/oculus/create(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/users/oculus#create {:format=3D>:json}">
+    api/v1/users/oculus#create {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/groups/names/:groupname(.:format)" data-re=
+gexp=3D"^\/api\/v1\/groups\/names\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /api/v1/groups/names/:groupname(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/groups#show_by_name {:format=3D>:json}">
+    api/v1/groups#show_by_name {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"names_api_v1_groups">
+      names_api_v1_groups<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/api/v1/groups/names(.:format)" data-regexp=3D"^\/=
+api\/v1\/groups\/names(?:\.([^\/.?]+))?$">
+    /api/v1/groups/names(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/groups#show_by_names {:format=3D>:json}">
+    api/v1/groups#show_by_names {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"reorder_api_v1_group_rank">
+      reorder_api_v1_group_rank<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/api/v1/groups/:group_id/ranks/:id/reorder(.:forma=
+t)" data-regexp=3D"^\/api\/v1\/groups\/((?i-mx:[0-9a-f]{8}-[0-9a-f]{4}-[0-9=
+a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}))\/ranks\/((?i-mx:[0-9a-f]{8}-[0-9a-f]{4}-=
+[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}))\/reorder(?:\.([^\/.?]+))?$">
+    /api/v1/groups/:group_id/ranks/:id/reorder(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/groups/ranks#reorder {:format=3D>:json, :id=
+=3D>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i, :group=
+_id=3D>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}">
+    api/v1/groups/ranks#reorder {:format=3D&gt;:json, :id=3D&gt;/[0-9a-f]{8=
+}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i, :group_id=3D&gt;/[0-9=
+a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_group_ranks">
+      api_v1_group_ranks<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/groups/:group_id/ranks(.:format)" data-reg=
+exp=3D"^\/api\/v1\/groups\/((?i-mx:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9=
+a-f]{4}-[0-9a-f]{12}))\/ranks(?:\.([^\/.?]+))?$">
+    /api/v1/groups/:group_id/ranks(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/groups/ranks#index {:format=3D>:json, :grou=
+p_id=3D>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}">
+    api/v1/groups/ranks#index {:format=3D&gt;:json, :group_id=3D&gt;/[0-9a-=
+f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/api/v1/groups/:group_id/ranks(.:format)" data-reg=
+exp=3D"^\/api\/v1\/groups\/((?i-mx:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9=
+a-f]{4}-[0-9a-f]{12}))\/ranks(?:\.([^\/.?]+))?$">
+    /api/v1/groups/:group_id/ranks(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/groups/ranks#create {:format=3D>:json, :gro=
+up_id=3D>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}">
+    api/v1/groups/ranks#create {:format=3D&gt;:json, :group_id=3D&gt;/[0-9a=
+-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_group_rank">
+      api_v1_group_rank<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"PATCH">
+    PATCH
+  </td>
+  <td data-route-path=3D"/api/v1/groups/:group_id/ranks/:id(.:format)" data=
+-regexp=3D"^\/api\/v1\/groups\/((?i-mx:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-=
+[0-9a-f]{4}-[0-9a-f]{12}))\/ranks\/((?i-mx:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]=
+{4}-[0-9a-f]{4}-[0-9a-f]{12}))(?:\.([^\/.?]+))?$">
+    /api/v1/groups/:group_id/ranks/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/groups/ranks#update {:format=3D>:json, :id=
+=3D>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i, :group=
+_id=3D>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}">
+    api/v1/groups/ranks#update {:format=3D&gt;:json, :id=3D&gt;/[0-9a-f]{8}=
+-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i, :group_id=3D&gt;/[0-9a=
+-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/api/v1/groups/:group_id/ranks/:id(.:format)" data=
+-regexp=3D"^\/api\/v1\/groups\/((?i-mx:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-=
+[0-9a-f]{4}-[0-9a-f]{12}))\/ranks\/((?i-mx:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]=
+{4}-[0-9a-f]{4}-[0-9a-f]{12}))(?:\.([^\/.?]+))?$">
+    /api/v1/groups/:group_id/ranks/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/groups/ranks#update {:format=3D>:json, :id=
+=3D>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i, :group=
+_id=3D>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}">
+    api/v1/groups/ranks#update {:format=3D&gt;:json, :id=3D&gt;/[0-9a-f]{8}=
+-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i, :group_id=3D&gt;/[0-9a=
+-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"DELETE">
+    DELETE
+  </td>
+  <td data-route-path=3D"/api/v1/groups/:group_id/ranks/:id(.:format)" data=
+-regexp=3D"^\/api\/v1\/groups\/((?i-mx:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-=
+[0-9a-f]{4}-[0-9a-f]{12}))\/ranks\/((?i-mx:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]=
+{4}-[0-9a-f]{4}-[0-9a-f]{12}))(?:\.([^\/.?]+))?$">
+    /api/v1/groups/:group_id/ranks/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/groups/ranks#destroy {:format=3D>:json, :id=
+=3D>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i, :group=
+_id=3D>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}">
+    api/v1/groups/ranks#destroy {:format=3D&gt;:json, :id=3D&gt;/[0-9a-f]{8=
+}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i, :group_id=3D&gt;/[0-9=
+a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_group_members">
+      api_v1_group_members<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/groups/:group_id/members(.:format)" data-r=
+egexp=3D"^\/api\/v1\/groups\/((?i-mx:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0=
+-9a-f]{4}-[0-9a-f]{12}))\/members(?:\.([^\/.?]+))?$">
+    /api/v1/groups/:group_id/members(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/groups/members#index {:format=3D>:json, :gr=
+oup_id=3D>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}"=
+>
+    api/v1/groups/members#index {:format=3D&gt;:json, :group_id=3D&gt;/[0-9=
+a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/api/v1/groups/:group_id/members(.:format)" data-r=
+egexp=3D"^\/api\/v1\/groups\/((?i-mx:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0=
+-9a-f]{4}-[0-9a-f]{12}))\/members(?:\.([^\/.?]+))?$">
+    /api/v1/groups/:group_id/members(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/groups/members#create {:format=3D>:json, :g=
+roup_id=3D>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}=
+">
+    api/v1/groups/members#create {:format=3D&gt;:json, :group_id=3D&gt;/[0-=
+9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_group_member">
+      api_v1_group_member<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/groups/:group_id/members/:username(.:forma=
+t)" data-regexp=3D"^\/api\/v1\/groups\/((?i-mx:[0-9a-f]{8}-[0-9a-f]{4}-[0-9=
+a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}))\/members\/(([a-zA-Z0-9_\.]+))(?:\.([^\/.=
+?]+))?$">
+    /api/v1/groups/:group_id/members/:username(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/groups/members#show {:format=3D>:json, :gro=
+up_id=3D>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i, :=
+username=3D>/[a-zA-Z0-9_\.]+/}">
+    api/v1/groups/members#show {:format=3D&gt;:json, :group_id=3D&gt;/[0-9a=
+-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i, :username=3D&gt;=
+/[a-zA-Z0-9_\.]+/}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PATCH">
+    PATCH
+  </td>
+  <td data-route-path=3D"/api/v1/groups/:group_id/members/:username(.:forma=
+t)" data-regexp=3D"^\/api\/v1\/groups\/((?i-mx:[0-9a-f]{8}-[0-9a-f]{4}-[0-9=
+a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}))\/members\/(([a-zA-Z0-9_\.]+))(?:\.([^\/.=
+?]+))?$">
+    /api/v1/groups/:group_id/members/:username(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/groups/members#update {:format=3D>:json, :g=
+roup_id=3D>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i,=
+ :username=3D>/[a-zA-Z0-9_\.]+/}">
+    api/v1/groups/members#update {:format=3D&gt;:json, :group_id=3D&gt;/[0-=
+9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i, :username=3D&g=
+t;/[a-zA-Z0-9_\.]+/}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/api/v1/groups/:group_id/members/:username(.:forma=
+t)" data-regexp=3D"^\/api\/v1\/groups\/((?i-mx:[0-9a-f]{8}-[0-9a-f]{4}-[0-9=
+a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}))\/members\/(([a-zA-Z0-9_\.]+))(?:\.([^\/.=
+?]+))?$">
+    /api/v1/groups/:group_id/members/:username(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/groups/members#update {:format=3D>:json, :g=
+roup_id=3D>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i,=
+ :username=3D>/[a-zA-Z0-9_\.]+/}">
+    api/v1/groups/members#update {:format=3D&gt;:json, :group_id=3D&gt;/[0-=
+9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i, :username=3D&g=
+t;/[a-zA-Z0-9_\.]+/}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"DELETE">
+    DELETE
+  </td>
+  <td data-route-path=3D"/api/v1/groups/:group_id/members/:username(.:forma=
+t)" data-regexp=3D"^\/api\/v1\/groups\/((?i-mx:[0-9a-f]{8}-[0-9a-f]{4}-[0-9=
+a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}))\/members\/(([a-zA-Z0-9_\.]+))(?:\.([^\/.=
+?]+))?$">
+    /api/v1/groups/:group_id/members/:username(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/groups/members#destroy {:format=3D>:json, :=
+group_id=3D>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i=
+, :username=3D>/[a-zA-Z0-9_\.]+/}">
+    api/v1/groups/members#destroy {:format=3D&gt;:json, :group_id=3D&gt;/[0=
+-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i, :username=3D&=
+gt;/[a-zA-Z0-9_\.]+/}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/api/v1/groups/members/:username(.:format)" data-r=
+egexp=3D"^\/api\/v1\/groups\/members\/(([a-zA-Z0-9_\.]+))(?:\.([^\/.?]+))?$=
+">
+    /api/v1/groups/members/:username(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/groups/members#show_groups {:format=3D>:jso=
+n, :username=3D>/[a-zA-Z0-9_\.]+/}">
+    api/v1/groups/members#show_groups {:format=3D&gt;:json, :username=3D&gt=
+;/[a-zA-Z0-9_\.]+/}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_groups">
+      api_v1_groups<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/groups(.:format)" data-regexp=3D"^\/api\/v=
+1\/groups(?:\.([^\/.?]+))?$">
+    /api/v1/groups(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/groups#index {:format=3D>:json}">
+    api/v1/groups#index {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_group">
+      api_v1_group<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/groups/:id(.:format)" data-regexp=3D"^\/ap=
+i\/v1\/groups\/((?i-mx:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9=
+a-f]{12}))(?:\.([^\/.?]+))?$">
+    /api/v1/groups/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/groups#show {:format=3D>:json, :id=3D>/[0-9=
+a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}">
+    api/v1/groups#show {:format=3D&gt;:json, :id=3D&gt;/[0-9a-f]{8}-[0-9a-f=
+]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_domain_ice_server_address">
+      api_v1_domain_ice_server_address<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/api/v1/domains/:domain_id/ice_server_address(.:fo=
+rmat)" data-regexp=3D"^\/api\/v1\/domains\/((?i-mx:[0-9a-f]{8}-[0-9a-f]{4}-=
+[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}))\/ice_server_address(?:\.([^\/.?]+))?=
+$">
+    /api/v1/domains/:domain_id/ice_server_address(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/domains#update_ice_server_address {:format=
+=3D>:json, :domain_id=3D>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[=
+0-9a-f]{12}/i}">
+    api/v1/domains#update_ice_server_address {:format=3D&gt;:json, :domain_=
+id=3D&gt;/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_domain_public_key">
+      api_v1_domain_public_key<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/domains/:domain_id/public_key(.:format)" d=
+ata-regexp=3D"^\/api\/v1\/domains\/((?i-mx:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]=
+{4}-[0-9a-f]{4}-[0-9a-f]{12}))\/public_key(?:\.([^\/.?]+))?$">
+    /api/v1/domains/:domain_id/public_key(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/domains/public_key#show {:format=3D>:json, =
+:domain_id=3D>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}=
+/i}">
+    api/v1/domains/public_key#show {:format=3D&gt;:json, :domain_id=3D&gt;/=
+[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PATCH">
+    PATCH
+  </td>
+  <td data-route-path=3D"/api/v1/domains/:domain_id/public_key(.:format)" d=
+ata-regexp=3D"^\/api\/v1\/domains\/((?i-mx:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]=
+{4}-[0-9a-f]{4}-[0-9a-f]{12}))\/public_key(?:\.([^\/.?]+))?$">
+    /api/v1/domains/:domain_id/public_key(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/domains/public_key#update {:format=3D>:json=
+, :domain_id=3D>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{1=
+2}/i}">
+    api/v1/domains/public_key#update {:format=3D&gt;:json, :domain_id=3D&gt=
+;/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/api/v1/domains/:domain_id/public_key(.:format)" d=
+ata-regexp=3D"^\/api\/v1\/domains\/((?i-mx:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]=
+{4}-[0-9a-f]{4}-[0-9a-f]{12}))\/public_key(?:\.([^\/.?]+))?$">
+    /api/v1/domains/:domain_id/public_key(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/domains/public_key#update {:format=3D>:json=
+, :domain_id=3D>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{1=
+2}/i}">
+    api/v1/domains/public_key#update {:format=3D&gt;:json, :domain_id=3D&gt=
+;/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_domains">
+      api_v1_domains<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/domains(.:format)" data-regexp=3D"^\/api\/=
+v1\/domains(?:\.([^\/.?]+))?$">
+    /api/v1/domains(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/domains#index {:format=3D>:json}">
+    api/v1/domains#index {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/api/v1/domains(.:format)" data-regexp=3D"^\/api\/=
+v1\/domains(?:\.([^\/.?]+))?$">
+    /api/v1/domains(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/domains#create {:format=3D>:json}">
+    api/v1/domains#create {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_domain">
+      api_v1_domain<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/domains/:id(.:format)" data-regexp=3D"^\/a=
+pi\/v1\/domains\/((?i-mx:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0=
+-9a-f]{12}))(?:\.([^\/.?]+))?$">
+    /api/v1/domains/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/domains#show {:format=3D>:json, :id=3D>/[0-=
+9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}">
+    api/v1/domains#show {:format=3D&gt;:json, :id=3D&gt;/[0-9a-f]{8}-[0-9a-=
+f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PATCH">
+    PATCH
+  </td>
+  <td data-route-path=3D"/api/v1/domains/:id(.:format)" data-regexp=3D"^\/a=
+pi\/v1\/domains\/((?i-mx:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0=
+-9a-f]{12}))(?:\.([^\/.?]+))?$">
+    /api/v1/domains/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/domains#update {:format=3D>:json, :id=3D>/[=
+0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}">
+    api/v1/domains#update {:format=3D&gt;:json, :id=3D&gt;/[0-9a-f]{8}-[0-9=
+a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/api/v1/domains/:id(.:format)" data-regexp=3D"^\/a=
+pi\/v1\/domains\/((?i-mx:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0=
+-9a-f]{12}))(?:\.([^\/.?]+))?$">
+    /api/v1/domains/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/domains#update {:format=3D>:json, :id=3D>/[=
+0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}">
+    api/v1/domains#update {:format=3D&gt;:json, :id=3D&gt;/[0-9a-f]{8}-[0-9=
+a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_all">
+      api_v1_all<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/domains/all(.:format)" data-regexp=3D"^\/a=
+pi\/v1\/domains\/all(?:\.([^\/.?]+))?$">
+    /api/v1/domains/all(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/domains#show_all {:format=3D>:json}">
+    api/v1/domains#show_all {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_active">
+      api_v1_active<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/domains/active(.:format)" data-regexp=3D"^=
+\/api\/v1\/domains\/active(?:\.([^\/.?]+))?$">
+    /api/v1/domains/active(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/domains#show_active {:format=3D>:json}">
+    api/v1/domains#show_active {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_temporary">
+      api_v1_temporary<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/api/v1/domains/temporary(.:format)" data-regexp=
+=3D"^\/api\/v1\/domains\/temporary(?:\.([^\/.?]+))?$">
+    /api/v1/domains/temporary(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/domains/temporary#create {:format=3D>:json}=
+">
+    api/v1/domains/temporary#create {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_tags">
+      api_v1_tags<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/domains/tags(.:format)" data-regexp=3D"^\/=
+api\/v1\/domains\/tags(?:\.([^\/.?]+))?$">
+    /api/v1/domains/tags(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/tags#index {:format=3D>:json}">
+    api/v1/tags#index {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_places">
+      api_v1_places<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/places(.:format)" data-regexp=3D"^\/api\/v=
+1\/places(?:\.([^\/.?]+))?$">
+    /api/v1/places(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/places#index {:format=3D>:json}">
+    api/v1/places#index {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_place">
+      api_v1_place<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/places/:name(.:format)" data-regexp=3D"^\/=
+api\/v1\/places\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /api/v1/places/:name(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/places#show {:format=3D>:json}">
+    api/v1/places#show {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PATCH">
+    PATCH
+  </td>
+  <td data-route-path=3D"/api/v1/places/:id(.:format)" data-regexp=3D"^\/ap=
+i\/v1\/places\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /api/v1/places/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/places#update {:format=3D>:json}">
+    api/v1/places#update {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"PUT">
+    PUT
+  </td>
+  <td data-route-path=3D"/api/v1/places/:id(.:format)" data-regexp=3D"^\/ap=
+i\/v1\/places\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /api/v1/places/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/places#update {:format=3D>:json}">
+    api/v1/places#update {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_model">
+      api_v1_model<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/models/:model_name(.:format)" data-regexp=
+=3D"^\/api\/v1\/models\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /api/v1/models/:model_name(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/models#show {:format=3D>:json}">
+    api/v1/models#show {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_stats_domains">
+      api_v1_stats_domains<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/stats/domains(.:format)" data-regexp=3D"^\=
+/api\/v1\/stats\/domains(?:\.([^\/.?]+))?$">
+    /api/v1/stats/domains(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/stats/domains#index {:format=3D>:json}">
+    api/v1/stats/domains#index {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_stats_infrastructure_index">
+      api_v1_stats_infrastructure_index<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/v1/stats/infrastructure(.:format)" data-regex=
+p=3D"^\/api\/v1\/stats\/infrastructure(?:\.([^\/.?]+))?$">
+    /api/v1/stats/infrastructure(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/stats/infrastructure#index {:format=3D>:jso=
+n}">
+    api/v1/stats/infrastructure#index {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_user_activities">
+      api_v1_user_activities<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/api/v1/user_activities(.:format)" data-regexp=3D"=
+^\/api\/v1\/user_activities(?:\.([^\/.?]+))?$">
+    /api/v1/user_activities(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/user_activities#create {:format=3D>:json}">
+    api/v1/user_activities#create {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_snapshots">
+      api_v1_snapshots<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/api/v1/snapshots(.:format)" data-regexp=3D"^\/api=
+\/v1\/snapshots(?:\.([^\/.?]+))?$">
+    /api/v1/snapshots(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/snapshots#create {:format=3D>:json}">
+    api/v1/snapshots#create {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_v1_snapshot">
+      api_v1_snapshot<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"DELETE">
+    DELETE
+  </td>
+  <td data-route-path=3D"/api/v1/snapshots/:id(.:format)" data-regexp=3D"^\=
+/api\/v1\/snapshots\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /api/v1/snapshots/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"api/v1/snapshots#destroy {:format=3D>:json}">
+    api/v1/snapshots#destroy {:format=3D&gt;:json}
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"discourse_sso">
+      discourse_sso<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/discourse/sso(.:format)" data-regexp=3D"^\/discou=
+rse\/sso(?:\.([^\/.?]+))?$">
+    /discourse/sso(.:format)
+  </td>
+  <td data-route-reqs=3D"discourse#sso">
+    discourse#sso
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"reporting_root">
+      reporting_root<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/reporting(.:format)" data-regexp=3D"^\/reporting(=
+?:\.([^\/.?]+))?$">
+    /reporting(.:format)
+  </td>
+  <td data-route-reqs=3D"reporting/finance#index">
+    reporting/finance#index
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"reporting_rollforward">
+      reporting_rollforward<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/reporting/rollforward(.:format)" data-regexp=3D"^=
+\/reporting\/rollforward(?:\.([^\/.?]+))?$">
+    /reporting/rollforward(.:format)
+  </td>
+  <td data-route-reqs=3D"reporting/finance#rollforward">
+    reporting/finance#rollforward
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"report">
+      report<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/report(.:format)" data-regexp=3D"^\/report(?:\.([=
+^\/.?]+))?$">
+    /report(.:format)
+  </td>
+  <td data-route-reqs=3D"report#index">
+    report#index
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"sidekiq_web">
+      sidekiq_web<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"">
+   =20
+  </td>
+  <td data-route-path=3D"/sidekiq" data-regexp=3D"^\/sidekiq">
+    /sidekiq
+  </td>
+  <td data-route-reqs=3D"Sidekiq::Web">
+    Sidekiq::Web
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"sidekiq_monitor">
+      sidekiq_monitor<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"">
+   =20
+  </td>
+  <td data-route-path=3D"/sidekiq/monitor" data-regexp=3D"^\/sidekiq\/monit=
+or">
+    /sidekiq/monitor
+  </td>
+  <td data-route-reqs=3D"Sidekiq::Monitor::Engine">
+    Sidekiq::Monitor::Engine
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"dashboards_concurrency">
+      dashboards_concurrency<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/dashboards/concurrency(.:format)" data-regexp=3D"=
+^\/dashboards\/concurrency(?:\.([^\/.?]+))?$">
+    /dashboards/concurrency(.:format)
+  </td>
+  <td data-route-reqs=3D"dashboards#concurrency">
+    dashboards#concurrency
+  </td>
+</tr>
+
+<tr><th colspan=3D"4">Routes for RailsAdmin::Engine</th></tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"dashboard">
+      dashboard<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/" data-regexp=3D"^\/$">
+    /
+  </td>
+  <td data-route-reqs=3D"rails_admin/main#dashboard">
+    rails_admin/main#dashboard
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"index">
+      index<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET|POST">
+    GET|POST
+  </td>
+  <td data-route-path=3D"/:model_name(.:format)" data-regexp=3D"^\/([^\/.?]=
++)(?:\.([^\/.?]+))?$">
+    /:model_name(.:format)
+  </td>
+  <td data-route-reqs=3D"rails_admin/main#index">
+    rails_admin/main#index
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"new">
+      new<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET|POST">
+    GET|POST
+  </td>
+  <td data-route-path=3D"/:model_name/new(.:format)" data-regexp=3D"^\/([^\=
+/.?]+)\/new(?:\.([^\/.?]+))?$">
+    /:model_name/new(.:format)
+  </td>
+  <td data-route-reqs=3D"rails_admin/main#new">
+    rails_admin/main#new
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"import">
+      import<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET|POST">
+    GET|POST
+  </td>
+  <td data-route-path=3D"/:model_name/import(.:format)" data-regexp=3D"^\/(=
+[^\/.?]+)\/import(?:\.([^\/.?]+))?$">
+    /:model_name/import(.:format)
+  </td>
+  <td data-route-reqs=3D"rails_admin/main#import">
+    rails_admin/main#import
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"bulk_feature">
+      bulk_feature<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/:model_name/bulk_feature(.:format)" data-regexp=
+=3D"^\/([^\/.?]+)\/bulk_feature(?:\.([^\/.?]+))?$">
+    /:model_name/bulk_feature(.:format)
+  </td>
+  <td data-route-reqs=3D"rails_admin/main#bulk_feature">
+    rails_admin/main#bulk_feature
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"export">
+      export<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET|POST">
+    GET|POST
+  </td>
+  <td data-route-path=3D"/:model_name/export(.:format)" data-regexp=3D"^\/(=
+[^\/.?]+)\/export(?:\.([^\/.?]+))?$">
+    /:model_name/export(.:format)
+  </td>
+  <td data-route-reqs=3D"rails_admin/main#export">
+    rails_admin/main#export
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"bulk_delete">
+      bulk_delete<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"POST|DELETE">
+    POST|DELETE
+  </td>
+  <td data-route-path=3D"/:model_name/bulk_delete(.:format)" data-regexp=3D=
+"^\/([^\/.?]+)\/bulk_delete(?:\.([^\/.?]+))?$">
+    /:model_name/bulk_delete(.:format)
+  </td>
+  <td data-route-reqs=3D"rails_admin/main#bulk_delete">
+    rails_admin/main#bulk_delete
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"bulk_action">
+      bulk_action<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"POST">
+    POST
+  </td>
+  <td data-route-path=3D"/:model_name/bulk_action(.:format)" data-regexp=3D=
+"^\/([^\/.?]+)\/bulk_action(?:\.([^\/.?]+))?$">
+    /:model_name/bulk_action(.:format)
+  </td>
+  <td data-route-reqs=3D"rails_admin/main#bulk_action">
+    rails_admin/main#bulk_action
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"show">
+      show<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/:model_name/:id(.:format)" data-regexp=3D"^\/([^\=
+/.?]+)\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /:model_name/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"rails_admin/main#show">
+    rails_admin/main#show
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"edit">
+      edit<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET|PUT">
+    GET|PUT
+  </td>
+  <td data-route-path=3D"/:model_name/:id/edit(.:format)" data-regexp=3D"^\=
+/([^\/.?]+)\/([^\/.?]+)\/edit(?:\.([^\/.?]+))?$">
+    /:model_name/:id/edit(.:format)
+  </td>
+  <td data-route-reqs=3D"rails_admin/main#edit">
+    rails_admin/main#edit
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"delete">
+      delete<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET|DELETE">
+    GET|DELETE
+  </td>
+  <td data-route-path=3D"/:model_name/:id/delete(.:format)" data-regexp=3D"=
+^\/([^\/.?]+)\/([^\/.?]+)\/delete(?:\.([^\/.?]+))?$">
+    /:model_name/:id/delete(.:format)
+  </td>
+  <td data-route-reqs=3D"rails_admin/main#delete">
+    rails_admin/main#delete
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"show_in_app">
+      show_in_app<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/:model_name/:id/show_in_app(.:format)" data-regex=
+p=3D"^\/([^\/.?]+)\/([^\/.?]+)\/show_in_app(?:\.([^\/.?]+))?$">
+    /:model_name/:id/show_in_app(.:format)
+  </td>
+  <td data-route-reqs=3D"rails_admin/main#show_in_app">
+    rails_admin/main#show_in_app
+  </td>
+</tr>
+
+<tr><th colspan=3D"4">Routes for Sidekiq::Monitor::Engine</th></tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"sidekiq_monitor">
+      sidekiq_monitor<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/" data-regexp=3D"^\/$">
+    /
+  </td>
+  <td data-route-reqs=3D"sidekiq/monitor/jobs#index">
+    sidekiq/monitor/jobs#index
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"graph">
+      graph<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/graph(.:format)" data-regexp=3D"^\/graph(?:\.([^\=
+/.?]+))?$">
+    /graph(.:format)
+  </td>
+  <td data-route-reqs=3D"sidekiq/monitor/jobs#graph">
+    sidekiq/monitor/jobs#graph
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"queues">
+      queues<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/queues(.:format)" data-regexp=3D"^\/queues(?:\.([=
+^\/.?]+))?$">
+    /queues(.:format)
+  </td>
+  <td data-route-reqs=3D"sidekiq/monitor/queues#index">
+    sidekiq/monitor/queues#index
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_jobs">
+      api_jobs<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/jobs(.:format)" data-regexp=3D"^\/api\/jobs(?=
+:\.([^\/.?]+))?$">
+    /api/jobs(.:format)
+  </td>
+  <td data-route-reqs=3D"sidekiq/monitor/api/jobs#index">
+    sidekiq/monitor/api/jobs#index
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_jobs_clean">
+      api_jobs_clean<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/jobs/clean(.:format)" data-regexp=3D"^\/api\/=
+jobs\/clean(?:\.([^\/.?]+))?$">
+    /api/jobs/clean(.:format)
+  </td>
+  <td data-route-reqs=3D"sidekiq/monitor/api/jobs#clean">
+    sidekiq/monitor/api/jobs#clean
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api">
+      api<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/jobs/custom_views/:id(.:format)" data-regexp=
+=3D"^\/api\/jobs\/custom_views\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /api/jobs/custom_views/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"sidekiq/monitor/api/jobs#custom_views">
+    sidekiq/monitor/api/jobs#custom_views
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_jobs_graph">
+      api_jobs_graph<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/jobs/graph(.:format)" data-regexp=3D"^\/api\/=
+jobs\/graph(?:\.([^\/.?]+))?$">
+    /api/jobs/graph(.:format)
+  </td>
+  <td data-route-reqs=3D"sidekiq/monitor/api/jobs#graph">
+    sidekiq/monitor/api/jobs#graph
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/jobs/retry/:id(.:format)" data-regexp=3D"^\/a=
+pi\/jobs\/retry\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /api/jobs/retry/:id(.:format)
+  </td>
+  <td data-route-reqs=3D"sidekiq/monitor/api/jobs#retry">
+    sidekiq/monitor/api/jobs#retry
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"api_jobs_statuses">
+      api_jobs_statuses<span class=3D"helper">_path</span>
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/jobs/statuses(.:format)" data-regexp=3D"^\/ap=
+i\/jobs\/statuses(?:\.([^\/.?]+))?$">
+    /api/jobs/statuses(.:format)
+  </td>
+  <td data-route-reqs=3D"sidekiq/monitor/api/jobs#statuses">
+    sidekiq/monitor/api/jobs#statuses
+  </td>
+</tr>
+<tr class=3D"route_row" data-helper=3D"path">
+  <td data-route-name=3D"">
+  </td>
+  <td data-route-verb=3D"GET">
+    GET
+  </td>
+  <td data-route-path=3D"/api/queues/:queue(.:format)" data-regexp=3D"^\/ap=
+i\/queues\/([^\/.?]+)(?:\.([^\/.?]+))?$">
+    /api/queues/:queue(.:format)
+  </td>
+  <td data-route-reqs=3D"sidekiq/monitor/api/queues#show">
+    sidekiq/monitor/api/queues#show
+  </td>
+</tr>
+
+  </tbody>
+</table>
+
+
+
+
+ =20
+
+<h2 style=3D"margin-top: 30px">Request</h2>
+<p><b>Parameters</b>:</p> <pre>None</pre>
+
+<div class=3D"details">
+  <div class=3D"summary"><a href=3D"https://staging.highfidelity.com/vendor=
+/bundle/ruby/2.3.0/bin/unicorn_rails#">Toggle session dump</a></div>
+  <div id=3D"session_dump" style=3D"display:none"><pre>_csrf_token: "fqA+UA=
+w/h0fpNITOCVqZo9dzUZB4fWR9ECldmexDMXs=3D"
+session_id: "300ace028fb12932bd2f147bb13d1a22"
+user_return_to: "/explore"
+warden.user.user.key: [["ee619c1b-d96c-4e50-b4dd-57d2f35bed2f"], "$2a$10$y7=
+VHX234glmbuSeX6lK1/e"]</pre></div>
+</div>
+
+<div class=3D"details">
+  <div class=3D"summary"><a href=3D"https://staging.highfidelity.com/vendor=
+/bundle/ruby/2.3.0/bin/unicorn_rails#">Toggle env dump</a></div>
+  <div id=3D"env_dump" style=3D"display:none"><pre>HTTP_ACCEPT: "text/html,=
+application/xhtml+xml,application/xml;q=3D0.9,image/webp,image/apng,*/*;q=
+=3D0.8,application/signed-exchange;v=3Db3;q=3D0.9"
+HTTP_ACCEPT_ENCODING: "gzip, deflate, br"
+HTTP_ACCEPT_LANGUAGE: "en-US,en;q=3D0.9"
+REMOTE_ADDR: "127.0.0.1"
+SERVER_NAME: "staging.highfidelity.com"
+SERVER_PROTOCOL: "HTTP/1.0"</pre></div>
+</div>
+
+<h2 style=3D"margin-top: 30px">Response</h2>
+<p><b>Headers</b>:</p> <pre>None</pre>
+
+</div>
+
+
+
+
+</body></html>
+------MultipartBoundary--Dq9sQVEGwg2hR5yktPzDHb9k4LFmx4okRx7Yg4llep----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: cid:css-9e994026-9c3e-456b-9441-ca92aa93ae47@mhtml.blink
+
+@charset "utf-8";
+
+body { background-color: rgb(250, 250, 250); color: rgb(51, 51, 51); margin=
+: 0px; }
+
+body, p, ol, ul, td { font-family: helvetica, verdana, arial, sans-serif; f=
+ont-size: 13px; line-height: 18px; }
+
+pre { font-size: 11px; white-space: pre-wrap; }
+
+pre.box { border: 1px solid rgb(238, 238, 238); padding: 10px; margin: 0px;=
+ width: 958px; }
+
+header { color: rgb(240, 240, 240); background: rgb(197, 47, 36); padding: =
+0.5em 1.5em; }
+
+h1 { margin: 0.2em 0px; line-height: 1.1em; font-size: 2em; }
+
+h2 { color: rgb(197, 47, 36); line-height: 25px; }
+
+.details { border: 1px solid rgb(208, 208, 208); border-radius: 4px; margin=
+: 1em 0px; display: block; width: 978px; }
+
+.summary { padding: 8px 15px; border-bottom: 1px solid rgb(208, 208, 208); =
+display: block; }
+
+.details pre { margin: 5px; border: none; }
+
+#container { box-sizing: border-box; width: 100%; padding: 0px 1.5em; }
+
+.source * { margin: 0px; padding: 0px; }
+
+.source { border: 1px solid rgb(217, 217, 217); background: rgb(236, 236, 2=
+36); width: 978px; }
+
+.source pre { padding: 10px 0px; border: none; }
+
+.source .data { font-size: 80%; overflow: auto; background-color: rgb(255, =
+255, 255); }
+
+.info { padding: 0.5em; }
+
+.source .data .line_numbers { background-color: rgb(236, 236, 236); color: =
+rgb(170, 170, 170); padding: 1em 0.5em; border-right: 1px solid rgb(221, 22=
+1, 221); text-align: right; }
+
+.line { padding-left: 10px; }
+
+.line:hover { background-color: rgb(246, 246, 246); }
+
+.line.active { background-color: rgb(255, 204, 204); }
+
+.hidden { display: none; }
+
+a { color: rgb(152, 9, 5); }
+
+a:visited { color: rgb(102, 102, 102); }
+
+a.trace-frames { color: rgb(102, 102, 102); }
+
+a:hover { color: rgb(197, 47, 36); }
+
+a.trace-frames.selected { color: rgb(197, 47, 36); }
+
+#route_table { margin: 0px; border-collapse: collapse; }
+
+#route_table thead tr { border-bottom: 2px solid rgb(221, 221, 221); }
+
+#route_table thead tr.bottom { border-bottom: none; }
+
+#route_table thead tr.bottom th { padding: 10px 0px; line-height: 15px; }
+
+#route_table tbody tr { border-bottom: 1px solid rgb(221, 221, 221); }
+
+#route_table tbody tr:nth-child(2n+1) { background: rgb(242, 242, 242); }
+
+#route_table tbody.exact_matches, #route_table tbody.fuzzy_matches { backgr=
+ound-color: lightgoldenrodyellow; border-bottom: 2px solid slategrey; }
+
+#route_table tbody.exact_matches tr, #route_table tbody.fuzzy_matches tr { =
+background: none; border-bottom: none; }
+
+#route_table td { padding: 4px 30px; }
+
+#path_search { width: 80%; font-size: inherit; }
+------MultipartBoundary--Dq9sQVEGwg2hR5yktPzDHb9k4LFmx4okRx7Yg4llep------

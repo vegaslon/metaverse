@@ -1,0 +1,51 @@
+<mat-toolbar color="primary">
+	<mat-toolbar-row>
+		<div class="container">
+			<div class="row align-items-center">
+				<a mat-button routerLink="/">
+					<img
+						src="/assets/logo-light-nopink.png"
+						alt="Tivoli Cloud VR logo"
+						style="height: 32px;"
+					/>
+				</a>
+
+				<!-- <a mat-button routerLink="/domains">
+					<mat-icon>meeting_room</mat-icon> Domains
+				</a> -->
+
+				<span style="flex: 1 1 auto"></span>
+
+				<a *ngIf="!isAuth" mat-flat-button (click)="onSignIn()">
+					<mat-icon>account_circle</mat-icon> Sign in
+				</a>
+
+				<button *ngIf="isAuth" mat-button [matMenuTriggerFor]="appMenu">
+					<div
+						style="display: inline-block; text-align: right; margin-right: 8px;"
+					>
+						Signed in as <b>{{ user.username }}</b>
+						<br />
+						<div style="opacity: 0.5; margin-top: -16px;">
+							{{ user.email }}
+						</div>
+					</div>
+					<img
+						class="user-image"
+						[src]="'/api/user/' + user.id + '/image'"
+						[alt]="'User image of ' + user.username"
+					/>
+				</button>
+
+				<mat-menu #appMenu="matMenu">
+					<button mat-menu-item routerLink="/user/settings">
+						<mat-icon>settings</mat-icon> Settings
+					</button>
+					<button mat-menu-item (click)="onSignOut()">
+						<mat-icon>arrow_back</mat-icon> Sign out
+					</button>
+				</mat-menu>
+			</div>
+		</div>
+	</mat-toolbar-row>
+</mat-toolbar>

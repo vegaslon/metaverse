@@ -1,0 +1,25 @@
+.header {
+	width: 100vw;
+	height: 250px;
+	padding: 50px 0;
+	text-align: center;
+
+	background-image: url(/assets/header-blur.jpg);
+	background-size: cover;
+	background-position: center;
+	background-repeat: repeat;
+
+	img {
+		display: block;
+		margin: 0 auto;
+		height: 100%;
+	}
+}
+
+h2 {
+	mat-icon {
+		font-size: 1.2em;
+		vertical-align: top;
+		margin-right: 12px;
+	}
+}
