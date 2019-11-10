@@ -2,7 +2,7 @@ export const {
 	DB_HOST = "localhost",
 	DB_USER = "",
 	DB_PASS = "",
-	DB_NAME = "metaverse-api",
+	DB_NAME = "metaverse",
 
 	PRODUCTION = false,
 
