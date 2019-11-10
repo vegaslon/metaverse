@@ -3,3 +3,5 @@ frontend/node_modules
 server/node_modules
 server/frontend
 server/dist
+
+docker/docker-compose.prod.yml
