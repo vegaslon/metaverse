@@ -5,3 +5,4 @@ server/frontend
 server/dist
 
 docker/docker-compose.prod.yml
+docker/db

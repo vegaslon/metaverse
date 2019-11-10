@@ -1,7 +1,7 @@
 version: "3.6"
 services:
     db:
-        image: mongo
+        image: mongo:latest
         restart: always
         volumes:
             - ./db:/data/db
