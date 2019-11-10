@@ -7,6 +7,13 @@ import * as path from "path";
 import { AppModule } from "./app.module";
 import { NotFoundExceptionFilter } from "./not-found";
 import bodyParser = require("body-parser");
+import { PRODUCTION } from "./environment";
+
+function initFrontend(app: NestExpressApplication) {
+	const { httpAdapter } = app.get(HttpAdapterHost);
+	app.useGlobalFilters(new NotFoundExceptionFilter(httpAdapter));
+	app.useStaticAssets(path.resolve(__dirname, "../frontend"));
+}
 
 function initSwagger(app: NestExpressApplication) {
 	const options = new DocumentBuilder()
@@ -22,10 +29,17 @@ function initSwagger(app: NestExpressApplication) {
 	SwaggerModule.setup("api", app, document);
 }
 
-function initFrontend(app: NestExpressApplication) {
-	const { httpAdapter } = app.get(HttpAdapterHost);
-	app.useGlobalFilters(new NotFoundExceptionFilter(httpAdapter));
-	app.useStaticAssets(path.resolve(__dirname, "../frontend"));
+function initDebugging(app: NestExpressApplication) {
+	app.use((req: Request, res: Response, next: () => {}) => {
+		bodyParser.json()(req, res, () => {
+			bodyParser.urlencoded()(req, res, () => {
+				console.log(req.method + " " + req.originalUrl);
+				console.log(req.headers.authorization);
+				console.log(req.body);
+				next();
+			});
+		});
+	});
 }
 
 async function bootstrap() {
@@ -42,17 +56,9 @@ async function bootstrap() {
 	initFrontend(app);
 	initSwagger(app);
 
-	// debugging
-	app.use((req: Request, res: Response, next: () => {}) => {
-		bodyParser.json()(req, res, () => {
-			bodyParser.urlencoded()(req, res, () => {
-				console.log(req.method + " " + req.originalUrl);
-				console.log(req.headers.authorization);
-				console.log(req.body);
-				next();
-			});
-		});
-	});
+	if (!PRODUCTION) {
+		initDebugging(app);
+	}
 
 	await app.listen(3000);
 }
