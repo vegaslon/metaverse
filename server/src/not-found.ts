@@ -17,7 +17,6 @@ export class NotFoundExceptionFilter extends BaseExceptionFilter {
 
 		const res: Response = ctx.getResponse();
 
-		console.log(frontendIndexPath);
 		if (!existsSync(frontendIndexPath)) return super.catch(exception, host);
 
 		res.sendFile(frontendIndexPath);
