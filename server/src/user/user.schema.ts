@@ -14,6 +14,8 @@ export const UserSchema = new Schema({
 	admin: { type: Boolean, default: false },
 	hash: { type: String, requred: true, select: false },
 	publicKey: { type: String, default: "" },
+
+	minutesOnline: { type: Number, default: 0 },
 });
 
 export interface User extends Document {
@@ -26,4 +28,6 @@ export interface User extends Document {
 	admin: boolean;
 	hash: string;
 	publicKey: string;
+
+	minutesOnline: number;
 }

@@ -3,15 +3,15 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import * as sharp from "sharp";
 import { AuthSignUpDto } from "../auth/auth.dto";
-import { User } from "./user.schema";
-import { ObjectID } from "bson";
-import { MulterFile } from "../common/multer-file.model";
-import { heartbeat, HeartbeatSession } from "../common/heartbeat";
 import { derPublicKeyHeader } from "../common/der-public-key-header";
+import { heartbeat, HeartbeatSession } from "../common/heartbeat";
+import { MulterFile } from "../common/multer-file.model";
+import { User } from "./user.schema";
 import uuid = require("uuid");
 
 interface UserSession {
 	id: string;
+	minutes: number;
 }
 
 @Injectable()
@@ -77,7 +77,7 @@ export class UserService {
 		return this.userModel.find({});
 	}
 
-	heartbeat(user: User): string {
+	async heartbeat(user: User) {
 		const { session, isNew } = heartbeat<UserSession>(
 			this.sessions,
 			user.username,
@@ -85,6 +85,15 @@ export class UserService {
 
 		if (isNew) {
 			session.id = uuid();
+			session.minutes = 0;
+		}
+
+		const minutes = Math.floor((+new Date() - +session._since) / 1000 / 60);
+
+		if (session.minutes < minutes) {
+			user.minutesOnline += minutes - session.minutes;
+			session.minutes = minutes;
+			await user.save();
 		}
 
 		return session.id;
