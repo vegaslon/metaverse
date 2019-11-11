@@ -72,9 +72,6 @@ export class AuthController {
 			registerToken = auth.register;
 		}
 
-		// required for the launcher since it's accessing from file://
-		res.header("Access-Control-Allow-Origin", "*");
-
 		res.send(
 			"<head>" +
 				"<script id='token' type='application/json'>" +
