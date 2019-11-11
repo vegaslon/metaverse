@@ -16,6 +16,14 @@
 
 				<span style="flex: 1 1 auto"></span>
 
+				<a
+					href="https://tivolicloud.s3-us-west-2.amazonaws.com/tivoli-cloud-launcher.zip"
+					mat-button
+					style="margin-right: 16px;"
+				>
+					<mat-icon>get_app</mat-icon> Download client
+				</a>
+
 				<a *ngIf="!isAuth" mat-flat-button (click)="onSignIn()">
 					<mat-icon>account_circle</mat-icon> Sign in
 				</a>
