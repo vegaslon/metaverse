@@ -98,7 +98,7 @@ export class SignInComponent implements OnInit {
 		});
 	}
 
-	onSubmit(captcha: string, captchaRef: any) {
+	onSubmit(captcha?: string, captchaRef?: any) {
 		let form = null;
 		if (this.mode == "signIn") form = this.signInForm;
 		if (this.mode == "signUp") form = this.signUpForm;
