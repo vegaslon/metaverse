@@ -21,12 +21,6 @@ export class OauthController {
 				401,
 			);
 
-		const login = await this.authService.login(user);
-
-		return {
-			...login,
-			scope: "owner",
-			token_type: "Bearer",
-		};
+		return await this.authService.login(user);
 	}
 }

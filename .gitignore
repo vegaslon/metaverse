@@ -3,6 +3,7 @@
 
 server/frontend
 server/dist
+server/ecosystem.config.js
 
 docker/docker-compose.prod.yml
 docker/db

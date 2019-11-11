@@ -8,6 +8,7 @@ import { heartbeat, HeartbeatSession } from "../common/heartbeat";
 import { MulterFile } from "../common/multer-file.model";
 import { User } from "./user.schema";
 import uuid = require("uuid");
+import fetch from "node-fetch";
 
 interface UserSession {
 	id: string;
@@ -27,10 +28,15 @@ export class UserService {
 			"^" + username.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&") + "$",
 			"i",
 		);
+		return this.userModel.findOne({ username: loginRegExp });
+	}
 
-		return this.userModel.findOne({
-			username: loginRegExp,
-		});
+	findByEmail(email: string) {
+		let loginRegExp = new RegExp(
+			"^" + email.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&") + "$",
+			"i",
+		);
+		return this.userModel.findOne({ email: loginRegExp });
 	}
 
 	findByUsernameOrEmail(username: string) {
@@ -38,7 +44,6 @@ export class UserService {
 			"^" + username.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&") + "$",
 			"i",
 		);
-
 		return this.userModel.findOne({
 			$or: [{ username: loginRegExp }, { email: loginRegExp }],
 		});
@@ -71,6 +76,23 @@ export class UserService {
 
 		await user.save();
 		return;
+	}
+
+	async changeUserImageFromUrl(user: User, imageUrl: string) {
+		try {
+			const res = await fetch(imageUrl);
+			const buffer = await res.buffer();
+
+			return this.changeUserImage(user, {
+				fieldname: "",
+				originalname: "",
+				encoding: "",
+				mimetype: "",
+				buffer,
+			});
+		} catch (err) {
+			return;
+		}
 	}
 
 	async findAll() {

@@ -67,7 +67,6 @@ export class UsersController {
 		@Req() req: Request,
 	) {
 		const { per_page, page, sort } = connectionsDto;
-		console.log(connectionsDto);
 
 		const users = (await this.userService.findAll()).map(user => {
 			return {

@@ -13,17 +13,18 @@ import { RecaptchaComponent } from "ng-recaptcha";
 export class SignInComponent implements OnInit {
 	errorMessage = "";
 
-	inSignUpMode = false;
+	mode: "signIn" | "signUp" | "extSignUp" = "signIn";
 	isLoading = false;
 
 	signInForm: FormGroup = null as any;
 	signUpForm: FormGroup = null as any;
+	extSignUpForm: FormGroup = null as any;
+
+	extServices = ["Google", "Discord", "GitHub"];
+	extEmail = "";
+	extImageUrl = "";
 
 	@ViewChild("captchaDiv", { static: true }) captchaDiv: ElementRef;
-
-	//extServices = ["Google", "Discord", "GitHub"];
-	extServices = [];
-
 	readonly siteKey = environment.reCaptchaSiteKey;
 
 	constructor(
@@ -66,8 +67,6 @@ export class SignInComponent implements OnInit {
 			]),
 		});
 
-		(window as any).testing = this.signInForm;
-
 		this.signUpForm = new FormGroup({
 			email: new FormControl(null, [
 				Validators.required,
@@ -86,19 +85,40 @@ export class SignInComponent implements OnInit {
 				Validators.maxLength(64),
 			]),
 		});
+
+		this.extSignUpForm = new FormGroup({
+			username: new FormControl(null, [
+				Validators.required,
+				this.usernameValidator,
+				Validators.minLength(4),
+				Validators.maxLength(24),
+			]),
+			token: new FormControl(null),
+			imageUrl: new FormControl(null),
+		});
 	}
 
 	onSubmit(captcha: string, captchaRef: any) {
-		const form = this.inSignUpMode ? this.signUpForm : this.signInForm;
+		let form = null;
+		if (this.mode == "signIn") form = this.signInForm;
+		if (this.mode == "signUp") form = this.signUpForm;
+		if (this.mode == "extSignUp") form = this.extSignUpForm;
+		if (form == null) return;
 		if (form.invalid) return;
+
+		let service = null;
+		if (this.mode == "signIn")
+			service = this.authService.signIn({ ...form.value });
+		if (this.mode == "signUp")
+			service = this.authService.signUp({ ...form.value, captcha });
+		if (this.mode == "extSignUp")
+			service = this.authService.extSignUp({ ...form.value });
+		if (service == null) return;
 
 		this.isLoading = true;
 		form.disable();
 
-		const sub = (this.inSignUpMode
-			? this.authService.signUp({ ...form.value, captcha })
-			: this.authService.signIn({ ...form.value, captcha })
-		).subscribe(
+		const sub = service.subscribe(
 			data => {
 				this.dialogRef.close();
 			},
@@ -106,7 +126,9 @@ export class SignInComponent implements OnInit {
 				this.errorMessage = err;
 				this.isLoading = false;
 				form.enable();
-				(captchaRef.grecaptcha as RecaptchaComponent).reset();
+
+				if (captchaRef)
+					(captchaRef.grecaptcha as RecaptchaComponent).reset();
 			},
 			() => {
 				sub.unsubscribe();
@@ -116,11 +138,11 @@ export class SignInComponent implements OnInit {
 
 	onSignInExt(serviceName: string) {
 		const authWindow = window.open(
-			(environment.production ? "" : "http://localhost:3000") +
-				"/auth/" +
+			(environment.production ? "" : "http://127.0.0.1:3000") +
+				"/api/auth/" +
 				serviceName,
 			"",
-			"width=500,height=600",
+			"width=500,height=600,resizable=no",
 		);
 
 		this.signInForm.disable();
@@ -132,18 +154,56 @@ export class SignInComponent implements OnInit {
 					authWindow.document.URL.indexOf(
 						environment.production
 							? window.location.host
-							: "localhost",
+							: "127.0.0.1",
 					) > -1
 				) {
-					const token = authWindow.document.head.querySelector(
+					const tokenStr = authWindow.document.head.querySelector(
 						"#token",
+					).innerHTML;
+
+					const registerStr = authWindow.document.head.querySelector(
+						"#register",
 					).innerHTML;
 
 					clearInterval(interval);
 
-					authWindow.close();
-					this.authService.handleAuthentication(token);
-					this.dialogRef.close();
+					if (tokenStr != "") {
+						const token = JSON.parse(tokenStr);
+
+						authWindow.close();
+						this.authService.handleAuthentication(token);
+						this.dialogRef.close();
+					}
+
+					if (registerStr != "") {
+						const register = JSON.parse(registerStr) as {
+							token: string;
+							username: string;
+							email: string;
+							imageUrl: string;
+						};
+
+						authWindow.close();
+
+						this.extSignUpForm.controls.token.setValue(
+							register.token,
+						);
+						this.extSignUpForm.controls.username.setValue(
+							register.username,
+						);
+						if (register.imageUrl)
+							this.extSignUpForm.controls.imageUrl.setValue(
+								register.imageUrl,
+							);
+
+						this.extEmail = register.email;
+						this.extImageUrl = register.imageUrl;
+
+						this.isLoading = false;
+
+						this.errorMessage = "";
+						this.mode = "extSignUp";
+					}
 				}
 			} catch (err) {}
 
@@ -159,6 +219,6 @@ export class SignInComponent implements OnInit {
 
 	onToggleSignUp() {
 		this.errorMessage = "";
-		this.inSignUpMode = !this.inSignUpMode;
+		this.mode = this.mode == "signIn" ? "signUp" : "signIn";
 	}
 }

@@ -1,5 +1,8 @@
-<h2 *ngIf="!inSignUpMode" style="margin-top: 0;">Sign in</h2>
-<h2 *ngIf="inSignUpMode" style="margin-top: 0;">Create a new account</h2>
+<h2 *ngIf="mode == 'signIn'" style="margin-top: 0;">Sign in</h2>
+<h2 *ngIf="mode == 'signUp'" style="margin-top: 0;">Create a new account</h2>
+<h2 *ngIf="mode == 'extSignUp'" style="margin-top: 0;">
+	Choose an account username
+</h2>
 
 <mat-card
 	*ngIf="errorMessage"
@@ -25,7 +28,7 @@
 </div>
 
 <form
-	*ngIf="!inSignUpMode"
+	*ngIf="mode == 'signIn'"
 	[formGroup]="signInForm"
 	(ngSubmit)="captchaRef.execute()"
 >
@@ -106,7 +109,7 @@
 </form>
 
 <form
-	*ngIf="inSignUpMode"
+	*ngIf="mode == 'signUp'"
 	[formGroup]="signUpForm"
 	(ngSubmit)="captchaRef.execute()"
 >
@@ -202,6 +205,78 @@
 		[disabled]="isLoading"
 	>
 		Sign in instead
+	</button>
+</form>
+
+<form
+	*ngIf="mode == 'extSignUp'"
+	[formGroup]="extSignUpForm"
+	(ngSubmit)="onSubmit()"
+>
+	<table style="margin-bottom: 16px;">
+		<tr>
+			<td>
+				<img
+					style="margin-right: 8px"
+					class="user-image"
+					[src]="extImageUrl"
+				/>
+			</td>
+			<td>
+				<p>
+					Using <b>{{ extEmail }}</b>
+				</p>
+			</td>
+		</tr>
+	</table>
+
+	<mat-form-field style="width: 100%;">
+		<input
+			matInput
+			placeholder="Username"
+			required
+			formControlName="username"
+		/>
+		<mat-error *ngIf="extSignUpForm.hasError('required', 'username')">
+			Username is required
+		</mat-error>
+		<mat-error *ngIf="extSignUpForm.hasError('minlength', 'username')">
+			Username is too short
+		</mat-error>
+		<mat-error *ngIf="extSignUpForm.hasError('maxlength', 'username')">
+			Username is too long
+		</mat-error>
+		<mat-error *ngIf="extSignUpForm.hasError('badCharacters', 'username')">
+			Letters, numbers, dots and underscores only
+		</mat-error>
+		<mat-error
+			*ngIf="extSignUpForm.hasError('startEndDotUnderscore', 'username')"
+		>
+			Cannot start or end with a dot or underscore
+		</mat-error>
+		<mat-error
+			*ngIf="
+				extSignUpForm.hasError('repeatingDotsUnderscores', 'username')
+			"
+		>
+			Cannot contain repeating dots or underscores
+		</mat-error>
+		<mat-error
+			*ngIf="extSignUpForm.hasError('nextToDotsUnderscores', 'username')"
+		>
+			Cannot have dots and underscores next to each other
+		</mat-error>
+	</mat-form-field>
+
+	<div style="margin: 16px 0;"></div>
+
+	<button
+		type="submit"
+		mat-flat-button
+		color="primary"
+		[disabled]="extSignUpForm.invalid || isLoading"
+	>
+		Create a new account
 	</button>
 </form>
 

@@ -5,7 +5,6 @@ import { JWT_SECRET } from "../environment";
 import { UserService } from "../user/user.service";
 
 export interface JwtPayload {
-	//username: string;
 	id: string;
 }
 

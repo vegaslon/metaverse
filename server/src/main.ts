@@ -20,12 +20,14 @@ function initSwagger(app: NestExpressApplication) {
 		.setTitle("Metaverse API")
 		.setDescription("The official unofficial implementation")
 		.setVersion("indev")
-		.addBearerAuth()
+		.setSchemes("http", "https")
 		.build();
 
 	const document = SwaggerModule.createDocument(app, options);
 
-	app.use("api.json", (req: Request, res: Response) => res.send(document));
+	app.use("/api.json", (req: Request, res: Response) => {
+		res.send(document);
+	});
 	SwaggerModule.setup("api", app, document);
 }
 

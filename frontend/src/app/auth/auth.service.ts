@@ -7,14 +7,15 @@ import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { BehaviorSubject, Observable, throwError } from "rxjs";
-import { catchError, map, tap } from "rxjs/operators";
-import { environment } from "../../environments/environment";
+import { catchError, tap } from "rxjs/operators";
 
-interface AuthResponse {
+interface AuthToken {
 	access_token: string;
 	created_at: number;
 	expires_in: number;
 	refresh_token: string;
+	scope: "owner";
+	token_type: "Bearer";
 }
 
 export class User {
@@ -22,7 +23,7 @@ export class User {
 		public id: string,
 		public username: string,
 		public email: string,
-		public jwt: string,
+		public token: AuthToken,
 	) {}
 }
 
@@ -39,10 +40,14 @@ export class AuthService {
 
 	private handleError = (err: HttpErrorResponse): Observable<never> => {
 		//console.log(err);
-		return throwError(err.statusText);
+		if (err.error.message) return throwError(err.error.message);
+		if (err.status == 401)
+			return throwError("Invalid username and password");
 	};
 
-	handleAuthentication = (jwt: string) => {
+	handleAuthentication = (token: AuthToken) => {
+		const jwt = token.access_token;
+
 		if (this.jwtHelper.isTokenExpired(jwt))
 			return throwError("Token expired");
 
@@ -67,15 +72,15 @@ export class AuthService {
 				profile => {
 					const { id, username, email } = profile.data.user;
 
-					const user = new User(id, username, email, jwt);
+					const user = new User(id, username, email, token);
 
-					const token = this.jwtHelper.decodeToken(jwt);
+					const payload = this.jwtHelper.decodeToken(jwt);
 					const msTillExpire =
-						+new Date(token.exp * 1000) - +new Date();
+						+new Date(payload.exp * 1000) - +new Date();
 
 					this.autoLogout(msTillExpire);
 					this.user.next(user);
-					localStorage.setItem("auth", jwt);
+					localStorage.setItem("auth", JSON.stringify(token));
 				},
 				() => {},
 				() => {
@@ -84,17 +89,9 @@ export class AuthService {
 			);
 	};
 
-	signUp(signUpDto: { email: string; username: string; password: string }) {
-		return this.http.post<AuthResponse>("/api/auth/signup", signUpDto).pipe(
-			catchError(this.handleError),
-			map(result => result.access_token),
-			tap(this.handleAuthentication),
-		);
-	}
-
 	signIn(signInDto: { username: string; password: string }) {
 		return this.http
-			.post<AuthResponse>("/oauth/token", {
+			.post<AuthToken>("/oauth/token", {
 				grant_type: "password",
 				username: signInDto.username,
 				password: signInDto.password,
@@ -102,15 +99,34 @@ export class AuthService {
 			})
 			.pipe(
 				catchError(this.handleError),
-				map(result => result.access_token),
+				tap(this.handleAuthentication),
+			);
+	}
+
+	signUp(signUpDto: { email: string; username: string; password: string }) {
+		return this.http.post<AuthToken>("/api/auth/signup", signUpDto).pipe(
+			catchError(this.handleError),
+			tap(this.handleAuthentication),
+		);
+	}
+
+	extSignUp(extSignUpDto: { token: string; username: string }) {
+		return this.http
+			.post<AuthToken>("/api/auth/signup-external", extSignUpDto)
+			.pipe(
+				catchError(this.handleError),
 				tap(this.handleAuthentication),
 			);
 	}
 
 	autoLogin() {
-		const token = localStorage.getItem("auth");
-		if (!token) return;
-		this.handleAuthentication(token);
+		const tokenStr = localStorage.getItem("auth");
+		if (!tokenStr) return;
+
+		try {
+			const token = JSON.parse(tokenStr);
+			this.handleAuthentication(token);
+		} catch (err) {}
 	}
 
 	logout() {

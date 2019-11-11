@@ -4,9 +4,20 @@ export const {
 	DB_PASS = "",
 	DB_NAME = "metaverse",
 
-	PRODUCTION = false,
-
 	JWT_SECRET = "thisIsSoVerySecretyou literally have no idealol1610239012",
 
-	HOSTNAME = "http://192.168.1.131:3000",
+	HOSTNAME = "http://127.0.0.1:3000",
+	PRODUCTION = false,
+
+	// https://console.cloud.google.com/apis/credentials
+	AUTH_GOOGLE_ID = "",
+	AUTH_GOOGLE_SECRET = "",
+
+	// https://discordapp.com/developers/applications
+	AUTH_DISCORD_ID = "",
+	AUTH_DISCORD_SECRET = "",
+
+	// https://github.com/settings/developers
+	AUTH_GITHUB_ID = "",
+	AUTH_GITHUB_SECRET = "",
 } = process.env;
