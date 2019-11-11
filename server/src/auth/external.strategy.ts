@@ -96,7 +96,6 @@ export class DiscordStrategy extends PassportStrategy(
 		profile: any,
 		done: Function,
 	) {
-		console.log(profile);
 		const email = profile.email;
 		const username = profile.username;
 		const imageUrl =
