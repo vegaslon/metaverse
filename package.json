@@ -3,9 +3,10 @@
 	"scripts": {
 		"format": "prettier --write **/*.ts **/*.json **/*.html **/*.scss",
 		"install": "cd server && npm i -D && cd ../frontend && npm i -D",
-		"start:server": "cd server && npm run start",
 		"start:frontend": "cd frontend && npm run start",
+		"start:server": "cd server && npm run start",
+		"build:frontend": "cd frontend && npm run build",
 		"build:server": "cd server && npm run build",
-		"build:frontend": "cd frontend && npm run build"
+		"dist": "npm run build:frontend && npm run build:server"
 	}
 }
