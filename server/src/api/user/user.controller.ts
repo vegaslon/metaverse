@@ -5,6 +5,7 @@ import {
 	Put,
 	UseInterceptors,
 	UploadedFile,
+	Body,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiUseTags } from "@nestjs/swagger";
 import { MetaverseAuthGuard } from "../../auth/auth.guard";
@@ -14,6 +15,7 @@ import { UserService } from "../../user/user.service";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { MulterFile } from "../../common/multer-file.model";
 import * as fs from "fs";
+import { UserUpdateLocationDto } from "../../user/user.dto";
 
 @ApiUseTags("interface api")
 @ApiBearerAuth()
@@ -82,5 +84,20 @@ export class UserController {
 
 	@Put("location")
 	@UseGuards(MetaverseAuthGuard())
-	putLocation() {}
+	async putLocation(
+		@CurrentUser() user: User,
+		@Body() userUpdateLocationDto: UserUpdateLocationDto,
+	) {
+		const session_id = await this.userService.setUserLocation(
+			user,
+			userUpdateLocationDto,
+		);
+
+		return {
+			status: "success",
+			data: {
+				session_id,
+			},
+		};
+	}
 }

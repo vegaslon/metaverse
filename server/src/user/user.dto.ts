@@ -1,11 +1,15 @@
+import { ApiModelProperty, ApiModelPropertyOptional } from "@nestjs/swagger";
+import { Type, Transform } from "class-transformer";
 import {
-	IsString,
 	IsEmail,
+	IsEnum,
 	IsOptional,
-	MinLength,
+	IsString,
 	MaxLength,
+	MinLength,
+	ValidateNested,
+	IsBoolean,
 } from "class-validator";
-import { ApiModelPropertyOptional } from "@nestjs/swagger";
 
 export class UserUpdateDto {
 	@ApiModelPropertyOptional({ example: "fairy@cutelab.space" })
@@ -21,4 +25,62 @@ export class UserUpdateDto {
 	@MaxLength(64, { message: "Password cannot be longer than 64 characters" })
 	@IsOptional()
 	password: string = "";
+}
+
+// updating user location
+
+export enum UserAvailability {
+	all = "all",
+	connections = "connections",
+	friends = "friends",
+	none = "none",
+}
+
+export class UserUpdateLocation {
+	@ApiModelPropertyOptional()
+	@IsEnum(UserAvailability)
+	@IsOptional()
+	availability: UserAvailability;
+
+	@ApiModelPropertyOptional()
+	@IsBoolean()
+	@IsOptional()
+	connected: boolean;
+
+	@ApiModelPropertyOptional()
+	@IsString()
+	@IsOptional()
+	domain_id: string;
+
+	@ApiModelPropertyOptional()
+	@IsString()
+	@IsOptional()
+	network_address: string;
+
+	@ApiModelPropertyOptional()
+	@IsOptional()
+	@Transform(n => n + "")
+	network_port: string;
+
+	@ApiModelPropertyOptional()
+	@IsString()
+	@IsOptional()
+	node_id: string; // id of user on domain
+
+	@ApiModelPropertyOptional()
+	@IsString()
+	@IsOptional()
+	path: string;
+
+	@ApiModelPropertyOptional()
+	@IsString()
+	@IsOptional()
+	place_id: string;
+}
+
+export class UserUpdateLocationDto {
+	@ApiModelProperty({ type: UserUpdateLocation, required: true })
+	@ValidateNested()
+	@Type(() => UserUpdateLocation)
+	location: UserUpdateLocation;
 }

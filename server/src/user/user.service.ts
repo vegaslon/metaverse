@@ -9,10 +9,17 @@ import { MulterFile } from "../common/multer-file.model";
 import { User } from "./user.schema";
 import uuid = require("uuid");
 import fetch from "node-fetch";
+import {
+	UserUpdateLocationDto,
+	UserUpdateLocation,
+	UserAvailability,
+} from "./user.dto";
+import { patchObject } from "../common/patch-object";
 
 interface UserSession {
 	id: string;
 	minutes: number;
+	location: UserUpdateLocation;
 }
 
 @Injectable()
@@ -108,6 +115,16 @@ export class UserService {
 		if (isNew) {
 			session.id = uuid();
 			session.minutes = 0;
+			session.location = {
+				availability: UserAvailability.none,
+				connected: false,
+				domain_id: null,
+				network_address: "",
+				network_port: "",
+				node_id: null,
+				path: "",
+				place_id: null,
+			};
 		}
 
 		const minutes = Math.floor((+new Date() - +session._since) / 1000 / 60);
@@ -130,5 +147,20 @@ export class UserService {
 
 		user.publicKey = publicKey;
 		return await user.save();
+	}
+
+	async setUserLocation(
+		user: User,
+		userUpdateLocationDto: UserUpdateLocationDto,
+	) {
+		let session = this.sessions[user.username];
+		if (session == null) {
+			await this.heartbeat(user);
+			session = this.sessions[user.username];
+		}
+
+		patchObject(session.location, userUpdateLocationDto.location);
+		console.log(this.sessions);
+		return session.id;
 	}
 }
