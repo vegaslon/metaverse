@@ -99,7 +99,7 @@ export class UsersController {
 	async getPublicKey(@Param("username") username: string) {
 		const user = await this.userService.findByUsername(username);
 
-		if (user != null && user.publicKey != null) {
+		if (user != null && user.publicKey != "") {
 			return {
 				status: "success",
 				data: {

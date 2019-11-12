@@ -7,7 +7,7 @@ import {
 	Req,
 	Res,
 } from "@nestjs/common";
-import { ApiUseTags } from "@nestjs/swagger";
+import { ApiUseTags, ApiExcludeEndpoint } from "@nestjs/swagger";
 import { AuthSignUpDto, AuthExtSignUpDto } from "./auth.dto";
 import { AuthService, AuthToken, AuthRegisterToken } from "./auth.service";
 import { AuthGuard } from "@nestjs/passport";
@@ -34,6 +34,7 @@ export class AuthController {
 	@UseGuards(AuthGuard("google"))
 	google() {}
 
+	@ApiExcludeEndpoint()
 	@Get("google/callback")
 	@UseGuards(AuthGuard("google"))
 	googleCallback(@Req() req: Request, @Res() res: Response) {
@@ -44,6 +45,7 @@ export class AuthController {
 	@UseGuards(AuthGuard("discord"))
 	discord() {}
 
+	@ApiExcludeEndpoint()
 	@Get("discord/callback")
 	@UseGuards(AuthGuard("discord"))
 	discordCallback(@Req() req: Request, @Res() res: Response) {
@@ -54,6 +56,7 @@ export class AuthController {
 	@UseGuards(AuthGuard("github"))
 	github() {}
 
+	@ApiExcludeEndpoint()
 	@Get("github/callback")
 	@UseGuards(AuthGuard("github"))
 	githubCallback(@Req() req: Request, @Res() res: Response) {

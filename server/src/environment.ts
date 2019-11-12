@@ -14,8 +14,8 @@ export const {
 	AUTH_GOOGLE_SECRET = " ",
 
 	// https://discordapp.com/developers/applications
-	AUTH_DISCORD_ID = "626510915843653638",
-	AUTH_DISCORD_SECRET = "7PTWzQ_NWX_vqEpr3gSh7h6v1MTdFbHJ",
+	AUTH_DISCORD_ID = " ",
+	AUTH_DISCORD_SECRET = " ",
 
 	// https://github.com/settings/developers
 	AUTH_GITHUB_ID = " ",

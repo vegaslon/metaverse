@@ -79,4 +79,8 @@ export class UserController {
 	putPublicKey(@CurrentUser() user: User, @UploadedFile() file: MulterFile) {
 		this.userService.setPublicKey(user, file.buffer);
 	}
+
+	@Put("location")
+	@UseGuards(MetaverseAuthGuard())
+	putLocation() {}
 }

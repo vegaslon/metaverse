@@ -20,6 +20,7 @@ function initSwagger(app: NestExpressApplication) {
 		.setTitle("Metaverse API")
 		.setDescription("The official unofficial implementation")
 		.setVersion("indev")
+		.addBearerAuth()
 		.setSchemes("http", "https")
 		.build();
 

@@ -99,13 +99,4 @@ export class UserController {
 
 		stream.pipe(res);
 	}
-
-	@Get("domains")
-	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard())
-	getUserDomains(@CurrentUser() user) {
-		return {
-			test: true,
-		};
-	}
 }
