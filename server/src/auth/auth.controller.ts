@@ -75,13 +75,11 @@ export class AuthController {
 		const json = JSON.stringify({ token, register });
 
 		res.send(
-			"<head>" +
-				"<script>" +
-				"window.opener.postMessage(" +
-				json +
-				",'*')" +
-				"</script>" +
-				"</head>",
+			`<script>
+				data = ${json};
+				if (window.opener) window.opener.postMessage(data, "*");
+				if (window.require) window.require("electron").ipcRenderer.send("postMessage", data);
+			</script>`.replace(/\s/g, ""),
 		);
 	}
 }
