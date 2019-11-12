@@ -48,6 +48,7 @@ export class GoogleStrategy extends PassportStrategy(StrategyGoogle, "google") {
 
 			passReqToCallback: true,
 			scope: ["profile", "email"],
+			prompt: "select_account",
 		});
 	}
 
