@@ -18,20 +18,16 @@
 	{{ errorMessage }}
 </mat-card>
 
-<div #captchaDiv style="display: none;">
+<!-- <div #captchaDiv style="display: none;">
 	<re-captcha
 		#captchaRef="reCaptcha"
 		[siteKey]="siteKey"
 		size="invisible"
 		(resolved)="$event && onSubmit($event, captchaRef)"
 	></re-captcha>
-</div>
+</div> -->
 
-<form
-	*ngIf="mode == 'signIn'"
-	[formGroup]="signInForm"
-	(ngSubmit)="captchaRef.execute()"
->
+<form *ngIf="mode == 'signIn'" [formGroup]="signInForm" (ngSubmit)="onSubmit()">
 	<mat-form-field style="width: 100%;">
 		<input
 			matInput
@@ -108,11 +104,7 @@
 	</span>
 </form>
 
-<form
-	*ngIf="mode == 'signUp'"
-	[formGroup]="signUpForm"
-	(ngSubmit)="captchaRef.execute()"
->
+<form *ngIf="mode == 'signUp'" [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
 	<mat-form-field style="width: 100%;">
 		<input
 			matInput

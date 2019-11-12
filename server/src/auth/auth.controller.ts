@@ -64,21 +64,22 @@ export class AuthController {
 		const auth = req.user as any;
 
 		let token: AuthToken = null;
-		let registerToken: AuthRegisterToken = null;
+		let register: AuthRegisterToken = null;
 
 		if (auth.user != null) {
 			token = this.authService.login(auth.user as User);
 		} else if (auth.register != null) {
-			registerToken = auth.register;
+			register = auth.register;
 		}
+
+		const json = JSON.stringify({ token, register });
 
 		res.send(
 			"<head>" +
-				"<script id='token' type='application/json'>" +
-				(token == null ? "" : JSON.stringify(token)) +
-				"</script>" +
-				"<script id='register' type='application/json'>" +
-				(registerToken == null ? "" : JSON.stringify(registerToken)) +
+				"<script>" +
+				"window.opener.postMessage(" +
+				json +
+				",'*')" +
 				"</script>" +
 				"</head>",
 		);

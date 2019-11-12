@@ -9,7 +9,7 @@ import { JwtHelperService } from "@auth0/angular-jwt";
 import { BehaviorSubject, Observable, throwError } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
 
-interface AuthToken {
+export interface AuthToken {
 	access_token: string;
 	created_at: number;
 	expires_in: number;
@@ -97,26 +97,19 @@ export class AuthService {
 				password: signInDto.password,
 				scope: "owner",
 			})
-			.pipe(
-				catchError(this.handleError),
-				tap(this.handleAuthentication),
-			);
+			.pipe(catchError(this.handleError), tap(this.handleAuthentication));
 	}
 
 	signUp(signUpDto: { email: string; username: string; password: string }) {
-		return this.http.post<AuthToken>("/api/auth/signup", signUpDto).pipe(
-			catchError(this.handleError),
-			tap(this.handleAuthentication),
-		);
+		return this.http
+			.post<AuthToken>("/api/auth/signup", signUpDto)
+			.pipe(catchError(this.handleError), tap(this.handleAuthentication));
 	}
 
 	extSignUp(extSignUpDto: { token: string; username: string }) {
 		return this.http
 			.post<AuthToken>("/api/auth/signup-external", extSignUpDto)
-			.pipe(
-				catchError(this.handleError),
-				tap(this.handleAuthentication),
-			);
+			.pipe(catchError(this.handleError), tap(this.handleAuthentication));
 	}
 
 	autoLogin() {

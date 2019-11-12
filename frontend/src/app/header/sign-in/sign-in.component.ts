@@ -1,9 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatDialogRef } from "@angular/material/dialog";
-import { environment } from "../../../environments/environment";
-import { AuthService } from "../../auth/auth.service";
 import { RecaptchaComponent } from "ng-recaptcha";
+import { environment } from "../../../environments/environment";
+import { AuthService, AuthToken } from "../../auth/auth.service";
 
 @Component({
 	selector: "app-sign-in",
@@ -24,8 +24,8 @@ export class SignInComponent implements OnInit {
 	extEmail = "";
 	extImageUrl = "";
 
-	@ViewChild("captchaDiv", { static: true }) captchaDiv: ElementRef;
-	readonly siteKey = environment.reCaptchaSiteKey;
+	//@ViewChild("captchaDiv", { static: true }) captchaDiv: ElementRef;
+	//readonly siteKey = environment.reCaptchaSiteKey;
 
 	constructor(
 		public dialogRef: MatDialogRef<SignInComponent>,
@@ -50,9 +50,9 @@ export class SignInComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		setTimeout(() => {
-			this.captchaDiv.nativeElement.style.display = "initial";
-		}, 250);
+		// setTimeout(() => {
+		// 	this.captchaDiv.nativeElement.style.display = "initial";
+		// }, 250);
 
 		this.signInForm = new FormGroup({
 			username: new FormControl(null, [
@@ -110,7 +110,7 @@ export class SignInComponent implements OnInit {
 		if (this.mode == "signIn")
 			service = this.authService.signIn({ ...form.value });
 		if (this.mode == "signUp")
-			service = this.authService.signUp({ ...form.value, captcha });
+			service = this.authService.signUp({ ...form.value });
 		if (this.mode == "extSignUp")
 			service = this.authService.extSignUp({ ...form.value });
 		if (service == null) return;
@@ -127,8 +127,8 @@ export class SignInComponent implements OnInit {
 				this.isLoading = false;
 				form.enable();
 
-				if (captchaRef)
-					(captchaRef.grecaptcha as RecaptchaComponent).reset();
+				//if (captchaRef)
+				//	(captchaRef.grecaptcha as RecaptchaComponent).reset();
 			},
 			() => {
 				sub.unsubscribe();
@@ -142,78 +142,62 @@ export class SignInComponent implements OnInit {
 				"/api/auth/" +
 				serviceName,
 			"",
-			"width=500,height=600,resizable=no",
+			"toolbar=no,menubar=no,width=500,height=600",
 		);
 
 		this.signInForm.disable();
 		this.isLoading = true;
 
-		const interval = setInterval(() => {
-			try {
-				if (
-					authWindow.document.URL.indexOf(
-						environment.production
-							? window.location.host
-							: "127.0.0.1",
-					) > -1
-				) {
-					const tokenStr = authWindow.document.head.querySelector(
-						"#token",
-					).innerHTML;
+		const handleMessage = (e: MessageEvent) => {
+			if (e.origin != window.location.origin) return;
+			window.removeEventListener("message", handleMessage);
+			authWindow.close();
 
-					const registerStr = authWindow.document.head.querySelector(
-						"#register",
-					).innerHTML;
+			const { token, register } = e.data as {
+				token: AuthToken;
+				register: {
+					token: string;
+					username: string;
+					email: string;
+					imageUrl: string;
+				};
+			};
 
-					clearInterval(interval);
+			if (token != null) {
+				this.authService.handleAuthentication(token);
+				this.dialogRef.close();
+				return;
+			}
 
-					if (tokenStr != "") {
-						const token = JSON.parse(tokenStr);
+			if (register != null) {
+				this.extSignUpForm.controls.token.setValue(register.token);
+				this.extSignUpForm.controls.username.setValue(
+					register.username,
+				);
+				if (register.imageUrl)
+					this.extSignUpForm.controls.imageUrl.setValue(
+						register.imageUrl,
+					);
 
-						authWindow.close();
-						this.authService.handleAuthentication(token);
-						this.dialogRef.close();
-					}
+				this.extEmail = register.email;
+				this.extImageUrl = register.imageUrl;
 
-					if (registerStr != "") {
-						const register = JSON.parse(registerStr) as {
-							token: string;
-							username: string;
-							email: string;
-							imageUrl: string;
-						};
+				this.isLoading = false;
 
-						authWindow.close();
+				this.errorMessage = "";
+				this.mode = "extSignUp";
+				return;
+			}
+		};
 
-						this.extSignUpForm.controls.token.setValue(
-							register.token,
-						);
-						this.extSignUpForm.controls.username.setValue(
-							register.username,
-						);
-						if (register.imageUrl)
-							this.extSignUpForm.controls.imageUrl.setValue(
-								register.imageUrl,
-							);
+		window.addEventListener("message", handleMessage);
 
-						this.extEmail = register.email;
-						this.extImageUrl = register.imageUrl;
-
-						this.isLoading = false;
-
-						this.errorMessage = "";
-						this.mode = "extSignUp";
-					}
-				}
-			} catch (err) {}
-
-			try {
-				if (authWindow.location.href == undefined) {
-					clearInterval(interval);
-					this.signInForm.enable();
-					this.isLoading = false;
-				}
-			} catch (err) {}
+		const onClosedInterval = setInterval(() => {
+			if (authWindow.closed) {
+				clearInterval(onClosedInterval);
+				this.signInForm.enable();
+				this.isLoading = false;
+			}
 		}, 100);
 	}
 
