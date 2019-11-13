@@ -10,19 +10,25 @@
 					/>
 				</a>
 
-				<!-- <a mat-button routerLink="/domains">
-					<mat-icon>meeting_room</mat-icon> Domains
-				</a> -->
-
-				<span style="flex: 1 1 auto"></span>
-
-				<a
+				<button
+					class="menu-item"
 					href="https://tivolicloud.s3-us-west-2.amazonaws.com/tivoli-cloud-launcher.zip"
 					mat-button
-					style="margin-right: 16px;"
+					(click)="openDownload()"
 				>
-					<mat-icon>get_app</mat-icon> Download launcher
+					<mat-icon>get_app</mat-icon> Download
+				</button>
+
+				<a
+					class="menu-item"
+					href="https://blog.tivolicloud.com"
+					target="_blank"
+					mat-button
+				>
+					<mat-icon>bookmarks</mat-icon> Blog
 				</a>
+
+				<span style="flex: 1 1 auto"></span>
 
 				<a *ngIf="!isAuth" mat-flat-button (click)="onSignIn()">
 					<mat-icon>account_circle</mat-icon> Sign in

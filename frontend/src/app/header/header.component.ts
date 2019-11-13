@@ -3,6 +3,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { Subscription } from "rxjs";
 import { AuthService, User } from "../auth/auth.service";
 import { SignInComponent } from "./sign-in/sign-in.component";
+import { DownloadComponent } from "./download/download.component";
 
 @Component({
 	selector: "app-header",
@@ -33,6 +34,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
 	ngOnDestroy() {
 		this.userSub.unsubscribe();
+	}
+
+	openDownload() {
+		this.dialog.open(DownloadComponent);
 	}
 
 	onSignIn() {

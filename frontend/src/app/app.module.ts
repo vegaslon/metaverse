@@ -13,6 +13,7 @@ import { MaterialModule } from "./material.module";
 import { HomeComponent } from "./home/home.component";
 import { ImagePickerComponent } from "./ui/image-picker/image-picker.component";
 import { UiModule } from "./ui/ui.module";
+import { DownloadComponent } from "./header/download/download.component";
 
 const routes: Routes = [
 	{ path: "", component: HomeComponent },
@@ -29,6 +30,7 @@ const routes: Routes = [
 		HeaderComponent,
 		SignInComponent,
 		HomeComponent,
+		DownloadComponent,
 	],
 	imports: [
 		BrowserModule,
@@ -51,6 +53,6 @@ const routes: Routes = [
 		},
 	],
 	bootstrap: [AppComponent],
-	entryComponents: [SignInComponent],
+	entryComponents: [SignInComponent, DownloadComponent],
 })
 export class AppModule {}
