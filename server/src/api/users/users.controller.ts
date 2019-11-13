@@ -69,15 +69,25 @@ export class UsersController {
 		const { per_page, page, sort } = connectionsDto;
 
 		const users = (await this.userService.findAll()).map(user => {
+			const session = this.userService.sessions[user.username];
+
 			return {
 				username: user.username,
-				online: false,
+				online: session == null ? false : true,
 				connection: UsersConnectionType.connection,
-				location: {
-					// root: {
-					// 	name: "Cutelab!!!",
-					// },
-				},
+				location:
+					session == null
+						? {}
+						: {
+								root: {
+									// place name
+									name:
+										session.location.network_address +
+										":" +
+										session.location.network_port +
+										session.location.path,
+								},
+						  },
 				images: {
 					thumbnail: HOSTNAME + "/api/user/" + user.id + "/image",
 				},
