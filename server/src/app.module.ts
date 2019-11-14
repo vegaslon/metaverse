@@ -9,6 +9,7 @@ import { AuthModule } from "./auth/auth.module";
 import { DomainModule } from "./domain/domain.module";
 import { DB_HOST, DB_NAME, DB_PASS, DB_USER } from "./environment";
 import { UserModule } from "./user/user.module";
+import { EventsGateway } from "./events.gateway";
 
 @Module({
 	imports: [
@@ -35,7 +36,7 @@ import { UserModule } from "./user/user.module";
 		ApiDomainsModule,
 		DomainModule,
 	],
-	providers: [],
+	providers: [EventsGateway],
 	controllers: [],
 })
 export class AppModule {
