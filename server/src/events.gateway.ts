@@ -53,6 +53,7 @@ export class EventsGateway implements OnGatewayDisconnect {
 
 	deleteHost(host: Host) {
 		for (let client of host.clients) {
+			client.socket.disconnect();
 			this.deleteFromArray(this.clients, client);
 		}
 		this.deleteFromArray(this.hosts, host);
