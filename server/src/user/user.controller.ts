@@ -86,7 +86,8 @@ export class UserController {
 		@Param("username") username: string,
 		@Res() res: Response,
 	) {
-		const user = await this.userService.findByUsername(username);
+		let user = await this.userService.findByUsername(username);
+		if (user == null) user = await this.userService.findById(username);
 		if (user == null) throw new NotFoundException();
 
 		const stream = new Readable();
