@@ -3,7 +3,7 @@ import { ApiBearerAuth, ApiUseTags } from "@nestjs/swagger";
 import { Request } from "express";
 import { MetaverseAuthGuard } from "../../auth/auth.guard";
 import { CurrentUser } from "../../auth/user.decorator";
-import { pagination } from "../../common/pagination";
+import { pagination } from "../../common/utils";
 import { HOSTNAME } from "../../environment";
 import { User } from "../../user/user.schema";
 import { UserService } from "../../user/user.service";

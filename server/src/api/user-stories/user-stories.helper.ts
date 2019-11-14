@@ -3,6 +3,7 @@ import {
 	UserStoryAction,
 	UserStroyAudience,
 } from "./user-stories.dto";
+import { Domain } from "../../domain/domain.schema";
 
 export function createAnnouncement(
 	name: string,
@@ -34,27 +35,28 @@ export function createAnnouncement(
 }
 
 export function createConcurrency(
-	name: string,
-	image: string,
-	number: number,
+	domain: Domain,
+	restriction: string,
 ): UserStory {
+	const place_name = domain.networkAddress + ":" + domain.networkPort;
+
 	return {
 		id: 0,
-		user_id: "idontcare",
-		username: "Caitlyn",
+		user_id: "",
+		username: "",
 		action: UserStoryAction.concurrency,
-		action_string: "havin' a great time!",
+		action_string: "",
 		audience: UserStroyAudience.for_feed,
-		place_id: "idontcareagain",
-		place_name: name,
+		place_id: "",
+		place_name,
 		path: "/0,0,0",
-		thumbnail_url: image,
+		thumbnail_url: "",
 		details: {
-			image_url: image,
-			concurrency: number,
+			image_url: "",
+			concurrency: domain.onlineUsers,
 		},
 		updated_at: new Date().toISOString(),
-		domain_id: "idontcareagainagain",
+		domain_id: domain.id,
 		hold_time: null,
 		is_stacked: false,
 		isStacked: false,

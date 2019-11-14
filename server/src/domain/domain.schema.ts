@@ -1,6 +1,12 @@
 import { Schema, Document } from "mongoose";
 
-enum DomainRestriction {
+export enum DomainAutomaticNetworking {
+	full = "full",
+	ip = "ip",
+	disabled = "disabled",
+}
+
+export enum DomainRestriction {
 	acl = "acl", // whitelist
 	hifi = "hifi", // whitelist, logged in
 	open = "open", // whitelist, logged in, anonymous
@@ -11,7 +17,11 @@ export const DomainSchema = new Schema({
 
 	iceServerAddress: { type: String, default: "" },
 	//cloudDomain: { type: Boolean, default: false },
-	automaticNetworking: { type: String, default: "none" },
+	automaticNetworking: {
+		type: String,
+		enum: Object.values(DomainAutomaticNetworking),
+		default: DomainAutomaticNetworking.disabled,
+	},
 
 	networkAddress: { type: String, default: "" },
 	networkPort: { type: String, default: "40102" },
@@ -25,7 +35,11 @@ export const DomainSchema = new Schema({
 
 	description: { type: String, default: "" },
 	capacity: { type: Number, default: 0 },
-	restricted: { type: Boolean, default: true },
+	restriction: {
+		type: String,
+		enum: Object.values(DomainRestriction),
+		default: DomainRestriction.acl,
+	},
 	maturity: { type: String, default: "unrated" },
 	hosts: { type: [String], default: [] },
 	tags: { type: [String], default: [] },
@@ -42,19 +56,19 @@ export const DomainSchema = new Schema({
 export interface Domain extends Document {
 	iceServerAddress: string;
 	//cloudDomain: boolean;
-	automaticNetworking: string;
+	automaticNetworking: DomainAutomaticNetworking;
 
 	networkAddress: string;
 	networkPort: string;
 	online: boolean;
 
 	defaultPlaceName: string;
-	ownerPlaces: string[];
+	ownerPlaces: string[]; // [{id, name, path}]
 	label: string;
 
 	description: string;
 	capacity: number;
-	restricted: boolean;
+	restriction: DomainRestriction;
 	maturity: string;
 	hosts: string;
 	tags: string[];

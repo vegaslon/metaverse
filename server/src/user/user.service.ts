@@ -1,20 +1,20 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
+import fetch from "node-fetch";
 import * as sharp from "sharp";
 import { AuthSignUpDto } from "../auth/auth.dto";
 import { derPublicKeyHeader } from "../common/der-public-key-header";
 import { heartbeat, HeartbeatSession } from "../common/heartbeat";
 import { MulterFile } from "../common/multer-file.model";
+import { patchObject } from "../common/utils";
+import {
+	UserAvailability,
+	UserUpdateLocation,
+	UserUpdateLocationDto,
+} from "./user.dto";
 import { User } from "./user.schema";
 import uuid = require("uuid");
-import fetch from "node-fetch";
-import {
-	UserUpdateLocationDto,
-	UserUpdateLocation,
-	UserAvailability,
-} from "./user.dto";
-import { patchObject } from "../common/patch-object";
 
 interface UserSession {
 	id: string;

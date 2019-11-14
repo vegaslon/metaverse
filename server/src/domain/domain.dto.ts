@@ -1,11 +1,13 @@
 import { ApiModelProperty, ApiModelPropertyOptional } from "@nestjs/swagger";
 import { Type } from "class-transformer";
+import { DomainRestriction, DomainAutomaticNetworking } from "./domain.schema";
 import {
 	IsArray,
 	IsBoolean,
 	IsNumber,
 	IsOptional,
 	ValidateNested,
+	IsEnum,
 } from "class-validator";
 
 class CreateDomain {
@@ -46,8 +48,9 @@ class UpdateDomain {
 	ice_server_address: string;
 
 	@ApiModelPropertyOptional()
+	@IsEnum(DomainAutomaticNetworking)
 	@IsOptional()
-	automatic_networking: string;
+	automatic_networking: DomainAutomaticNetworking;
 
 	@ApiModelPropertyOptional()
 	@IsOptional()
@@ -74,14 +77,15 @@ class UpdateDomain {
 	capacity: number;
 
 	@ApiModelPropertyOptional()
+	@IsEnum(DomainRestriction)
+	@IsOptional()
+	restriction: DomainRestriction;
+
+	// one or the other... not using this
+	@ApiModelPropertyOptional()
 	@IsBoolean()
 	@IsOptional()
 	restricted: boolean;
-
-	// fucking one or the other
-	@ApiModelPropertyOptional()
-	@IsOptional()
-	restriction: string; // acl or open
 
 	@ApiModelPropertyOptional()
 	@IsOptional()

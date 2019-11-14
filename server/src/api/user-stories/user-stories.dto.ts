@@ -54,7 +54,8 @@ export class UserStoriesDto {
 
 	@ApiModelPropertyOptional({
 		default: "open,hifi",
-		description: '"open" allows anonymous',
+		description:
+			'"open" is anonymous, "hifi" is logged in, "acl" is private (but ignored here)',
 	})
 	@IsString()
 	@IsOptional()

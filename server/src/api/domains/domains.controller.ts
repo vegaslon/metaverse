@@ -3,24 +3,23 @@ import {
 	Controller,
 	Get,
 	NotFoundException,
+	NotImplementedException,
 	Param,
 	Post,
 	Put,
-	UseGuards,
-	NotImplementedException,
-	UseInterceptors,
 	UploadedFile,
+	UseGuards,
+	UseInterceptors,
 } from "@nestjs/common";
+import { FileInterceptor } from "@nestjs/platform-express";
 import { ApiBearerAuth, ApiUseTags } from "@nestjs/swagger";
-import { CurrentUser } from "../../auth/user.decorator";
 import { MetaverseAuthGuard } from "../../auth/auth.guard";
+import { CurrentUser } from "../../auth/user.decorator";
+import { MulterFile } from "../../common/multer-file.model";
 import { CreateDomainDto, UpdateDomainDto } from "../../domain/domain.dto";
 import { Domain } from "../../domain/domain.schema";
 import { DomainService } from "../../domain/domain.service";
 import { User } from "../../user/user.schema";
-import { FileInterceptor } from "@nestjs/platform-express";
-import { MulterFile } from "../../common/multer-file.model";
-import { writeFileSync } from "fs";
 
 @ApiUseTags("interface api")
 @Controller("api/v1/domains")
@@ -44,7 +43,7 @@ export class DomainsController {
 
 			description: d.description,
 			capacity: d.capacity,
-			restricted: d.restricted,
+			restriction: d.restriction,
 			maturity: d.maturity,
 			hosts: d.hosts,
 			tags: d.tags,
