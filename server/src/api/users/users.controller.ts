@@ -69,32 +69,34 @@ export class UsersController {
 	) {
 		const { per_page, page, sort } = connectionsDto;
 
-		const users = (await this.userService.findAll()).map(user => {
-			const session = this.userService.sessions[user.username];
+		// const users = (await this.userService.findAll()).map(user => {
+		// 	const session = this.userService.sessions[user.username];
 
-			return {
-				username: user.username,
-				online: session == null ? false : true,
-				connection: UsersConnectionType.connection,
-				location:
-					session == null
-						? {}
-						: {
-								root: {
-									// place name
-									name:
-										session.location.network_address +
-										":" +
-										session.location.network_port +
-										session.location.path,
-								},
-						  },
-				images: {
-					thumbnail:
-						HOSTNAME + "/api/user/" + user.username + "/image",
-				},
-			} as UsersConnection;
-		});
+		// 	return {
+		// 		username: user.username,
+		// 		online: session == null ? false : true,
+		// 		connection: UsersConnectionType.connection,
+		// 		location:
+		// 			session == null
+		// 				? {}
+		// 				: {
+		// 						root: {
+		// 							// place name
+		// 							name:
+		// 								session.location.network_address +
+		// 								":" +
+		// 								session.location.network_port +
+		// 								session.location.path,
+		// 						},
+		// 				  },
+		// 		images: {
+		// 			thumbnail:
+		// 				HOSTNAME + "/api/user/" + user.username + "/image",
+		// 		},
+		// 	} as UsersConnection;
+		// });
+
+		const users = [];
 
 		const sliced = pagination(page, per_page, users);
 
