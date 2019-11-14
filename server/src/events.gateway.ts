@@ -153,7 +153,7 @@ export class EventsGateway implements OnGatewayDisconnect {
 
 		const client = this.findClientById(id);
 		if (client != null) {
-			client.host.socket.emit("clientDisconnect", id);
+			client.host.socket.emit("clientDisconnected", id);
 			this.deleteClient(client);
 			return;
 		}
