@@ -12,7 +12,6 @@ import { DownloadComponent } from "./download/download.component";
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 	private userSub: Subscription = null;
-	isAuth = false;
 	user: User = {} as User;
 
 	constructor(public dialog: MatDialog, private authService: AuthService) {}
@@ -23,12 +22,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 		}
 
 		this.userSub = this.authService.user.subscribe(user => {
-			if (user == null) {
-				this.isAuth = false;
-			} else {
-				this.isAuth = true;
-				this.user = user;
-			}
+			this.user = user;
 		});
 	}
 

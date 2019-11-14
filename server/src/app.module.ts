@@ -1,13 +1,14 @@
 import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
+import { AdminModule } from "./admin/admin.module";
 import { ApiDomainsModule } from "./api/domains/domains.module";
 import { ApiUserStoriesModule } from "./api/user-stories/user-stories.module";
 import { ApiUserModule } from "./api/user/user.module";
 import { ApiUsersModule } from "./api/users/users.module";
 import { AuthModule } from "./auth/auth.module";
+import { DomainModule } from "./domain/domain.module";
 import { DB_HOST, DB_NAME, DB_PASS, DB_USER } from "./environment";
 import { UserModule } from "./user/user.module";
-import { DomainModule } from './domain/domain.module';
 
 @Module({
 	imports: [
@@ -26,6 +27,7 @@ import { DomainModule } from './domain/domain.module';
 		}),
 		AuthModule,
 		UserModule,
+		AdminModule,
 
 		ApiUserModule,
 		ApiUsersModule,

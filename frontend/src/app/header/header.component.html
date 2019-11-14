@@ -30,11 +30,11 @@
 
 				<span style="flex: 1 1 auto"></span>
 
-				<a *ngIf="!isAuth" mat-flat-button (click)="onSignIn()">
+				<a *ngIf="!user" mat-flat-button (click)="onSignIn()">
 					<mat-icon>account_circle</mat-icon> Sign in
 				</a>
 
-				<button *ngIf="isAuth" mat-button [matMenuTriggerFor]="appMenu">
+				<button *ngIf="user" mat-button [matMenuTriggerFor]="appMenu">
 					<div
 						style="display: inline-block; text-align: right; margin-right: 8px;"
 					>
@@ -46,10 +46,21 @@
 					</div>
 					<img
 						class="user-image"
-						[src]="'/api/user/' + user.id + '/image'"
+						src="/api/user/{{ user.username }}/image"
 						[alt]="'User image of ' + user.username"
 					/>
 				</button>
+
+				<ng-container *ngIf="user">
+					<button
+						class="admin-button"
+						*ngIf="user.admin"
+						mat-button
+						routerLink="/admin"
+					>
+						<mat-icon>build</mat-icon><br />Admin
+					</button>
+				</ng-container>
 
 				<mat-menu #appMenu="matMenu">
 					<button mat-menu-item routerLink="/user/settings">

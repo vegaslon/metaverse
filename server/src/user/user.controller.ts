@@ -10,6 +10,7 @@ import {
 	UseInterceptors,
 	Patch,
 	Put,
+	NotFoundException,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { ApiBearerAuth, ApiImplicitFile, ApiUseTags } from "@nestjs/swagger";
@@ -80,9 +81,13 @@ export class UserController {
 		return { success: true };
 	}
 
-	@Get(":id/image")
-	async getUserImage(@Param("id") id: string, @Res() res: Response) {
-		const user = await this.userService.findById(id);
+	@Get(":username/image")
+	async getUserImage(
+		@Param("username") username: string,
+		@Res() res: Response,
+	) {
+		const user = await this.userService.findByUsername(username);
+		if (user == null) throw new NotFoundException();
 
 		const stream = new Readable();
 		if (user == null || user.image == null) {

@@ -7,7 +7,7 @@ import { UiModule } from "../ui/ui.module";
 import { SettingsComponent } from "./settings/settings.component";
 
 const routes: Routes = [
-	{ path: "", redirectTo: "/settings", pathMatch: "full" },
+	{ path: "", redirectTo: "settings", pathMatch: "full" },
 	{ path: "settings", component: SettingsComponent },
 ];
 

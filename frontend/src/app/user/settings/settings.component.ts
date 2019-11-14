@@ -18,7 +18,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 	updateUserImage() {
 		if (this.user == null) return;
 		this.userImageSrc =
-			"/api/user/" + this.user.id + "/image?" + +new Date();
+			"/api/user/" + this.user.username + "/image?" + +new Date();
 	}
 
 	constructor(

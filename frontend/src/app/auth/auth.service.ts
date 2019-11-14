@@ -23,6 +23,7 @@ export class User {
 		public id: string,
 		public username: string,
 		public email: string,
+		public admin: boolean,
 		public token: AuthToken,
 	) {}
 }
@@ -59,7 +60,7 @@ export class AuthService {
 						id: string;
 						username: string;
 						email: string;
-						roles: string;
+						roles: string[];
 					};
 				};
 			}>("/api/v1/user/profile", {
@@ -70,9 +71,10 @@ export class AuthService {
 			})
 			.subscribe(
 				profile => {
-					const { id, username, email } = profile.data.user;
+					const { id, username, email, roles } = profile.data.user;
+					const admin = roles.includes("admin");
 
-					const user = new User(id, username, email, token);
+					const user = new User(id, username, email, admin, token);
 
 					const payload = this.jwtHelper.decodeToken(jwt);
 					const msTillExpire =

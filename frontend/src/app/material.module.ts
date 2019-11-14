@@ -8,6 +8,8 @@ import { MatInputModule } from "@angular/material/input";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatTableModule } from "@angular/material/table";
+import { MatTabsModule } from "@angular/material/tabs";
 import { MatToolbarModule } from "@angular/material/toolbar";
 
 const modules = [
@@ -20,6 +22,8 @@ const modules = [
 	MatMenuModule,
 	MatProgressBarModule,
 	MatSnackBarModule,
+	MatTableModule,
+	MatTabsModule,
 	MatToolbarModule,
 ];
 

@@ -130,7 +130,7 @@ export class UserService {
 		const minutes = Math.floor((+new Date() - +session._since) / 1000 / 60);
 
 		if (session.minutes < minutes) {
-			user.minutesOnline += minutes - session.minutes;
+			user.minutes += minutes - session.minutes;
 			session.minutes = minutes;
 			await user.save();
 		}

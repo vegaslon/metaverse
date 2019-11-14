@@ -41,9 +41,10 @@ export class UsersController {
 					root: {},
 				},
 				images: {
-					hero: HOSTNAME + "/api/user/" + user.id + "/image",
-					thumbnail: HOSTNAME + "/api/user/" + user.id + "/image",
-					tiny: HOSTNAME + "/api/user/" + user.id + "/image",
+					hero: HOSTNAME + "/api/user/" + user.username + "/image",
+					thumbnail:
+						HOSTNAME + "/api/user/" + user.username + "/image",
+					tiny: HOSTNAME + "/api/user/" + user.username + "/image",
 				},
 			},
 		];
@@ -89,7 +90,8 @@ export class UsersController {
 								},
 						  },
 				images: {
-					thumbnail: HOSTNAME + "/api/user/" + user.id + "/image",
+					thumbnail:
+						HOSTNAME + "/api/user/" + user.username + "/image",
 				},
 			} as UsersConnection;
 		});
