@@ -1,26 +1,21 @@
-import {
-	Controller,
-	Get,
-	UseGuards,
-	UnauthorizedException,
-} from "@nestjs/common";
-import { ApiUseTags, ApiBearerAuth } from "@nestjs/swagger";
+import { Controller, Get, UseGuards } from "@nestjs/common";
+import { ApiBearerAuth, ApiUseTags } from "@nestjs/swagger";
+import { AdminAuthGuard } from "../auth/admin.guard";
 import { UserService } from "../user/user.service";
-import { MetaverseAuthGuard } from "../auth/auth.guard";
-import { CurrentUser } from "../auth/user.decorator";
-import { User } from "../user/user.schema";
+import { VideoStreamService } from "../video-stream/video-stream.service";
 
 @Controller("api/admin")
-@ApiUseTags("api")
+@ApiUseTags("admin")
 export class AdminController {
-	constructor(private userService: UserService) {}
+	constructor(
+		private userService: UserService,
+		private videoStreamService: VideoStreamService,
+	) {}
 
 	@Get("users")
 	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard())
-	async getUsers(@CurrentUser() user: User) {
-		if (!user.admin) throw new UnauthorizedException();
-
+	@UseGuards(AdminAuthGuard())
+	async getUsers() {
 		const users = (await this.userService.findAll()).map(user => {
 			return {
 				username: user.username,
@@ -34,10 +29,8 @@ export class AdminController {
 
 	@Get("users/online")
 	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard())
-	getOnlineUsers(@CurrentUser() user: User) {
-		if (!user.admin) throw new UnauthorizedException();
-
+	@UseGuards(AdminAuthGuard())
+	getOnlineUsers() {
 		let onlineUsers = [];
 
 		const usernames = Object.keys(this.userService.sessions);
@@ -52,5 +45,18 @@ export class AdminController {
 		}
 
 		return onlineUsers;
+	}
+
+	@Get("streams")
+	@ApiBearerAuth()
+	@UseGuards(AdminAuthGuard())
+	getVideoStreams() {
+		return this.videoStreamService.hosts.map(host => {
+			console.log(host.socket.request.connection);
+			return {
+				id: host.socket.client.id,
+				clients: host.clients.map(client => client.socket.client.id),
+			};
+		});
 	}
 }

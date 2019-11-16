@@ -5,86 +5,45 @@ import {
 	WebSocketServer,
 } from "@nestjs/websockets";
 import { Server, Socket } from "socket.io";
+import {
+	VideoStreamService,
+	VideoStreamHost,
+	VideoStreamClient,
+} from "./video-stream.service";
 
 interface RTCSessionDescription {
 	type: string;
 	sdp: string;
 }
 
-interface Host {
-	socket: Socket;
-	clients: Client[];
-}
-
-interface Client {
-	socket: Socket;
-	host: Host;
-}
-
 @WebSocketGateway({
 	namespace: "webrtc",
 })
-export class EventsGateway implements OnGatewayDisconnect {
+export class VideoStreamGateway implements OnGatewayDisconnect {
 	@WebSocketServer() server: Server;
 
-	hosts: Host[] = [];
-	clients: Client[] = [];
-
-	findHostById(id: string): Host {
-		for (let host of this.hosts) {
-			if (host.socket.client.id != id) continue;
-			return host;
-		}
-		return null;
-	}
-
-	findClientById(id: string): Client {
-		for (let client of this.clients) {
-			if (client.socket.client.id != id) continue;
-			return client;
-		}
-		return null;
-	}
-
-	deleteFromArray(array: any[], item: any) {
-		const i = array.indexOf(item);
-		array.splice(i, 1);
-	}
-
-	deleteHost(host: Host) {
-		for (let client of host.clients) {
-			client.socket.disconnect();
-			this.deleteFromArray(this.clients, client);
-		}
-		this.deleteFromArray(this.hosts, host);
-	}
-
-	deleteClient(client: Client) {
-		this.deleteFromArray(client.host.clients, client);
-		this.deleteFromArray(this.clients, client);
-	}
+	constructor(private service: VideoStreamService) {}
 
 	@SubscribeMessage("host")
 	newHost(socket: Socket): string {
 		const id = socket.client.id;
 
-		const host = this.findHostById(id);
-		if (host == null) this.hosts.push({ socket, clients: [] });
+		const host = this.service.findHostById(id);
+		if (host == null) this.service.addHost(socket);
 
 		return id;
 	}
 
 	@SubscribeMessage("join")
 	newClient(socket: Socket, hostId: string): boolean {
-		const host = this.findHostById(hostId);
+		const host = this.service.findHostById(hostId);
 		if (host == null) return null;
 
 		const id = socket.client.id;
-		const client = this.findClientById(id);
+		const client = this.service.findClientById(id);
 
 		if (client == null) {
-			const client = { socket, host };
-			this.clients.push(client);
+			const client = this.service.addClient(socket, host);
 			host.clients.push(client);
 			host.socket.emit("client", id);
 		}
@@ -96,7 +55,7 @@ export class EventsGateway implements OnGatewayDisconnect {
 	iceCandidateToHost(socket: Socket, dto: { id: string; candidate: Object }) {
 		const id = socket.client.id;
 
-		const host = this.findHostById(dto.id);
+		const host = this.service.findHostById(dto.id);
 		if (host == null) return null;
 
 		host.socket.emit("iceCandidate", { id, candidate: dto.candidate });
@@ -110,7 +69,7 @@ export class EventsGateway implements OnGatewayDisconnect {
 	) {
 		const id = socket.client.id;
 
-		const client = this.findClientById(dto.id);
+		const client = this.service.findClientById(dto.id);
 		if (client == null) return null;
 
 		client.socket.emit("iceCandidate", { id, candidate: dto.candidate });
@@ -124,7 +83,7 @@ export class EventsGateway implements OnGatewayDisconnect {
 	) {
 		const id = socket.client.id;
 
-		const client = this.findClientById(dto.id);
+		const client = this.service.findClientById(dto.id);
 		if (client == null) return null;
 
 		client.socket.emit("offer", { id, offer: dto.offer });
@@ -138,7 +97,7 @@ export class EventsGateway implements OnGatewayDisconnect {
 	) {
 		const id = socket.client.id;
 
-		const host = this.findHostById(dto.id);
+		const host = this.service.findHostById(dto.id);
 		if (host == null) return null;
 
 		host.socket.emit("answer", { id, answer: dto.answer });
@@ -148,13 +107,13 @@ export class EventsGateway implements OnGatewayDisconnect {
 	handleDisconnect(socket: Socket) {
 		const id = socket.client.id;
 
-		const host = this.findHostById(id);
-		if (host != null) return this.deleteHost(host);
+		const host = this.service.findHostById(id);
+		if (host != null) return this.service.deleteHost(host);
 
-		const client = this.findClientById(id);
+		const client = this.service.findClientById(id);
 		if (client != null) {
 			client.host.socket.emit("clientDisconnected", id);
-			this.deleteClient(client);
+			this.service.deleteClient(client);
 			return;
 		}
 	}

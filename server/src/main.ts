@@ -57,9 +57,9 @@ async function bootstrap() {
 	);
 
 	initFrontend(app);
-	initSwagger(app);
 
 	if (!PRODUCTION) {
+		initSwagger(app);
 		initDebugging(app);
 	}
 

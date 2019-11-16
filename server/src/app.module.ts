@@ -9,7 +9,7 @@ import { AuthModule } from "./auth/auth.module";
 import { DomainModule } from "./domain/domain.module";
 import { DB_HOST, DB_NAME, DB_PASS, DB_USER } from "./environment";
 import { UserModule } from "./user/user.module";
-import { EventsGateway } from "./events.gateway";
+import { VideoStreamModule } from "./video-stream/video-stream.module";
 
 @Module({
 	imports: [
@@ -29,14 +29,17 @@ import { EventsGateway } from "./events.gateway";
 		AuthModule,
 		UserModule,
 		AdminModule,
+		DomainModule,
 
 		ApiUserModule,
 		ApiUsersModule,
 		ApiUserStoriesModule,
 		ApiDomainsModule,
-		DomainModule,
+
+		// extras
+		VideoStreamModule,
 	],
-	providers: [EventsGateway],
+	providers: [],
 	controllers: [],
 })
 export class AppModule {
