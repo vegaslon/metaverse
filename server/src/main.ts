@@ -2,12 +2,14 @@ import { ValidationPipe } from "@nestjs/common";
 import { HttpAdapterHost, NestFactory } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import * as compression from "compression";
 import { Request, Response } from "express";
+import * as helmet from "helmet";
 import * as path from "path";
 import { AppModule } from "./app.module";
+import { DEV } from "./environment";
 import { NotFoundExceptionFilter } from "./not-found";
 import bodyParser = require("body-parser");
-import { DEV } from "./environment";
 
 function initFrontend(app: NestExpressApplication) {
 	const { httpAdapter } = app.get(HttpAdapterHost);
@@ -33,7 +35,7 @@ function initSwagger(app: NestExpressApplication) {
 }
 
 function initDebugging(app: NestExpressApplication) {
-	app.use((req: Request, res: Response, next: () => {}) => {
+	app.use((req: Request, res: Response, next: () => void) => {
 		bodyParser.json()(req, res, () => {
 			bodyParser.urlencoded()(req, res, () => {
 				console.log(req.method + " " + req.originalUrl);
@@ -47,6 +49,9 @@ function initDebugging(app: NestExpressApplication) {
 
 async function bootstrap() {
 	const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+	app.use(helmet(), compression());
+
 	app.useGlobalPipes(
 		new ValidationPipe({
 			//disableErrorMessages: true,
