@@ -68,7 +68,12 @@ export class UserStoriesController {
 				const restrictions = restriction.split(",");
 
 				if (restrictions.includes(domain.restriction))
-					user_stories.push(createConcurrency(domain, restriction));
+					user_stories.push(
+						createConcurrency(
+							domain,
+							this.domainService.sessions[domain._id],
+						),
+					);
 			}
 		}
 

@@ -6,7 +6,7 @@ import { MaterialModule } from "../material.module";
 import { UiModule } from "../ui/ui.module";
 import { SettingsComponent } from "./settings/settings.component";
 import { DomainsComponent } from "./domains/domains.component";
-import { TokenComponent } from "./domains/token/token.component";
+import { DomainTokenComponent } from "./domains/domain-token/domain-token.component";
 
 const routes: Routes = [
 	{ path: "", redirectTo: "settings", pathMatch: "full" },
@@ -15,7 +15,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-	declarations: [SettingsComponent, DomainsComponent, TokenComponent],
+	declarations: [SettingsComponent, DomainsComponent, DomainTokenComponent],
 	imports: [
 		CommonModule,
 		RouterModule.forChild(routes),
@@ -23,6 +23,6 @@ const routes: Routes = [
 		MaterialModule,
 		ReactiveFormsModule,
 	],
-	entryComponents: [TokenComponent],
+	entryComponents: [DomainTokenComponent],
 })
 export class UserModule {}

@@ -1,24 +1,20 @@
-import { Component, Inject, OnInit } from "@angular/core";
-import {
-	MatDialog,
-	MatDialogRef,
-	MAT_DIALOG_DATA,
-} from "@angular/material/dialog";
+import { Component, Inject } from "@angular/core";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Domain, UserService } from "../../user.service";
 
 @Component({
-	selector: "app-token",
-	templateUrl: "./token.component.html",
-	styleUrls: ["./token.component.scss"],
+	selector: "app-domain-token",
+	templateUrl: "./domain-token.component.html",
+	styleUrls: ["./domain-token.component.scss"],
 })
-export class TokenComponent {
+export class DomainTokenComponent {
 	domain: Domain = {} as any;
 	loading = false;
 	token = "";
 
 	constructor(
 		private userService: UserService,
-		private dialogRef: MatDialogRef<TokenComponent>,
+		private dialogRef: MatDialogRef<DomainTokenComponent>,
 		@Inject(MAT_DIALOG_DATA) private data: { domain: Domain },
 	) {
 		this.domain = data.domain;

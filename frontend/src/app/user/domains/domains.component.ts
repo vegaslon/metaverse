@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Domain, UserService } from "../user.service";
 import { MatDialog } from "@angular/material/dialog";
-import { TokenComponent } from "./token/token.component";
+import { DomainTokenComponent } from "./domain-token/domain-token.component";
 
 @Component({
 	selector: "app-domains",
@@ -28,7 +28,7 @@ export class DomainsComponent implements OnInit {
 	}
 
 	onGenerateToken(domain: Domain) {
-		this.dialog.open(TokenComponent, {
+		this.dialog.open(DomainTokenComponent, {
 			width: "600px",
 			data: {
 				domain,
