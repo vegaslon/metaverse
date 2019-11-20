@@ -10,148 +10,140 @@ import {
 	UploadedFile,
 	UseGuards,
 	UseInterceptors,
+	ForbiddenException,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { ApiBearerAuth, ApiUseTags } from "@nestjs/swagger";
-import { MetaverseAuthGuard } from "../../auth/auth.guard";
+import {
+	ApiBearerAuth,
+	ApiNotImplementedResponse,
+	ApiUseTags,
+} from "@nestjs/swagger";
+import { renderDomain } from "../../common/utils";
+import { CurrentDomain } from "../../auth/domain.decorator";
+import { DomainAuthGuard } from "../../auth/domain.guard";
 import { CurrentUser } from "../../auth/user.decorator";
 import { MulterFile } from "../../common/multer-file.model";
-import { CreateDomainDto, UpdateDomainDto } from "../../domain/domain.dto";
+import { UpdateDomainDto } from "../../domain/domain.dto";
 import { Domain } from "../../domain/domain.schema";
 import { DomainService } from "../../domain/domain.service";
 import { User } from "../../user/user.schema";
 
-@ApiUseTags("interface api")
+@ApiUseTags("from hifi")
 @Controller("api/v1/domains")
 export class DomainsController {
 	constructor(private domainService: DomainService) {}
 
-	renderDomain(d: Domain) {
-		return {
-			id: d._id,
-
-			ice_server_address: d.iceServerAddress,
-			cloud_domain: false,
-
-			network_address: d.networkAddress,
-			network_port: d.networkPort,
-			online: d.online,
-
-			default_place_name: d.defaultPlaceName,
-			owner_places: d.ownerPlaces,
-			label: d.label, // probobaly shouldnt
-
-			description: d.description,
-			capacity: d.capacity,
-			restriction: d.restriction,
-			maturity: d.maturity,
-			hosts: d.hosts,
-			tags: d.tags,
-
-			version: d.version,
-			protocol: d.protocol,
-
-			online_users: d.onlineUsers,
-			online_anonymous_users: d.onlineAnonUsers,
-		};
-	}
-
 	@Get()
 	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard())
-	async getDomains(@CurrentUser() user: User) {
-		const docs = await this.domainService.getUserDomains(user);
-		let domains = [];
+	@UseGuards(DomainAuthGuard())
+	async getDomains(@CurrentDomain() domain: Domain) {
+		// const docs = await this.domainService.getUserDomains(user);
+		// let domains = [];
 
-		for (let doc of docs) {
-			domains.push(this.renderDomain(doc));
-		}
+		// for (let doc of docs) {
+		// 	domains.push(renderDomain(doc));
+		// }
 
 		return {
 			status: "success",
 			data: {
-				domains,
+				domains: [
+					renderDomain(
+						domain,
+						this.domainService.sessions[domain._id],
+					),
+				],
 			},
 		};
 	}
 
 	@Post()
 	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard())
-	async createDomain(
-		@CurrentUser() user: User,
-		@Body() createDomainDto: CreateDomainDto,
-	) {
-		const domain = await this.domainService.createDomain(
-			user,
-			createDomainDto,
-		);
+	@ApiNotImplementedResponse({
+		description: "Not implemented because we're using an in-house system",
+	})
+	async createDomain() {
+		throw new NotImplementedException();
 
-		return {
-			status: "success",
-			domain: this.renderDomain(domain),
-		};
+		// const domain = await this.domainService.createDomain(
+		// 	user,
+		// 	createDomainDto,
+		// );
+
+		// return {
+		// 	status: "success",
+		// 	domain: renderDomain(domain),
+		// };
 	}
 
 	@Post("temporary")
+	@ApiNotImplementedResponse({
+		description: "Not implemented because we're using an in-house system",
+	})
 	async createTemporaryDomain() {
 		throw new NotImplementedException();
 	}
 
 	@Put(":id")
 	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard())
+	@UseGuards(DomainAuthGuard())
 	async updateDomain(
-		@CurrentUser() user: User,
+		@CurrentDomain() domain: Domain,
 		@Param("id") id: string,
 		@Body() updateDomainDto: UpdateDomainDto,
 	) {
-		const domain = await this.domainService.updateDomain(
-			user,
-			id,
+		if (domain._id != id) throw new ForbiddenException();
+
+		const updatedDomain = await this.domainService.updateDomain(
+			domain,
 			updateDomainDto,
 		);
 
 		return {
 			status: "success",
-			domain: this.renderDomain(domain),
+			domain: renderDomain(
+				updatedDomain,
+				this.domainService.sessions[updatedDomain._id],
+			),
 		};
 	}
 
 	@Put(":id/ice_server_address")
 	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard())
+	@UseGuards(DomainAuthGuard())
 	async updateDomainIceServer(
-		@CurrentUser() user: User,
+		@CurrentDomain() domain: Domain,
 		@Param("id") id: string,
 		@Body() updateDomainDto: UpdateDomainDto,
 	) {
-		const domain = await this.domainService.updateDomain(
-			user,
-			id,
+		if (domain._id != id) throw new ForbiddenException();
+
+		const updatedDomain = await this.domainService.updateDomain(
+			domain,
 			updateDomainDto,
 		);
 
 		return {
 			status: "success",
-			domain: this.renderDomain(domain),
+			domain: renderDomain(
+				updatedDomain,
+				this.domainService.sessions[updatedDomain._id],
+			),
 		};
 	}
 
 	@Put(":id/public_key")
 	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard())
+	@UseGuards(DomainAuthGuard())
 	@UseInterceptors(FileInterceptor("public_key"))
 	async putDomainPublicKey(
-		@CurrentUser() user: User,
+		@CurrentDomain() domain: Domain,
 		@Param("id") id: string,
 		@UploadedFile() file: MulterFile,
 	) {
-		const domain = await this.domainService.setPublicKey(
-			user,
-			id,
-			file.buffer,
-		);
+		if (domain._id != id) throw new ForbiddenException();
+
+		await this.domainService.setPublicKey(domain, file.buffer);
 
 		return {
 			status: "success",
@@ -160,7 +152,7 @@ export class DomainsController {
 
 	@Get(":id/public_key")
 	async getDomainPublicKey(@Param("id") id: string) {
-		const domain = await this.domainService.getDomainById(id);
+		const domain = await this.domainService.findById(id);
 
 		if (domain != null && domain.publicKey != null) {
 			return {
@@ -179,21 +171,19 @@ export class DomainsController {
 		}
 	}
 
-	async updateDomainPublicKey(
-		@CurrentUser() user: User,
-		@Param("id") id: string,
-	) {}
-
 	@Get(":id")
 	async getDomain(@Param("id") id: string) {
-		const domain = await this.domainService.getDomainById(id);
+		const domain = await this.domainService.findById(id);
 		if (domain == null) {
 			throw new NotFoundException();
 		}
 
 		return {
 			status: "success",
-			domain: this.renderDomain(domain),
+			domain: renderDomain(
+				domain,
+				this.domainService.sessions[domain._id],
+			),
 		};
 	}
 }

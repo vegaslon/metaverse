@@ -160,7 +160,6 @@ export class UserService {
 		}
 
 		patchObject(session.location, userUpdateLocationDto.location);
-		console.log(this.sessions);
 		return session.id;
 	}
 }

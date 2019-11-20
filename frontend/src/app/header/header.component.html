@@ -63,8 +63,11 @@
 				</ng-container>
 
 				<mat-menu #appMenu="matMenu">
-					<button mat-menu-item routerLink="/user/settings">
-						<mat-icon>settings</mat-icon> Settings
+					<button mat-menu-item routerLink="user/domains">
+						<mat-icon>public</mat-icon> My domains
+					</button>
+					<button mat-menu-item routerLink="user/settings">
+						<mat-icon>settings</mat-icon> User settings
 					</button>
 					<button mat-menu-item (click)="onSignOut()">
 						<mat-icon>arrow_back</mat-icon> Sign out

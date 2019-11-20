@@ -1,23 +1,22 @@
 import {
+	Body,
 	Controller,
 	Get,
-	UseGuards,
 	Put,
-	UseInterceptors,
 	UploadedFile,
-	Body,
+	UseGuards,
+	UseInterceptors,
 } from "@nestjs/common";
+import { FileInterceptor } from "@nestjs/platform-express";
 import { ApiBearerAuth, ApiUseTags } from "@nestjs/swagger";
 import { MetaverseAuthGuard } from "../../auth/auth.guard";
 import { CurrentUser } from "../../auth/user.decorator";
+import { MulterFile } from "../../common/multer-file.model";
+import { UserUpdateLocationDto } from "../../user/user.dto";
 import { User } from "../../user/user.schema";
 import { UserService } from "../../user/user.service";
-import { FileInterceptor } from "@nestjs/platform-express";
-import { MulterFile } from "../../common/multer-file.model";
-import * as fs from "fs";
-import { UserUpdateLocationDto } from "../../user/user.dto";
 
-@ApiUseTags("interface api")
+@ApiUseTags("from hifi")
 @ApiBearerAuth()
 @Controller("api/v1/user")
 export class UserController {
@@ -44,7 +43,7 @@ export class UserController {
 
 	@Get("locker")
 	@UseGuards(MetaverseAuthGuard())
-	getLocker() {
+	getLocker(@CurrentUser() user: User) {
 		return {
 			status: "success",
 			data: {},
@@ -79,6 +78,7 @@ export class UserController {
 	@UseGuards(MetaverseAuthGuard())
 	@UseInterceptors(FileInterceptor("public_key"))
 	putPublicKey(@CurrentUser() user: User, @UploadedFile() file: MulterFile) {
+		if (file == null) return;
 		this.userService.setPublicKey(user, file.buffer);
 	}
 

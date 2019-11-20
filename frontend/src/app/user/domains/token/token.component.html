@@ -1,0 +1,53 @@
+<ng-container *ngIf="!token">
+	<h2 style="margin-top: 0;">
+		Generate a new access token for
+		<b>{{ domain.label }}</b
+		>?
+	</h2>
+	<p>
+		This will revoke your previously generated token and break your domain
+		if you don't update the token.
+	</p>
+	<div style="text-align: right;">
+		<button mat-flat-button [disabled]="loading" (click)="onClose()">
+			Cancel
+		</button>
+		<span style="padding: 0 4px;"></span>
+		<button
+			mat-flat-button
+			[disabled]="loading"
+			color="warn"
+			(click)="onGenerateToken()"
+		>
+			<mat-icon>vpn_key</mat-icon> Generate new access token
+		</button>
+	</div>
+	<ng-container *ngIf="loading">
+		<br />
+		<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+	</ng-container>
+</ng-container>
+<ng-container *ngIf="token">
+	<h2 style="margin-top: 0;">
+		Your shiny new access token for <b>{{ domain.label }}</b
+		>!
+	</h2>
+	<mdc-form-field>
+		<mdc-text-field
+			label="Access token"
+			outlined
+			readonly
+			[value]="token"
+			style="width: 100%;"
+		></mdc-text-field>
+	</mdc-form-field>
+	<div style="text-align: right;">
+		<button
+			mat-button
+			style="text-align: right; margin-top: 16px;"
+			(click)="onClose()"
+		>
+			Continue
+		</button>
+	</div>
+</ng-container>

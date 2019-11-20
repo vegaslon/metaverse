@@ -7,6 +7,10 @@ $warn: mat-palette($mat-red);
 $theme: mat-light-theme($primary, $accent, $warn);
 @include angular-material-theme($theme);
 
+$mdc-theme-primary: #e91e63;
+$mdc-theme-secondary: $mdc-theme-primary;
+@import "~@angular-mdc/theme/material";
+
 @import "../node_modules/bootstrap/dist/css/bootstrap-grid.css";
 
 html,

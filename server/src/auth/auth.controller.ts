@@ -9,7 +9,11 @@ import {
 } from "@nestjs/common";
 import { ApiUseTags, ApiExcludeEndpoint } from "@nestjs/swagger";
 import { AuthSignUpDto, AuthExtSignUpDto } from "./auth.dto";
-import { AuthService, AuthToken, AuthRegisterToken } from "./auth.service";
+import {
+	AuthService,
+	InterfaceAuthToken,
+	AuthRegisterToken,
+} from "./auth.service";
 import { AuthGuard } from "@nestjs/passport";
 import { Request, Response } from "express";
 import { User } from "../user/user.schema";
@@ -66,7 +70,7 @@ export class AuthController {
 	handleExternalLogin(req: Request, res: Response) {
 		const auth = req.user as any;
 
-		let token: AuthToken = null;
+		let token: InterfaceAuthToken = null;
 		let register: AuthRegisterToken = null;
 
 		if (auth.user != null) {

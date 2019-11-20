@@ -7,11 +7,13 @@ import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
 import { UserService } from "../user/user.service";
 import { AuthTokenDto, AuthSignUpDto, AuthExtSignUpDto } from "./auth.dto";
-import { JwtPayload } from "./jwt.strategy";
+import { JwtPayload, JwtPayloadType } from "./jwt.strategy";
 import { User } from "../user/user.schema";
+import { Domain } from "../domain/domain.schema";
+import { generateRandomString } from "../common/utils";
 
 // aaah... cant camel case here
-export interface AuthToken {
+export interface InterfaceAuthToken {
 	access_token: string;
 	created_at: number;
 	expires_in: number;
@@ -59,23 +61,30 @@ export class AuthService {
 	}
 
 	login(user: User) {
-		const jwt = this.jwtService.sign({
-			id: user._id,
-		} as JwtPayload);
+		const jwt = this.jwtService.sign(
+			{
+				t: JwtPayloadType.USER,
+				id: user._id,
+			} as JwtPayload,
+			{
+				expiresIn: "30d",
+			},
+		);
 
 		const payload = this.jwtService.decode(jwt) as {
-			iat: number;
 			exp: number;
 		};
 
+		const iat = Math.floor(+new Date() / 1000);
+
 		return {
 			access_token: jwt,
-			created_at: payload.iat,
-			expires_in: payload.exp - payload.iat,
+			created_at: iat,
+			expires_in: payload.exp - iat,
 			refresh_token: "",
 			scope: "owner",
 			token_type: "Bearer",
-		} as AuthToken;
+		} as InterfaceAuthToken;
 	}
 
 	async signUp(authSignUpDto: AuthSignUpDto) {
@@ -144,5 +153,20 @@ export class AuthService {
 				imageUrl,
 			} as AuthRegisterToken,
 		};
+	}
+
+	// domain authentication
+
+	async newDomainToken(user: User, domain: Domain) {
+		const s = generateRandomString();
+
+		domain.secret = s;
+		await domain.save();
+
+		return this.jwtService.sign({
+			t: JwtPayloadType.DOMAIN,
+			id: domain._id,
+			s,
+		} as JwtPayload);
 	}
 }

@@ -1,6 +1,6 @@
 {
 	"scripts": {
-		"start": "rimraf dist && nest start --watch",
+		"start": "rimraf dist && cross-env DEV=true nest start --watch",
 		"build": "rimraf dist && nest build"
 	},
 	"dependencies": {
@@ -47,6 +47,7 @@
 		"@types/socket.io": "^2.1.4",
 		"@types/supertest": "^2.0.8",
 		"@types/uuid": "^3.4.6",
+		"cross-env": "^6.0.3",
 		"jest": "^24.9.0",
 		"prettier": "^1.18.2",
 		"rimraf": "^3.0.0",

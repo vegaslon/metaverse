@@ -15,7 +15,7 @@ import {
 	UsersUser,
 } from "./users.dto";
 
-@ApiUseTags("interface api")
+@ApiUseTags("from hifi")
 @Controller("/api/v1/users")
 export class UsersController {
 	constructor(private userService: UserService) {}

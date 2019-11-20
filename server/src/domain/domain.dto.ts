@@ -10,17 +10,22 @@ import {
 	IsEnum,
 } from "class-validator";
 
-class CreateDomain {
-	@ApiModelPropertyOptional()
-	@IsOptional()
-	label: string;
-}
+// class CreateDomain {
+// 	@ApiModelPropertyOptional()
+// 	@IsOptional()
+// 	label: string;
+// }
+
+// export class CreateDomainDto {
+// 	@ApiModelProperty({ type: CreateDomain })
+// 	@ValidateNested()
+// 	@Type(() => CreateDomain)
+// 	domain: CreateDomain;
+// }
 
 export class CreateDomainDto {
-	@ApiModelProperty({ type: CreateDomain })
-	@ValidateNested()
-	@Type(() => CreateDomain)
-	domain: CreateDomain;
+	@ApiModelProperty()
+	label: string;
 }
 
 class UpdateDomainHeartbeat {

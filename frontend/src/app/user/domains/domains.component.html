@@ -1,0 +1,28 @@
+<div class="container">
+	<h1 style="padding: 16px 0;">My domains</h1>
+	<div class="row">
+		<div class="col-md-4" *ngFor="let domain of domains">
+			<mat-card>
+				<h2>{{ domain.label }}</h2>
+				<p>{{ domain.description }}</p>
+				<p>
+					{{ domain.online_users + domain.online_anonymous_users }}
+					people online
+				</p>
+				<button mat-stroked-button>
+					<mat-icon>edit</mat-icon> Edit domain
+				</button>
+				<button
+					mat-flat-button
+					color="warn"
+					(click)="onGenerateToken(domain)"
+				>
+					<mat-icon>vpn_key</mat-icon> Generate new access token
+				</button>
+				<button mat-flat-button color="warn">
+					<mat-icon>delete</mat-icon> Delete domain
+				</button>
+			</mat-card>
+		</div>
+	</div>
+</div>

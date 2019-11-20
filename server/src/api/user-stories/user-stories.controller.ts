@@ -4,9 +4,8 @@ import { pagination } from "../../common/utils";
 import { DomainService } from "../../domain/domain.service";
 import { UserStoriesDto, UserStory, UserStoryAction } from "./user-stories.dto";
 import { createConcurrency } from "./user-stories.helper";
-import { DomainRestriction } from "../../domain/domain.schema";
 
-@ApiUseTags("interface api")
+@ApiUseTags("from hifi")
 @Controller("/api/v1/user_stories")
 export class UserStoriesController {
 	constructor(private domainService: DomainService) {}

@@ -1,7 +1,15 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
-import { catchError } from "rxjs/operators";
+import { catchError, map } from "rxjs/operators";
+
+export interface Domain {
+	id: string;
+	label: string;
+	description: string;
+	online_users: number;
+	online_anonymous_users: number;
+}
 
 @Injectable({
 	providedIn: "root",
@@ -27,5 +35,20 @@ export class UserService {
 		return this.http
 			.put("/api/user/image", formData)
 			.pipe(catchError(this.handleError));
+	}
+
+	getUserDomains() {
+		return this.http
+			.get<Domain[]>("/api/user/domains")
+			.pipe(catchError(this.handleError));
+	}
+
+	generateDomainAccessToken(id: string) {
+		return this.http
+			.post<{ token: string }>("/api/user/domain/" + id + "/token", null)
+			.pipe(
+				catchError(this.handleError),
+				map(data => data.token),
+			);
 	}
 }

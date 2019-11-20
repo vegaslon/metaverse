@@ -1,4 +1,5 @@
-import { Schema, Document } from "mongoose";
+import { Document, Schema } from "mongoose";
+import { User } from "../user/user.schema";
 
 export enum DomainAutomaticNetworking {
 	full = "full",
@@ -14,6 +15,8 @@ export enum DomainRestriction {
 
 export const DomainSchema = new Schema({
 	_id: { type: String, required: true },
+	author: { type: Schema.Types.ObjectId, ref: "User", required: true },
+	secret: { type: String, default: "" }, // require for auth
 
 	iceServerAddress: { type: String, default: "" },
 	//cloudDomain: { type: Boolean, default: false },
@@ -25,7 +28,7 @@ export const DomainSchema = new Schema({
 
 	networkAddress: { type: String, default: "" },
 	networkPort: { type: String, default: "40102" },
-	online: { type: Boolean, default: true },
+	//online: { type: Boolean, default: false }, // handled by session
 
 	// -- not present in domain/:id put|post request
 	defaultPlaceName: { type: String, default: "" },
@@ -47,20 +50,23 @@ export const DomainSchema = new Schema({
 	version: { type: String, default: "" },
 	protocol: { type: String, default: "" },
 
-	onlineUsers: { type: Number, default: 0 },
-	onlineAnonUsers: { type: Number, default: 0 },
+	//onlineUsers: { type: Number, default: 0 },
+	//onlineAnonUsers: { type: Number, default: 0 },
 
 	publicKey: { type: String, default: "" },
 });
 
 export interface Domain extends Document {
+	author: User;
+	secret: string;
+
 	iceServerAddress: string;
 	//cloudDomain: boolean;
 	automaticNetworking: DomainAutomaticNetworking;
 
 	networkAddress: string;
 	networkPort: string;
-	online: boolean;
+	//online: boolean;
 
 	defaultPlaceName: string;
 	ownerPlaces: string[]; // [{id, name, path}]
@@ -76,8 +82,8 @@ export interface Domain extends Document {
 	version: string;
 	protocol: string;
 
-	onlineUsers: number;
-	onlineAnonUsers: number;
+	//onlineUsers: number;
+	//onlineAnonUsers: number;
 
 	publicKey: string;
 }

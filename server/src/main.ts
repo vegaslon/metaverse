@@ -7,7 +7,7 @@ import * as path from "path";
 import { AppModule } from "./app.module";
 import { NotFoundExceptionFilter } from "./not-found";
 import bodyParser = require("body-parser");
-import { PRODUCTION } from "./environment";
+import { DEV } from "./environment";
 
 function initFrontend(app: NestExpressApplication) {
 	const { httpAdapter } = app.get(HttpAdapterHost);
@@ -58,7 +58,7 @@ async function bootstrap() {
 
 	initFrontend(app);
 
-	if (!PRODUCTION) {
+	if (DEV) {
 		initSwagger(app);
 		initDebugging(app);
 	}

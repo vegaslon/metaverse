@@ -1,3 +1,7 @@
+import { Domain } from "../domain/domain.schema";
+import { DomainSession } from "../domain/domain.service";
+import { HeartbeatSession } from "./heartbeat";
+
 export function snakeToCamelCase(snake: string) {
 	const split = snake.split("_");
 
@@ -73,3 +77,60 @@ export function pagination(
 // 	console.log(pagination(4, 5, test));
 // 	console.log(pagination(5, 5, test));
 // }
+
+export function generateRandomString(
+	length = 32,
+	small = true,
+	big = true,
+	numbers = true,
+) {
+	let out = "";
+	let chars = "";
+
+	if (small) chars += "abcdefghijklmnopqrstuvwxyz";
+	if (big) chars += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	if (numbers) chars += "0123456789";
+
+	for (let i = 0; i < length; i++) {
+		out += chars[Math.floor(Math.random() * chars.length)];
+	}
+
+	return out;
+}
+
+export function renderDomain(
+	d: Domain,
+	session: DomainSession & HeartbeatSession,
+) {
+	const online = session == null;
+	const online_users = session == null ? 0 : session.users;
+	const online_anonymous_users = session == null ? 0 : session.anonUsers;
+
+	return {
+		id: d._id,
+
+		ice_server_address: d.iceServerAddress,
+		cloud_domain: false,
+
+		network_address: d.networkAddress,
+		network_port: d.networkPort,
+		online,
+
+		default_place_name: d.defaultPlaceName,
+		owner_places: d.ownerPlaces,
+		label: d.label, // probobaly shouldnt
+
+		description: d.description,
+		capacity: d.capacity,
+		restriction: d.restriction,
+		maturity: d.maturity,
+		hosts: d.hosts,
+		tags: d.tags,
+
+		version: d.version,
+		protocol: d.protocol,
+
+		online_users,
+		online_anonymous_users,
+	};
+}

@@ -7,7 +7,7 @@ export const {
 	JWT_SECRET = "thisIsSoVerySecretyou literally have no idealol1610239012",
 
 	HOSTNAME = "http://127.0.0.1:3000",
-	PRODUCTION = false,
+	DEV = false,
 
 	// https://console.cloud.google.com/apis/credentials
 	AUTH_GOOGLE_ID = " ",

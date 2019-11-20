@@ -12,6 +12,7 @@ import {
 } from "./external.strategy";
 import { JwtStrategy } from "./jwt.strategy";
 import { OauthController } from "./oauth.controller";
+import { DomainModule } from "../domain/domain.module";
 
 const strategies = [GoogleStrategy, DiscordStrategy, GitHubStrategy];
 
@@ -23,10 +24,11 @@ const strategies = [GoogleStrategy, DiscordStrategy, GitHubStrategy];
 		JwtModule.register({
 			secret: JWT_SECRET,
 			signOptions: {
-				expiresIn: "30d",
+				noTimestamp: true,
 			},
 		}),
 		forwardRef(() => UserModule),
+		forwardRef(() => DomainModule),
 	],
 	controllers: [OauthController, AuthController],
 	providers: [AuthService, JwtStrategy, ...strategies],

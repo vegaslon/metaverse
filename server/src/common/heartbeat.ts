@@ -1,5 +1,3 @@
-import { ObjectId } from "bson";
-
 export interface HeartbeatSession {
 	_timer: NodeJS.Timer;
 	_since: Date;

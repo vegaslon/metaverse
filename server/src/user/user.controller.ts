@@ -31,7 +31,7 @@ const defaultUserImage = fs.readFileSync(
 );
 
 @Controller("api/user")
-@ApiUseTags("api")
+@ApiUseTags("user")
 export class UserController {
 	constructor(
 		private userService: UserService,
