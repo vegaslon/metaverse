@@ -20,41 +20,49 @@
 				</mat-card>
 
 				<form [formGroup]="userForm" (ngSubmit)="onUserFormSubmit()">
-					<mat-form-field style="width: 100%;">
-						<input
-							matInput
+					<mdc-form-field>
+						<mdc-text-field
+							autocomplete="email"
 							type="email"
-							placeholder="Email"
+							label="Email"
 							formControlName="email"
-						/>
-						<mat-error *ngIf="userForm.hasError('email', 'email')">
-							Email is invalid
-						</mat-error>
-						<mat-error
-							*ngIf="userForm.hasError('maxlength', 'email')"
-						>
-							Email is too long
-						</mat-error>
-					</mat-form-field>
+						></mdc-text-field>
+						<mdc-helper-text validation>
+							<span *ngIf="userForm.hasError('email', 'email')">
+								Email is invalid
+							</span>
+							<span
+								*ngIf="userForm.hasError('maxlength', 'email')"
+							>
+								Email is too long
+							</span>
+						</mdc-helper-text>
+					</mdc-form-field>
 
-					<mat-form-field style="width: 100%;">
-						<input
-							matInput
+					<mdc-form-field>
+						<mdc-text-field
+							autocomplete="password"
 							type="password"
-							placeholder="Password"
+							label="Password"
 							formControlName="password"
-						/>
-						<mat-error
-							*ngIf="userForm.hasError('minlength', 'password')"
-						>
-							Password is too short
-						</mat-error>
-						<mat-error
-							*ngIf="userForm.hasError('maxlength', 'password')"
-						>
-							Password is too long
-						</mat-error>
-					</mat-form-field>
+						></mdc-text-field>
+						<mdc-helper-text validation>
+							<span
+								*ngIf="
+									userForm.hasError('minlength', 'password')
+								"
+							>
+								Password is too short
+							</span>
+							<span
+								*ngIf="
+									userForm.hasError('maxlength', 'password')
+								"
+							>
+								Password is too long
+							</span>
+						</mdc-helper-text>
+					</mdc-form-field>
 
 					<button
 						type="submit"
