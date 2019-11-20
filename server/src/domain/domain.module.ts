@@ -12,8 +12,8 @@ import { AuthModule } from "../auth/auth.module";
 		forwardRef(() => AuthModule),
 		UserModule,
 	],
-	providers: [DomainService],
 	controllers: [UserDomainController],
+	providers: [DomainService],
 	exports: [DomainService],
 })
 export class DomainModule {}
