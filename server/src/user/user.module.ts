@@ -10,6 +10,7 @@ import { UserService } from "./user.service";
 	imports: [
 		MongooseModule.forFeature([{ name: "User", schema: UserSchema }]),
 		forwardRef(() => AuthModule),
+		forwardRef(() => DomainModule),
 	],
 	controllers: [UserController],
 	providers: [UserService],

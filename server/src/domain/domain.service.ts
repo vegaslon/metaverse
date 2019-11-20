@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, OnModuleInit } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { HeartbeatSession } from "src/common/heartbeat";
@@ -9,6 +9,7 @@ import { UserService, UserSession } from "../user/user.service";
 import { CreateDomainDto, UpdateDomainDto } from "./domain.dto";
 import { Domain } from "./domain.schema";
 import { heartbeat } from "../common/heartbeat";
+import { ModuleRef } from "@nestjs/core";
 import uuid = require("uuid");
 
 export interface DomainSession {
@@ -18,14 +19,20 @@ export interface DomainSession {
 }
 
 @Injectable()
-export class DomainService {
+export class DomainService implements OnModuleInit {
 	// current online domains. this can get big!
 	sessions: { [id: string]: DomainSession & HeartbeatSession } = {};
 
+	private userService: UserService;
+
 	constructor(
 		@InjectModel("Domain") private readonly domainModel: Model<Domain>,
-		private userService: UserService,
+		private moduleRef: ModuleRef,
 	) {}
+
+	onModuleInit() {
+		this.userService = this.moduleRef.get(UserService, { strict: false });
+	}
 
 	findById(id: string) {
 		return this.domainModel.findById(id);

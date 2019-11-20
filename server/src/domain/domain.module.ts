@@ -10,7 +10,7 @@ import { AuthModule } from "../auth/auth.module";
 	imports: [
 		MongooseModule.forFeature([{ name: "Domain", schema: DomainSchema }]),
 		forwardRef(() => AuthModule),
-		UserModule,
+		forwardRef(() => UserModule),
 	],
 	controllers: [UserDomainController],
 	providers: [DomainService],

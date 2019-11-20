@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, OnModuleInit } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import fetch from "node-fetch";
@@ -15,6 +15,7 @@ import {
 } from "./user.dto";
 import { User } from "./user.schema";
 import { DomainService } from "../domain/domain.service";
+import { ModuleRef } from "@nestjs/core";
 import uuid = require("uuid");
 
 export interface UserSession {
@@ -27,11 +28,19 @@ export interface UserSession {
 }
 
 @Injectable()
-export class UserService {
+export class UserService implements OnModuleInit {
+	private domainService: DomainService;
+
 	constructor(
 		@InjectModel("User") private readonly userModel: Model<User>,
-	) //private domainService: DomainService,
-	{}
+		private moduleRef: ModuleRef,
+	) {}
+
+	onModuleInit() {
+		this.domainService = this.moduleRef.get(DomainService, {
+			strict: false,
+		});
+	}
 
 	// current online users. this can get big!
 	sessions: { [username: string]: UserSession & HeartbeatSession } = {};
@@ -119,12 +128,14 @@ export class UserService {
 			user.username,
 			async session => {
 				// clean up session from domains
-				// const domainId = session.location.domain_id;
-				// if (domainId == null) return;
-				// const domainSession = this.domainService.sessions[domainId];
-				// if (domainSession == null) return;
-				// const i = domainSession.users.indexOf(session);
-				// domainSession.users.splice(i, 1);
+				const domainId = session.location.domain_id;
+				if (domainId == null) return;
+
+				const domainSession = this.domainService.sessions[domainId];
+				if (domainSession == null) return;
+
+				const i = domainSession.users.indexOf(session);
+				domainSession.users.splice(i, 1);
 			},
 		);
 
@@ -179,16 +190,16 @@ export class UserService {
 		patchObject(session.location, userUpdateLocationDto.location);
 
 		// update user in domain
-		// if (userUpdateLocationDto.location.domain_id) {
-		// 	const domainId = userUpdateLocationDto.location.domain_id;
+		if (userUpdateLocationDto.location.domain_id) {
+			const domainId = userUpdateLocationDto.location.domain_id;
 
-		// 	const domainSession = this.domainService.sessions[domainId];
-		// 	if (domainSession != null) {
-		// 		if (!domainSession.users.includes(session)) {
-		// 			domainSession.users.push(session);
-		// 		}
-		// 	}
-		// }
+			const domainSession = this.domainService.sessions[domainId];
+			if (domainSession != null) {
+				if (!domainSession.users.includes(session)) {
+					domainSession.users.push(session);
+				}
+			}
+		}
 
 		// return session id
 		return session.id;
