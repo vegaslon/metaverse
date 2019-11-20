@@ -5,15 +5,16 @@ import { HeartbeatSession } from "src/common/heartbeat";
 import { derPublicKeyHeader } from "../common/der-public-key-header";
 import { patchDoc, snakeToCamelCaseObject } from "../common/utils";
 import { User } from "../user/user.schema";
-import { UserService } from "../user/user.service";
+import { UserService, UserSession } from "../user/user.service";
 import { CreateDomainDto, UpdateDomainDto } from "./domain.dto";
 import { Domain } from "./domain.schema";
 import { heartbeat } from "../common/heartbeat";
 import uuid = require("uuid");
 
 export interface DomainSession {
-	users: number;
-	anonUsers: number;
+	numUsers: number;
+	numAnonUsers: number;
+	users: UserSession[];
 }
 
 @Injectable()
@@ -69,14 +70,16 @@ export class DomainService {
 			);
 
 			if (isNew) {
-				session.users = 0;
-				session.anonUsers = 0;
+				session.numUsers = 0;
+				session.numAnonUsers = 0;
+				session.users = [];
 			}
 
 			if (heartbeatDto.num_users != null)
-				session.users = heartbeatDto.num_users;
+				session.numUsers = heartbeatDto.num_users;
+
 			if (heartbeatDto.num_anon_users != null)
-				session.anonUsers = heartbeatDto.num_anon_users;
+				session.numAnonUsers = heartbeatDto.num_anon_users;
 		}
 
 		return await domain.save();

@@ -40,7 +40,8 @@ export function createConcurrency(
 	session: DomainSession,
 ): UserStory {
 	const place_name = domain.networkAddress + ":" + domain.networkPort;
-	const concurrency = session == null ? 0 : session.users + session.anonUsers;
+	const concurrency =
+		session == null ? 0 : session.numUsers + session.numAnonUsers;
 
 	return {
 		id: 0,

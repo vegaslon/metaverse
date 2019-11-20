@@ -35,7 +35,7 @@ export class UsersDto {
 
 	@ApiModelPropertyOptional({
 		default: "",
-		description: "A unique identifier",
+		description: "Domain ID",
 	})
 	@IsString()
 	@IsOptional()
@@ -43,7 +43,7 @@ export class UsersDto {
 
 	@ApiModelPropertyOptional({
 		default: 0,
-		description: "The time? In milliseconds!? What the fuck!",
+		description: "The time? In milliseconds?",
 	})
 	@IsInt()
 	@IsOptional()

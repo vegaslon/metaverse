@@ -103,8 +103,8 @@ export function renderDomain(
 	session: DomainSession & HeartbeatSession,
 ) {
 	const online = session == null;
-	const online_users = session == null ? 0 : session.users;
-	const online_anonymous_users = session == null ? 0 : session.anonUsers;
+	const online_users = session == null ? 0 : session.numUsers;
+	const online_anonymous_users = session == null ? 0 : session.numAnonUsers;
 
 	return {
 		id: d._id,

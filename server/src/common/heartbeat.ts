@@ -8,19 +8,23 @@ export function heartbeat<T>(
 		[s: string]: T & HeartbeatSession;
 	},
 	id: string,
+	cleanup?: (s: T & HeartbeatSession) => Promise<void>,
 	timeout: number = 1000 * 60,
 ): {
 	isNew: boolean;
 	session: T & HeartbeatSession;
 } {
+	const deleteSession = async () => {
+		if (cleanup) await cleanup(sessions[id]);
+		delete sessions[id];
+	};
+
 	if (sessions[id] != null) {
 		const session = sessions[id];
 
 		// reset timer
 		clearTimeout(session._timer);
-		session._timer = setTimeout(() => {
-			delete sessions[id];
-		}, timeout);
+		session._timer = setTimeout(deleteSession, timeout);
 
 		return {
 			isNew: false,
@@ -29,9 +33,7 @@ export function heartbeat<T>(
 	} else {
 		// create new session
 		const session = ((sessions[id] as HeartbeatSession) = {
-			_timer: setTimeout(() => {
-				delete sessions[id];
-			}, timeout),
+			_timer: setTimeout(deleteSession, timeout),
 			_since: new Date(),
 		}) as T & HeartbeatSession;
 

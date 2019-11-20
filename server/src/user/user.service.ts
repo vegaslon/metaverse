@@ -14,17 +14,24 @@ import {
 	UserUpdateLocationDto,
 } from "./user.dto";
 import { User } from "./user.schema";
+import { DomainService } from "../domain/domain.service";
 import uuid = require("uuid");
 
-interface UserSession {
+export interface UserSession {
 	id: string;
+	userId: string;
+
 	minutes: number;
+
 	location: UserUpdateLocation;
 }
 
 @Injectable()
 export class UserService {
-	constructor(@InjectModel("User") private readonly userModel: Model<User>) {}
+	constructor(
+		@InjectModel("User") private readonly userModel: Model<User>,
+	) //private domainService: DomainService,
+	{}
 
 	// current online users. this can get big!
 	sessions: { [username: string]: UserSession & HeartbeatSession } = {};
@@ -110,10 +117,20 @@ export class UserService {
 		const { session, isNew } = heartbeat<UserSession>(
 			this.sessions,
 			user.username,
+			async session => {
+				// clean up session from domains
+				// const domainId = session.location.domain_id;
+				// if (domainId == null) return;
+				// const domainSession = this.domainService.sessions[domainId];
+				// if (domainSession == null) return;
+				// const i = domainSession.users.indexOf(session);
+				// domainSession.users.splice(i, 1);
+			},
 		);
 
 		if (isNew) {
 			session.id = uuid();
+			session.userId = user._id;
 			session.minutes = 0;
 			session.location = {
 				availability: UserAvailability.none,
@@ -160,6 +177,20 @@ export class UserService {
 		}
 
 		patchObject(session.location, userUpdateLocationDto.location);
+
+		// update user in domain
+		// if (userUpdateLocationDto.location.domain_id) {
+		// 	const domainId = userUpdateLocationDto.location.domain_id;
+
+		// 	const domainSession = this.domainService.sessions[domainId];
+		// 	if (domainSession != null) {
+		// 		if (!domainSession.users.includes(session)) {
+		// 			domainSession.users.push(session);
+		// 		}
+		// 	}
+		// }
+
+		// return session id
 		return session.id;
 	}
 }

@@ -8,12 +8,12 @@ import { AuthModule } from "../auth/auth.module";
 
 @Module({
 	imports: [
-		forwardRef(() => AuthModule),
 		MongooseModule.forFeature([{ name: "Domain", schema: DomainSchema }]),
+		forwardRef(() => AuthModule),
 		UserModule,
 	],
 	providers: [DomainService],
-	exports: [DomainService],
 	controllers: [UserDomainController],
+	exports: [DomainService],
 })
 export class DomainModule {}
