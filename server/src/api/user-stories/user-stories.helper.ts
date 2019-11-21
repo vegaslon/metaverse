@@ -39,20 +39,19 @@ export function createConcurrency(
 	domain: Domain,
 	session: DomainSession,
 ): UserStory {
-	const place_name = domain.networkAddress + ":" + domain.networkPort;
 	const concurrency =
 		session == null ? 0 : session.numUsers + session.numAnonUsers;
 
 	return {
-		id: 0,
+		id: domain._id,
 		user_id: "",
 		username: "",
 		action: UserStoryAction.concurrency,
 		action_string: "",
 		audience: UserStroyAudience.for_feed,
-		place_id: "",
-		place_name,
-		path: "/0,0,0",
+		place_id: domain._id,
+		place_name: domain._id,
+		path: domain.path,
 		thumbnail_url: "",
 		details: {
 			image_url: "",

@@ -1,6 +1,7 @@
 import {
 	Body,
 	Controller,
+	ForbiddenException,
 	Get,
 	NotFoundException,
 	NotImplementedException,
@@ -10,7 +11,6 @@ import {
 	UploadedFile,
 	UseGuards,
 	UseInterceptors,
-	ForbiddenException,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import {
@@ -18,15 +18,13 @@ import {
 	ApiNotImplementedResponse,
 	ApiUseTags,
 } from "@nestjs/swagger";
-import { renderDomain } from "../../common/utils";
 import { CurrentDomain } from "../../auth/domain.decorator";
 import { DomainAuthGuard } from "../../auth/domain.guard";
-import { CurrentUser } from "../../auth/user.decorator";
 import { MulterFile } from "../../common/multer-file.model";
+import { renderDomain } from "../../common/utils";
 import { UpdateDomainDto } from "../../domain/domain.dto";
 import { Domain } from "../../domain/domain.schema";
 import { DomainService } from "../../domain/domain.service";
-import { User } from "../../user/user.schema";
 
 @ApiUseTags("from hifi")
 @Controller("api/v1/domains")

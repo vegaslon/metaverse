@@ -54,6 +54,9 @@ export const DomainSchema = new Schema({
 	//onlineAnonUsers: { type: Number, default: 0 },
 
 	publicKey: { type: String, default: "" },
+
+	// not from hifi
+	path: { type: String, default: "/0,0,0/0,0,0,0" },
 });
 
 export interface Domain extends Document {
@@ -86,4 +89,6 @@ export interface Domain extends Document {
 	//onlineAnonUsers: number;
 
 	publicKey: string;
+
+	path: string;
 }

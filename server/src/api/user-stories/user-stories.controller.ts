@@ -6,13 +6,15 @@ import { UserStoriesDto, UserStory, UserStoryAction } from "./user-stories.dto";
 import { createConcurrency } from "./user-stories.helper";
 
 @ApiUseTags("from hifi")
-@Controller("/api/v1/user_stories")
+@Controller("api/v1/user_stories")
 export class UserStoriesController {
 	constructor(private domainService: DomainService) {}
 
 	@Get()
 	async getUserStories(@Query() userStoriesDto: UserStoriesDto) {
-		const {
+		// this is all temporary
+
+		let {
 			include_actions,
 			restriction,
 			require_online,
@@ -20,6 +22,8 @@ export class UserStoriesController {
 			per_page,
 			page,
 		} = userStoriesDto;
+
+		page = page <= 0 ? 1 : page;
 
 		let user_stories: UserStory[] = [];
 
@@ -59,12 +63,14 @@ export class UserStoriesController {
 		// }
 
 		if (include_actions == UserStoryAction.concurrency) {
-			const domains = await this.domainService.getAllDomains(
-				page,
+			const domainIDs = Object.keys(this.domainService.sessions).splice(
+				per_page * (page - 1),
 				per_page,
 			);
 
-			for (let domain of domains) {
+			for (let domainID of domainIDs) {
+				const domain = await this.domainService.findById(domainID);
+
 				const restrictions = restriction.split(",");
 
 				if (restrictions.includes(domain.restriction))

@@ -10,6 +10,7 @@ import { DomainModule } from "./domain/domain.module";
 import { DB_HOST, DB_NAME, DB_PASS, DB_USER } from "./environment";
 import { UserModule } from "./user/user.module";
 import { VideoStreamModule } from "./video-stream/video-stream.module";
+import { PlacesModule } from './api/places/places.module';
 
 @Module({
 	imports: [
@@ -38,6 +39,8 @@ import { VideoStreamModule } from "./video-stream/video-stream.module";
 
 		// extras
 		VideoStreamModule,
+
+		PlacesModule,
 	],
 	providers: [],
 	controllers: [],
