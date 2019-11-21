@@ -80,11 +80,17 @@ export class UsersController {
 				);
 				if (user == null) return;
 
+				const connection = null;
+
+				if (currentUser != null) {
+					if (currentUser._id == user._id)
+						connection == UsersConnectionType.self;
+				}
+
 				users.push({
 					username: user.username,
 					online: true,
-					//connection: UsersConnectionType.connection,
-					connection: null,
+					connection,
 					location: {
 						path: userSession.location.path,
 						node_id: userSession.location.node_id,
