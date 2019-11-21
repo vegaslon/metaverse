@@ -10,7 +10,6 @@ import { UserService, UserSession } from "../user/user.service";
 import { CreateDomainDto, UpdateDomainDto } from "./domain.dto";
 import { Domain } from "./domain.schema";
 import uuid = require("uuid");
-import * as adler32 from "adler-32";
 
 export interface DomainSession {
 	numUsers: number;
