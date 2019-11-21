@@ -82,6 +82,12 @@ export class UserService implements OnModuleInit {
 		}
 	}
 
+	findByUsernameRegex(regexp: RegExp) {
+		return this.userModel.findOne({
+			username: regexp,
+		});
+	}
+
 	async createUser(authSignUpDto: AuthSignUpDto, hash: string) {
 		return await new this.userModel({
 			username: authSignUpDto.username,

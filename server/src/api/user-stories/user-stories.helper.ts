@@ -36,6 +36,7 @@ import { DomainSession } from "../../domain/domain.service";
 // }
 
 export function createConcurrency(
+	placeName: string,
 	domain: Domain,
 	session: DomainSession,
 ): UserStory {
@@ -50,7 +51,7 @@ export function createConcurrency(
 		action_string: "",
 		audience: UserStroyAudience.for_feed,
 		place_id: domain._id,
-		place_name: domain._id,
+		place_name: placeName,
 		path: domain.path,
 		thumbnail_url: "",
 		details: {

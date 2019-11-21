@@ -10,6 +10,7 @@ import { UserService, UserSession } from "../user/user.service";
 import { CreateDomainDto, UpdateDomainDto } from "./domain.dto";
 import { Domain } from "./domain.schema";
 import uuid = require("uuid");
+import * as adler32 from "adler-32";
 
 export interface DomainSession {
 	numUsers: number;
@@ -120,5 +121,64 @@ export class DomainService implements OnModuleInit {
 			.sort({ onlineUsers: -1 })
 			.limit(per_page)
 			.skip(page * per_page);
+	}
+
+	// place name things
+
+	private transformLabel(label: string) {
+		return label.replace(/\s+/g, "-").replace(/[^a-z0-9-]+/gi, "");
+	}
+
+	private transformUsername(username: string) {
+		return username.replace(/[^a-z0-9]/gi, "");
+	}
+
+	private transformedLabelToRegex(tLabel: string) {
+		return new RegExp(
+			"^" +
+				tLabel
+					.split("-")
+					.map(word => {
+						return word.split("").join("[^a-z0-9-]*");
+					})
+					.join("[^a-z0-9-\\s]*-[^a-z0-9-\\s]*") +
+				"$",
+			"i",
+		);
+	}
+
+	private transformedUsernameToRegex(tUsername: string) {
+		const regExpStr = "^" + tUsername.split("").join("[^a-z0-9]*") + "$";
+
+		return new RegExp(regExpStr, "i");
+	}
+
+	toPlaceName(user: User, domain: Domain): string {
+		const tLabel = this.transformLabel(domain.label);
+		const tUsername = this.transformUsername(user.username);
+		return tLabel + "-" + tUsername;
+	}
+
+	async domainFromPlaceName(placeName: string): Promise<Domain> {
+		const split = placeName.split("-");
+		if (split.length < 2) return null;
+
+		const tUsername = split.pop();
+		const tLabel = split.join("-");
+
+		const user = await this.userService
+			.findByUsernameRegex(this.transformedUsernameToRegex(tUsername))
+			.populate("domains");
+
+		if (user == null) return null;
+
+		const domains = user.domains.filter(domain => {
+			return this.transformedLabelToRegex(tLabel).test(domain.label);
+		});
+		if (domains.length < 1) return null;
+		const domain = domains[0];
+		domain.author = user;
+
+		return domain;
 	}
 }

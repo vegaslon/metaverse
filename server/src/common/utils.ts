@@ -1,6 +1,7 @@
 import { Domain } from "../domain/domain.schema";
 import { DomainSession } from "../domain/domain.service";
 import { HeartbeatSession } from "./heartbeat";
+import { User } from "../user/user.schema";
 
 export function snakeToCamelCase(snake: string) {
 	const split = snake.split("_");

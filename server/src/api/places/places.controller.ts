@@ -2,24 +2,31 @@ import { Controller, Get, Param } from "@nestjs/common";
 import { ApiUseTags } from "@nestjs/swagger";
 import { DomainService } from "../../domain/domain.service";
 import { Place } from "./places.dto";
+import { UserService } from "../../user/user.service";
 
 @ApiUseTags("from hifi")
 @Controller("api/v1/places")
 export class PlacesController {
-	constructor(private domainService: DomainService) {}
+	constructor(
+		private domainService: DomainService,
+		private userService: UserService,
+	) {}
 
-	@Get(":id")
-	async getPlace(@Param("id") id: string) {
-		const domain = await this.domainService.findById(id);
-		if (domain == null)
-			return {
-				status: "fail",
-				data: {
-					place: "there is no place with that name",
-				},
-			};
+	private throwNoPlace() {
+		return {
+			status: "fail",
+			data: {
+				place: "there is no place with that name",
+			},
+		};
+	}
 
-		const domainSession = this.domainService.sessions[id];
+	@Get(":placeName")
+	async getPlace(@Param("placeName") placeName: string) {
+		const domain = await this.domainService.domainFromPlaceName(placeName);
+		if (domain == null) return this.throwNoPlace();
+
+		const domainSession = this.domainService.sessions[domain._id];
 
 		return {
 			status: "success",
@@ -28,7 +35,7 @@ export class PlacesController {
 					id: domain._id,
 					description: domain.description,
 					path: domain.path,
-					name: domain._id,
+					name: this.domainService.toPlaceName(domain.author, domain),
 					address: "hifi://" + domain.id + domain.path,
 					domain: {
 						id: domain._id,

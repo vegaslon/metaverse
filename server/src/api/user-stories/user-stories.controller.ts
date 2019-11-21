@@ -68,14 +68,22 @@ export class UserStoriesController {
 				per_page,
 			);
 
-			for (let domainID of domainIDs) {
-				const domain = await this.domainService.findById(domainID);
+			const restrictions = restriction.split(",");
 
-				const restrictions = restriction.split(",");
+			for (let domainID of domainIDs) {
+				const domain = await this.domainService
+					.findById(domainID)
+					.populate("author");
+
+				if (domain.restriction == "acl") continue;
 
 				if (restrictions.includes(domain.restriction))
 					user_stories.push(
 						createConcurrency(
+							this.domainService.toPlaceName(
+								domain.author,
+								domain,
+							),
 							domain,
 							this.domainService.sessions[domain._id],
 						),
