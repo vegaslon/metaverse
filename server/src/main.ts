@@ -39,8 +39,8 @@ function initDebugging(app: NestExpressApplication) {
 		bodyParser.json()(req, res, () => {
 			bodyParser.urlencoded()(req, res, () => {
 				console.log(req.method + " " + req.originalUrl);
-				console.log(req.headers.authorization);
-				console.log(req.body);
+				console.log("auth: " + req.headers.authorization);
+				console.log("body: \n" + JSON.stringify(req.body, null, 4));
 				next();
 			});
 		});

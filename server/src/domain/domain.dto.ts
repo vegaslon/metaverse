@@ -41,7 +41,7 @@ class UpdateDomainHeartbeat {
 
 	@ApiModelPropertyOptional()
 	@IsOptional()
-	user_hostnames: string[]; // no idea
+	user_hostnames: string[]; // no idea {"*": 1}
 }
 
 class UpdateDomain {
