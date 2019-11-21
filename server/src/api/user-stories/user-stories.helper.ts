@@ -5,6 +5,7 @@ import {
 } from "./user-stories.dto";
 import { Domain } from "../../domain/domain.schema";
 import { DomainSession } from "../../domain/domain.service";
+import { HOSTNAME } from "../../environment";
 
 // export function createAnnouncement(
 // 	name: string,
@@ -43,6 +44,8 @@ export function createConcurrency(
 	const concurrency =
 		session == null ? 0 : session.numUsers + session.numAnonUsers;
 
+	const thumbnail_url = HOSTNAME + "/api/domain/" + domain._id + "/image";
+
 	return {
 		id: domain._id,
 		user_id: "",
@@ -53,9 +56,9 @@ export function createConcurrency(
 		place_id: domain._id,
 		place_name: placeName,
 		path: domain.path,
-		thumbnail_url: "",
+		thumbnail_url,
 		details: {
-			image_url: "",
+			image_url: thumbnail_url,
 			concurrency,
 		},
 		updated_at: new Date().toISOString(),
