@@ -82,7 +82,7 @@ export class UsersController {
 
 				let connection = null;
 				if (currentUser != null) {
-					if (currentUser._id == user._id)
+					if (currentUser.username == user.username)
 						connection = UsersConnectionType.self;
 				}
 

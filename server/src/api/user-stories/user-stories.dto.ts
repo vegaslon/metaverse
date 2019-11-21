@@ -87,4 +87,9 @@ export class UserStoriesDto {
 	@IsOptional()
 	@Transform(n => Number(n))
 	page: number = 1;
+
+	@ApiModelPropertyOptional()
+	@IsOptional()
+	@IsString()
+	search: string = "";
 }

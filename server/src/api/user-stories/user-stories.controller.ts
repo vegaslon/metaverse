@@ -21,6 +21,7 @@ export class UserStoriesController {
 			protocol,
 			per_page,
 			page,
+			search,
 		} = userStoriesDto;
 
 		page = page <= 0 ? 1 : page;
