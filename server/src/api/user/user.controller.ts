@@ -32,10 +32,12 @@ export class UserController {
 			status: "success",
 			data: {
 				user: {
-					id: user._id, // not part of hifi
 					username: user.username,
-					email: user.email, // not part of hifi
 					roles,
+					// not part of hifi
+					id: user._id,
+					email: user.email,
+					minutes: user.minutes,
 				},
 			},
 		};
