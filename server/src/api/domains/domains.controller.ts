@@ -26,8 +26,8 @@ import { renderDomain } from "../../common/utils";
 import { UpdateDomainDto } from "../../domain/domain.dto";
 import { Domain } from "../../domain/domain.schema";
 import { DomainService } from "../../domain/domain.service";
-import { MetaverseAuthGuard } from "src/auth/auth.guard";
-import { CurrentUser } from "src/auth/user.decorator";
+import { MetaverseAuthGuard } from "../../auth/auth.guard";
+import { CurrentUser } from "../../auth/user.decorator";
 import { User } from "../../user/user.schema";
 
 @ApiUseTags("from hifi")

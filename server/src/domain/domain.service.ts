@@ -1,11 +1,9 @@
 import { Injectable, OnModuleInit } from "@nestjs/common";
 import { ModuleRef } from "@nestjs/core";
 import { InjectModel } from "@nestjs/mongoose";
-import { ObjectID } from "bson";
 import { Model } from "mongoose";
-import { HeartbeatSession } from "src/common/heartbeat";
 import { derPublicKeyHeader } from "../common/der-public-key-header";
-import { heartbeat } from "../common/heartbeat";
+import { heartbeat, HeartbeatSession } from "../common/heartbeat";
 import { patchDoc, snakeToCamelCaseObject } from "../common/utils";
 import { User } from "../user/user.schema";
 import { UserService, UserSession } from "../user/user.service";
