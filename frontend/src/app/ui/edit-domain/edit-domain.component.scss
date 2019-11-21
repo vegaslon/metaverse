@@ -1,0 +1,13 @@
+.thumbnail-preview {
+	width: 100px;
+	height: 75px;
+	border-radius: 4px;
+	background-size: cover;
+	background-position: center;
+}
+
+.thumbnail-text {
+	text-overflow: ellipsis;
+	overflow: hidden;
+	width: 240px;
+}

@@ -57,6 +57,7 @@ export const DomainSchema = new Schema({
 
 	// not from hifi
 	path: { type: String, default: "/0,0,0/0,0,0,0" },
+	image: { type: Buffer, default: null },
 });
 
 export interface Domain extends Document {
@@ -91,4 +92,5 @@ export interface Domain extends Document {
 	publicKey: string;
 
 	path: string;
+	image: Buffer;
 }

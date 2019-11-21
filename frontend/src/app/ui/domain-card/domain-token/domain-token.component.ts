@@ -1,6 +1,6 @@
 import { Component, Inject } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { Domain, UserService } from "../../user.service";
+import { Domain, UserService } from "../../../user/user.service";
 
 @Component({
 	selector: "app-domain-token",
@@ -8,17 +8,14 @@ import { Domain, UserService } from "../../user.service";
 	styleUrls: ["./domain-token.component.scss"],
 })
 export class DomainTokenComponent {
-	domain: Domain = {} as any;
 	loading = false;
 	token = "";
 
 	constructor(
 		private userService: UserService,
 		private dialogRef: MatDialogRef<DomainTokenComponent>,
-		@Inject(MAT_DIALOG_DATA) private data: { domain: Domain },
-	) {
-		this.domain = data.domain;
-	}
+		@Inject(MAT_DIALOG_DATA) public domain: Domain,
+	) {}
 
 	onClose() {
 		this.dialogRef.close();

@@ -18,11 +18,12 @@ import {
 	ApiBearerAuth,
 	ApiNotImplementedResponse,
 	ApiUseTags,
+	ApiOperation,
 } from "@nestjs/swagger";
 import { CurrentDomain } from "../../auth/domain.decorator";
 import { DomainAuthGuard } from "../../auth/domain.guard";
 import { MulterFile } from "../../common/multer-file.model";
-import { renderDomain } from "../../common/utils";
+import { renderDomainForHifi } from "../../common/utils";
 import { UpdateDomainDto } from "../../domain/domain.dto";
 import { Domain } from "../../domain/domain.schema";
 import { DomainService } from "../../domain/domain.service";
@@ -43,14 +44,14 @@ export class DomainsController {
 		// let domains = [];
 
 		// for (let doc of docs) {
-		// 	domains.push(renderDomain(doc));
+		// 	domains.push(renderDomainForHifi(doc));
 		// }
 
 		return {
 			status: "success",
 			data: {
 				domains: [
-					renderDomain(
+					renderDomainForHifi(
 						domain,
 						this.domainService.sessions[domain._id],
 					),
@@ -60,30 +61,31 @@ export class DomainsController {
 	}
 
 	@Post()
+	@ApiOperation({ title: "", deprecated: true })
 	@ApiBearerAuth()
 	@UseGuards(MetaverseAuthGuard())
 	@ApiNotImplementedResponse({
-		description:
-			'~~Not implemented because we\'re using an in-house system~~, for now you use this with {domain:{label:"My Domain"}}',
+		description: "Not implemented because we're using an in-house system",
 	})
 	async createDomain(@CurrentUser() user: User, @Body() body: any) {
-		//throw new NotImplementedException();
+		throw new NotImplementedException();
 
-		if (body == null) throw new BadRequestException();
-		if (body.domain == null) throw new BadRequestException();
-		if (body.domain.label == null) throw new BadRequestException();
+		// if (body == null) throw new BadRequestException();
+		// if (body.domain == null) throw new BadRequestException();
+		// if (body.domain.label == null) throw new BadRequestException();
 
-		const domain = await this.domainService.createDomain(user, {
-			label: body.domain.label,
-		});
+		// const domain = await this.domainService.createDomain(user, {
+		// 	label: body.domain.label,
+		// });
 
-		return {
-			status: "success",
-			domain: renderDomain(domain, null),
-		};
+		// return {
+		// 	status: "success",
+		// 	domain: renderDomainForHifi(domain, null),
+		// };
 	}
 
 	@Post("temporary")
+	@ApiOperation({ title: "", deprecated: true })
 	@ApiNotImplementedResponse({
 		description: "Not implemented because we're using an in-house system",
 	})
@@ -108,7 +110,7 @@ export class DomainsController {
 
 		return {
 			status: "success",
-			domain: renderDomain(
+			domain: renderDomainForHifi(
 				updatedDomain,
 				this.domainService.sessions[updatedDomain._id],
 			),
@@ -132,7 +134,7 @@ export class DomainsController {
 
 		return {
 			status: "success",
-			domain: renderDomain(
+			domain: renderDomainForHifi(
 				updatedDomain,
 				this.domainService.sessions[updatedDomain._id],
 			),
@@ -187,7 +189,7 @@ export class DomainsController {
 
 		return {
 			status: "success",
-			domain: renderDomain(
+			domain: renderDomainForHifi(
 				domain,
 				this.domainService.sessions[domain._id],
 			),

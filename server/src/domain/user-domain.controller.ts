@@ -1,23 +1,30 @@
 import {
 	Body,
 	Controller,
+	Delete,
 	Get,
 	NotFoundException,
 	Param,
+	Patch,
 	Post,
 	UseGuards,
+	Put,
+	UseInterceptors,
+	UploadedFile,
 } from "@nestjs/common";
-import { ApiBearerAuth, ApiUseTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiUseTags, ApiImplicitFile } from "@nestjs/swagger";
 import { MetaverseAuthGuard } from "../auth/auth.guard";
 import { AuthService } from "../auth/auth.service";
 import { CurrentUser } from "../auth/user.decorator";
 import { renderDomain } from "../common/utils";
 import { User } from "../user/user.schema";
-import { CreateDomainDto } from "./domain.dto";
+import { CreateDomainDto, UpdateDomainDto } from "./domain.dto";
 import { DomainService } from "./domain.service";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { MulterFile } from "../common/multer-file.model";
 
+@ApiUseTags("user domains")
 @Controller("api/user")
-@ApiUseTags("user")
 export class UserDomainController {
 	constructor(
 		private authService: AuthService,
@@ -36,19 +43,8 @@ export class UserDomainController {
 			createDomainDto,
 		);
 
-		return {
-			status: "success",
-			domain: renderDomain(
-				domain,
-				this.domainService.sessions[domain._id],
-			),
-		};
+		return renderDomain(domain, user, this.domainService);
 	}
-
-	// @Get(":id")
-	// getDomain(@Param("id") id: string) {
-	// 	console.log(id);
-	// }
 
 	@Post("domain/:id/token")
 	@ApiBearerAuth()
@@ -69,8 +65,70 @@ export class UserDomainController {
 	@UseGuards(MetaverseAuthGuard())
 	async getAllUserDomains(@CurrentUser() user: User) {
 		await user.populate("domains").execPopulate();
-		return user.domains.map(d =>
-			renderDomain(d, this.domainService.sessions[d._id]),
+
+		return user.domains.map(domain => {
+			return renderDomain(domain, user, this.domainService);
+		});
+	}
+
+	@Patch("domain/:id")
+	@ApiBearerAuth()
+	@UseGuards(MetaverseAuthGuard())
+	async updateDomain(
+		@CurrentUser() user: User,
+		@Param("id") id: string,
+		@Body() updateDomainDto: UpdateDomainDto,
+	) {
+		if (!(user.domains as any[]).includes(id))
+			throw new NotFoundException();
+
+		const domain = await this.domainService.findById(id);
+
+		const updatedDomain = await this.domainService.updateDomain(
+			domain,
+			updateDomainDto,
 		);
+
+		return renderDomain(updatedDomain, user, this.domainService);
+	}
+
+	@Delete("domain/:id")
+	@ApiBearerAuth()
+	@UseGuards(MetaverseAuthGuard())
+	async deleteDomain(@CurrentUser() user: User, @Param("id") id: string) {
+		if (!(user.domains as any[]).includes(id))
+			throw new NotFoundException();
+
+		return this.domainService.deleteDomain(id);
+	}
+
+	@Put("domain/:id/image")
+	@ApiBearerAuth()
+	@ApiImplicitFile({
+		name: "image",
+		description: "Update domain thumbnail",
+		required: true,
+	})
+	@UseGuards(MetaverseAuthGuard())
+	@UseInterceptors(
+		FileInterceptor("image", {
+			limits: {
+				fileSize: 1000 * 1000 * 8, // 8mb
+			},
+		}),
+	)
+	async updateDomainImage(
+		@CurrentUser() user: User,
+		@UploadedFile() file: MulterFile,
+		@Param("id") id: string,
+	) {
+		if (!(user.domains as any[]).includes(id))
+			throw new NotFoundException();
+
+		const domain = await this.domainService.findById(id);
+		if (domain == null) throw new NotFoundException();
+
+		await this.domainService.changeDomainImage(domain, file);
+		return { success: true };
 	}
 }

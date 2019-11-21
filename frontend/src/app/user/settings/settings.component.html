@@ -20,49 +20,46 @@
 				</mat-card>
 
 				<form [formGroup]="userForm" (ngSubmit)="onUserFormSubmit()">
-					<mdc-form-field>
-						<mdc-text-field
-							autocomplete="email"
+					<mat-form-field style="width: 100%;">
+						<input
+							matInput
 							type="email"
-							label="Email"
+							placeholder="Email"
 							formControlName="email"
-						></mdc-text-field>
-						<mdc-helper-text validation>
-							<span *ngIf="userForm.hasError('email', 'email')">
-								Email is invalid
-							</span>
-							<span
-								*ngIf="userForm.hasError('maxlength', 'email')"
-							>
-								Email is too long
-							</span>
-						</mdc-helper-text>
-					</mdc-form-field>
+						/>
+						<mat-error *ngIf="userForm.hasError('email', 'email')">
+							Email is invalid
+						</mat-error>
+						<mat-error
+							*ngIf="userForm.hasError('maxLength', 'email')"
+						>
+							Email is too long
+						</mat-error>
+					</mat-form-field>
 
-					<mdc-form-field>
-						<mdc-text-field
-							autocomplete="password"
+					<mat-form-field style="width: 100%;">
+						<input
+							matInput
 							type="password"
-							label="Password"
+							placeholder="Password"
 							formControlName="password"
-						></mdc-text-field>
-						<mdc-helper-text validation>
-							<span
-								*ngIf="
-									userForm.hasError('minlength', 'password')
-								"
-							>
-								Password is too short
-							</span>
-							<span
-								*ngIf="
-									userForm.hasError('maxlength', 'password')
-								"
-							>
-								Password is too long
-							</span>
-						</mdc-helper-text>
-					</mdc-form-field>
+						/>
+						<mat-error
+							*ngIf="userForm.hasError('required', 'label')"
+						>
+							Password is required
+						</mat-error>
+						<mat-error
+							*ngIf="userForm.hasError('minLength', 'label')"
+						>
+							Password is too short
+						</mat-error>
+						<mat-error
+							*ngIf="userForm.hasError('maxLength', 'label')"
+						>
+							Password is too long
+						</mat-error>
+					</mat-form-field>
 
 					<button
 						type="submit"

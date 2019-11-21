@@ -1,5 +1,5 @@
 import { Domain } from "../domain/domain.schema";
-import { DomainSession } from "../domain/domain.service";
+import { DomainSession, DomainService } from "../domain/domain.service";
 import { HeartbeatSession } from "./heartbeat";
 import { User } from "../user/user.schema";
 
@@ -99,7 +99,7 @@ export function generateRandomString(
 	return out;
 }
 
-export function renderDomain(
+export function renderDomainForHifi(
 	d: Domain,
 	session: DomainSession & HeartbeatSession,
 ) {
@@ -133,5 +133,28 @@ export function renderDomain(
 
 		online_users,
 		online_anonymous_users,
+	};
+}
+
+export function renderDomain(
+	domain: Domain,
+	user: User,
+	domainService: DomainService,
+) {
+	const session = domainService.sessions[domain._id];
+
+	return {
+		id: domain._id,
+		label: domain.label,
+		username: user.username,
+		description: domain.description,
+		restriction: domain.restriction,
+
+		online: session != null,
+		numUsers: session == null ? 0 : session.numUsers + session.numAnonUsers,
+
+		placename: domainService.toPlaceName(user, domain),
+		networkAddress: domain.networkAddress,
+		networkPort: domain.networkPort,
 	};
 }

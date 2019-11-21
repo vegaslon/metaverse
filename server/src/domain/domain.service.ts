@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from "@nestjs/common";
+import { Injectable, OnModuleInit, NotFoundException } from "@nestjs/common";
 import { ModuleRef } from "@nestjs/core";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
@@ -10,6 +10,8 @@ import { UserService, UserSession } from "../user/user.service";
 import { CreateDomainDto, UpdateDomainDto } from "./domain.dto";
 import { Domain } from "./domain.schema";
 import uuid = require("uuid");
+import { MulterFile } from "src/common/multer-file.model";
+import sharp = require("sharp");
 
 export interface DomainSession {
 	numUsers: number;
@@ -51,8 +53,10 @@ export class DomainService implements OnModuleInit {
 		const domain = new this.domainModel({
 			_id: uuid(),
 			author: user,
-			label: createDomainDto.label,
+			label: createDomainDto.label, // required
 		});
+
+		patchDoc(domain, createDomainDto);
 
 		user.domains.push(domain);
 		await user.save();
@@ -123,7 +127,6 @@ export class DomainService implements OnModuleInit {
 	}
 
 	// place name things
-
 	private transformLabel(label: string) {
 		return label.replace(/\s+/g, "-").replace(/[^a-z0-9-]+/gi, "");
 	}
@@ -180,5 +183,32 @@ export class DomainService implements OnModuleInit {
 		domain.author = user;
 
 		return domain;
+	}
+	// place name things over
+
+	async deleteDomain(domainId: string) {
+		const domain = await this.findById(domainId).populate("author");
+		if (domain == null) throw new NotFoundException();
+
+		const user = domain.author;
+		user.domains.splice((user.domains as any[]).indexOf(domainId));
+		await user.save();
+
+		return await domain.remove();
+	}
+
+	async changeDomainImage(domain: Domain, file: MulterFile) {
+		domain.image = await sharp(file.buffer)
+			.resize(768, 512, {
+				fit: "cover",
+				position: "centre",
+			})
+			.jpeg({
+				quality: 100,
+			})
+			.toBuffer();
+
+		await domain.save();
+		return;
 	}
 }

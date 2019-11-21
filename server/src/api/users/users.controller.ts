@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Query, Req, UseGuards } from "@nestjs/common";
-import { ApiBearerAuth, ApiUseTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiUseTags, ApiOperation } from "@nestjs/swagger";
 import { Request } from "express";
 import { MetaverseAuthGuard } from "../../auth/auth.guard";
 import { CurrentUser } from "../../auth/user.decorator";
@@ -121,6 +121,7 @@ export class UsersController {
 	}
 
 	@Get("connections")
+	@ApiOperation({ title: "", deprecated: true })
 	@ApiBearerAuth()
 	@UseGuards(MetaverseAuthGuard())
 	async getConnections(

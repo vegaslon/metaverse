@@ -1,0 +1,10 @@
+<p style="margin-top: 0">{{ message }}</p>
+<button
+	mat-flat-button
+	color="warn"
+	(click)="deleted.emit(); dialogRef.close()"
+	style="margin-right: 10px;"
+>
+	<mat-icon>{{ yesIcon }}</mat-icon> {{ yes }}
+</button>
+<button mat-flat-button (click)="dialogRef.close()">{{ no }}</button>

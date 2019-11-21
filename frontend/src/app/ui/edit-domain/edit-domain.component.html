@@ -1,0 +1,104 @@
+<h2 *ngIf="!editMode" style="margin-top: 0;">Creating a new domain</h2>
+<h2 *ngIf="editMode" style="margin-top: 0;">
+	Editing
+	<span style="font-weight: 500">{{ domain.label }}</span>
+</h2>
+
+<mat-card
+	*ngIf="error"
+	class="bg-warn"
+	style="margin-bottom: 16px; color: #fff;
+display: flex; vertical-align: middle;"
+>
+	<mat-icon style="margin-top: -3px; margin-right: 8px;">
+		error_outline
+	</mat-icon>
+	{{ error }}
+</mat-card>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+	<mat-form-field style="width: 100%;">
+		<input matInput placeholder="Name" required formControlName="label" />
+		<mat-error *ngIf="form.hasError('required', 'label')">
+			Name is required
+		</mat-error>
+		<mat-error *ngIf="form.hasError('minLength', 'label')">
+			Name is too short
+		</mat-error>
+		<mat-error *ngIf="form.hasError('maxLength', 'label')">
+			Name is too long
+		</mat-error>
+	</mat-form-field>
+
+	<mat-form-field style="width: 100%;">
+		<textarea
+			matInput
+			placeholder="Description"
+			formControlName="description"
+			rows="4"
+		></textarea>
+		<mat-error *ngIf="form.hasError('maxLength', 'description')">
+			Description is too long
+		</mat-error>
+	</mat-form-field>
+
+	<!-- <mat-form-field style="width: 100%;">
+		<input matInput placeholder="Thumbnail" formControlName="thumbnail">
+		<mat-error *ngIf="hasError('thumbnail', 'maxLength')">
+			Thumnail is too long
+		</mat-error>
+	</mat-form-field> -->
+
+	<app-image-picker
+		circle="false"
+		name="thumbnail"
+		formControlName="thumbnail"
+	></app-image-picker>
+
+	<div style="margin: 8px 0;"></div>
+
+	<button
+		type="submit"
+		mat-flat-button
+		color="primary"
+		*ngIf="!editMode"
+		[disabled]="form.invalid || isLoading"
+	>
+		<mat-icon>add</mat-icon> Add domain
+	</button>
+	<button
+		type="submit"
+		mat-flat-button
+		color="primary"
+		*ngIf="editMode"
+		[disabled]="form.invalid || isLoading"
+	>
+		<mat-icon>save</mat-icon> Save domain
+	</button>
+
+	<button
+		style="margin-left: 8px;"
+		type="button"
+		mat-flat-button
+		*ngIf="editMode"
+		(click)="onDelete()"
+		[disabled]="isLoading"
+	>
+		<mat-icon>delete</mat-icon> Delete
+	</button>
+
+	<button
+		style="margin-left: 8px"
+		type="button"
+		mat-flat-button
+		(click)="onDiscard()"
+		[disabled]="isLoading"
+	>
+		<mat-icon>close</mat-icon> Discard
+	</button>
+</form>
+
+<div *ngIf="isLoading">
+	<br />
+	<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>

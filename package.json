@@ -8,5 +8,6 @@
 		"build:frontend": "cd frontend && npm run build",
 		"build:server": "cd server && npm run build",
 		"dist": "npm run build:frontend && npm run build:server"
-	}
+	},
+	"dependencies": {}
 }

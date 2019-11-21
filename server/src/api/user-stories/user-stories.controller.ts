@@ -1,5 +1,5 @@
 import { Controller, Get, Query } from "@nestjs/common";
-import { ApiUseTags } from "@nestjs/swagger";
+import { ApiUseTags, ApiOperation } from "@nestjs/swagger";
 import { pagination } from "../../common/utils";
 import { DomainService } from "../../domain/domain.service";
 import { UserStoriesDto, UserStory, UserStoryAction } from "./user-stories.dto";
@@ -11,6 +11,7 @@ export class UserStoriesController {
 	constructor(private domainService: DomainService) {}
 
 	@Get()
+	@ApiOperation({ title: "", deprecated: true })
 	async getUserStories(@Query() userStoriesDto: UserStoriesDto) {
 		// this is all temporary
 

@@ -1,0 +1,12 @@
+// app-domain-card {
+// 	width: calc(100% / 6);
+// 	display: inline-block;
+// }
+
+// @for $i from 12 through 2 {
+// 	@media screen and (max-width: 275px * $i) {
+// 		app-domain-card {
+// 			width: 100% / ($i - 1);
+// 		}
+// 	}
+// }

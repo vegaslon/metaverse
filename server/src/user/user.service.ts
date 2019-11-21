@@ -107,8 +107,6 @@ export class UserService implements OnModuleInit {
 			})
 			.toBuffer();
 
-		console;
-
 		await user.save();
 		return;
 	}

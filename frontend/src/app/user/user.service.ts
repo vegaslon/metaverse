@@ -6,9 +6,16 @@ import { catchError, map } from "rxjs/operators";
 export interface Domain {
 	id: string;
 	label: string;
+	username: string;
 	description: string;
-	online_users: number;
-	online_anonymous_users: number;
+	restriction: "open" | "hifi" | "acl";
+
+	online: boolean;
+	numUsers: number;
+
+	placename: string;
+	networkAddress: string;
+	networkPort: string;
 }
 
 @Injectable({
@@ -50,5 +57,23 @@ export class UserService {
 				catchError(this.handleError),
 				map(data => data.token),
 			);
+	}
+
+	updateUserDomain(id: string, domain: any) {
+		return this.http
+			.patch<Domain>("/api/user/domain/" + id, { domain })
+			.pipe(catchError(this.handleError));
+	}
+
+	deleteUserDomain(id: string) {
+		return this.http
+			.delete("/api/user/domain/" + id)
+			.pipe(catchError(this.handleError));
+	}
+
+	createUserDomain(domain: any) {
+		return this.http
+			.post("/api/user/domain", domain)
+			.pipe(catchError(this.handleError));
 	}
 }

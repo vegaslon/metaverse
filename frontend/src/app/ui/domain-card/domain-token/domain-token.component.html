@@ -32,21 +32,11 @@
 		Your shiny new access token for <b>{{ domain.label }}</b
 		>!
 	</h2>
-	<mdc-form-field>
-		<mdc-text-field
-			label="Access token"
-			outlined
-			readonly
-			[value]="token"
-			style="width: 100%;"
-		></mdc-text-field>
-	</mdc-form-field>
+	<mat-form-field style="width: 100%;">
+		<input matInput placeholder="Access token" [value]="token" />
+	</mat-form-field>
 	<div style="text-align: right;">
-		<button
-			mat-button
-			style="text-align: right; margin-top: 16px;"
-			(click)="onClose()"
-		>
+		<button mat-button style="text-align: right;" (click)="onClose()">
 			Continue
 		</button>
 	</div>

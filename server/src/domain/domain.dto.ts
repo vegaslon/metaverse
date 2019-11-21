@@ -1,14 +1,16 @@
 import { ApiModelProperty, ApiModelPropertyOptional } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { DomainRestriction, DomainAutomaticNetworking } from "./domain.schema";
 import {
 	IsArray,
 	IsBoolean,
+	IsEnum,
 	IsNumber,
 	IsOptional,
+	MaxLength,
 	ValidateNested,
-	IsEnum,
 } from "class-validator";
+import { DomainAutomaticNetworking, DomainRestriction } from "./domain.schema";
+import { MulterFile } from "../common/multer-file.model";
 
 // class CreateDomain {
 // 	@ApiModelPropertyOptional()
@@ -25,7 +27,13 @@ import {
 
 export class CreateDomainDto {
 	@ApiModelProperty()
+	@MaxLength(128)
 	label: string;
+
+	@ApiModelPropertyOptional()
+	@MaxLength(8192)
+	@IsOptional()
+	description: string;
 }
 
 class UpdateDomainHeartbeat {
@@ -73,6 +81,7 @@ class UpdateDomain {
 
 	// metadata
 	@ApiModelPropertyOptional()
+	@MaxLength(8192)
 	@IsOptional()
 	description: string;
 
@@ -113,6 +122,12 @@ class UpdateDomain {
 	@ApiModelPropertyOptional()
 	@IsOptional()
 	protocol: string;
+
+	// not from hifi
+	@ApiModelPropertyOptional()
+	@IsOptional()
+	@MaxLength(128)
+	label: string;
 }
 
 export class UpdateDomainDto {

@@ -1,7 +1,8 @@
-import { Component, OnInit } from "@angular/core";
-import { Domain, UserService } from "../user.service";
+import { Component, OnInit, EventEmitter } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import { DomainTokenComponent } from "./domain-token/domain-token.component";
+import { Domain, UserService } from "../user.service";
+import { EditDomainComponent } from "../../ui/edit-domain/edit-domain.component";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
 	selector: "app-domains",
@@ -11,10 +12,27 @@ import { DomainTokenComponent } from "./domain-token/domain-token.component";
 export class DomainsComponent implements OnInit {
 	domains: Domain[] = [];
 
-	refreshDomains() {
+	constructor(
+		private userService: UserService,
+		private dialog: MatDialog,
+		private snackBar: MatSnackBar,
+	) {
+		this.refreshDomains();
+	}
+
+	refreshDomains(snackbar = false) {
 		const sub = this.userService.getUserDomains().subscribe(
 			domains => {
 				this.domains = domains;
+
+				if (snackbar)
+					this.snackBar.open(
+						"Domains have been reloaded",
+						"Dismiss",
+						{
+							duration: 2000,
+						},
+					);
 			},
 			err => {},
 			() => {
@@ -23,16 +41,24 @@ export class DomainsComponent implements OnInit {
 		);
 	}
 
-	constructor(private userService: UserService, private dialog: MatDialog) {
-		this.refreshDomains();
+	onCreateDomain() {
+		const dialog = this.dialog.open(EditDomainComponent, {
+			width: "600px",
+		});
+
+		dialog.componentInstance.onUpdated.subscribe(() => {
+			this.refreshDomains();
+		});
 	}
 
-	onGenerateToken(domain: Domain) {
-		this.dialog.open(DomainTokenComponent, {
+	onEditDomain(domain: Domain) {
+		const dialog = this.dialog.open(EditDomainComponent, {
 			width: "600px",
-			data: {
-				domain,
-			},
+			data: domain,
+		});
+
+		dialog.componentInstance.onUpdated.subscribe(() => {
+			this.refreshDomains();
 		});
 	}
 

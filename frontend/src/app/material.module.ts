@@ -1,4 +1,3 @@
-import { MdcTextFieldModule, MdcFormFieldModule } from "@angular-mdc/web";
 import { NgModule } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
@@ -26,9 +25,6 @@ const modules = [
 	MatTableModule,
 	MatTabsModule,
 	MatToolbarModule,
-
-	MdcFormFieldModule,
-	MdcTextFieldModule,
 ];
 
 @NgModule({

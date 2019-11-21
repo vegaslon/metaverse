@@ -1,0 +1,73 @@
+.domain-card {
+	display: inline-block;
+	width: 100%;
+	// margin: 0 8px;
+	// margin-bottom: 16px;
+
+	.thumbnail {
+		height: 180px;
+		background-size: cover;
+		background-position: center;
+		position: relative;
+		border-radius: inherit;
+
+		> p {
+			position: absolute;
+			margin: auto;
+			font-size: 1.5em;
+			bottom: 16px;
+			left: 16px;
+			color: #fff;
+		}
+
+		&::before {
+			content: "";
+			position: absolute;
+			margin: auto;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: linear-gradient(
+				transparent,
+				transparent,
+				rgba(29, 31, 33, 0.2),
+				rgba(29, 31, 33, 0.8)
+			);
+		}
+
+		.offline {
+			opacity: 0.6;
+		}
+	}
+
+	&.offline .thumbnail {
+		filter: grayscale(1);
+	}
+
+	.mat-card-title,
+	.mat-card-subtitle {
+		margin-left: -16px;
+	}
+
+	.mat-card-actions {
+		margin-top: -8px;
+
+		> button {
+			display: block;
+			margin-left: -8px;
+		}
+	}
+
+	.ellipses {
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
+	}
+
+	.mat-card-content > div {
+		height: 1em;
+		// height: 2.4em;
+		overflow: hidden;
+	}
+}

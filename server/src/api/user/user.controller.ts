@@ -8,7 +8,7 @@ import {
 	UseInterceptors,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { ApiBearerAuth, ApiUseTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiUseTags, ApiOperation } from "@nestjs/swagger";
 import { MetaverseAuthGuard } from "../../auth/auth.guard";
 import { CurrentUser } from "../../auth/user.decorator";
 import { MulterFile } from "../../common/multer-file.model";
@@ -42,6 +42,7 @@ export class UserController {
 	}
 
 	@Get("locker")
+	@ApiOperation({ title: "", deprecated: true })
 	@UseGuards(MetaverseAuthGuard())
 	getLocker(@CurrentUser() user: User) {
 		return {
@@ -64,6 +65,7 @@ export class UserController {
 	}
 
 	@Get("friends")
+	@ApiOperation({ title: "", deprecated: true })
 	@UseGuards(MetaverseAuthGuard())
 	getFriends(@CurrentUser() user) {
 		return {

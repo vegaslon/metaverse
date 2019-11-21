@@ -5,6 +5,7 @@ import { DomainSchema } from "./domain.schema";
 import { DomainService } from "./domain.service";
 import { UserDomainController } from "./user-domain.controller";
 import { AuthModule } from "../auth/auth.module";
+import { DomainController } from './domain.controller';
 
 @Module({
 	imports: [
@@ -12,7 +13,7 @@ import { AuthModule } from "../auth/auth.module";
 		forwardRef(() => AuthModule),
 		forwardRef(() => UserModule),
 	],
-	controllers: [UserDomainController],
+	controllers: [UserDomainController, DomainController],
 	providers: [DomainService],
 	exports: [DomainService],
 })
