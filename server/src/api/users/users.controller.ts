@@ -83,7 +83,8 @@ export class UsersController {
 				users.push({
 					username: user.username,
 					online: true,
-					connection: UsersConnectionType.connection,
+					//connection: UsersConnectionType.connection,
+					connection: null,
 					location: {
 						path: userSession.location.path,
 						node_id: userSession.location.node_id,
