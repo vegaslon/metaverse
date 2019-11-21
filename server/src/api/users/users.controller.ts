@@ -80,11 +80,10 @@ export class UsersController {
 				);
 				if (user == null) return;
 
-				const connection = null;
-
+				let connection = null;
 				if (currentUser != null) {
 					if (currentUser._id == user._id)
-						connection == UsersConnectionType.self;
+						connection = UsersConnectionType.self;
 				}
 
 				users.push({
