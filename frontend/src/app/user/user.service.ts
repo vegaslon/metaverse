@@ -59,6 +59,17 @@ export class UserService {
 			);
 	}
 
+	// updating domains
+
+	updateDomainImage(id: string, data: { image: File }) {
+		const formData = new FormData();
+		formData.set("image", data.image);
+
+		return this.http
+			.put("/api/user/domain/" + id + "/image", formData)
+			.pipe(catchError(this.handleError));
+	}
+
 	updateUserDomain(id: string, domain: any) {
 		return this.http
 			.patch<Domain>("/api/user/domain/" + id, { domain })

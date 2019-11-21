@@ -60,8 +60,8 @@ export class EditDomainComponent implements OnInit {
 		const body = {
 			label: this.form.value.label,
 			description: this.form.value.description,
-			//thumbnail: thumbnail.files.length > 0 ? thumbnail.files[0] : null,
 		};
+		const image = this.form.value.thumbnail;
 
 		const obs = this.editMode
 			? this.userService.updateUserDomain(this.domain.id, body)
@@ -69,8 +69,30 @@ export class EditDomainComponent implements OnInit {
 
 		const sub = obs.subscribe(
 			domain => {
-				this.onUpdated.emit(null);
-				this.dialogRef.close();
+				console.log(image);
+				if (image == null) {
+					this.onUpdated.emit(null);
+					this.dialogRef.close();
+				} else {
+					const sub = this.userService
+						.updateDomainImage(this.domain.id, {
+							image,
+						})
+						.subscribe(
+							() => {
+								this.onUpdated.emit(null);
+								this.dialogRef.close();
+							},
+							err => {
+								this.error = err;
+								this.isLoading = false;
+								this.form.enable();
+							},
+							() => {
+								sub.unsubscribe();
+							},
+						);
+				}
 			},
 			err => {
 				this.error = err;

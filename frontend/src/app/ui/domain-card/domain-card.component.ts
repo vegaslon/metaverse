@@ -24,7 +24,8 @@ export class DomainCardComponent implements OnInit {
 	constructor(private dialog: MatDialog) {}
 
 	ngOnInit() {
-		this.thumbnailURL = "/api/domain/" + this.domain.id + "/image";
+		this.thumbnailURL =
+			"/api/domain/" + this.domain.id + "/image?" + +new Date();
 	}
 
 	get users(): string {
