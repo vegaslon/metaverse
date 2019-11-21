@@ -63,8 +63,8 @@ async function bootstrap() {
 
 	initFrontend(app);
 
+	initSwagger(app); // while in alpha
 	if (DEV) {
-		initSwagger(app);
 		initDebugging(app);
 	}
 
