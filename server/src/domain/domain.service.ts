@@ -159,6 +159,8 @@ export class DomainService implements OnModuleInit {
 	}
 
 	async domainFromPlaceName(placeName: string): Promise<Domain> {
+		// tests must be written for this
+
 		const split = placeName.split("-");
 		if (split.length < 2) return null;
 
