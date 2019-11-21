@@ -4,18 +4,13 @@ import { IsInt, IsString, IsEnum, IsOptional } from "class-validator";
 
 // users
 
-export enum UsersFilter {
-	connections = "connections",
-}
-
 export class UsersDto {
 	@ApiModelPropertyOptional({
-		default: 1000,
-		enum: Object.values(UsersFilter),
+		default: "",
+		description: 'Can be "connections" but isn\'t used',
 	})
-	@IsEnum(UsersFilter)
 	@IsOptional()
-	filter: UsersFilter;
+	filter: string;
 
 	@ApiModelPropertyOptional({
 		default: 1000,

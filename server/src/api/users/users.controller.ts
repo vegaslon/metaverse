@@ -7,6 +7,9 @@ import { pagination } from "../../common/utils";
 import { HOSTNAME } from "../../environment";
 import { User } from "../../user/user.schema";
 import { UserService } from "../../user/user.service";
+import { DomainService } from "../../domain/domain.service";
+import { OptionalAuthGuard } from "../../auth/optional.guard";
+import { DomainRestriction, Domain } from "../../domain/domain.schema";
 import {
 	UsersConnection,
 	UsersConnectionsDto,
@@ -18,36 +21,87 @@ import {
 @ApiUseTags("from hifi")
 @Controller("/api/v1/users")
 export class UsersController {
-	constructor(private userService: UserService) {}
+	constructor(
+		private userService: UserService,
+		private domainService: DomainService,
+	) {}
 
 	@Get()
 	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard())
+	@UseGuards(OptionalAuthGuard())
 	async getNearbyUsers(
-		@CurrentUser() user: User,
+		@CurrentUser() currentUser: User,
 		@Query() usersDto: UsersDto,
 	) {
 		const { filter, per_page, page, a } = usersDto;
 		const domainId = usersDto.status;
 
-		const users: UsersUser[] = [
-			{
-				username: user.username,
-				online: true,
-				connection: UsersConnectionType.self,
-				location: {
-					path: "fuckyou",
-					node_id: "",
-					root: {},
-				},
-				images: {
-					hero: HOSTNAME + "/api/user/" + user.username + "/image",
-					thumbnail:
-						HOSTNAME + "/api/user/" + user.username + "/image",
-					tiny: HOSTNAME + "/api/user/" + user.username + "/image",
-				},
-			},
-		];
+		if ((currentUser as any) == false) currentUser = null;
+
+		let users: UsersUser[] = [];
+
+		await (async (currentUser: User) => {
+			if (domainId == null) return;
+
+			const domain = await this.domainService.findById(domainId);
+			if (domain == null) return;
+
+			const domainSession = this.domainService.sessions[domainId];
+			if (domainSession == null) return;
+
+			// logic if allowed to see users in domain
+			let showUsers = false;
+			switch (domain.restriction) {
+				case DomainRestriction.open:
+					showUsers = true;
+					break;
+
+				case DomainRestriction.hifi:
+					if (currentUser != null) showUsers = true;
+					break;
+
+				case DomainRestriction.acl:
+					if (currentUser != null)
+						if (
+							// only if user is in domain
+							domainSession.users.filter(
+								user => user.userId == currentUser.id,
+							).length > 0
+						)
+							showUsers = true;
+
+					break;
+			}
+			if (showUsers == false) return;
+
+			for (let userSession of domainSession.users) {
+				const user = await this.userService.findById(
+					userSession.userId,
+				);
+				if (user == null) return;
+
+				users.push({
+					username: user.username,
+					online: true,
+					connection: UsersConnectionType.connection,
+					location: {
+						path: userSession.location.path,
+						node_id: userSession.location.node_id,
+						root: {
+							// fill up
+						},
+					},
+					images: {
+						hero:
+							HOSTNAME + "/api/user/" + user.username + "/image",
+						thumbnail:
+							HOSTNAME + "/api/user/" + user.username + "/image",
+						tiny:
+							HOSTNAME + "/api/user/" + user.username + "/image",
+					},
+				});
+			}
+		})(currentUser);
 
 		const sliced = pagination(page, per_page, users);
 

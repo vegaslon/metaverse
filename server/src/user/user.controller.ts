@@ -88,7 +88,6 @@ export class UserController {
 	) {
 		let user = await this.userService.findByUsername(username);
 		if (user == null) user = await this.userService.findById(username);
-		if (user == null) throw new NotFoundException();
 
 		const stream = new Readable();
 		if (user == null || user.image == null) {

@@ -1,5 +1,7 @@
 import { Injectable, OnModuleInit } from "@nestjs/common";
+import { ModuleRef } from "@nestjs/core";
 import { InjectModel } from "@nestjs/mongoose";
+import { ObjectID } from "bson";
 import { Model } from "mongoose";
 import fetch from "node-fetch";
 import * as sharp from "sharp";
@@ -8,14 +10,13 @@ import { derPublicKeyHeader } from "../common/der-public-key-header";
 import { heartbeat, HeartbeatSession } from "../common/heartbeat";
 import { MulterFile } from "../common/multer-file.model";
 import { patchObject } from "../common/utils";
+import { DomainService } from "../domain/domain.service";
 import {
 	UserAvailability,
 	UserUpdateLocation,
 	UserUpdateLocationDto,
 } from "./user.dto";
 import { User } from "./user.schema";
-import { DomainService } from "../domain/domain.service";
-import { ModuleRef } from "@nestjs/core";
 import uuid = require("uuid");
 
 export interface UserSession {
@@ -72,8 +73,13 @@ export class UserService implements OnModuleInit {
 		});
 	}
 
-	findById(id: string) {
-		return this.userModel.findById(id);
+	findById(idStr: string) {
+		try {
+			const id = new ObjectID(idStr);
+			return this.userModel.findById(id);
+		} catch (err) {
+			return null;
+		}
 	}
 
 	async createUser(authSignUpDto: AuthSignUpDto, hash: string) {
