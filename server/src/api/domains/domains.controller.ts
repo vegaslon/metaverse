@@ -11,6 +11,7 @@ import {
 	UploadedFile,
 	UseGuards,
 	UseInterceptors,
+	BadRequestException,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import {
@@ -25,6 +26,9 @@ import { renderDomain } from "../../common/utils";
 import { UpdateDomainDto } from "../../domain/domain.dto";
 import { Domain } from "../../domain/domain.schema";
 import { DomainService } from "../../domain/domain.service";
+import { MetaverseAuthGuard } from "src/auth/auth.guard";
+import { CurrentUser } from "src/auth/user.decorator";
+import { User } from "../../user/user.schema";
 
 @ApiUseTags("from hifi")
 @Controller("api/v1/domains")
@@ -57,21 +61,26 @@ export class DomainsController {
 
 	@Post()
 	@ApiBearerAuth()
+	@UseGuards(MetaverseAuthGuard())
 	@ApiNotImplementedResponse({
-		description: "Not implemented because we're using an in-house system",
+		description:
+			'~~Not implemented because we\'re using an in-house system~~, for now you use this with {domain:{label:"My Domain"}}',
 	})
-	async createDomain() {
-		throw new NotImplementedException();
+	async createDomain(@CurrentUser() user: User, @Body() body: any) {
+		//throw new NotImplementedException();
 
-		// const domain = await this.domainService.createDomain(
-		// 	user,
-		// 	createDomainDto,
-		// );
+		if (body == null) throw new BadRequestException();
+		if (body.domain == null) throw new BadRequestException();
+		if (body.domain.label == null) throw new BadRequestException();
 
-		// return {
-		// 	status: "success",
-		// 	domain: renderDomain(domain),
-		// };
+		const domain = await this.domainService.createDomain(user, {
+			label: body.domain.label,
+		});
+
+		return {
+			status: "success",
+			domain: renderDomain(domain, null),
+		};
 	}
 
 	@Post("temporary")
