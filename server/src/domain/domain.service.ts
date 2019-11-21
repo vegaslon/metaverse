@@ -140,7 +140,7 @@ export class DomainService implements OnModuleInit {
 					.map(word => {
 						return word.split("").join("[^a-z0-9-]*");
 					})
-					.join("[^a-z0-9-\\s]*-[^a-z0-9-\\s]*") +
+					.join("[^a-z0-9-]*[\\s-][^a-z0-9-]*") +
 				"$",
 			"i",
 		);
@@ -168,7 +168,6 @@ export class DomainService implements OnModuleInit {
 		const user = await this.userService
 			.findByUsernameRegex(this.transformedUsernameToRegex(tUsername))
 			.populate("domains");
-
 		if (user == null) return null;
 
 		const domains = user.domains.filter(domain => {
