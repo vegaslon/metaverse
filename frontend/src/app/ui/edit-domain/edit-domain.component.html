@@ -42,12 +42,15 @@ display: flex; vertical-align: middle;"
 		</mat-error>
 	</mat-form-field>
 
-	<!-- <mat-form-field style="width: 100%;">
-		<input matInput placeholder="Thumbnail" formControlName="thumbnail">
-		<mat-error *ngIf="hasError('thumbnail', 'maxLength')">
-			Thumnail is too long
+	<mat-form-field style="width: 100%;">
+		<input matInput placeholder="Path" required formControlName="path" />
+		<mat-error *ngIf="form.hasError('required', 'path')">
+			Path is required
 		</mat-error>
-	</mat-form-field> -->
+		<mat-error *ngIf="form.hasError('maxLength', 'path')">
+			Path is too long
+		</mat-error>
+	</mat-form-field>
 
 	<app-image-picker
 		name="thumbnail"

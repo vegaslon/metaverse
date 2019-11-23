@@ -57,7 +57,7 @@ export class DomainsComponent implements OnInit {
 			data: domain,
 		});
 
-		dialog.componentInstance.onUpdated.subscribe(() => {
+		dialog.componentInstance.onUpdated.subscribe((domain: Domain) => {
 			this.refreshDomains();
 		});
 	}

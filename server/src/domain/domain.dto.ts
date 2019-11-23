@@ -128,6 +128,11 @@ class UpdateDomain {
 	@IsOptional()
 	@MaxLength(128)
 	label: string;
+
+	@ApiModelPropertyOptional()
+	@IsOptional()
+	@MaxLength(128)
+	path: string;
 }
 
 export class UpdateDomainDto {

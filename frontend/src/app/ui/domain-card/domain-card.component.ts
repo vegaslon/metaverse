@@ -10,6 +10,7 @@ import { DomainTokenComponent } from "./domain-token/domain-token.component";
 })
 export class DomainCardComponent implements OnInit {
 	@Input() domain: Domain;
+	//@Input() refreshImage = false;
 	@Input() editMode: boolean;
 	@Output() onEdit = new EventEmitter<Domain>();
 
@@ -26,6 +27,7 @@ export class DomainCardComponent implements OnInit {
 	ngOnInit() {
 		this.thumbnailURL =
 			"/api/domain/" + this.domain.id + "/image?" + +new Date();
+		//(this.refreshImage ? "?" + +new Date() : "");
 	}
 
 	get users(): string {

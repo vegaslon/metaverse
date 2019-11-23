@@ -14,7 +14,7 @@ import { DeleteConfirmComponent } from "../delete-confirm/delete-confirm.compone
 	styleUrls: ["./edit-domain.component.scss"],
 })
 export class EditDomainComponent implements OnInit {
-	@Output() onUpdated = new EventEmitter();
+	@Output() onUpdated = new EventEmitter<Domain>();
 
 	isLoading = false;
 	editMode = false;
@@ -47,6 +47,10 @@ export class EditDomainComponent implements OnInit {
 			description: new FormControl(this.domain.description || "", [
 				Validators.maxLength(8192),
 			]),
+			path: new FormControl(this.domain.path || "/0,0,0/0,0,0,0", [
+				Validators.required,
+				Validators.maxLength(128),
+			]),
 			thumbnail: new FormControl(null),
 		});
 	}
@@ -57,21 +61,18 @@ export class EditDomainComponent implements OnInit {
 		this.isLoading = true;
 		this.form.disable();
 
-		const body = {
-			label: this.form.value.label,
-			description: this.form.value.description,
-		};
 		const image = this.form.value.thumbnail;
+		delete this.form.value.thumbnail;
 
 		const obs = this.editMode
-			? this.userService.updateUserDomain(this.domain.id, body)
-			: this.userService.createUserDomain(body);
+			? this.userService.updateUserDomain(this.domain.id, this.form.value)
+			: this.userService.createUserDomain(this.form.value);
 
 		const sub = obs.subscribe(
 			domain => {
 				console.log(image);
 				if (image == null) {
-					this.onUpdated.emit(null);
+					this.onUpdated.emit(domain);
 					this.dialogRef.close();
 				} else {
 					const sub = this.userService
@@ -80,7 +81,7 @@ export class EditDomainComponent implements OnInit {
 						})
 						.subscribe(
 							() => {
-								this.onUpdated.emit(null);
+								this.onUpdated.emit(domain);
 								this.dialogRef.close();
 							},
 							err => {
