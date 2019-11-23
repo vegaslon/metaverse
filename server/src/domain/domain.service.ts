@@ -121,7 +121,8 @@ export class DomainService implements OnModuleInit {
 		if (domain == null) throw new NotFoundException();
 
 		const user = domain.author;
-		user.domains.splice((user.domains as any[]).indexOf(domainId));
+		const i = (user.domains as any[]).indexOf(domainId);
+		user.domains.splice(i, 1);
 		await user.save();
 
 		return await domain.remove();

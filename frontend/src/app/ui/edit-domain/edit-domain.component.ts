@@ -70,7 +70,6 @@ export class EditDomainComponent implements OnInit {
 
 		const sub = obs.subscribe(
 			domain => {
-				console.log(image);
 				if (image == null) {
 					this.onUpdated.emit(domain);
 					this.dialogRef.close();
