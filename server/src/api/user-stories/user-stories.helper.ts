@@ -37,7 +37,6 @@ import { HOSTNAME } from "../../environment";
 // }
 
 export function createConcurrency(
-	placeName: string,
 	domain: Domain,
 	session: DomainSession,
 ): UserStory {
@@ -54,7 +53,7 @@ export function createConcurrency(
 		action_string: "",
 		audience: UserStroyAudience.for_feed,
 		place_id: domain._id,
-		place_name: placeName,
+		place_name: domain.networkAddress + ":" + domain.networkPort,
 		path: domain.path,
 		thumbnail_url,
 		details: {

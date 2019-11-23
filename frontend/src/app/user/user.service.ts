@@ -13,9 +13,9 @@ export interface Domain {
 	online: boolean;
 	numUsers: number;
 
-	placename: string;
 	networkAddress: string;
 	networkPort: string;
+	path: string;
 }
 
 @Injectable({
@@ -84,7 +84,7 @@ export class UserService {
 
 	createUserDomain(domain: any) {
 		return this.http
-			.post("/api/user/domain", domain)
+			.post<Domain>("/api/user/domain", domain)
 			.pipe(catchError(this.handleError));
 	}
 }

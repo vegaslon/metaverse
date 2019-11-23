@@ -82,10 +82,6 @@ export class UserStoriesController {
 				if (restrictions.includes(domain.restriction))
 					user_stories.push(
 						createConcurrency(
-							this.domainService.toPlaceName(
-								domain.author,
-								domain,
-							),
 							domain,
 							this.domainService.sessions[domain._id],
 						),

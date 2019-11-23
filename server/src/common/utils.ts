@@ -153,8 +153,8 @@ export function renderDomain(
 		online: session != null,
 		numUsers: session == null ? 0 : session.numUsers + session.numAnonUsers,
 
-		placename: domainService.toPlaceName(user, domain),
 		networkAddress: domain.networkAddress,
 		networkPort: domain.networkPort,
+		path: domain.path,
 	};
 }

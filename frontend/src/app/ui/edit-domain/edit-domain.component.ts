@@ -75,7 +75,7 @@ export class EditDomainComponent implements OnInit {
 					this.dialogRef.close();
 				} else {
 					const sub = this.userService
-						.updateDomainImage(this.domain.id, {
+						.updateDomainImage(domain.id, {
 							image,
 						})
 						.subscribe(
