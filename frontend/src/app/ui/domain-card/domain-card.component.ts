@@ -15,6 +15,7 @@ export class DomainCardComponent implements OnInit {
 	@Output() onEdit = new EventEmitter<Domain>();
 
 	thumbnailURL = "";
+	domainSettings = "";
 
 	inInterface = (window as any).qt != null;
 
@@ -28,6 +29,18 @@ export class DomainCardComponent implements OnInit {
 		this.thumbnailURL =
 			"/api/domain/" + this.domain.id + "/image?" + +new Date();
 		//(this.refreshImage ? "?" + +new Date() : "");
+
+		let domainSettingsHttpPort;
+		try {
+			domainSettingsHttpPort = parseInt(this.domain.networkPort) - 2;
+		} catch (err) {
+			domainSettingsHttpPort = 4010;
+		}
+		this.domainSettings =
+			"http://" +
+			this.domain.networkAddress +
+			":" +
+			domainSettingsHttpPort;
 	}
 
 	get users(): string {

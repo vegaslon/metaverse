@@ -19,16 +19,15 @@
 		</div>
 	</mat-card-content>
 	<mat-card-actions>
-		<button
-			mat-button
-			*ngIf="!inInterface"
-			style="max-width: 100%; overflow: hidden;"
-		>
+		<button mat-button *ngIf="!inInterface">
 			<mat-icon>launch</mat-icon> Join
 			<span style="opacity: 0.5; font-size: 0.8em; padding-left: 8px;">
 				{{ domain.networkAddress + ":" + domain.networkPort }}
 			</span>
 		</button>
+		<a mat-button *ngIf="editMode" [href]="domainSettings" target="_blank">
+			<mat-icon>settings</mat-icon> Open domain settings
+		</a>
 		<button mat-button *ngIf="editMode" (click)="onEditDomain()">
 			<mat-icon>edit</mat-icon> Edit domain details
 		</button>

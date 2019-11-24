@@ -53,9 +53,16 @@
 	.mat-card-actions {
 		margin-top: -8px;
 
-		> button {
+		.mat-button {
 			display: block;
+			max-width: 100%;
+			overflow: hidden;
 			margin-left: -8px;
+		}
+
+		a.mat-button {
+			display: inline-block;
+			margin-top: 4px;
 		}
 	}
 
