@@ -44,31 +44,6 @@ export class UserService implements OnModuleInit {
 		this.images = new GridFSBucket(connection.db, {
 			bucketName: "userImages",
 		});
-
-		(async () => {
-			await this.userModel.find(
-				{ image: { $ne: null } },
-				async (err, users) => {
-					for (let user of users) {
-						const buffer = (user as any).image as Buffer;
-						const stream = new Readable();
-						stream.push(buffer);
-						stream.push(null);
-
-						stream.pipe(
-							this.images.openUploadStreamWithId(user.id, null, {
-								contentType: "image/jpg",
-							}),
-						);
-
-						stream.on("end", async () => {
-							(user as any).image = null;
-							await user.save();
-						});
-					}
-				},
-			);
-		})();
 	}
 
 	onModuleInit() {
