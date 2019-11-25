@@ -132,8 +132,8 @@ export class DomainService implements OnModuleInit {
 		return this.domainModel
 			.find({ online: true, ...restriction })
 			.sort({ onlineUsers: -1, lastUpdated: -1 })
-			.limit(page)
-			.skip(page * amount);
+			.skip(page * amount)
+			.limit(page);
 	}
 
 	async deleteDomain(domainId: string) {
