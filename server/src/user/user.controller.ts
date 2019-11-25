@@ -89,14 +89,13 @@ export class UserController {
 	) {
 		res.set("Content-Type", "image/jpg");
 
-		const sendDefaultImage = () => {
+		if (username == "_") {
 			const stream = new Readable();
 			stream.push(defaultUserImage);
 			stream.push(null);
 			stream.pipe(res);
-		};
-
-		if (username == "_") return sendDefaultImage();
+			return;
+		}
 
 		let user = await this.userService.findByUsername(username);
 		if (user == null) user = await this.userService.findById(username);
@@ -109,7 +108,7 @@ export class UserController {
 		});
 
 		stream.on("error", () => {
-			sendDefaultImage();
+			res.redirect("/api/user/_/image");
 		});
 
 		stream.on("end", () => {
