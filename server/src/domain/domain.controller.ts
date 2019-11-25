@@ -5,8 +5,9 @@ import * as fs from "fs";
 import * as path from "path";
 import { Readable } from "stream";
 import { DomainService } from "./domain.service";
+import { ObjectId } from "bson";
 
-const defaultUserImage = fs.readFileSync(
+const defaultDomainImage = fs.readFileSync(
 	path.resolve(__dirname, "../../assets/domain-image.jpg"),
 );
 
@@ -17,21 +18,22 @@ export class DomainController {
 
 	@Get(":id/image")
 	async getDomainImage(@Param("id") id: string, @Res() res: Response) {
-		let domain = await this.domainService.findById(id);
+		const stream = this.domainService.images.openDownloadStream(id as any);
+		res.set("Content-Type", "image/jpg");
 
-		const stream = new Readable();
-		if (domain == null || domain.image == null) {
-			stream.push(defaultUserImage);
-		} else {
-			stream.push(domain.image);
-		}
-		stream.push(null);
-
-		res.set({
-			"Content-Type": "image/jpg",
-			"Content-Length": stream.readableLength,
+		stream.on("data", chunk => {
+			res.write(chunk);
 		});
 
-		stream.pipe(res);
+		stream.on("error", () => {
+			const stream = new Readable();
+			stream.push(defaultDomainImage);
+			stream.push(null);
+			stream.pipe(res);
+		});
+
+		stream.on("end", () => {
+			res.end();
+		});
 	}
 }

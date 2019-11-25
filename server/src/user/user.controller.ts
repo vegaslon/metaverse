@@ -25,6 +25,7 @@ import { MulterFile } from "../common/multer-file.model";
 import { UserUpdateDto } from "./user.dto";
 import { User } from "./user.schema";
 import { UserService } from "./user.service";
+import { GridFSBucketReadStream } from "mongodb";
 
 const defaultUserImage = fs.readFileSync(
 	path.resolve(__dirname, "../../assets/user-image.jpg"),
@@ -89,19 +90,22 @@ export class UserController {
 		let user = await this.userService.findByUsername(username);
 		if (user == null) user = await this.userService.findById(username);
 
-		const stream = new Readable();
-		if (user == null || user.image == null) {
-			stream.push(defaultUserImage);
-		} else {
-			stream.push(user.image);
-		}
-		stream.push(null);
+		const stream = this.userService.images.openDownloadStream(user.id);
+		res.set("Content-Type", "image/jpg");
 
-		res.set({
-			"Content-Type": "image/jpg",
-			"Content-Length": stream.readableLength,
+		stream.on("data", chunk => {
+			res.write(chunk);
 		});
 
-		stream.pipe(res);
+		stream.on("error", () => {
+			const stream = new Readable();
+			stream.push(defaultUserImage);
+			stream.push(null);
+			stream.pipe(res);
+		});
+
+		stream.on("end", () => {
+			res.end();
+		});
 	}
 }

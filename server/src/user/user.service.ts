@@ -1,8 +1,9 @@
 import { Injectable, OnModuleInit } from "@nestjs/common";
 import { ModuleRef } from "@nestjs/core";
-import { InjectModel } from "@nestjs/mongoose";
+import { InjectConnection, InjectModel } from "@nestjs/mongoose";
 import { ObjectID } from "bson";
-import { Model } from "mongoose";
+import { GridFSBucket } from "mongodb";
+import { Connection, Model } from "mongoose";
 import fetch from "node-fetch";
 import * as sharp from "sharp";
 import { AuthSignUpDto } from "../auth/auth.dto";
@@ -18,6 +19,8 @@ import {
 } from "./user.dto";
 import { User } from "./user.schema";
 import uuid = require("uuid");
+import { promisify } from "util";
+import { Readable } from "stream";
 
 export interface UserSession {
 	id: string;
@@ -31,11 +34,42 @@ export interface UserSession {
 @Injectable()
 export class UserService implements OnModuleInit {
 	private domainService: DomainService;
+	public images: GridFSBucket;
 
 	constructor(
 		@InjectModel("User") private readonly userModel: Model<User>,
+		@InjectConnection() private connection: Connection,
 		private moduleRef: ModuleRef,
-	) {}
+	) {
+		this.images = new GridFSBucket(connection.db, {
+			bucketName: "userImages",
+		});
+
+		(async () => {
+			await this.userModel.find(
+				{ image: { $ne: null } },
+				async (err, users) => {
+					for (let user of users) {
+						const buffer = (user as any).image as Buffer;
+						const stream = new Readable();
+						stream.push(buffer);
+						stream.push(null);
+
+						stream.pipe(
+							this.images.openUploadStreamWithId(user.id, null, {
+								contentType: "image/jpg",
+							}),
+						);
+
+						stream.on("end", async () => {
+							(user as any).image = null;
+							await user.save();
+						});
+					}
+				},
+			);
+		})();
+	}
 
 	onModuleInit() {
 		this.domainService = this.moduleRef.get(DomainService, {
@@ -97,18 +131,36 @@ export class UserService implements OnModuleInit {
 	}
 
 	async changeUserImage(user: User, file: MulterFile) {
-		user.image = await sharp(file.buffer)
-			.resize(128, 128, {
-				fit: "cover",
-				position: "centre",
-			})
-			.jpeg({
-				quality: 100,
-			})
-			.toBuffer();
+		return new Promise(async (resolve, reject) => {
+			await new Promise(resolve => {
+				this.images.delete(user.id, err => {
+					resolve();
+				});
+			});
 
-		await user.save();
-		return;
+			const stream = sharp(file.buffer)
+				.resize(128, 128, {
+					fit: "cover",
+					position: "centre",
+				})
+				.jpeg({
+					quality: 100,
+				});
+
+			stream.pipe(
+				this.images.openUploadStreamWithId(user.id, null, {
+					contentType: "image/jpg",
+				}),
+			);
+
+			stream.on("error", err => {
+				reject(err);
+			});
+
+			stream.on("end", () => {
+				resolve();
+			});
+		});
 	}
 
 	async changeUserImageFromUrl(user: User, imageUrl: string) {

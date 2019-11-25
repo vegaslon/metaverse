@@ -1,7 +1,7 @@
 import { Injectable, OnModuleInit, NotFoundException } from "@nestjs/common";
 import { ModuleRef } from "@nestjs/core";
-import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
+import { InjectModel, InjectConnection } from "@nestjs/mongoose";
+import { Model, Connection } from "mongoose";
 import { derPublicKeyHeader } from "../common/der-public-key-header";
 import { heartbeat, HeartbeatSession } from "../common/heartbeat";
 import { patchDoc, snakeToCamelCaseObject } from "../common/utils";
@@ -12,6 +12,7 @@ import { Domain } from "./domain.schema";
 import uuid = require("uuid");
 import { MulterFile } from "src/common/multer-file.model";
 import sharp = require("sharp");
+import { GridFSBucket } from "mongodb";
 
 export interface DomainSession {
 	numUsers: number;
@@ -25,11 +26,17 @@ export class DomainService implements OnModuleInit {
 	sessions: { [id: string]: DomainSession & HeartbeatSession } = {};
 
 	private userService: UserService;
+	public images: GridFSBucket;
 
 	constructor(
 		@InjectModel("Domain") private readonly domainModel: Model<Domain>,
+		@InjectConnection() private connection: Connection,
 		private moduleRef: ModuleRef,
-	) {}
+	) {
+		this.images = new GridFSBucket(connection.db, {
+			bucketName: "domainThumbnails",
+		});
+	}
 
 	onModuleInit() {
 		this.userService = this.moduleRef.get(UserService, { strict: false });
@@ -129,17 +136,35 @@ export class DomainService implements OnModuleInit {
 	}
 
 	async changeDomainImage(domain: Domain, file: MulterFile) {
-		domain.image = await sharp(file.buffer)
-			.resize(768, 512, {
-				fit: "cover",
-				position: "centre",
-			})
-			.jpeg({
-				quality: 100,
-			})
-			.toBuffer();
+		return new Promise(async (resolve, reject) => {
+			await new Promise(resolve => {
+				this.images.delete(domain.id, err => {
+					resolve();
+				});
+			});
 
-		await domain.save();
-		return;
+			const stream = sharp(file.buffer)
+				.resize(768, 512, {
+					fit: "cover",
+					position: "centre",
+				})
+				.jpeg({
+					quality: 100,
+				});
+
+			stream.pipe(
+				this.images.openUploadStreamWithId(domain.id, null, {
+					contentType: "image/jpg",
+				}),
+			);
+
+			stream.on("error", err => {
+				reject(err);
+			});
+
+			stream.on("end", () => {
+				resolve();
+			});
+		});
 	}
 }
