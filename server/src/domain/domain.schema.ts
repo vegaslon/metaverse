@@ -15,6 +15,8 @@ export enum DomainRestriction {
 
 export const DomainSchema = new Schema({
 	_id: { type: String, required: true },
+	lastUpdated: { type: Date, default: new Date() },
+
 	author: { type: Schema.Types.ObjectId, ref: "User", required: true },
 	secret: { type: String, default: "" }, // require for auth
 
@@ -60,6 +62,8 @@ export const DomainSchema = new Schema({
 });
 
 export interface Domain extends Document {
+	lastUpdated: Date;
+
 	author: User;
 	secret: string;
 
