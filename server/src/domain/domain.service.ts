@@ -71,8 +71,6 @@ export class DomainService implements OnModuleInit {
 		const dto = snakeToCamelCaseObject(updateDomainDto.domain);
 		patchDoc(domain, dto);
 
-		domain.lastUpdated = new Date();
-
 		const heartbeatDto = updateDomainDto.domain.heartbeat;
 		if (heartbeatDto) {
 			const { session, isNew } = heartbeat<DomainSession>(
@@ -91,8 +89,12 @@ export class DomainService implements OnModuleInit {
 
 			// update domain in db
 			domain.online = true;
+
 			if (heartbeatDto.num_users != null)
-				domain.onlineUsers = heartbeatDto.num_users;
+				if (heartbeatDto.num_users != domain.onlineUsers) {
+					domain.lastUpdated = new Date();
+					domain.onlineUsers = heartbeatDto.num_users;
+				}
 		}
 
 		return await domain.save();
@@ -129,7 +131,7 @@ export class DomainService implements OnModuleInit {
 
 		return this.domainModel
 			.find({ online: true, ...restriction })
-			.sort({ lastUpdated: -1, onlineUsers: -1 })
+			.sort({ onlineUsers: -1, lastUpdated: -1 })
 			.limit(page)
 			.skip(page * amount);
 	}
