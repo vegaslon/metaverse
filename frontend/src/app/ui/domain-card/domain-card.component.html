@@ -1,4 +1,7 @@
-<mat-card class="domain-card" [ngClass]="{ offline: !domain.online }">
+<mat-card
+	class="domain-card"
+	[ngClass]="{ offline: !domain.online, small: true }"
+>
 	<div mat-card-image>
 		<div
 			class="thumbnail"
@@ -25,12 +28,15 @@
 				{{ domain.networkAddress + ":" + domain.networkPort }}
 			</span>
 		</button>
-		<a mat-button *ngIf="editMode" [href]="domainSettings" target="_blank">
-			<mat-icon>settings</mat-icon> Open domain settings
-		</a>
 		<button mat-button *ngIf="editMode" (click)="onEditDomain()">
-			<mat-icon>edit</mat-icon> Edit domain details
+			<mat-icon>edit</mat-icon> Edit details
 		</button>
+		<a mat-button *ngIf="editMode" [href]="domainSettings" target="_blank">
+			<mat-icon>settings</mat-icon> Open settings
+			<span style="opacity: 0.5; font-size: 0.8em; padding-left: 8px;">
+				{{ domain.networkAddress + ":" + domain.networkPort }}
+			</span>
+		</a>
 		<button mat-button *ngIf="editMode" (click)="onGenerateToken()">
 			<mat-icon>vpn_key</mat-icon> Generate new access token
 		</button>
