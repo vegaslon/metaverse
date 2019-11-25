@@ -90,7 +90,7 @@ export class UserController {
 		let user = await this.userService.findByUsername(username);
 		if (user == null) user = await this.userService.findById(username);
 
-		const stream = this.userService.images.openDownloadStream(user.id);
+		const stream = this.userService.images.openDownloadStream(user._id);
 		res.set("Content-Type", "image/jpg");
 
 		stream.on("data", chunk => {

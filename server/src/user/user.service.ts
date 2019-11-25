@@ -123,7 +123,7 @@ export class UserService implements OnModuleInit {
 				});
 
 			stream.pipe(
-				this.images.openUploadStreamWithId(user.id, null, {
+				this.images.openUploadStreamWithId(user._id, null, {
 					contentType: "image/jpg",
 				}),
 			);
