@@ -40,7 +40,8 @@ export class DomainCardComponent implements OnInit {
 			"http://" +
 			this.domain.networkAddress +
 			":" +
-			domainSettingsHttpPort;
+			domainSettingsHttpPort +
+			"/settings";
 	}
 
 	get users(): string {

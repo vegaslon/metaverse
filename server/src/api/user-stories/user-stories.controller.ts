@@ -25,8 +25,6 @@ export class UserStoriesController {
 			search,
 		} = userStoriesDto;
 
-		page = page <= 0 ? 1 : page;
-
 		let user_stories: UserStory[] = [];
 
 		// switch (include_actions) {
@@ -65,27 +63,17 @@ export class UserStoriesController {
 		// }
 
 		if (include_actions == UserStoryAction.concurrency) {
-			const domainIDs = Object.keys(this.domainService.sessions).splice(
-				per_page * (page - 1),
+			const restrictions = restriction.split(",");
+			const anonymousOnly = !restrictions.includes("hifi");
+
+			const foundDomains = await this.domainService.findOnlineDomains(
+				page,
 				per_page,
+				anonymousOnly,
 			);
 
-			const restrictions = restriction.split(",");
-
-			for (let domainID of domainIDs) {
-				const domain = await this.domainService
-					.findById(domainID)
-					.populate("author");
-
-				if (domain.restriction == "acl") continue;
-
-				if (restrictions.includes(domain.restriction))
-					user_stories.push(
-						createConcurrency(
-							domain,
-							this.domainService.sessions[domain._id],
-						),
-					);
+			for (let domain of foundDomains) {
+				user_stories.push(createConcurrency(domain));
 			}
 		}
 

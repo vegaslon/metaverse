@@ -1,11 +1,10 @@
+import { Domain } from "../../domain/domain.schema";
+import { HOSTNAME } from "../../environment";
 import {
 	UserStory,
 	UserStoryAction,
 	UserStroyAudience,
 } from "./user-stories.dto";
-import { Domain } from "../../domain/domain.schema";
-import { DomainSession } from "../../domain/domain.service";
-import { HOSTNAME } from "../../environment";
 
 // export function createAnnouncement(
 // 	name: string,
@@ -36,13 +35,8 @@ import { HOSTNAME } from "../../environment";
 // 	};
 // }
 
-export function createConcurrency(
-	domain: Domain,
-	session: DomainSession,
-): UserStory {
-	const concurrency =
-		session == null ? 0 : session.numUsers + session.numAnonUsers;
-
+export function createConcurrency(domain: Domain): UserStory {
+	const concurrency = domain.online ? domain.onlineUsers : 0;
 	const thumbnail_url = HOSTNAME + "/api/domain/" + domain._id + "/image";
 
 	return {

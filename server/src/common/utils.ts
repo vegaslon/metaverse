@@ -99,14 +99,7 @@ export function generateRandomString(
 	return out;
 }
 
-export function renderDomainForHifi(
-	d: Domain,
-	session: DomainSession & HeartbeatSession,
-) {
-	const online = session == null;
-	const online_users = session == null ? 0 : session.numUsers;
-	const online_anonymous_users = session == null ? 0 : session.numAnonUsers;
-
+export function renderDomainForHifi(d: Domain) {
 	return {
 		id: d._id,
 
@@ -115,9 +108,9 @@ export function renderDomainForHifi(
 
 		network_address: d.networkAddress,
 		network_port: d.networkPort,
-		online,
+		online: d.online,
 
-		default_place_name: d.defaultPlaceName,
+		default_place_name: null,
 		owner_places: d.ownerPlaces,
 		label: d.label, // probobaly shouldnt
 
@@ -131,18 +124,12 @@ export function renderDomainForHifi(
 		version: d.version,
 		protocol: d.protocol,
 
-		online_users,
-		online_anonymous_users,
+		online_users: d.onlineUsers,
+		online_anonymous_users: null,
 	};
 }
 
-export function renderDomain(
-	domain: Domain,
-	user: User,
-	domainService: DomainService,
-) {
-	const session = domainService.sessions[domain._id];
-
+export function renderDomain(domain: Domain, user: User) {
 	return {
 		id: domain._id,
 		label: domain.label,
@@ -150,8 +137,8 @@ export function renderDomain(
 		description: domain.description,
 		restriction: domain.restriction,
 
-		online: session != null,
-		numUsers: session == null ? 0 : session.numUsers + session.numAnonUsers,
+		online: domain.online,
+		numUsers: domain.onlineUsers,
 
 		networkAddress: domain.networkAddress,
 		networkPort: domain.networkPort,

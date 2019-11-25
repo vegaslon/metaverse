@@ -43,7 +43,7 @@ export class UserDomainController {
 			createDomainDto,
 		);
 
-		return renderDomain(domain, user, this.domainService);
+		return renderDomain(domain, user);
 	}
 
 	@Post("domain/:id/token")
@@ -67,7 +67,7 @@ export class UserDomainController {
 		await user.populate("domains").execPopulate();
 
 		return user.domains.map(domain => {
-			return renderDomain(domain, user, this.domainService);
+			return renderDomain(domain, user);
 		});
 	}
 
@@ -89,7 +89,7 @@ export class UserDomainController {
 			updateDomainDto,
 		);
 
-		return renderDomain(updatedDomain, user, this.domainService);
+		return renderDomain(updatedDomain, user);
 	}
 
 	@Delete("domain/:id")

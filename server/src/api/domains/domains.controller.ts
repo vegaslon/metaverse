@@ -50,12 +50,7 @@ export class DomainsController {
 		return {
 			status: "success",
 			data: {
-				domains: [
-					renderDomainForHifi(
-						domain,
-						this.domainService.sessions[domain._id],
-					),
-				],
+				domains: [renderDomainForHifi(domain)],
 			},
 		};
 	}
@@ -110,10 +105,7 @@ export class DomainsController {
 
 		return {
 			status: "success",
-			domain: renderDomainForHifi(
-				updatedDomain,
-				this.domainService.sessions[updatedDomain._id],
-			),
+			domain: renderDomainForHifi(updatedDomain),
 		};
 	}
 
@@ -134,10 +126,7 @@ export class DomainsController {
 
 		return {
 			status: "success",
-			domain: renderDomainForHifi(
-				updatedDomain,
-				this.domainService.sessions[updatedDomain._id],
-			),
+			domain: renderDomainForHifi(updatedDomain),
 		};
 	}
 
@@ -189,10 +178,7 @@ export class DomainsController {
 
 		return {
 			status: "success",
-			domain: renderDomainForHifi(
-				domain,
-				this.domainService.sessions[domain._id],
-			),
+			domain: renderDomainForHifi(domain),
 		};
 	}
 }

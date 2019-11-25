@@ -37,15 +37,16 @@ export class CreateDomainDto {
 }
 
 class UpdateDomainHeartbeat {
-	@ApiModelPropertyOptional()
-	@IsNumber()
-	@IsOptional()
-	num_anon_users: number;
+	// just anon users, not useful
+	// @ApiModelPropertyOptional()
+	// @IsNumber()
+	// @IsOptional()
+	// num_anon_users: number;
 
 	@ApiModelPropertyOptional()
 	@IsNumber()
 	@IsOptional()
-	num_users: number;
+	num_users: number; // total users (with anon)
 
 	@ApiModelPropertyOptional()
 	@IsOptional()

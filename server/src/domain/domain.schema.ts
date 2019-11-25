@@ -28,10 +28,12 @@ export const DomainSchema = new Schema({
 
 	networkAddress: { type: String, default: "" },
 	networkPort: { type: String, default: "40102" },
-	//online: { type: Boolean, default: false }, // handled by session
+
+	online: { type: Boolean, default: false },
+	onlineUsers: { type: Number, default: 0 },
 
 	// -- not present in domain/:id put|post request
-	defaultPlaceName: { type: String, default: "" },
+	//defaultPlaceName: { type: String, default: "" },
 	ownerPlaces: { type: [String], default: [] },
 	label: { type: String, default: "" },
 	// --
@@ -50,9 +52,6 @@ export const DomainSchema = new Schema({
 	version: { type: String, default: "" },
 	protocol: { type: String, default: "" },
 
-	//onlineUsers: { type: Number, default: 0 },
-	//onlineAnonUsers: { type: Number, default: 0 },
-
 	publicKey: { type: String, default: "" },
 
 	// not from hifi
@@ -70,9 +69,11 @@ export interface Domain extends Document {
 
 	networkAddress: string;
 	networkPort: string;
-	//online: boolean;
 
-	defaultPlaceName: string;
+	online: boolean;
+	onlineUsers: number;
+
+	//defaultPlaceName: string;
 	ownerPlaces: string[]; // [{id, name, path}]
 	label: string;
 
@@ -85,9 +86,6 @@ export interface Domain extends Document {
 
 	version: string;
 	protocol: string;
-
-	//onlineUsers: number;
-	//onlineAnonUsers: number;
 
 	publicKey: string;
 

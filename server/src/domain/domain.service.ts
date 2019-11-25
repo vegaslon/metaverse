@@ -15,8 +15,6 @@ import sharp = require("sharp");
 import { GridFSBucket } from "mongodb";
 
 export interface DomainSession {
-	numUsers: number;
-	numAnonUsers: number;
 	users: UserSession[];
 }
 
@@ -33,6 +31,10 @@ export class DomainService implements OnModuleInit {
 		@InjectConnection() private connection: Connection,
 		private moduleRef: ModuleRef,
 	) {
+		this.domainModel
+			.updateMany({}, { $set: { online: false, onlineUsers: 0 } })
+			.exec();
+
 		this.images = new GridFSBucket(connection.db, {
 			bucketName: "domainThumbnails",
 		});
@@ -74,19 +76,21 @@ export class DomainService implements OnModuleInit {
 			const { session, isNew } = heartbeat<DomainSession>(
 				this.sessions,
 				domain._id,
+				async () => {
+					// cleanup if it goes offline
+					const offlineDomain = await this.findById(domain._id);
+					offlineDomain.online = false;
+					offlineDomain.onlineUsers = 0;
+					await offlineDomain.save();
+				},
 			);
 
-			if (isNew) {
-				session.numUsers = 0;
-				session.numAnonUsers = 0;
-				session.users = [];
-			}
+			if (isNew) session.users = [];
 
+			// update domain in db
+			domain.online = true;
 			if (heartbeatDto.num_users != null)
-				session.numUsers = heartbeatDto.num_users;
-
-			if (heartbeatDto.num_anon_users != null)
-				session.numAnonUsers = heartbeatDto.num_anon_users;
+				domain.onlineUsers = heartbeatDto.num_users;
 		}
 
 		return await domain.save();
@@ -111,16 +115,21 @@ export class DomainService implements OnModuleInit {
 		return userPopulated.domains;
 	}
 
-	async getAllDomains(page: number, per_page: number) {
+	async findOnlineDomains(page = 1, amount = 50, anonymousOnly = false) {
 		if (page <= 0) page = 1;
-		if (per_page > 50) per_page = 50;
-
 		page -= 1;
+
+		if (amount > 50) amount = 50;
+
+		const restriction = anonymousOnly
+			? { restriction: "open" }
+			: { $or: [{ restriction: "open" }, { restriction: "hifi" }] };
+
 		return this.domainModel
-			.find()
+			.find({ online: true, ...restriction })
 			.sort({ onlineUsers: -1 })
-			.limit(per_page)
-			.skip(page * per_page);
+			.limit(page)
+			.skip(page * amount);
 	}
 
 	async deleteDomain(domainId: string) {
@@ -149,7 +158,7 @@ export class DomainService implements OnModuleInit {
 					position: "centre",
 				})
 				.jpeg({
-					quality: 100,
+					quality: 90,
 				});
 
 			stream.pipe(
