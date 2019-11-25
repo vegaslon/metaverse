@@ -162,7 +162,7 @@ export class DomainService implements OnModuleInit {
 					position: "centre",
 				})
 				.jpeg({
-					quality: 90,
+					quality: 80,
 				});
 
 			stream.pipe(

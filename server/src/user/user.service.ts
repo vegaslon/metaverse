@@ -119,7 +119,7 @@ export class UserService implements OnModuleInit {
 					position: "centre",
 				})
 				.jpeg({
-					quality: 100,
+					quality: 80,
 				});
 
 			stream.pipe(
