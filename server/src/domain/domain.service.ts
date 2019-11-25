@@ -119,7 +119,7 @@ export class DomainService implements OnModuleInit {
 		return userPopulated.domains;
 	}
 
-	async findOnlineDomains(page = 1, amount = 50, anonymousOnly = false) {
+	findOnlineDomains(page = 1, amount = 50, anonymousOnly = false) {
 		if (page <= 0) page = 1;
 		page -= 1;
 

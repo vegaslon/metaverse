@@ -1,5 +1,5 @@
 import { ApiModelProperty, ApiModelPropertyOptional } from "@nestjs/swagger";
-import { Type } from "class-transformer";
+import { Type, Transform } from "class-transformer";
 import {
 	IsArray,
 	IsBoolean,
@@ -141,4 +141,18 @@ export class UpdateDomainDto {
 	@ValidateNested()
 	@Type(() => UpdateDomain)
 	domain: UpdateDomain;
+}
+
+export class GetDomainsDto {
+	@ApiModelPropertyOptional()
+	@IsNumber()
+	@IsOptional()
+	@Transform(n => Number(n))
+	page = 1;
+
+	@ApiModelPropertyOptional()
+	@IsNumber()
+	@IsOptional()
+	@Transform(n => Number(n))
+	amount = 50;
 }

@@ -19,7 +19,7 @@
 		</div>
 	</mat-card-content>
 	<mat-card-actions>
-		<button mat-button *ngIf="!inInterface">
+		<button mat-button *ngIf="inInterface" (click)="onJoinDomain()">
 			<mat-icon>launch</mat-icon> Join
 			<span style="opacity: 0.5; font-size: 0.8em; padding-left: 8px;">
 				{{ domain.networkAddress + ":" + domain.networkPort }}

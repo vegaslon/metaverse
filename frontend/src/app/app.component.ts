@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { NavigationEnd, Router } from "@angular/router";
+import { NavigationEnd, Router, ActivatedRoute } from "@angular/router";
 import { AuthService } from "./auth/auth.service";
 
 @Component({
@@ -9,16 +9,16 @@ import { AuthService } from "./auth/auth.service";
 export class AppComponent implements OnInit {
 	public showHeader = true;
 
-	constructor(private authService: AuthService, private router: Router) {}
+	constructor(
+		private authService: AuthService,
+		private router: Router,
+		private route: ActivatedRoute,
+	) {}
 
 	ngOnInit() {
-		this.router.events.subscribe(val => {
-			if (!(val instanceof NavigationEnd)) return;
-
-			if (val.url.startsWith("/stream/")) {
+		this.route.queryParams.subscribe(querys => {
+			if (querys.noHeader != null) {
 				this.showHeader = false;
-			} else {
-				this.showHeader = true;
 			}
 		});
 

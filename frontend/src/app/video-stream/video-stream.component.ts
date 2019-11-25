@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { ActivatedRoute, Params, Router } from "@angular/router";
 import { WebRTCClient } from "./libs/webrtcClient";
 
 @Component({
@@ -13,7 +13,13 @@ export class VideoStreamComponent implements OnInit {
 
 	@ViewChild("video", { static: false }) video: ElementRef;
 
-	constructor(private route: ActivatedRoute) {}
+	constructor(private router: Router, private route: ActivatedRoute) {
+		this.router.navigate([], {
+			relativeTo: route,
+			queryParams: { noHeader: true } as Params,
+			queryParamsHandling: "merge",
+		});
+	}
 
 	getID(): Promise<string> {
 		return new Promise((resolve, reject) => {

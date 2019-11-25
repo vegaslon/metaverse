@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Res, UseGuards } from "@nestjs/common";
+import { Controller, Get, Param, Res, UseGuards, Query } from "@nestjs/common";
 import { ApiUseTags } from "@nestjs/swagger";
 import { Response } from "express";
 import * as fs from "fs";
@@ -8,6 +8,8 @@ import { OptionalAuthGuard } from "../auth/optional.guard";
 import { CurrentUser } from "../auth/user.decorator";
 import { User } from "../user/user.schema";
 import { DomainService } from "./domain.service";
+import { GetDomainsDto } from "./domain.dto";
+import { renderDomain } from "../common/utils";
 
 const defaultDomainImage = fs.readFileSync(
 	path.resolve(__dirname, "../../assets/domain-image.jpg"),
@@ -52,5 +54,20 @@ export class DomainController {
 
 	@Get("domains")
 	@UseGuards(OptionalAuthGuard())
-	async getDomains(@CurrentUser() user: User) {}
+	async findOnlineDomains(
+		@CurrentUser() user: User,
+		@Query() getDomainsDto: GetDomainsDto,
+	) {
+		const domains = await this.domainService
+			.findOnlineDomains(
+				getDomainsDto.page,
+				getDomainsDto.amount,
+				(user as any) == false,
+			)
+			.populate("author");
+
+		return domains.map(domain => {
+			return renderDomain(domain, domain.author);
+		});
+	}
 }

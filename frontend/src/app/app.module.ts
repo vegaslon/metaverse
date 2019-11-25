@@ -18,6 +18,11 @@ import { MaterialModule } from "./material.module";
 const routes: Routes = [
 	{ path: "", component: HomeComponent },
 	{
+		path: "explore",
+		loadChildren: () =>
+			import("./explore/explore.module").then(m => m.ExploreModule),
+	},
+	{
 		path: "user",
 		canActivate: [AuthGuard],
 		loadChildren: () =>
@@ -36,6 +41,7 @@ const routes: Routes = [
 				m => m.VideoStreamModule,
 			),
 	},
+	{ path: "**", redirectTo: "/" },
 ];
 
 @NgModule({
