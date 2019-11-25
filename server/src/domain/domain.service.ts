@@ -10,7 +10,7 @@ import { UserService, UserSession } from "../user/user.service";
 import { CreateDomainDto, UpdateDomainDto } from "./domain.dto";
 import { Domain } from "./domain.schema";
 import uuid = require("uuid");
-import { MulterFile } from "src/common/multer-file.model";
+import { MulterFile } from "../common/multer-file.model";
 import sharp = require("sharp");
 import { GridFSBucket } from "mongodb";
 

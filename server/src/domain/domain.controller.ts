@@ -1,22 +1,24 @@
-import { Controller, Get, Param, Res } from "@nestjs/common";
+import { Controller, Get, Param, Res, UseGuards } from "@nestjs/common";
 import { ApiUseTags } from "@nestjs/swagger";
 import { Response } from "express";
 import * as fs from "fs";
 import * as path from "path";
 import { Readable } from "stream";
+import { OptionalAuthGuard } from "../auth/optional.guard";
+import { CurrentUser } from "../auth/user.decorator";
+import { User } from "../user/user.schema";
 import { DomainService } from "./domain.service";
-import { ObjectId } from "bson";
 
 const defaultDomainImage = fs.readFileSync(
 	path.resolve(__dirname, "../../assets/domain-image.jpg"),
 );
 
-@Controller("api/domain")
+@Controller("api")
 @ApiUseTags("domains")
 export class DomainController {
 	constructor(private domainService: DomainService) {}
 
-	@Get(":id/image")
+	@Get("domain/:id/image")
 	async getDomainImage(@Param("id") id: string, @Res() res: Response) {
 		const stream = this.domainService.images.openDownloadStream(id as any);
 		res.set("Content-Type", "image/jpg");
@@ -36,4 +38,8 @@ export class DomainController {
 			res.end();
 		});
 	}
+
+	@Get("domains")
+	@UseGuards(OptionalAuthGuard())
+	async getDomains(@CurrentUser() user: User) {}
 }
