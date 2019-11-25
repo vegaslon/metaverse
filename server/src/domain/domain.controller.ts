@@ -20,18 +20,29 @@ export class DomainController {
 
 	@Get("domain/:id/image")
 	async getDomainImage(@Param("id") id: string, @Res() res: Response) {
-		const stream = this.domainService.images.openDownloadStream(id as any);
+		const defaultDomainImageURL = "/api/domain/_/image";
+
 		res.set("Content-Type", "image/jpg");
+
+		if (id == "_") {
+			const stream = new Readable();
+			stream.push(defaultDomainImage);
+			stream.push(null);
+			stream.pipe(res);
+			return;
+		}
+
+		const domain = await this.domainService.findById(id);
+		if (domain == null) return res.redirect(defaultDomainImageURL);
+
+		const stream = this.domainService.images.openDownloadStream(domain._id);
 
 		stream.on("data", chunk => {
 			res.write(chunk);
 		});
 
 		stream.on("error", () => {
-			const stream = new Readable();
-			stream.push(defaultDomainImage);
-			stream.push(null);
-			stream.pipe(res);
+			res.redirect(defaultDomainImageURL);
 		});
 
 		stream.on("end", () => {

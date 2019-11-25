@@ -87,6 +87,8 @@ export class UserController {
 		@Param("username") username: string,
 		@Res() res: Response,
 	) {
+		const defaultUserImageURL = "/api/user/_/image";
+
 		res.set("Content-Type", "image/jpg");
 
 		if (username == "_") {
@@ -99,7 +101,7 @@ export class UserController {
 
 		let user = await this.userService.findByUsername(username);
 		if (user == null) user = await this.userService.findById(username);
-		if (user == null) return res.redirect("/api/user/_/image");
+		if (user == null) return res.redirect(defaultUserImageURL);
 
 		const stream = this.userService.images.openDownloadStream(user._id);
 
@@ -108,7 +110,7 @@ export class UserController {
 		});
 
 		stream.on("error", () => {
-			res.redirect("/api/user/_/image");
+			res.redirect(defaultUserImageURL);
 		});
 
 		stream.on("end", () => {
