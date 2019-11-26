@@ -10,16 +10,7 @@
 					/>
 				</a>
 
-				<button class="menu-item" mat-button routerLink="/explore">
-					<mat-icon>public</mat-icon> Explore
-				</button>
-
-				<button
-					class="menu-item"
-					href="https://tivolicloud.s3-us-west-2.amazonaws.com/tivoli-cloud-launcher.zip"
-					mat-button
-					(click)="openDownload()"
-				>
+				<button class="menu-item" mat-button (click)="openDownload()">
 					<mat-icon>get_app</mat-icon> Download
 				</button>
 
@@ -31,6 +22,10 @@
 				>
 					<mat-icon>bookmarks</mat-icon> Blog
 				</a>
+
+				<button class="menu-item" mat-button routerLink="/explore">
+					<mat-icon>public</mat-icon> Explore worlds
+				</button>
 
 				<span style="flex: 1 1 auto"></span>
 
@@ -67,8 +62,8 @@
 				</ng-container>
 
 				<mat-menu #appMenu="matMenu">
-					<button mat-menu-item routerLink="user/domains">
-						<mat-icon>public</mat-icon> My domains
+					<button mat-menu-item routerLink="user/worlds">
+						<mat-icon>public</mat-icon> My worlds
 					</button>
 					<button mat-menu-item routerLink="user/settings">
 						<mat-icon>settings</mat-icon> User settings

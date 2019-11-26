@@ -10,7 +10,7 @@ import { SettingsComponent } from "./settings/settings.component";
 const routes: Routes = [
 	{ path: "", redirectTo: "settings", pathMatch: "full" },
 	{ path: "settings", component: SettingsComponent },
-	{ path: "domains", component: DomainsComponent },
+	{ path: "worlds", component: DomainsComponent },
 ];
 
 @NgModule({
