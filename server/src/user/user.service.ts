@@ -190,7 +190,7 @@ export class UserService implements OnModuleInit {
 				const i = domainSession.users.indexOf(session);
 				domainSession.users.splice(i, 1);
 			},
-			1000 * 80, // :(
+			1000 * 30, // maybe 15
 		);
 
 		// minutes since online
@@ -224,11 +224,8 @@ export class UserService implements OnModuleInit {
 		user: User,
 		userUpdateLocationDto: UserUpdateLocationDto,
 	) {
+		await this.heartbeatUser(user);
 		let session = this.sessions[user.username];
-		if (session == null) {
-			await this.heartbeatUser(user);
-			session = this.sessions[user.username];
-		}
 
 		patchObject(session.location, userUpdateLocationDto.location);
 
