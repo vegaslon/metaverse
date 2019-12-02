@@ -56,7 +56,7 @@ export class UserController {
 	@Put("heartbeat")
 	@UseGuards(MetaverseAuthGuard())
 	async heartbeart(@CurrentUser() user) {
-		const session_id = await this.userService.heartbeat(user);
+		const session_id = await this.userService.heartbeatUser(user);
 
 		return {
 			status: "success",

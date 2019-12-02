@@ -159,7 +159,7 @@ export class UserService implements OnModuleInit {
 		return this.userModel.find({});
 	}
 
-	async heartbeat(user: User) {
+	async heartbeatUser(user: User) {
 		const session = heartbeat<UserSession>(
 			this.sessions,
 			user.username,
@@ -226,7 +226,7 @@ export class UserService implements OnModuleInit {
 	) {
 		let session = this.sessions[user.username];
 		if (session == null) {
-			await this.heartbeat(user);
+			await this.heartbeatUser(user);
 			session = this.sessions[user.username];
 		}
 
