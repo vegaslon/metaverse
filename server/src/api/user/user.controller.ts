@@ -56,9 +56,11 @@ export class UserController {
 	@Put("heartbeat")
 	@UseGuards(MetaverseAuthGuard())
 	async heartbeart(@CurrentUser() user) {
-		console.log("heartbeat: " + user.username);
+		console.log(" heartbeat: " + user.username);
 		const session_id = await this.userService.heartbeatUser(user);
-		console.log(" complete: " + user.username + ", session: " + session_id);
+		console.log(
+			"!heartbeat: " + user.username + ", session: " + session_id,
+		);
 
 		return {
 			status: "success",
@@ -94,10 +96,12 @@ export class UserController {
 		@CurrentUser() user: User,
 		@Body() userUpdateLocationDto: UserUpdateLocationDto,
 	) {
+		console.log(" location: " + user.username);
 		const session_id = await this.userService.setUserLocation(
 			user,
 			userUpdateLocationDto,
 		);
+		console.log("!location: " + user.username + ", session: " + session_id);
 
 		return {
 			status: "success",
