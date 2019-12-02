@@ -1,6 +1,4 @@
 import { Domain } from "../domain/domain.schema";
-import { DomainSession, DomainService } from "../domain/domain.service";
-import { HeartbeatSession } from "./heartbeat";
 import { User } from "../user/user.schema";
 
 export function snakeToCamelCase(snake: string) {
