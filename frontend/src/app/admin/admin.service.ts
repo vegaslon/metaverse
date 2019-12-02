@@ -16,8 +16,6 @@ export interface AdminOnlineUser {
 		path: string;
 		place_id: string;
 	};
-	id: string;
-	userId: string;
 }
 
 export interface AdminUser {

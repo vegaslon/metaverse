@@ -12,20 +12,17 @@ export function heartbeat<T>(
 	cleanup?: (s: T & HeartbeatSession) => any,
 	timeout: number = 1000 * 60,
 ): T & HeartbeatSession {
-	if (!/-/.test(id)) {
-		console.log(
-			"heartbeating: " + id + ", new session: " + (sessions[id] == null),
-		);
-		console.log(sessions);
-	}
+	const destroy = () => {
+		if (cleanup) cleanup(sessions[id]);
+		delete sessions[id];
+	};
 
 	if (sessions[id] == null) {
 		// create new session
 		if (sessions[id] == null) {
 			(sessions[id] as HeartbeatSession) = {
 				_timer: setTimeout(() => {
-					if (cleanup) cleanup(sessions[id]);
-					delete sessions[id];
+					destroy();
 				}, timeout),
 				_since: new Date(),
 			};
@@ -40,8 +37,7 @@ export function heartbeat<T>(
 		clearTimeout(oldTimer);
 
 		sessions[id]._timer = setTimeout(() => {
-			if (cleanup) cleanup(sessions[id]);
-			delete sessions[id];
+			destroy();
 		}, timeout);
 
 		return sessions[id];

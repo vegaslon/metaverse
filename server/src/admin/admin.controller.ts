@@ -32,16 +32,12 @@ export class AdminController {
 	@UseGuards(AdminAuthGuard())
 	getOnlineUsers() {
 		return Object.keys(this.userService.sessions).map(username => {
-			const { minutes, location, id, userId } = this.userService.sessions[
-				username
-			];
+			const { minutes, location } = this.userService.sessions[username];
 
 			return {
 				username,
 				minutes,
 				location,
-				id,
-				userId,
 			};
 		});
 	}

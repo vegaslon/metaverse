@@ -190,6 +190,7 @@ export class UserService implements OnModuleInit {
 				const i = domainSession.users.indexOf(session);
 				domainSession.users.splice(i, 1);
 			},
+			1000 * 70, // :(
 		);
 
 		// minutes since online
