@@ -12,13 +12,6 @@ export function heartbeat<T>(
 	cleanup?: (s: T & HeartbeatSession) => any,
 	timeout: number = 1000 * 60,
 ): T & HeartbeatSession {
-	if (!/-/.test(id)) {
-		console.log(
-			"heartbeating: " + id + ", new session: " + (sessions[id] == null),
-		);
-		console.log(sessions);
-	}
-
 	const destroy = () => {
 		if (cleanup) cleanup(sessions[id]);
 		delete sessions[id];
