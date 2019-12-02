@@ -198,10 +198,10 @@ export class UserService implements OnModuleInit {
 
 		// session.minutes needs to be updated
 		if (session.minutes < minutes) {
+			const minutesToAddToUser = minutes - session.minutes;
 			session.minutes = minutes; // sync again
 
 			// update user
-			const minutesToAddToUser = minutes - session.minutes;
 			user.minutes += minutesToAddToUser;
 			await user.save();
 		}
