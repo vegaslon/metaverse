@@ -31,20 +31,19 @@ export class AdminController {
 	@ApiBearerAuth()
 	@UseGuards(AdminAuthGuard())
 	getOnlineUsers() {
-		let onlineUsers = [];
+		return Object.keys(this.userService.sessions).map(username => {
+			const { minutes, location, id, userId } = this.userService.sessions[
+				username
+			];
 
-		const usernames = Object.keys(this.userService.sessions);
-		for (let username of usernames) {
-			const { minutes, location } = this.userService.sessions[username];
-
-			onlineUsers.push({
+			return {
 				username,
 				minutes,
 				location,
-			});
-		}
-
-		return onlineUsers;
+				id,
+				userId,
+			};
+		});
 	}
 
 	@Get("streams")

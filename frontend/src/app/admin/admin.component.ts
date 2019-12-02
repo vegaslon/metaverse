@@ -8,7 +8,7 @@ import { AdminOnlineUser, AdminService, AdminUser } from "./admin.service";
 })
 export class AdminComponent implements OnInit {
 	onlineUsers: AdminOnlineUser[] = [];
-	onlineUsersCols = ["image", "username", "minutes", "location"];
+	onlineUsersCols = ["image", "username", "minutes", "location", "id"];
 
 	users: AdminUser[] = [];
 	usersCols = ["image", "username", "email", "minutes"];
