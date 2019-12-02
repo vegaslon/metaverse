@@ -8,58 +8,61 @@ export function heartbeat<T>(
 		[s: string]: T & HeartbeatSession;
 	},
 	id: string,
-	cleanup?: (s: T & HeartbeatSession) => Promise<void>,
+	init?: (s: T & HeartbeatSession) => any,
+	cleanup?: (s: T & HeartbeatSession) => any,
 	timeout: number = 1000 * 60,
-): {
-	isNew: boolean;
-	session: T & HeartbeatSession;
-} {
-	const deleteSession = async () => {
-		if (cleanup) await cleanup(sessions[id]);
-		delete sessions[id];
-	};
-
-	if (sessions[id] != null) {
-		const session = sessions[id];
-
-		// reset timer
-		clearTimeout(session._timer);
-		session._timer = setTimeout(deleteSession, timeout);
-
-		return {
-			isNew: false,
-			session,
-		};
-	} else {
+): T & HeartbeatSession {
+	if (sessions[id] == null) {
 		// create new session
-		const session = ((sessions[id] as HeartbeatSession) = {
-			_timer: setTimeout(deleteSession, timeout),
-			_since: new Date(),
-		}) as T & HeartbeatSession;
+		if (sessions[id] == null) {
+			(sessions[id] as HeartbeatSession) = {
+				_timer: setTimeout(() => {
+					if (cleanup) cleanup(sessions[id]);
+					delete sessions[id];
+				}, timeout),
+				_since: new Date(),
+			};
 
-		return {
-			isNew: true,
-			session,
-		};
+			if (init) init(sessions[id]);
+		}
+
+		return sessions[id];
+	} else if (sessions[id] != null) {
+		// reset timer back to timeout
+		const oldTimer = sessions[id]._timer;
+		clearTimeout(oldTimer);
+
+		sessions[id]._timer = setTimeout(() => {
+			if (cleanup) cleanup(sessions[id]);
+			delete sessions[id];
+		}, timeout);
+
+		return sessions[id];
+	} else {
+		return sessions[id];
 	}
 }
 
 // export function testHeartbeating() {
 // 	interface MySession {
-// 		id: string;
+// 		id: number;
 // 		online: boolean;
 // 	}
 
 // 	let sessions = {};
 
 // 	function handleHeartbeat() {
-// 		let beat = heartbeat<MySession>(sessions, "Maki", 1000);
-// 		if (beat.isNew) {
-// 			const session = beat.session;
+// 		heartbeat<MySession>(
+// 			sessions,
+// 			"Maki",
+// 			session => {
+// 				session.id = Math.floor(Math.random() * 100);
+// 				session.online = true;
+// 			},
+// 			null,
+// 			100,
+// 		);
 
-// 			session.id = new ObjectId().toHexString();
-// 			session.online = true;
-// 		}
 // 		console.log(sessions);
 // 	}
 
@@ -68,14 +71,24 @@ export function heartbeat<T>(
 // 		handleHeartbeat();
 // 		i++;
 
-// 		if (i >= 6) {
+// 		if (i >= 50) {
 // 			clearInterval(interval);
 // 			setTimeout(() => {
 // 				console.log(sessions);
 // 				setTimeout(() => {
 // 					handleHeartbeat();
-// 				}, 2000);
-// 			}, 2000);
+// 					handleHeartbeat();
+// 					handleHeartbeat();
+// 					handleHeartbeat();
+// 					handleHeartbeat();
+// 					handleHeartbeat();
+// 					handleHeartbeat();
+// 					handleHeartbeat();
+// 					handleHeartbeat();
+// 					handleHeartbeat();
+// 				}, 200);
+// 			}, 200);
 // 		}
-// 	}, 500);
+// 	}, 50);
 // }
+// testHeartbeating();

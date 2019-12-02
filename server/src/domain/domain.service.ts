@@ -73,9 +73,13 @@ export class DomainService implements OnModuleInit {
 
 		const heartbeatDto = updateDomainDto.domain.heartbeat;
 		if (heartbeatDto) {
-			const { session, isNew } = heartbeat<DomainSession>(
+			heartbeat<DomainSession>(
 				this.sessions,
 				domain._id,
+				session => {
+					// initialize
+					session.users = [];
+				},
 				async () => {
 					// cleanup if it goes offline
 					const offlineDomain = await this.findById(domain._id);
@@ -84,8 +88,6 @@ export class DomainService implements OnModuleInit {
 					await offlineDomain.save();
 				},
 			);
-
-			if (isNew) session.users = [];
 
 			// update domain in db
 			domain.online = true;

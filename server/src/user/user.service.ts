@@ -160,10 +160,26 @@ export class UserService implements OnModuleInit {
 	}
 
 	async heartbeat(user: User) {
-		const { session, isNew } = heartbeat<UserSession>(
+		const session = heartbeat<UserSession>(
 			this.sessions,
 			user.username,
-			async session => {
+			session => {
+				// initialize
+				session.id = uuid();
+				session.userId = user._id;
+				session.minutes = 0;
+				session.location = {
+					availability: UserAvailability.none,
+					connected: false,
+					domain_id: null,
+					network_address: "",
+					network_port: "",
+					node_id: null,
+					path: "",
+					place_id: null,
+				};
+			},
+			session => {
 				// clean up session from domains
 				const domainId = session.location.domain_id;
 				if (domainId == null) return;
@@ -176,27 +192,16 @@ export class UserService implements OnModuleInit {
 			},
 		);
 
-		if (isNew) {
-			session.id = uuid();
-			session.userId = user._id;
-			session.minutes = 0;
-			session.location = {
-				availability: UserAvailability.none,
-				connected: false,
-				domain_id: null,
-				network_address: "",
-				network_port: "",
-				node_id: null,
-				path: "",
-				place_id: null,
-			};
-		}
-
+		// minutes since online
 		const minutes = Math.floor((+new Date() - +session._since) / 1000 / 60);
 
+		// session.minutes needs to be updated
 		if (session.minutes < minutes) {
-			user.minutes += minutes - session.minutes;
-			session.minutes = minutes;
+			session.minutes = minutes; // sync again
+
+			// update user
+			const minutesToAddToUser = minutes - session.minutes;
+			user.minutes += minutesToAddToUser;
 			await user.save();
 		}
 
