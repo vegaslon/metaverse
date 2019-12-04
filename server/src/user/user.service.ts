@@ -15,13 +15,11 @@ import { DomainService } from "../domain/domain.service";
 import { UserSettings } from "./user-settings.schema";
 import {
 	UserAvailability,
-	UserSettingsDto,
 	UserUpdateLocation,
 	UserUpdateLocationDto,
 } from "./user.dto";
 import { User } from "./user.schema";
 import uuid = require("uuid");
-import * as BSON from "bson";
 
 export interface UserSession {
 	id: string;
