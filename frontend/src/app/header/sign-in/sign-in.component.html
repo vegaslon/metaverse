@@ -141,22 +141,7 @@
 			Username is too long
 		</mat-error>
 		<mat-error *ngIf="signUpForm.hasError('badCharacters', 'username')">
-			Letters, numbers, dots and underscores only
-		</mat-error>
-		<mat-error
-			*ngIf="signUpForm.hasError('startEndDotUnderscore', 'username')"
-		>
-			Cannot start or end with a dot or underscore
-		</mat-error>
-		<mat-error
-			*ngIf="signUpForm.hasError('repeatingDotsUnderscores', 'username')"
-		>
-			Cannot contain repeating dots or underscores
-		</mat-error>
-		<mat-error
-			*ngIf="signUpForm.hasError('nextToDotsUnderscores', 'username')"
-		>
-			Cannot have dots and underscores next to each other
+			Letters, numbers and underscores only
 		</mat-error>
 	</mat-form-field>
 
@@ -239,24 +224,7 @@
 			Username is too long
 		</mat-error>
 		<mat-error *ngIf="extSignUpForm.hasError('badCharacters', 'username')">
-			Letters, numbers, dots and underscores only
-		</mat-error>
-		<mat-error
-			*ngIf="extSignUpForm.hasError('startEndDotUnderscore', 'username')"
-		>
-			Cannot start or end with a dot or underscore
-		</mat-error>
-		<mat-error
-			*ngIf="
-				extSignUpForm.hasError('repeatingDotsUnderscores', 'username')
-			"
-		>
-			Cannot contain repeating dots or underscores
-		</mat-error>
-		<mat-error
-			*ngIf="extSignUpForm.hasError('nextToDotsUnderscores', 'username')"
-		>
-			Cannot have dots and underscores next to each other
+			Letters, numbers and underscores only
 		</mat-error>
 	</mat-form-field>
 
