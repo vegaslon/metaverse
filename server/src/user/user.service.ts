@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit, NotFoundException } from "@nestjs/common";
+import { Injectable, OnModuleInit } from "@nestjs/common";
 import { ModuleRef } from "@nestjs/core";
 import { InjectConnection, InjectModel } from "@nestjs/mongoose";
 import { ObjectID } from "bson";
@@ -10,8 +10,9 @@ import { AuthSignUpDto } from "../auth/auth.dto";
 import { derPublicKeyHeader } from "../common/der-public-key-header";
 import { heartbeat, HeartbeatSession } from "../common/heartbeat";
 import { MulterFile } from "../common/multer-file.model";
-import { patchObject, patchDoc } from "../common/utils";
+import { patchObject } from "../common/utils";
 import { DomainService } from "../domain/domain.service";
+import { UserSettings } from "./user-settings.schema";
 import {
 	UserAvailability,
 	UserSettingsDto,
@@ -19,8 +20,8 @@ import {
 	UserUpdateLocationDto,
 } from "./user.dto";
 import { User } from "./user.schema";
-import { UserSettings } from "./user-settings.schema";
 import uuid = require("uuid");
+import * as BSON from "bson";
 
 export interface UserSession {
 	id: string;
@@ -250,23 +251,42 @@ export class UserService implements OnModuleInit {
 		return session.id;
 	}
 
-	getUserSettings(user: User) {
-		return this.userSettingsModel.findById(user._id);
+	async getUserSettings(user: User) {
+		const userSettings = await this.userSettingsModel.findById(user._id);
+		if (userSettings == null) return null;
+
+		try {
+			const settings = {
+				interface: JSON.parse(userSettings.interface),
+				avatarBookmarks: JSON.parse(userSettings.avatarBookmarks),
+			};
+			return settings;
+		} catch (err) {
+			return null;
+		}
 	}
 
 	async changeUserSettings(user: User, userSettingsDto: UserSettingsDto) {
-		const userSettings = await this.getUserSettings(user);
+		const userSettings = await this.userSettingsModel.findById(user._id);
 
 		if (userSettings == null) {
 			// create new user settings
 			const newUserSettings = new this.userSettingsModel({
 				_id: user._id,
-				...userSettingsDto,
+				interface: JSON.stringify(userSettingsDto.interface),
+				avatarBookmarks: JSON.stringify(
+					userSettingsDto.avatarBookmarks,
+				),
 			});
 			await newUserSettings.save();
 		} else {
 			// update user settings
-			patchDoc(userSettings, userSettingsDto);
+			userSettings.interface = JSON.stringify(
+				userSettings.avatarBookmarks,
+			);
+			userSettings.avatarBookmarks = JSON.stringify(
+				userSettings.avatarBookmarks,
+			);
 			await userSettings.save();
 		}
 	}

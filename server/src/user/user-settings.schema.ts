@@ -1,11 +1,11 @@
-import { Document, Schema } from "mongoose";
+import { Document, Schema, SchemaTypes } from "mongoose";
 
 export const UserSettingsSchema = new Schema({
-	interface: { type: Object, required: true },
-	avatarBookmarks: { type: Object, required: true },
+	interface: { type: String, required: true },
+	avatarBookmarks: { type: String, required: true },
 });
 
 export interface UserSettings extends Document {
-	interface: any;
-	avatarBookmarks: any;
+	interface: string;
+	avatarBookmarks: string;
 }
