@@ -5,10 +5,14 @@ import { DomainModule } from "../domain/domain.module";
 import { UserController } from "./user.controller";
 import { UserSchema } from "./user.schema";
 import { UserService } from "./user.service";
+import { UserSettingsSchema } from "./user-settings.schema";
 
 @Module({
 	imports: [
-		MongooseModule.forFeature([{ name: "User", schema: UserSchema }]),
+		MongooseModule.forFeature([
+			{ name: "user", schema: UserSchema },
+			{ name: "user.settings", schema: UserSettingsSchema },
+		]),
 		forwardRef(() => AuthModule),
 		forwardRef(() => DomainModule),
 	],

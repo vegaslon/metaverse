@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from "@nestjs/common";
+import { Injectable, OnModuleInit, NotFoundException } from "@nestjs/common";
 import { ModuleRef } from "@nestjs/core";
 import { InjectConnection, InjectModel } from "@nestjs/mongoose";
 import { ObjectID } from "bson";
@@ -10,17 +10,17 @@ import { AuthSignUpDto } from "../auth/auth.dto";
 import { derPublicKeyHeader } from "../common/der-public-key-header";
 import { heartbeat, HeartbeatSession } from "../common/heartbeat";
 import { MulterFile } from "../common/multer-file.model";
-import { patchObject } from "../common/utils";
+import { patchObject, patchDoc } from "../common/utils";
 import { DomainService } from "../domain/domain.service";
 import {
 	UserAvailability,
+	UserSettingsDto,
 	UserUpdateLocation,
 	UserUpdateLocationDto,
 } from "./user.dto";
 import { User } from "./user.schema";
+import { UserSettings } from "./user-settings.schema";
 import uuid = require("uuid");
-import { promisify } from "util";
-import { Readable } from "stream";
 
 export interface UserSession {
 	id: string;
@@ -37,12 +37,17 @@ export class UserService implements OnModuleInit {
 	public images: GridFSBucket;
 
 	constructor(
-		@InjectModel("User") private readonly userModel: Model<User>,
+		@InjectModel("user") private readonly userModel: Model<User>,
+
+		@InjectModel("user.settings")
+		private readonly userSettingsModel: Model<UserSettings>,
+
 		@InjectConnection() private connection: Connection,
+
 		private moduleRef: ModuleRef,
 	) {
 		this.images = new GridFSBucket(connection.db, {
-			bucketName: "userImages",
+			bucketName: "user.images",
 		});
 	}
 
@@ -243,5 +248,26 @@ export class UserService implements OnModuleInit {
 
 		// return session id
 		return session.id;
+	}
+
+	getUserSettings(user: User) {
+		return this.userSettingsModel.findById(user._id);
+	}
+
+	async changeUserSettings(user: User, userSettingsDto: UserSettingsDto) {
+		const userSettings = await this.getUserSettings(user);
+
+		if (userSettings == null) {
+			// create new user settings
+			const newUserSettings = new this.userSettingsModel({
+				_id: user._id,
+				...userSettingsDto,
+			});
+			await newUserSettings.save();
+		} else {
+			// update user settings
+			patchDoc(userSettings, userSettingsDto);
+			await userSettings.save();
+		}
 	}
 }

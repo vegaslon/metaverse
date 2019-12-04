@@ -84,3 +84,11 @@ export class UserUpdateLocationDto {
 	@Type(() => UserUpdateLocation)
 	location: UserUpdateLocation;
 }
+
+export class UserSettingsDto {
+	@ApiModelProperty()
+	interface: any = {};
+
+	@ApiModelProperty()
+	avatarBookmarks: any = {};
+}

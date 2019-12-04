@@ -2,15 +2,14 @@ import {
 	Body,
 	Controller,
 	Get,
+	NotFoundException,
 	Param,
-	Post,
+	Patch,
+	Put,
 	Res,
 	UploadedFile,
 	UseGuards,
 	UseInterceptors,
-	Patch,
-	Put,
-	NotFoundException,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { ApiBearerAuth, ApiImplicitFile, ApiUseTags } from "@nestjs/swagger";
@@ -22,10 +21,9 @@ import { MetaverseAuthGuard } from "../auth/auth.guard";
 import { AuthService } from "../auth/auth.service";
 import { CurrentUser } from "../auth/user.decorator";
 import { MulterFile } from "../common/multer-file.model";
-import { UserUpdateDto } from "./user.dto";
+import { UserSettingsDto, UserUpdateDto } from "./user.dto";
 import { User } from "./user.schema";
 import { UserService } from "./user.service";
-import { GridFSBucketReadStream } from "mongodb";
 
 const defaultUserImage = fs.readFileSync(
 	path.resolve(__dirname, "../../assets/user-image.jpg"),
@@ -116,5 +114,28 @@ export class UserController {
 		stream.on("end", () => {
 			res.end();
 		});
+	}
+
+	@Get("settings")
+	@ApiBearerAuth()
+	@UseGuards(MetaverseAuthGuard())
+	async getUserSettings(@CurrentUser() user) {
+		const userSettings = await this.userService.getUserSettings(user);
+		if (userSettings == null) throw new NotFoundException();
+
+		return {
+			interface: userSettings.interface,
+			avatarBookmarks: userSettings.avatarBookmarks,
+		};
+	}
+
+	@Put("settings")
+	@ApiBearerAuth()
+	@UseGuards(MetaverseAuthGuard())
+	putUserSettings(
+		@CurrentUser() user,
+		@Body() userSettingsDto: UserSettingsDto,
+	) {
+		return this.userService.changeUserSettings(user, userSettingsDto);
 	}
 }

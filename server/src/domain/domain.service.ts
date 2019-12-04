@@ -27,7 +27,7 @@ export class DomainService implements OnModuleInit {
 	public images: GridFSBucket;
 
 	constructor(
-		@InjectModel("Domain") private readonly domainModel: Model<Domain>,
+		@InjectModel("domain") private readonly domainModel: Model<Domain>,
 		@InjectConnection() private connection: Connection,
 		private moduleRef: ModuleRef,
 	) {
@@ -36,7 +36,7 @@ export class DomainService implements OnModuleInit {
 			.exec();
 
 		this.images = new GridFSBucket(connection.db, {
-			bucketName: "domainThumbnails",
+			bucketName: "domain.thumbnails",
 		});
 	}
 
