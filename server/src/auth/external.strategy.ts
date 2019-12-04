@@ -35,7 +35,7 @@ function handleLogin(
 }
 
 function transformUsername(username: string) {
-	return username.replace(/[^a-zA-Z0-9\.\_]+/, "");
+	return username.replace(/[^a-zA-Z0-9\_]+/, "");
 }
 
 @Injectable()
