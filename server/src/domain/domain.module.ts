@@ -9,7 +9,9 @@ import { DomainController } from "./domain.controller";
 
 @Module({
 	imports: [
-		MongooseModule.forFeature([{ name: "domain", schema: DomainSchema }]),
+		MongooseModule.forFeature([
+			{ name: "domains", schema: DomainSchema, collection: "domains" },
+		]),
 		forwardRef(() => AuthModule),
 		forwardRef(() => UserModule),
 	],

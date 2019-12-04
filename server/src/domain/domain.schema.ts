@@ -17,7 +17,7 @@ export const DomainSchema = new Schema({
 	_id: { type: String, required: true },
 	lastUpdated: { type: Date, default: new Date() },
 
-	author: { type: Schema.Types.ObjectId, ref: "user", required: true },
+	author: { type: Schema.Types.ObjectId, ref: "users", required: true },
 	secret: { type: String, default: "" }, // require for auth
 
 	iceServerAddress: { type: String, default: "" },

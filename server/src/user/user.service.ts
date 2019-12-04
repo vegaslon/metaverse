@@ -36,7 +36,7 @@ export class UserService implements OnModuleInit {
 	public images: GridFSBucket;
 
 	constructor(
-		@InjectModel("user") private readonly userModel: Model<User>,
+		@InjectModel("users") private readonly userModel: Model<User>,
 
 		@InjectModel("users.settings")
 		private readonly userSettingsModel: Model<UserSettings>,

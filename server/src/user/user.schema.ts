@@ -6,7 +6,7 @@ export const UserSchema = new Schema({
 	email: { type: String, required: true },
 
 	domains: {
-		type: [{ type: String, ref: "domain" }],
+		type: [{ type: String, ref: "domains" }],
 		required: true,
 	},
 

@@ -1,4 +1,4 @@
-import { Document, Schema, SchemaTypes } from "mongoose";
+import { Document, Schema } from "mongoose";
 
 export const UserSettingsSchema = new Schema({
 	interface: { type: String, required: true },

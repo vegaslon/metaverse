@@ -27,7 +27,7 @@ export class DomainService implements OnModuleInit {
 	public images: GridFSBucket;
 
 	constructor(
-		@InjectModel("domain") private readonly domainModel: Model<Domain>,
+		@InjectModel("domains") private readonly domainModel: Model<Domain>,
 		@InjectConnection() private connection: Connection,
 		private moduleRef: ModuleRef,
 	) {

@@ -10,8 +10,12 @@ import { UserSettingsSchema } from "./user-settings.schema";
 @Module({
 	imports: [
 		MongooseModule.forFeature([
-			{ name: "user", schema: UserSchema },
-			{ name: "user.settings", schema: UserSettingsSchema },
+			{ name: "users", schema: UserSchema, collection: "users" },
+			{
+				name: "users.settings",
+				schema: UserSettingsSchema,
+				collection: "users.settings",
+			},
 		]),
 		forwardRef(() => AuthModule),
 		forwardRef(() => DomainModule),
