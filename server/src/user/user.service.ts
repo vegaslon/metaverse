@@ -251,43 +251,37 @@ export class UserService implements OnModuleInit {
 		return session.id;
 	}
 
-	async getUserSettings(user: User) {
-		const userSettings = await this.userSettingsModel.findById(user._id);
-		if (userSettings == null) return null;
+	// async getUserSettings(user: User) {
+	// 	const userSettings = await this.userSettingsModel.findById(user._id);
+	// 	if (userSettings == null) return null;
 
-		try {
-			const settings = {
-				interface: JSON.parse(userSettings.interface),
-				avatarBookmarks: JSON.parse(userSettings.avatarBookmarks),
-			};
-			return settings;
-		} catch (err) {
-			return null;
-		}
-	}
+	// 	try {
+	// 		const settings = {
+	// 			interface: JSON.parse(userSettings.interface),
+	// 			avatarBookmarks: JSON.parse(userSettings.avatarBookmarks),
+	// 		};
+	// 		return settings;
+	// 	} catch (err) {
+	// 		return null;
+	// 	}
+	// }
 
-	async changeUserSettings(user: User, userSettingsDto: UserSettingsDto) {
-		const userSettings = await this.userSettingsModel.findById(user._id);
+	// async changeUserSettings(user: User, userSettingsDto: UserSettingsDto) {
+	// 	const userSettings = await this.userSettingsModel.findById(user._id);
 
-		if (userSettings == null) {
-			// create new user settings
-			const newUserSettings = new this.userSettingsModel({
-				_id: user._id,
-				interface: JSON.stringify(userSettingsDto.interface),
-				avatarBookmarks: JSON.stringify(
-					userSettingsDto.avatarBookmarks,
-				),
-			});
-			await newUserSettings.save();
-		} else {
-			// update user settings
-			userSettings.interface = JSON.stringify(
-				userSettings.avatarBookmarks,
-			);
-			userSettings.avatarBookmarks = JSON.stringify(
-				userSettings.avatarBookmarks,
-			);
-			await userSettings.save();
-		}
-	}
+	// 	if (userSettings == null) {
+	// 		// create new user settings
+	// 		const newUserSettings = new this.userSettingsModel({
+	// 			_id: user._id,
+	// 			interface: userSettingsDto.interface,
+	// 			avatarBookmarks: userSettingsDto.avatarBookmarks,
+	// 		});
+	// 		await newUserSettings.save();
+	// 	} else {
+	// 		// update user settings
+	// 		userSettings.interface = userSettings.avatarBookmarks;
+	// 		userSettings.avatarBookmarks = userSettings.avatarBookmarks;
+	// 		await userSettings.save();
+	// 	}
+	// }
 }

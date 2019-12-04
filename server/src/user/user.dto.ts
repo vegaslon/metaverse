@@ -87,8 +87,10 @@ export class UserUpdateLocationDto {
 
 export class UserSettingsDto {
 	@ApiModelProperty()
-	interface: any = {};
+	@IsString()
+	interface: string;
 
 	@ApiModelProperty()
-	avatarBookmarks: any = {};
+	@IsString()
+	avatarBookmarks: string;
 }
