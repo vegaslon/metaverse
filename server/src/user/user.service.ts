@@ -38,7 +38,7 @@ export class UserService implements OnModuleInit {
 	constructor(
 		@InjectModel("user") private readonly userModel: Model<User>,
 
-		@InjectModel("user.settings")
+		@InjectModel("users.settings")
 		private readonly userSettingsModel: Model<UserSettings>,
 
 		@InjectConnection() private connection: Connection,
@@ -46,7 +46,7 @@ export class UserService implements OnModuleInit {
 		private moduleRef: ModuleRef,
 	) {
 		this.images = new GridFSBucket(connection.db, {
-			bucketName: "user.images",
+			bucketName: "users.images",
 		});
 	}
 

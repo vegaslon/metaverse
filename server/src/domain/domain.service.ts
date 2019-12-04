@@ -36,7 +36,7 @@ export class DomainService implements OnModuleInit {
 			.exec();
 
 		this.images = new GridFSBucket(connection.db, {
-			bucketName: "domain.thumbnails",
+			bucketName: "domains.thumbnails",
 		});
 	}
 
