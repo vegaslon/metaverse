@@ -66,11 +66,9 @@ export class UserStoriesController {
 			const restrictions = restriction.split(",");
 			const anonymousOnly = !restrictions.includes("hifi");
 
-			const foundDomains = await this.domainService.findOnlineDomains(
-				page,
-				per_page,
-				anonymousOnly,
-			);
+			const foundDomains = await this.domainService
+				.findOnlineDomains(page, per_page, anonymousOnly)
+				.populate("+author");
 
 			for (let domain of foundDomains) {
 				user_stories.push(createConcurrency(domain));

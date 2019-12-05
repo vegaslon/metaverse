@@ -135,24 +135,22 @@ class UpdateDomain {
 	@MaxLength(128)
 	path: string;
 }
-
 export class UpdateDomainDto {
 	@ApiModelProperty({ type: UpdateDomain, required: true })
 	@ValidateNested()
 	@Type(() => UpdateDomain)
 	domain: UpdateDomain;
 }
-
 export class GetDomainsDto {
 	@ApiModelPropertyOptional()
 	@IsNumber()
 	@IsOptional()
 	@Transform(n => Number(n))
-	page = 1;
+	page: number = 1;
 
 	@ApiModelPropertyOptional()
 	@IsNumber()
 	@IsOptional()
 	@Transform(n => Number(n))
-	amount = 50;
+	amount: number = 50;
 }
