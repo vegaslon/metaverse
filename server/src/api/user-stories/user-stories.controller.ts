@@ -1,17 +1,17 @@
 import { Controller, Get, Query } from "@nestjs/common";
-import { ApiUseTags, ApiOperation } from "@nestjs/swagger";
+import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { pagination } from "../../common/utils";
 import { DomainService } from "../../domain/domain.service";
 import { UserStoriesDto, UserStory, UserStoryAction } from "./user-stories.dto";
 import { createConcurrency } from "./user-stories.helper";
 
-@ApiUseTags("from hifi")
+@ApiTags("from hifi")
 @Controller("api/v1/user_stories")
 export class UserStoriesController {
 	constructor(private domainService: DomainService) {}
 
 	@Get()
-	@ApiOperation({ title: "", deprecated: true })
+	@ApiOperation({ deprecated: true })
 	async getUserStories(@Query() userStoriesDto: UserStoriesDto) {
 		// this is all temporary
 

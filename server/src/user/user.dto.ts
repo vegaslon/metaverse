@@ -1,4 +1,4 @@
-import { ApiModelProperty, ApiModelPropertyOptional } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Type, Transform } from "class-transformer";
 import {
 	IsEmail,
@@ -12,19 +12,24 @@ import {
 } from "class-validator";
 
 export class UserUpdateDto {
-	@ApiModelPropertyOptional({ example: "fairy@cutelab.space" })
+	@ApiPropertyOptional({ example: "fairy@cutelab.space" })
 	@IsString({ message: "Email is not a string" })
 	@IsEmail({}, { message: "Email is not valid" })
 	@MaxLength(64, { message: "Email cannot be longer than 64 characters" })
 	@IsOptional()
-	email: string = "";
+	email?: string = "";
 
-	@ApiModelPropertyOptional({ example: "MyS3cretPa55w0rd" })
+	@ApiPropertyOptional({ example: "MyS3cretPa55w0rd" })
 	@IsString({ message: "Password is not a string" })
 	@MinLength(6, { message: "Password cannot be less than 6 characters" })
 	@MaxLength(64, { message: "Password cannot be longer than 64 characters" })
 	@IsOptional()
-	password: string = "";
+	password?: string = "";
+}
+
+export class UserUpdateImageDto {
+	@ApiProperty({ type: "string", format: "binary" })
+	image: any;
 }
 
 // updating user location
@@ -37,60 +42,49 @@ export enum UserAvailability {
 }
 
 export class UserUpdateLocation {
-	@ApiModelPropertyOptional()
 	@IsEnum(UserAvailability)
 	@IsOptional()
-	availability: UserAvailability;
+	availability?: UserAvailability;
 
-	@ApiModelPropertyOptional()
 	@IsBoolean()
 	@IsOptional()
-	connected: boolean;
+	connected?: boolean;
 
-	@ApiModelPropertyOptional()
 	@IsString()
 	@IsOptional()
-	domain_id: string;
+	domain_id?: string;
 
-	@ApiModelPropertyOptional()
 	@IsString()
 	@IsOptional()
-	network_address: string;
+	network_address?: string;
 
-	@ApiModelPropertyOptional()
 	@IsOptional()
 	@Transform(n => n + "")
-	network_port: string;
+	network_port?: string;
 
-	@ApiModelPropertyOptional()
 	@IsString()
 	@IsOptional()
-	node_id: string; // id of user on domain
+	node_id?: string; // id of user on domain
 
-	@ApiModelPropertyOptional()
 	@IsString()
 	@IsOptional()
-	path: string;
+	path?: string;
 
-	@ApiModelPropertyOptional()
 	@IsString()
 	@IsOptional()
-	place_id: string;
+	place_id?: string;
 }
 
 export class UserUpdateLocationDto {
-	@ApiModelProperty({ type: UserUpdateLocation, required: true })
 	@ValidateNested()
 	@Type(() => UserUpdateLocation)
 	location: UserUpdateLocation;
 }
 
 export class UserSettingsDto {
-	@ApiModelProperty()
 	@IsString()
 	interface: string;
 
-	@ApiModelProperty()
 	@IsString()
 	avatarBookmarks: string;
 }

@@ -23,7 +23,6 @@ function initSwagger(app: NestExpressApplication) {
 		.setDescription("The official unofficial implementation")
 		.setVersion("indev")
 		.addBearerAuth()
-		.setSchemes("http", "https")
 		.build();
 
 	const document = SwaggerModule.createDocument(app, options);

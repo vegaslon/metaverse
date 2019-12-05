@@ -12,18 +12,22 @@ import {
 	UseInterceptors,
 	UploadedFile,
 } from "@nestjs/common";
-import { ApiBearerAuth, ApiUseTags, ApiImplicitFile } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiTags, ApiBody, ApiConsumes } from "@nestjs/swagger";
 import { MetaverseAuthGuard } from "../auth/auth.guard";
 import { AuthService } from "../auth/auth.service";
 import { CurrentUser } from "../auth/user.decorator";
 import { renderDomain } from "../common/utils";
 import { User } from "../user/user.schema";
-import { CreateDomainDto, UpdateDomainDto } from "./domain.dto";
+import {
+	CreateDomainDto,
+	UpdateDomainDto,
+	UpdateDomainImageDto,
+} from "./domain.dto";
 import { DomainService } from "./domain.service";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { MulterFile } from "../common/multer-file.model";
 
-@ApiUseTags("user domains")
+@ApiTags("user domains")
 @Controller("api/user")
 export class UserDomainController {
 	constructor(
@@ -104,10 +108,10 @@ export class UserDomainController {
 
 	@Put("domain/:id/image")
 	@ApiBearerAuth()
-	@ApiImplicitFile({
-		name: "image",
+	@ApiConsumes("multipart/form-data")
+	@ApiBody({
 		description: "Update domain thumbnail",
-		required: true,
+		type: UpdateDomainImageDto,
 	})
 	@UseGuards(MetaverseAuthGuard())
 	@UseInterceptors(

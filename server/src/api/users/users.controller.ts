@@ -1,24 +1,23 @@
 import { Controller, Get, Param, Query, Req, UseGuards } from "@nestjs/common";
-import { ApiBearerAuth, ApiUseTags, ApiOperation } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { Request } from "express";
 import { MetaverseAuthGuard } from "../../auth/auth.guard";
+import { OptionalAuthGuard } from "../../auth/optional.guard";
 import { CurrentUser } from "../../auth/user.decorator";
 import { pagination } from "../../common/utils";
+import { DomainRestriction } from "../../domain/domain.schema";
+import { DomainService } from "../../domain/domain.service";
 import { HOSTNAME } from "../../environment";
 import { User } from "../../user/user.schema";
 import { UserService } from "../../user/user.service";
-import { DomainService } from "../../domain/domain.service";
-import { OptionalAuthGuard } from "../../auth/optional.guard";
-import { DomainRestriction, Domain } from "../../domain/domain.schema";
 import {
-	UsersConnection,
 	UsersConnectionsDto,
 	UsersConnectionType,
 	UsersDto,
 	UsersUser,
 } from "./users.dto";
 
-@ApiUseTags("from hifi")
+@ApiTags("from hifi")
 @Controller("/api/v1/users")
 export class UsersController {
 	constructor(
@@ -121,7 +120,7 @@ export class UsersController {
 	}
 
 	@Get("connections")
-	@ApiOperation({ title: "", deprecated: true })
+	@ApiOperation({ deprecated: true })
 	@ApiBearerAuth()
 	@UseGuards(MetaverseAuthGuard())
 	async getConnections(

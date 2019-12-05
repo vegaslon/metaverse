@@ -1,9 +1,9 @@
 import { Body, Controller, HttpException, Post } from "@nestjs/common";
-import { ApiUseTags } from "@nestjs/swagger";
+import { ApiTags } from "@nestjs/swagger";
 import { AuthTokenDto } from "./auth.dto";
 import { AuthService } from "./auth.service";
 
-@ApiUseTags("from hifi")
+@ApiTags("from hifi")
 @Controller("oauth")
 export class OauthController {
 	constructor(private authService: AuthService) {}

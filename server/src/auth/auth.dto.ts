@@ -1,4 +1,4 @@
-import { ApiModelProperty } from "@nestjs/swagger";
+import { ApiProperty } from "@nestjs/swagger";
 import {
 	IsEmail,
 	IsEnum,
@@ -20,7 +20,7 @@ export enum AuthTokenScope {
 }
 
 class AuthDto {
-	@ApiModelProperty({ example: "MyS3cretPa55w0rd" })
+	@ApiProperty({ example: "MyS3cretPa55w0rd" })
 	@IsNotEmpty({ message: "Password is required" })
 	@IsString({ message: "Password is not a string" })
 	@MinLength(6, { message: "Password cannot be less than 6 characters" })
@@ -29,7 +29,7 @@ class AuthDto {
 }
 
 export class AuthTokenDto extends AuthDto {
-	@ApiModelProperty({ example: "Fairy" })
+	@ApiProperty({ example: "Fairy" })
 	@IsNotEmpty({ message: "Username or email is required" })
 	@IsString({ message: "Username or email is not a string" })
 	@MinLength(4, {
@@ -41,26 +41,26 @@ export class AuthTokenDto extends AuthDto {
 	username: string;
 
 	// hifi trash
-	@ApiModelProperty({ enum: AuthTokenGrantType })
+	@ApiProperty({ enum: AuthTokenGrantType })
 	@IsNotEmpty({ message: "Grant type is required" })
 	@IsEnum(AuthTokenGrantType, { message: "Grant type is invalud" })
 	grant_type: AuthTokenGrantType;
 
-	@ApiModelProperty({ enum: AuthTokenScope })
+	@ApiProperty({ enum: AuthTokenScope })
 	@IsNotEmpty({ message: "Scope is required" })
 	@IsEnum(AuthTokenScope, { message: "Scope is invalid" })
 	scope: AuthTokenScope;
 }
 
 export class AuthSignUpDto extends AuthDto {
-	@ApiModelProperty({ example: "fairy@cutelab.space" })
+	@ApiProperty({ example: "fairy@cutelab.space" })
 	@IsNotEmpty({ message: "Email is required" })
 	@IsString({ message: "Email is not a string" })
 	@IsEmail({}, { message: "Email is not valid" })
 	@MaxLength(64, { message: "Email cannot be longer than 64 characters" })
 	email: string = "";
 
-	@ApiModelProperty({ example: "Fairy" })
+	@ApiProperty({ example: "Fairy" })
 	@IsNotEmpty({ message: "Username is required" })
 	@IsString({ message: "Username is not a string" })
 	@MinLength(4, { message: "Username cannot be less than 4 characters" })
@@ -72,12 +72,12 @@ export class AuthSignUpDto extends AuthDto {
 }
 
 export class AuthExtSignUpDto {
-	@ApiModelProperty({ example: "" })
+	@ApiProperty({ example: "" })
 	@IsNotEmpty({ message: "Token is required" })
 	@IsString({ message: "Token is not a string" })
 	token: string = "";
 
-	@ApiModelProperty({ example: "Fairy" })
+	@ApiProperty({ example: "Fairy" })
 	@IsNotEmpty({ message: "Username is required" })
 	@IsString({ message: "Username is not a string" })
 	@MinLength(4, { message: "Username cannot be less than 4 characters" })
@@ -87,7 +87,7 @@ export class AuthExtSignUpDto {
 	})
 	username: string = "";
 
-	@ApiModelProperty({ example: "" })
+	@ApiProperty({ example: "" })
 	@IsString({ message: "Image URL is not a string" })
 	@IsOptional()
 	imageUrl: string = "";

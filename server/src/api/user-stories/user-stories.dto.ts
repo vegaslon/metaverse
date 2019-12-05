@@ -1,4 +1,4 @@
-import { ApiModelPropertyOptional, ApiModelProperty } from "@nestjs/swagger";
+import { ApiPropertyOptional, ApiProperty } from "@nestjs/swagger";
 import {
 	IsInt,
 	IsString,
@@ -45,14 +45,13 @@ export interface UserStory {
 }
 
 export class UserStoriesDto {
-	@ApiModelProperty({
-		enum: Object.values(UserStoryAction),
+	@ApiProperty({
 		default: UserStoryAction.concurrency,
 	})
 	@IsEnum(UserStoryAction)
 	include_actions: UserStoryAction;
 
-	@ApiModelPropertyOptional({
+	@ApiProperty({
 		default: "open,hifi",
 		description:
 			'"open" is anonymous, "hifi" is logged in, "acl" is private (but ignored here)',
@@ -61,7 +60,7 @@ export class UserStoriesDto {
 	@IsOptional()
 	restriction: string = "open,hifi";
 
-	@ApiModelPropertyOptional({
+	@ApiProperty({
 		description: "Filters online domains",
 	})
 	@IsOptional()
@@ -69,27 +68,27 @@ export class UserStoriesDto {
 	@Transform(b => b == "true")
 	require_online: boolean = true;
 
-	@ApiModelPropertyOptional()
+	@ApiPropertyOptional()
 	@IsOptional()
 	@IsString()
-	protocol: string = "";
+	protocol?: string = "";
 
-	@ApiModelPropertyOptional({
+	@ApiPropertyOptional({
 		default: 10,
 	})
 	@IsInt()
 	@IsOptional()
 	@Transform(n => Number(n))
-	per_page: number = 10;
+	per_page?: number = 10;
 
-	@ApiModelPropertyOptional({ default: 1 })
+	@ApiPropertyOptional({ default: 1 })
 	@IsInt()
 	@IsOptional()
 	@Transform(n => Number(n))
-	page: number = 1;
+	page?: number = 1;
 
-	@ApiModelPropertyOptional()
+	@ApiPropertyOptional()
 	@IsOptional()
 	@IsString()
-	search: string = "";
+	search?: string = "";
 }

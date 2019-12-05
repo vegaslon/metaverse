@@ -1,49 +1,49 @@
-import { ApiModelPropertyOptional, ApiModelProperty } from "@nestjs/swagger";
+import { ApiPropertyOptional, ApiProperty } from "@nestjs/swagger";
 import { Transform } from "class-transformer";
 import { IsInt, IsString, IsEnum, IsOptional } from "class-validator";
 
 // users
 
 export class UsersDto {
-	@ApiModelPropertyOptional({
+	@ApiPropertyOptional({
 		default: "",
 		description: 'Can be "connections" but isn\'t used',
 	})
 	@IsOptional()
-	filter: string;
+	filter?: string;
 
-	@ApiModelPropertyOptional({
+	@ApiPropertyOptional({
 		default: 1000,
 	})
 	@IsInt()
 	@IsOptional()
 	@Transform(n => Number(n))
-	per_page: number = 1000;
+	per_page?: number = 1000;
 
-	@ApiModelPropertyOptional({
+	@ApiPropertyOptional({
 		default: 1,
 	})
 	@IsInt()
 	@IsOptional()
 	@Transform(n => Number(n))
-	page: number = 1;
+	page?: number = 1;
 
-	@ApiModelPropertyOptional({
+	@ApiPropertyOptional({
 		default: "",
 		description: "Domain ID",
 	})
 	@IsString()
 	@IsOptional()
-	status: string = "";
+	status?: string = "";
 
-	@ApiModelPropertyOptional({
+	@ApiPropertyOptional({
 		default: 0,
 		description: "The time? In milliseconds?",
 	})
 	@IsInt()
 	@IsOptional()
 	@Transform(n => Number(n))
-	a: number = 0;
+	a?: number = 0;
 }
 
 export enum UsersConnectionType {
@@ -98,17 +98,17 @@ export interface UsersConnection {
 }
 
 export class UsersConnectionsDto {
-	@ApiModelPropertyOptional({ default: 1000 })
+	@ApiPropertyOptional({ default: 1000 })
 	@IsInt()
 	@Transform(value => Number(value))
-	per_page: number = 1000;
+	per_page?: number = 1000;
 
-	@ApiModelPropertyOptional({ default: 1 })
+	@ApiPropertyOptional({ default: 1 })
 	@IsInt()
 	@Transform(value => Number(value))
-	page: number = 1;
+	page?: number = 1;
 
-	@ApiModelPropertyOptional({ default: "location,DESC" })
+	@ApiPropertyOptional({ default: "location,DESC" })
 	@IsString()
-	sort: string = "location,DESC";
+	sort?: string = "location,DESC";
 }

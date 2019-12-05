@@ -7,7 +7,7 @@ import {
 	Req,
 	Res,
 } from "@nestjs/common";
-import { ApiUseTags, ApiExcludeEndpoint } from "@nestjs/swagger";
+import { ApiTags, ApiExcludeEndpoint } from "@nestjs/swagger";
 import { AuthSignUpDto, AuthExtSignUpDto } from "./auth.dto";
 import {
 	AuthService,
@@ -18,7 +18,7 @@ import { AuthGuard } from "@nestjs/passport";
 import { Request, Response } from "express";
 import { User } from "../user/user.schema";
 
-@ApiUseTags("auth")
+@ApiTags("auth")
 @Controller("api/auth")
 export class AuthController {
 	constructor(private authService: AuthService) {}

@@ -12,7 +12,7 @@ import {
 	UseInterceptors,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { ApiBearerAuth, ApiImplicitFile, ApiUseTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiTags, ApiConsumes, ApiBody } from "@nestjs/swagger";
 import { Response } from "express";
 import * as fs from "fs";
 import * as path from "path";
@@ -21,7 +21,7 @@ import { MetaverseAuthGuard } from "../auth/auth.guard";
 import { AuthService } from "../auth/auth.service";
 import { CurrentUser } from "../auth/user.decorator";
 import { MulterFile } from "../common/multer-file.model";
-import { UserSettingsDto, UserUpdateDto } from "./user.dto";
+import { UserSettingsDto, UserUpdateDto, UserUpdateImageDto } from "./user.dto";
 import { User } from "./user.schema";
 import { UserService } from "./user.service";
 
@@ -30,7 +30,7 @@ const defaultUserImage = fs.readFileSync(
 );
 
 @Controller("api/user")
-@ApiUseTags("user")
+@ApiTags("user")
 export class UserController {
 	constructor(
 		private userService: UserService,
@@ -59,10 +59,10 @@ export class UserController {
 
 	@Put("image")
 	@ApiBearerAuth()
-	@ApiImplicitFile({
-		name: "image",
+	@ApiConsumes("multipart/form-data")
+	@ApiBody({
 		description: "Update user profile picture",
-		required: true,
+		type: UserUpdateImageDto,
 	})
 	@UseGuards(MetaverseAuthGuard())
 	@UseInterceptors(

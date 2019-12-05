@@ -1,11 +1,11 @@
 import { Controller, Get, UseGuards } from "@nestjs/common";
-import { ApiBearerAuth, ApiUseTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiTags, ApiResponse } from "@nestjs/swagger";
 import { AdminAuthGuard } from "../auth/admin.guard";
 import { UserService } from "../user/user.service";
 import { VideoStreamService } from "../video-stream/video-stream.service";
 
 @Controller("api/admin")
-@ApiUseTags("admin")
+@ApiTags("admin")
 export class AdminController {
 	constructor(
 		private userService: UserService,

@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Res, UseGuards, Query } from "@nestjs/common";
-import { ApiUseTags } from "@nestjs/swagger";
+import { ApiTags } from "@nestjs/swagger";
 import { Response } from "express";
 import * as fs from "fs";
 import * as path from "path";
@@ -16,7 +16,7 @@ const defaultDomainImage = fs.readFileSync(
 );
 
 @Controller("api")
-@ApiUseTags("domains")
+@ApiTags("domains")
 export class DomainController {
 	constructor(private domainService: DomainService) {}
 

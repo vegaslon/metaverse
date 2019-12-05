@@ -11,27 +11,26 @@ import {
 	UploadedFile,
 	UseGuards,
 	UseInterceptors,
-	BadRequestException,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import {
 	ApiBearerAuth,
 	ApiNotImplementedResponse,
-	ApiUseTags,
 	ApiOperation,
+	ApiTags,
 } from "@nestjs/swagger";
+import { MetaverseAuthGuard } from "../../auth/auth.guard";
 import { CurrentDomain } from "../../auth/domain.decorator";
 import { DomainAuthGuard } from "../../auth/domain.guard";
+import { CurrentUser } from "../../auth/user.decorator";
 import { MulterFile } from "../../common/multer-file.model";
 import { renderDomainForHifi } from "../../common/utils";
 import { UpdateDomainDto } from "../../domain/domain.dto";
 import { Domain } from "../../domain/domain.schema";
 import { DomainService } from "../../domain/domain.service";
-import { MetaverseAuthGuard } from "../../auth/auth.guard";
-import { CurrentUser } from "../../auth/user.decorator";
 import { User } from "../../user/user.schema";
 
-@ApiUseTags("from hifi")
+@ApiTags("from hifi")
 @Controller("api/v1/domains")
 export class DomainsController {
 	constructor(private domainService: DomainService) {}
@@ -56,7 +55,7 @@ export class DomainsController {
 	}
 
 	@Post()
-	@ApiOperation({ title: "", deprecated: true })
+	@ApiOperation({ deprecated: true })
 	@ApiBearerAuth()
 	@UseGuards(MetaverseAuthGuard())
 	@ApiNotImplementedResponse({
@@ -80,7 +79,7 @@ export class DomainsController {
 	}
 
 	@Post("temporary")
-	@ApiOperation({ title: "", deprecated: true })
+	@ApiOperation({ deprecated: true })
 	@ApiNotImplementedResponse({
 		description: "Not implemented because we're using an in-house system",
 	})

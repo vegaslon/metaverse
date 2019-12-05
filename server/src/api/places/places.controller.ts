@@ -1,11 +1,11 @@
 import { Controller, Get, HttpException, Param } from "@nestjs/common";
-import { ApiUseTags } from "@nestjs/swagger";
+import { ApiTags } from "@nestjs/swagger";
 import { HOSTNAME } from "src/environment";
 import { DomainService } from "../../domain/domain.service";
 import { UserService } from "../../user/user.service";
 import { Place } from "./places.dto";
 
-@ApiUseTags("from hifi")
+@ApiTags("from hifi")
 @Controller("api/v1/places")
 export class PlacesController {
 	constructor(
