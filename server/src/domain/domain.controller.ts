@@ -70,4 +70,9 @@ export class DomainController {
 			return renderDomain(domain, domain.author);
 		});
 	}
+
+	@Get("domains/stats")
+	getDomainsStat() {
+		return this.domainService.getDomainsStats();
+	}
 }

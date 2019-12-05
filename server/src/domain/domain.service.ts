@@ -182,4 +182,26 @@ export class DomainService implements OnModuleInit {
 			});
 		});
 	}
+
+	async getDomainsStats() {
+		const onlineUsers = Object.keys(this.userService.sessions).length;
+		const onlineDomains = Object.keys(this.sessions).length;
+
+		// const stats = await this.domainModel.aggregate([
+		// 	{ $match: { onlineUsers: { $gt: 0 } } },
+		// 	{
+		// 		$group: {
+		// 			_id: null,
+		// 			onlineDomainsWithUsers: { $sum: 1 },
+		// 		},
+		// 	},
+		// ]);
+
+		return {
+			onlineUsers,
+			onlineDomains,
+			// onlineDomainsWithUsers:
+			// 	stats.length > 0 ? stats[0].onlineDomainsWithUsers : 0,
+		};
+	}
 }
