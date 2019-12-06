@@ -148,9 +148,21 @@ export class DomainService implements OnModuleInit {
 
 		const searchRegExp = new RegExp(
 			search
-				.split("")
-				.map(char => escapeString(char))
-				.join("['\\-_+=#^&]?"),
+				.split(" ")
+				.map(word => {
+					word = word.trim();
+					if (word == "") return null;
+
+					word = word
+						.trim()
+						.split("")
+						.map(char => escapeString(char))
+						.join("['\\-_+=#^&]?");
+
+					return "(" + word + ")";
+				})
+				.filter(word => word != null)
+				.join("|"),
 			"gi",
 		);
 
