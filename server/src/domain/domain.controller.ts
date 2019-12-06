@@ -62,7 +62,7 @@ export class DomainController {
 			.findOnlineDomains(
 				getDomainsDto.page,
 				getDomainsDto.amount,
-				(user as any) == false,
+				//(user as any) == false,
 			)
 			.populate("author");
 

@@ -48,7 +48,13 @@ function initDebugging(app: NestExpressApplication) {
 
 async function bootstrap() {
 	const app = await NestFactory.create<NestExpressApplication>(AppModule);
-	if (DEV) app.enableCors();
+	if (DEV) {
+		app.enableCors();
+	} else {
+		app.enableCors({
+			origin: "null",
+		});
+	}
 
 	app.use(helmet(), compression());
 
