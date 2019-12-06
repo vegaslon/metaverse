@@ -72,7 +72,7 @@ export class DomainService implements OnModuleInit {
 			return domain;
 		}
 
-		if (allowCrucialOverwrite) {
+		if (!allowCrucialOverwrite) {
 			// dont want the domain to update crucial info
 			delete updateDomainDto.domain.label;
 			delete updateDomainDto.domain.description;
