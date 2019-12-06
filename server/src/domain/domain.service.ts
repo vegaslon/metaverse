@@ -7,7 +7,7 @@ import { heartbeat, HeartbeatSession } from "../common/heartbeat";
 import { patchDoc, snakeToCamelCaseObject } from "../common/utils";
 import { User } from "../user/user.schema";
 import { UserService, UserSession } from "../user/user.service";
-import { CreateDomainDto, UpdateDomainDto } from "./domain.dto";
+import { CreateDomainDto, UpdateDomainDto, GetDomainsDto } from "./domain.dto";
 import { Domain } from "./domain.schema";
 import uuid = require("uuid");
 import { MulterFile } from "../common/multer-file.model";
@@ -132,18 +132,33 @@ export class DomainService implements OnModuleInit {
 		return userPopulated.domains;
 	}
 
-	findOnlineDomains(page = 1, amount = 50, anonymousOnly = false) {
+	findOnlineDomains(getDomainDto: GetDomainsDto, anonymousOnly = false) {
+		let { page, amount, search } = getDomainDto;
+
 		if (page <= 0) page = 1;
 		page -= 1;
 
 		if (amount > 50) amount = 50;
 
-		const restriction = anonymousOnly
-			? { restriction: "open" }
-			: { $or: [{ restriction: "open" }, { restriction: "hifi" }] };
+		const restrictionQuery = [
+			{ restriction: "open" },
+			...(!anonymousOnly ? [{ restriction: "hifi" }] : []),
+		];
+
+		const searchQuery = search
+			? [
+					{ label: new RegExp(search, "gi") },
+					{
+						description: new RegExp(search, "gi"),
+					},
+			  ]
+			: [{}];
 
 		return this.domainModel
-			.find({ online: true, ...restriction })
+			.find({
+				online: true,
+				$and: [{ $or: restrictionQuery }, { $or: searchQuery }],
+			})
 			.sort({ onlineUsers: -1, lastUpdated: -1 })
 			.skip(page * amount)
 			.limit(page);

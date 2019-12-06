@@ -8,6 +8,7 @@ import {
 	IsOptional,
 	MaxLength,
 	ValidateNested,
+	IsString,
 } from "class-validator";
 import { DomainAutomaticNetworking, DomainRestriction } from "./domain.schema";
 
@@ -128,6 +129,10 @@ export class GetDomainsDto {
 	@IsOptional()
 	@Transform(n => Number(n))
 	amount?: number = 50;
+
+	@IsString()
+	@IsOptional()
+	search?: string = "";
 }
 
 export class UpdateDomainImageDto {

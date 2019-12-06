@@ -60,8 +60,7 @@ export class DomainController {
 	) {
 		const domains = await this.domainService
 			.findOnlineDomains(
-				getDomainsDto.page,
-				getDomainsDto.amount,
+				getDomainsDto,
 				//(user as any) == false,
 			)
 			.populate("author");
