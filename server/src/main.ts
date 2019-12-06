@@ -48,12 +48,12 @@ function initDebugging(app: NestExpressApplication) {
 
 async function bootstrap() {
 	const app = await NestFactory.create<NestExpressApplication>(AppModule);
-	if (DEV) {
-		app.enableCors();
-	} else {
+	if (!DEV) {
 		app.enableCors({
-			origin: "null",
+			origin: /^((null)|(file:\/\/))$/i, // null from chrome file://
 		});
+	} else {
+		app.enableCors();
 	}
 
 	app.use(helmet(), compression());
