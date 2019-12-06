@@ -91,6 +91,7 @@ export class UserDomainController {
 		const updatedDomain = await this.domainService.updateDomain(
 			domain,
 			updateDomainDto,
+			true,
 		);
 
 		return renderDomain(updatedDomain, user);

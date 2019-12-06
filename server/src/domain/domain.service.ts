@@ -63,9 +63,20 @@ export class DomainService implements OnModuleInit {
 		return await domain.save();
 	}
 
-	async updateDomain(domain: Domain, updateDomainDto: UpdateDomainDto) {
+	async updateDomain(
+		domain: Domain,
+		updateDomainDto: UpdateDomainDto,
+		allowCrucialOverwrite = false,
+	) {
 		if (updateDomainDto.domain == null) {
 			return domain;
+		}
+
+		if (allowCrucialOverwrite) {
+			// dont want the domain to update crucial info
+			delete updateDomainDto.domain.label;
+			delete updateDomainDto.domain.description;
+			delete updateDomainDto.domain.path;
 		}
 
 		const dto = snakeToCamelCaseObject(updateDomainDto.domain);
