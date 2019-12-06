@@ -13,6 +13,7 @@ import uuid = require("uuid");
 import { MulterFile } from "../common/multer-file.model";
 import sharp = require("sharp");
 import { GridFSBucket } from "mongodb";
+import escapeString = require("escape-string-regexp");
 
 export interface DomainSession {
 	users: UserSession[];
@@ -145,13 +146,16 @@ export class DomainService implements OnModuleInit {
 			...(!anonymousOnly ? [{ restriction: "hifi" }] : []),
 		];
 
+		const searchRegExp = new RegExp(
+			search
+				.split("")
+				.map(char => escapeString(char))
+				.join("['\\-_+=#^&]?"),
+			"gi",
+		);
+
 		const searchQuery = search
-			? [
-					{ label: new RegExp(search, "gi") },
-					{
-						description: new RegExp(search, "gi"),
-					},
-			  ]
+			? [{ label: searchRegExp }, { description: searchRegExp }]
 			: [{}];
 
 		return this.domainModel
