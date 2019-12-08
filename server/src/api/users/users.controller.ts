@@ -35,6 +35,7 @@ export class UsersController {
 		const { filter, per_page, page, a } = usersDto;
 		const domainId = usersDto.status;
 
+		// passport js sets user to false
 		if ((currentUser as any) == false) currentUser = null;
 
 		let users: UsersUser[] = [];
@@ -73,11 +74,12 @@ export class UsersController {
 			}
 			if (showUsers == false) return;
 
+			// turning user sessions into users to display
 			for (let userSession of domainSession.users) {
 				const user = await this.userService.findById(
 					userSession.userId,
 				);
-				if (user == null) return;
+				if (user == null) continue;
 
 				let connection = null;
 				if (currentUser != null) {
