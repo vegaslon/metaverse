@@ -99,12 +99,16 @@ export interface Domain extends Document {
 }
 
 DomainSchema.pre("remove", async function(next) {
-	const domain = await (this as Domain).populate("author").execPopulate();
+	try {
+		const domain = await (this as Domain).populate("author").execPopulate();
 
-	const user = domain.author;
-	const i = (user.domains as any[]).indexOf(domain._id);
-	user.domains.splice(i, 1);
-	await user.save();
+		const user = domain.author;
+		const i = (user.domains as any[]).indexOf(domain._id);
+		user.domains.splice(i, 1);
+		await user.save();
 
-	next();
+		next();
+	} catch (err) {
+		next();
+	}
 });
