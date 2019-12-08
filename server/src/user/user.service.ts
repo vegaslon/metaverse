@@ -10,13 +10,14 @@ import { AuthSignUpDto } from "../auth/auth.dto";
 import { derPublicKeyHeader } from "../common/der-public-key-header";
 import { heartbeat, HeartbeatSession } from "../common/heartbeat";
 import { MulterFile } from "../common/multer-file.model";
-import { patchObject } from "../common/utils";
+import { patchObject, renderDomain } from "../common/utils";
 import { DomainService } from "../domain/domain.service";
 import { UserSettings } from "./user-settings.schema";
 import {
 	UserAvailability,
 	UserUpdateLocation,
 	UserUpdateLocationDto,
+	GetUserDomainsLikesDto,
 } from "./user.dto";
 import { User } from "./user.schema";
 import uuid = require("uuid");
@@ -279,4 +280,25 @@ export class UserService implements OnModuleInit {
 	// 		await userSettings.save();
 	// 	}
 	// }
+
+	async getDomainLikes(
+		user: User,
+		getUserDomainsLikesDto: GetUserDomainsLikesDto,
+	) {
+		const { populate, page, amount } = getUserDomainsLikesDto;
+
+		console.log(user.domainLikes);
+
+		if (populate) {
+			await user
+				.populate({ path: "domainLikes", populate: { path: "author" } })
+				.execPopulate();
+
+			return user.domainLikes.map(domain => {
+				return renderDomain(domain, domain.author);
+			});
+		} else {
+			return (user.domainLikes as any) as string[];
+		}
+	}
 }

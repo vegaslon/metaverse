@@ -241,4 +241,30 @@ export class DomainService implements OnModuleInit {
 			// 	stats.length > 0 ? stats[0].onlineDomainsWithUsers : 0,
 		};
 	}
+
+	async likeDomain(user: User, domain: Domain) {
+		if (!(user.domainLikes as any[]).includes(domain._id)) {
+			user.domainLikes.push(domain._id);
+			await user.save();
+		}
+
+		if (!(domain.userLikes as any[]).includes(user._id)) {
+			domain.userLikes.push(user._id);
+			await domain.save();
+		}
+	}
+
+	async unlikeDomain(user: User, domain: Domain) {
+		if ((user.domainLikes as any[]).includes(domain._id)) {
+			const i = user.domainLikes.indexOf(domain._id);
+			user.domainLikes.splice(i, 1);
+			await user.save();
+		}
+
+		if ((domain.userLikes as any[]).includes(user._id)) {
+			const i = domain.userLikes.indexOf(user._id);
+			domain.userLikes.splice(i, 1);
+			await domain.save();
+		}
+	}
 }

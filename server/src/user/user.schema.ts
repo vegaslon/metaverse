@@ -14,6 +14,8 @@ export const UserSchema = new Schema({
 	hash: { type: String, requred: true, select: false },
 	publicKey: { type: String, default: "" },
 
+	domainLikes: [{ type: String, ref: "domains" }],
+
 	created: { type: Date, default: new Date() },
 	minutes: { type: Number, default: 0 },
 });
@@ -27,6 +29,8 @@ export interface User extends Document {
 	admin: boolean;
 	hash: string;
 	publicKey: string;
+
+	domainLikes: Domain[];
 
 	created: Date;
 	minutes: number;

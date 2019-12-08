@@ -10,6 +10,7 @@ import {
 	UploadedFile,
 	UseGuards,
 	UseInterceptors,
+	Query,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { ApiBearerAuth, ApiTags, ApiConsumes, ApiBody } from "@nestjs/swagger";
@@ -21,7 +22,12 @@ import { MetaverseAuthGuard } from "../auth/auth.guard";
 import { AuthService } from "../auth/auth.service";
 import { CurrentUser } from "../auth/user.decorator";
 import { MulterFile } from "../common/multer-file.model";
-import { UserSettingsDto, UserUpdateDto, UserUpdateImageDto } from "./user.dto";
+import {
+	UserSettingsDto,
+	UserUpdateDto,
+	UserUpdateImageDto,
+	GetUserDomainsLikesDto,
+} from "./user.dto";
 import { User } from "./user.schema";
 import { UserService } from "./user.service";
 
@@ -138,4 +144,14 @@ export class UserController {
 	// ) {
 	// 	return this.userService.changeUserSettings(user, userSettingsDto);
 	// }
+
+	@Get("domain-likes")
+	@ApiBearerAuth()
+	@UseGuards(MetaverseAuthGuard())
+	getDomainLikes(
+		@CurrentUser() user: User,
+		@Query() getUserDomainsLikesDto: GetUserDomainsLikesDto,
+	) {
+		return this.userService.getDomainLikes(user, getUserDomainsLikesDto);
+	}
 }

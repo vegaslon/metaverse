@@ -59,7 +59,8 @@ export const DomainSchema = new Schema({
 
 	// not from hifi
 	path: { type: String, default: "/0,0,0/0,0,0,0" },
-	image: { type: Buffer, default: null },
+
+	userLikes: [{ type: Schema.Types.ObjectId, ref: "users" }],
 });
 
 export interface Domain extends Document {
@@ -94,18 +95,37 @@ export interface Domain extends Document {
 
 	publicKey: string;
 
+	// not from hifi
 	path: string;
-	image: Buffer;
+
+	userLikes: User[];
 }
 
 DomainSchema.pre("remove", async function(next) {
 	try {
-		const domain = await (this as Domain).populate("author").execPopulate();
+		const domain = await (this as Domain)
+			.populate("author")
+			.populate("userLikes")
+			.execPopulate();
 
-		const user = domain.author;
-		const i = (user.domains as any[]).indexOf(domain._id);
-		user.domains.splice(i, 1);
-		await user.save();
+		// remove domain from author
+		await (async () => {
+			const user = domain.author;
+			const i = (user.domains as any[]).indexOf(domain._id);
+			user.domains.splice(i, 1);
+			await user.save();
+		})().catch(() => {});
+
+		// remove domain from user's likes
+		await (async () => {
+			for (let user of domain.userLikes) {
+				try {
+					const i = (user.domainLikes as any[]).indexOf(domain._id);
+					user.domainLikes.splice(i, 1);
+					await user.save();
+				} catch (err) {}
+			}
+		})().catch(() => {});
 
 		next();
 	} catch (err) {

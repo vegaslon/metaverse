@@ -9,6 +9,7 @@ import {
 	MinLength,
 	ValidateNested,
 	IsBoolean,
+	IsNumber,
 } from "class-validator";
 
 export class UserUpdateDto {
@@ -87,4 +88,25 @@ export class UserSettingsDto {
 
 	@IsString()
 	avatarBookmarks: string;
+}
+
+export class GetUserDomainsLikesDto {
+	@IsBoolean()
+	@IsOptional()
+	@Transform(b => b == "true")
+	populate? = false;
+
+	@IsNumber()
+	@IsOptional()
+	@Transform(n => Number(n))
+	page?: number = 1;
+
+	@IsNumber()
+	@IsOptional()
+	@Transform(n => Number(n))
+	amount?: number = 50;
+
+	// @IsString()
+	// @IsOptional()
+	// search?: string = "";
 }

@@ -1,5 +1,14 @@
-import { Controller, Get, Param, Res, UseGuards, Query } from "@nestjs/common";
-import { ApiTags } from "@nestjs/swagger";
+import {
+	Controller,
+	Get,
+	Param,
+	Res,
+	UseGuards,
+	Query,
+	Post,
+	NotFoundException,
+} from "@nestjs/common";
+import { ApiTags, ApiBearerAuth } from "@nestjs/swagger";
 import { Response } from "express";
 import * as fs from "fs";
 import * as path from "path";
@@ -10,6 +19,7 @@ import { User } from "../user/user.schema";
 import { DomainService } from "./domain.service";
 import { GetDomainsDto } from "./domain.dto";
 import { renderDomain } from "../common/utils";
+import { MetaverseAuthGuard } from "src/auth/auth.guard";
 
 const defaultDomainImage = fs.readFileSync(
 	path.resolve(__dirname, "../../assets/domain-image.jpg"),
@@ -73,5 +83,25 @@ export class DomainController {
 	@Get("domains/stats")
 	getDomainsStat() {
 		return this.domainService.getDomainsStats();
+	}
+
+	@Post("domains/:id/like")
+	@ApiBearerAuth()
+	@UseGuards(MetaverseAuthGuard())
+	async likeDomain(@CurrentUser() user: User, @Param("id") id: string) {
+		const domain = await this.domainService.findById(id);
+		if (domain == null) throw new NotFoundException();
+
+		return this.domainService.likeDomain(user, domain);
+	}
+
+	@Post("domains/:id/unlike")
+	@ApiBearerAuth()
+	@UseGuards(MetaverseAuthGuard())
+	async unlikeDomain(@CurrentUser() user: User, @Param("id") id: string) {
+		const domain = await this.domainService.findById(id);
+		if (domain == null) throw new NotFoundException();
+
+		return this.domainService.unlikeDomain(user, domain);
 	}
 }

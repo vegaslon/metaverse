@@ -127,16 +127,18 @@ export function renderDomainForHifi(d: Domain) {
 	};
 }
 
-export function renderDomain(domain: Domain, user: User) {
+export function renderDomain(domain: Domain, author: User) {
 	return {
 		id: domain._id,
 		label: domain.label,
-		username: user.username,
+		username: author.username,
 		description: domain.description,
 		restriction: domain.restriction,
 
 		online: domain.online,
 		numUsers: domain.onlineUsers,
+
+		likes: domain.userLikes.length,
 
 		networkAddress: domain.networkAddress,
 		networkPort: domain.networkPort,
