@@ -1,5 +1,6 @@
-import { Document, Schema } from "mongoose";
+import { Document, Schema, MongooseDocumentOptionals } from "mongoose";
 import { User } from "../user/user.schema";
+import { MongoClient } from "mongodb";
 
 export enum DomainAutomaticNetworking {
 	full = "full",
@@ -96,3 +97,14 @@ export interface Domain extends Document {
 	path: string;
 	image: Buffer;
 }
+
+DomainSchema.pre("remove", async function(next) {
+	const domain = await (this as Domain).populate("author").execPopulate();
+
+	const user = domain.author;
+	const i = (user.domains as any[]).indexOf(domain._id);
+	user.domains.splice(i, 1);
+	await user.save();
+
+	next();
+});

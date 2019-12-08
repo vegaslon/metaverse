@@ -181,13 +181,8 @@ export class DomainService implements OnModuleInit {
 	}
 
 	async deleteDomain(domainId: string) {
-		const domain = await this.findById(domainId).populate("author");
+		const domain = await this.findById(domainId);
 		if (domain == null) throw new NotFoundException();
-
-		const user = domain.author;
-		const i = (user.domains as any[]).indexOf(domainId);
-		user.domains.splice(i, 1);
-		await user.save();
 
 		return await domain.remove();
 	}
