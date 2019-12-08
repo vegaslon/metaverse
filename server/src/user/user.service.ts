@@ -191,8 +191,7 @@ export class UserService implements OnModuleInit {
 				const domainSession = this.domainService.sessions[domainId];
 				if (domainSession == null) return;
 
-				const i = domainSession.users.indexOf(session);
-				domainSession.users.splice(i, 1);
+				delete domainSession.users[user._id];
 			},
 			1000 * 30, // maybe 15
 		);
@@ -239,9 +238,7 @@ export class UserService implements OnModuleInit {
 
 			const domainSession = this.domainService.sessions[domainId];
 			if (domainSession != null) {
-				if (!domainSession.users.includes(session)) {
-					domainSession.users.push(session);
-				}
+				domainSession.users[user._id] = session;
 			}
 		}
 

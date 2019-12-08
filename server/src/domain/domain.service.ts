@@ -16,7 +16,7 @@ import { GridFSBucket } from "mongodb";
 import escapeString = require("escape-string-regexp");
 
 export interface DomainSession {
-	users: UserSession[];
+	users: { [id: string]: UserSession };
 }
 
 @Injectable()
@@ -90,7 +90,7 @@ export class DomainService implements OnModuleInit {
 				domain._id,
 				session => {
 					// initialize
-					session.users = [];
+					session.users = {};
 				},
 				async () => {
 					// cleanup if it goes offline

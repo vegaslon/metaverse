@@ -49,6 +49,8 @@ export class UsersController {
 			const domainSession = this.domainService.sessions[domainId];
 			if (domainSession == null) return;
 
+			const domainUserSessions = Object.values(domainSession.users);
+
 			// logic if allowed to see users in domain
 			let showUsers = false;
 			switch (domain.restriction) {
@@ -63,19 +65,18 @@ export class UsersController {
 				case DomainRestriction.acl:
 					if (currentUser != null)
 						if (
-							// only if user is in domain
-							domainSession.users.filter(
+							// only if logged in user is in domain
+							domainUserSessions.some(
 								user => user.userId == currentUser.id,
-							).length > 0
+							)
 						)
 							showUsers = true;
-
 					break;
 			}
 			if (showUsers == false) return;
 
 			// turning user sessions into users to display
-			for (let userSession of domainSession.users) {
+			for (let userSession of domainUserSessions) {
 				const user = await this.userService.findById(
 					userSession.userId,
 				);
