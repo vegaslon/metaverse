@@ -76,7 +76,7 @@ export class DomainController {
 			.populate("author");
 
 		return domains.map(domain => {
-			return renderDomain(domain, domain.author);
+			return renderDomain(domain, user);
 		});
 	}
 

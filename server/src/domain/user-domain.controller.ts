@@ -46,6 +46,7 @@ export class UserDomainController {
 			user,
 			createDomainDto,
 		);
+		domain.author = user; // populate
 
 		return renderDomain(domain, user);
 	}
@@ -71,6 +72,7 @@ export class UserDomainController {
 		await user.populate("domains").execPopulate();
 
 		return user.domains.map(domain => {
+			domain.author = user; // populate
 			return renderDomain(domain, user);
 		});
 	}
@@ -93,6 +95,7 @@ export class UserDomainController {
 			updateDomainDto,
 			true,
 		);
+		updatedDomain.author = user;
 
 		return renderDomain(updatedDomain, user);
 	}

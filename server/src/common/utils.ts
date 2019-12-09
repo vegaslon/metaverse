@@ -127,11 +127,13 @@ export function renderDomainForHifi(d: Domain) {
 	};
 }
 
-export function renderDomain(domain: Domain, author: User) {
+export function renderDomain(domain: Domain, currentUser: User) {
+	const liked = (currentUser.domainLikes as any[]).includes(domain._id);
+
 	return {
 		id: domain._id,
 		label: domain.label,
-		username: author.username,
+		username: domain.author.username,
 		description: domain.description,
 		restriction: domain.restriction,
 
@@ -139,6 +141,7 @@ export function renderDomain(domain: Domain, author: User) {
 		numUsers: domain.onlineUsers,
 
 		likes: domain.userLikes.length,
+		liked,
 
 		networkAddress: domain.networkAddress,
 		networkPort: domain.networkPort,
