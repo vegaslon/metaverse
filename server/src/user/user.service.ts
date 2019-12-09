@@ -292,7 +292,7 @@ export class UserService implements OnModuleInit {
 			.execPopulate();
 
 		return user.domainLikes.map(domain => {
-			return renderDomain(domain, domain.author);
+			return renderDomain(domain, user);
 		});
 	}
 }
