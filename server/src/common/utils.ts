@@ -131,7 +131,13 @@ export function renderDomain(domain: Domain, currentUser: User) {
 	const liked =
 		currentUser == null
 			? false
-			: (currentUser.domainLikes as any[]).includes(domain._id);
+			: currentUser.domainLikes.some(likedDomain => {
+					if (typeof likedDomain == "string") {
+						return likedDomain == domain._id;
+					} else if (typeof likedDomain == "object") {
+						return likedDomain._id == domain._id;
+					}
+			  });
 
 	return {
 		id: domain._id,
