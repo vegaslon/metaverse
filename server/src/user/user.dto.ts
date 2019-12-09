@@ -91,11 +91,6 @@ export class UserSettingsDto {
 }
 
 export class GetUserDomainsLikesDto {
-	@IsBoolean()
-	@IsOptional()
-	@Transform(b => b == "true")
-	populate? = false;
-
 	@IsNumber()
 	@IsOptional()
 	@Transform(n => Number(n))
@@ -106,7 +101,7 @@ export class GetUserDomainsLikesDto {
 	@Transform(n => Number(n))
 	amount?: number = 50;
 
-	// @IsString()
-	// @IsOptional()
-	// search?: string = "";
+	@IsString()
+	@IsOptional()
+	search?: string = "";
 }

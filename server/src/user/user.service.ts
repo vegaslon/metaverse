@@ -285,20 +285,14 @@ export class UserService implements OnModuleInit {
 		user: User,
 		getUserDomainsLikesDto: GetUserDomainsLikesDto,
 	) {
-		const { populate, page, amount } = getUserDomainsLikesDto;
+		const { page, amount, search } = getUserDomainsLikesDto;
 
-		console.log(user.domainLikes);
+		await user
+			.populate({ path: "domainLikes", populate: { path: "author" } })
+			.execPopulate();
 
-		if (populate) {
-			await user
-				.populate({ path: "domainLikes", populate: { path: "author" } })
-				.execPopulate();
-
-			return user.domainLikes.map(domain => {
-				return renderDomain(domain, domain.author);
-			});
-		} else {
-			return (user.domainLikes as any) as string[];
-		}
+		return user.domainLikes.map(domain => {
+			return renderDomain(domain, domain.author);
+		});
 	}
 }

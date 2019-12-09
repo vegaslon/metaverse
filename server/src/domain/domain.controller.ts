@@ -63,6 +63,7 @@ export class DomainController {
 	}
 
 	@Get("domains")
+	@ApiBearerAuth()
 	@UseGuards(OptionalAuthGuard())
 	async findOnlineDomains(
 		@CurrentUser() user: User,

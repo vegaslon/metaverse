@@ -128,9 +128,10 @@ export function renderDomainForHifi(d: Domain) {
 }
 
 export function renderDomain(domain: Domain, currentUser: User) {
-	const domainLikes = currentUser.domainLikes as any[];
 	const liked =
-		domainLikes == null ? false : domainLikes.includes(domain._id);
+		currentUser == null
+			? false
+			: (currentUser.domainLikes as any[]).includes(domain._id);
 
 	return {
 		id: domain._id,
