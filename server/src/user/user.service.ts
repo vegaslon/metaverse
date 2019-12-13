@@ -240,6 +240,14 @@ export class UserService implements OnModuleInit {
 			const domainSession = this.domainService.sessions[domainId];
 			if (domainSession != null) {
 				domainSession.users[user._id] = session;
+
+				// move domain to top in user's likes if it exists
+				if ((user.domainLikes as any[]).includes(domainId)) {
+					this.domainService.moveLikedDomainToTopForUser(
+						user,
+						domainId,
+					);
+				}
 			}
 		}
 

@@ -244,7 +244,8 @@ export class DomainService implements OnModuleInit {
 
 	async likeDomain(user: User, domain: Domain) {
 		if (!(user.domainLikes as any[]).includes(domain._id)) {
-			user.domainLikes.push(domain._id);
+			// new domains appear at the top
+			user.domainLikes.unshift(domain._id);
 			await user.save();
 		}
 
@@ -266,5 +267,15 @@ export class DomainService implements OnModuleInit {
 			domain.userLikes.splice(i, 1);
 			await domain.save();
 		}
+	}
+
+	async moveLikedDomainToTopForUser(user: User, domainId: any) {
+		if (!(user.domainLikes as any[]).includes(domainId)) return;
+
+		const i = user.domainLikes.indexOf(domainId);
+		user.domainLikes.splice(i, 1);
+		user.domainLikes.unshift(domainId);
+
+		await user.save();
 	}
 }
