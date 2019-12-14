@@ -17,6 +17,7 @@ import {
 	UsersUser,
 } from "./users.dto";
 import { HttpException } from "@nestjs/common/exceptions";
+import { UsersConnection } from "./users.dto";
 
 @ApiTags("from hifi")
 @Controller("/api/v1/users")
@@ -114,43 +115,41 @@ export class UsersController {
 		let users: UsersUser[] = [];
 
 		if (filter == "connections" && status == "online") {
-			const usernames = Object.keys(this.userService.sessions);
-			const sessions = Object.values(this.userService.sessions);
-
-			users = sessions.map((session, i) => {
-				const username = usernames[i];
-				const userImageUrl =
-					HOSTNAME + "/api/user/" + username + "/image";
-				const domainId = session.location.domain_id;
-
-				return {
-					username,
-					online: true,
-					connection: UsersConnectionType.connection,
-					location: {
-						path: session.location.path,
-						node_id: session.location.node_id,
-						root: {
-							id: domainId,
-							name: domainId,
-							domain: {
-								id: domainId,
-								network_address:
-									session.location.network_address,
-								network_port: session.location.network_port,
-								cloud_domain: false,
-								online: true,
-								default_place_name: domainId,
-							},
-						},
-					},
-					images: {
-						hero: userImageUrl,
-						thumbnail: userImageUrl,
-						tiny: userImageUrl,
-					},
-				};
-			});
+			// const usernames = Object.keys(this.userService.sessions);
+			// const sessions = Object.values(this.userService.sessions);
+			// users = sessions.map((session, i) => {
+			// 	const username = usernames[i];
+			// 	const userImageUrl =
+			// 		HOSTNAME + "/api/user/" + username + "/image";
+			// 	const domainId = session.location.domain_id;
+			// 	return {
+			// 		username,
+			// 		online: true,
+			// 		connection: UsersConnectionType.connection,
+			// 		location: {
+			// 			path: session.location.path,
+			// 			node_id: session.location.node_id,
+			// 			root: {
+			// 				id: domainId,
+			// 				name: domainId,
+			// 				domain: {
+			// 					id: domainId,
+			// 					network_address:
+			// 						session.location.network_address,
+			// 					network_port: session.location.network_port,
+			// 					cloud_domain: false,
+			// 					online: true,
+			// 					default_place_name: domainId,
+			// 				},
+			// 			},
+			// 		},
+			// 		images: {
+			// 			hero: userImageUrl,
+			// 			thumbnail: userImageUrl,
+			// 			tiny: userImageUrl,
+			// 		},
+			// 	};
+			// });
 		} else {
 			users = await this.getNearbyUsers(currentUser, status);
 		}
@@ -176,34 +175,26 @@ export class UsersController {
 	) {
 		const { per_page, page, sort } = connectionsDto;
 
-		// const users = (await this.userService.findAll()).map(user => {
-		// 	const session = this.userService.sessions[user.username];
+		const usernames = Object.keys(this.userService.sessions);
+		const sessions = Object.values(this.userService.sessions);
 
-		// 	return {
-		// 		username: user.username,
-		// 		online: session == null ? false : true,
-		// 		connection: UsersConnectionType.connection,
-		// 		location:
-		// 			session == null
-		// 				? {}
-		// 				: {
-		// 						root: {
-		// 							// place name
-		// 							name:
-		// 								session.location.network_address +
-		// 								":" +
-		// 								session.location.network_port +
-		// 								session.location.path,
-		// 						},
-		// 				  },
-		// 		images: {
-		// 			thumbnail:
-		// 				HOSTNAME + "/api/user/" + user.username + "/image",
-		// 		},
-		// 	} as UsersConnection;
-		// });
+		const users = sessions.map((session, i) => {
+			const username = usernames[i];
 
-		const users = [];
+			return {
+				username,
+				online: true,
+				connection: UsersConnectionType.connection,
+				location: {
+					root: {
+						name: session.location.domain_id,
+					},
+				},
+				images: {
+					thumbnail: HOSTNAME + "/api/user/" + username + "/image",
+				},
+			} as UsersConnection;
+		});
 
 		const sliced = pagination(page, per_page, users);
 
