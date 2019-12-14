@@ -115,6 +115,7 @@ export class UsersController {
 		let users: UsersUser[] = [];
 
 		if (filter == "connections" && status == "online") {
+			// completely useless
 			// const usernames = Object.keys(this.userService.sessions);
 			// const sessions = Object.values(this.userService.sessions);
 			// users = sessions.map((session, i) => {
@@ -169,10 +170,7 @@ export class UsersController {
 	@ApiOperation({ deprecated: true })
 	@ApiBearerAuth()
 	@UseGuards(MetaverseAuthGuard())
-	async getConnections(
-		@Query() connectionsDto: UsersConnectionsDto,
-		@Req() req: Request,
-	) {
+	async getConnections(@Query() connectionsDto: UsersConnectionsDto) {
 		const { per_page, page, sort } = connectionsDto;
 
 		const usernames = Object.keys(this.userService.sessions);
