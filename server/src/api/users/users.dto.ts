@@ -86,35 +86,35 @@ export interface UsersUser {
 
 // connections
 
-// export interface UsersConnection {
-// 	username: string;
-// 	online: boolean;
-// 	connection: UsersConnectionType;
-// 	location: {
-// 		root?: {
-// 			name: string; // place name (domain id)
-// 		};
-// 	};
-// 	images: {
-// 		thumbnail: string;
-// 	};
-// }
+export interface UsersConnection {
+	username: string;
+	online: boolean;
+	connection: UsersConnectionType;
+	location: {
+		root?: {
+			name: string; // place name (domain id)
+		};
+	};
+	images: {
+		thumbnail: string;
+	};
+}
 
-// export class UsersConnectionsDto {
-// 	@ApiPropertyOptional({ default: 1000 })
-// 	@IsInt()
-// 	@Transform(value => Number(value))
-// 	per_page?: number = 1000;
+export class UsersConnectionsDto {
+	@ApiPropertyOptional({ default: 1000 })
+	@IsInt()
+	@Transform(value => Number(value))
+	per_page?: number = 1000;
 
-// 	@ApiPropertyOptional({ default: 1 })
-// 	@IsInt()
-// 	@Transform(value => Number(value))
-// 	page?: number = 1;
+	@ApiPropertyOptional({ default: 1 })
+	@IsInt()
+	@Transform(value => Number(value))
+	page?: number = 1;
 
-// 	@ApiPropertyOptional({ default: "location,DESC" })
-// 	@IsString()
-// 	sort?: string = "location,DESC";
-// 	// location,DESC/ASC
-// 	// is_friend,DESC/ASC
-// 	// username,DESC/ASC
-// }
+	@ApiPropertyOptional({ default: "location,DESC" })
+	@IsString()
+	sort?: string = "location,DESC";
+	// location,DESC/ASC
+	// is_friend,DESC/ASC
+	// username,DESC/ASC
+}

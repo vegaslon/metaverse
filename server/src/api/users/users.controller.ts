@@ -1,6 +1,7 @@
 import { Controller, Get, Param, Query, UseGuards } from "@nestjs/common";
 import { HttpException } from "@nestjs/common/exceptions";
-import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
+import { MetaverseAuthGuard } from "../../auth/auth.guard";
 import { OptionalAuthGuard } from "../../auth/optional.guard";
 import { CurrentUser } from "../../auth/user.decorator";
 import { pagination } from "../../common/utils";
@@ -9,7 +10,9 @@ import { DomainService } from "../../domain/domain.service";
 import { HOSTNAME } from "../../environment";
 import { User } from "../../user/user.schema";
 import { UserService } from "../../user/user.service";
+import { UsersConnection } from "./users.dto";
 import {
+	UsersConnectionsDto,
 	UsersConnectionType,
 	UsersDto,
 	UsersLocation,
@@ -126,6 +129,45 @@ export class UsersController {
 		};
 	}
 
+	@Get("connections")
+	@ApiOperation({ deprecated: true })
+	@ApiBearerAuth()
+	@UseGuards(MetaverseAuthGuard())
+	async getConnections(@Query() connectionsDto: UsersConnectionsDto) {
+		const { per_page, page, sort } = connectionsDto;
+
+		const usernames = Object.keys(this.userService.sessions);
+		const sessions = Object.values(this.userService.sessions);
+
+		const users = sessions.map((session, i) => {
+			const username = usernames[i];
+
+			return {
+				username,
+				online: true,
+				connection: UsersConnectionType.connection,
+				location: {
+					root: {
+						name: session.location.domain_id,
+					},
+				},
+				images: {
+					thumbnail: HOSTNAME + "/api/user/" + username + "/image",
+				},
+			} as UsersConnection;
+		});
+
+		const sliced = pagination(page, per_page, users);
+
+		return {
+			status: "success",
+			...sliced.info,
+			data: {
+				users: sliced.data,
+			},
+		};
+	}
+
 	@Get(":username/public_key")
 	async getPublicKey(@Param("username") username: string) {
 		const user = await this.userService.findByUsername(username);
@@ -152,8 +194,23 @@ export class UsersController {
 
 	@Get(":username/location")
 	async getUserLocation(@Param("username") username: string) {
-		username = username.toLowerCase();
-		const session = this.userService.sessions[username];
+		const NoLocation = () =>
+			new HttpException(
+				{
+					status: "fail",
+					data: {
+						location: "there is no location for that user",
+					},
+				},
+				404,
+			);
+
+		const user = await this.userService.findByUsername(username);
+		if (user == null) throw NoLocation();
+
+		// username is case sensetive
+		const session = this.userService.sessions[user.username];
+		if (session == null) throw NoLocation();
 
 		// TODO: check whether they're friends or not
 
@@ -180,15 +237,6 @@ export class UsersController {
 				},
 			};
 		} else {
-			throw new HttpException(
-				{
-					status: "fail",
-					data: {
-						location: "there is no location for that user",
-					},
-				},
-				404,
-			);
 		}
 	}
 }
