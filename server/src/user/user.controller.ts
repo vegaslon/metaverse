@@ -2,18 +2,17 @@ import {
 	Body,
 	Controller,
 	Get,
-	NotFoundException,
 	Param,
 	Patch,
 	Put,
+	Query,
 	Res,
 	UploadedFile,
 	UseGuards,
 	UseInterceptors,
-	Query,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { ApiBearerAuth, ApiTags, ApiConsumes, ApiBody } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { Response } from "express";
 import * as fs from "fs";
 import * as path from "path";
@@ -23,10 +22,9 @@ import { AuthService } from "../auth/auth.service";
 import { CurrentUser } from "../auth/user.decorator";
 import { MulterFile } from "../common/multer-file.model";
 import {
-	UserSettingsDto,
+	GetUserDomainsLikesDto,
 	UserUpdateDto,
 	UserUpdateImageDto,
-	GetUserDomainsLikesDto,
 } from "./user.dto";
 import { User } from "./user.schema";
 import { UserService } from "./user.service";
@@ -153,5 +151,12 @@ export class UserController {
 		@Query() getUserDomainsLikesDto: GetUserDomainsLikesDto,
 	) {
 		return this.userService.getDomainLikes(user, getUserDomainsLikesDto);
+	}
+
+	@Get("friends")
+	@ApiBearerAuth()
+	@UseGuards(MetaverseAuthGuard())
+	getFriends(@CurrentUser() user: User) {
+		return this.userService.getFriends(user);
 	}
 }

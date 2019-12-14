@@ -1,5 +1,8 @@
+import { HOSTNAME } from "src/environment";
 import { Domain } from "../domain/domain.schema";
+import { DomainService } from "../domain/domain.service";
 import { User } from "../user/user.schema";
+import { UserService } from "../user/user.service";
 
 export function snakeToCamelCase(snake: string) {
 	const split = snake.split("_");
@@ -155,5 +158,32 @@ export function renderDomain(domain: Domain, currentUser: User) {
 		networkAddress: domain.networkAddress,
 		networkPort: domain.networkPort,
 		path: domain.path,
+	};
+}
+
+export async function renderFriend(
+	username: string,
+	userService: UserService,
+	domainService: DomainService,
+) {
+	const userSession = userService.sessions[username];
+
+	const domain =
+		userSession != null
+			? await domainService.findById(userSession.location.domain_id)
+			: null;
+
+	const showDomain = domain == null ? false : domain.restriction != "acl";
+
+	return {
+		username: username,
+		online: userSession != null,
+		trusted: false,
+		image: HOSTNAME + "/api/user/" + username + "/image",
+		domain: showDomain
+			? {
+					name: domain.label,
+			  }
+			: null,
 	};
 }

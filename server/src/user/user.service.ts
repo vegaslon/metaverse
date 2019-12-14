@@ -10,7 +10,7 @@ import { AuthSignUpDto } from "../auth/auth.dto";
 import { derPublicKeyHeader } from "../common/der-public-key-header";
 import { heartbeat, HeartbeatSession } from "../common/heartbeat";
 import { MulterFile } from "../common/multer-file.model";
-import { patchObject, renderDomain } from "../common/utils";
+import { patchObject, renderDomain, renderFriend } from "../common/utils";
 import { DomainService } from "../domain/domain.service";
 import { UserSettings } from "./user-settings.schema";
 import {
@@ -302,5 +302,19 @@ export class UserService implements OnModuleInit {
 		return user.domainLikes.map(domain => {
 			return renderDomain(domain, user);
 		});
+	}
+
+	async getFriends(user: User) {
+		// TODO: replace with actual friends
+
+		const usernames = Object.keys(this.sessions);
+
+		const friends = [];
+		for (const username of usernames) {
+			friends.push(
+				await renderFriend(username, this, this.domainService),
+			);
+		}
+		return friends;
 	}
 }
