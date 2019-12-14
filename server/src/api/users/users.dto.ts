@@ -49,7 +49,7 @@ export class UsersDto {
 export enum UsersConnectionType {
 	self = "self",
 	connection = "connection",
-	friend = "friend",
+	//friend = "friend",
 }
 
 export interface UsersUser {
@@ -89,7 +89,7 @@ export interface UsersConnection {
 	connection: UsersConnectionType;
 	location: {
 		root?: {
-			name: string;
+			name: string; // place name (domain id)
 		};
 	};
 	images: {
@@ -111,4 +111,7 @@ export class UsersConnectionsDto {
 	@ApiPropertyOptional({ default: "location,DESC" })
 	@IsString()
 	sort?: string = "location,DESC";
+	// location,DESC/ASC
+	// is_friend,DESC/ASC
+	// username,DESC/ASC
 }

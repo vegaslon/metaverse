@@ -1,2 +1,2 @@
 set HIFI_METAVERSE_URL=http://127.0.0.1:3000
-"F:\Steam\steamapps\common\High Fidelity\interface.exe" --allowMultipleInstances
+"C:\Program Files\Tivoli Cloud\resources\app\interface\0.86.0\interface.exe" --allowMultipleInstances

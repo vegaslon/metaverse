@@ -73,6 +73,7 @@ export class UserController {
 		return {
 			status: "success",
 			data: {
+				// all friends for domain server, not connections
 				friends: [] as string[],
 			},
 		};

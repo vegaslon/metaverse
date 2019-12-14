@@ -26,91 +26,134 @@ export class UsersController {
 		private domainService: DomainService,
 	) {}
 
+	private async getNearbyUsers(currentUser: User, domainId: string) {
+		let users: UsersUser[] = [];
+
+		if (domainId == null) return users;
+
+		const domain = await this.domainService.findById(domainId);
+		if (domain == null) return users;
+
+		const domainSession = this.domainService.sessions[domainId];
+		if (domainSession == null) return users;
+
+		const domainUserSessions = Object.values(domainSession.users);
+
+		// logic if allowed to see users in domain
+		let showUsers = false;
+		switch (domain.restriction) {
+			case DomainRestriction.open:
+				showUsers = true;
+				break;
+
+			case DomainRestriction.hifi:
+				if (currentUser != null) showUsers = true;
+				break;
+
+			case DomainRestriction.acl:
+				if (currentUser != null)
+					if (
+						// only if logged in user is in domain
+						domainUserSessions.some(
+							user => user.userId == currentUser.id,
+						)
+					)
+						showUsers = true;
+				break;
+		}
+		if (showUsers == false) return users;
+
+		// turning user sessions into UsersUser
+		for (let userSession of domainUserSessions) {
+			const user = await this.userService.findById(userSession.userId);
+			if (user == null) continue;
+
+			let connection = null;
+			if (currentUser != null) {
+				if (currentUser.username == user.username)
+					connection = UsersConnectionType.self;
+			}
+
+			const userImageUrl =
+				HOSTNAME + "/api/user/" + user.username + "/image";
+
+			users.push({
+				username: user.username,
+				online: true,
+				connection,
+				location: {
+					path: userSession.location.path,
+					node_id: userSession.location.node_id,
+					root: {
+						// fill up
+					},
+				},
+				images: {
+					hero: userImageUrl,
+					thumbnail: userImageUrl,
+					tiny: userImageUrl,
+				},
+			});
+		}
+
+		return users;
+	}
+
 	@Get()
 	@ApiBearerAuth()
 	@UseGuards(OptionalAuthGuard())
-	async getNearbyUsers(
+	async getUsers(
 		@CurrentUser() currentUser: User,
 		@Query() usersDto: UsersDto,
 	) {
-		const { filter, per_page, page, a } = usersDto;
-		const domainId = usersDto.status;
+		const { filter, per_page, page, status } = usersDto;
 
 		// passport js sets user to false
 		if ((currentUser as any) == false) currentUser = null;
 
 		let users: UsersUser[] = [];
 
-		await (async (currentUser: User) => {
-			if (domainId == null) return;
+		if (filter == "connections" && status == "online") {
+			const usernames = Object.keys(this.userService.sessions);
+			const sessions = Object.values(this.userService.sessions);
 
-			const domain = await this.domainService.findById(domainId);
-			if (domain == null) return;
+			users = sessions.map((session, i) => {
+				const username = usernames[i];
+				const userImageUrl =
+					HOSTNAME + "/api/user/" + username + "/image";
+				const domainId = session.location.domain_id;
 
-			const domainSession = this.domainService.sessions[domainId];
-			if (domainSession == null) return;
-
-			const domainUserSessions = Object.values(domainSession.users);
-
-			// logic if allowed to see users in domain
-			let showUsers = false;
-			switch (domain.restriction) {
-				case DomainRestriction.open:
-					showUsers = true;
-					break;
-
-				case DomainRestriction.hifi:
-					if (currentUser != null) showUsers = true;
-					break;
-
-				case DomainRestriction.acl:
-					if (currentUser != null)
-						if (
-							// only if logged in user is in domain
-							domainUserSessions.some(
-								user => user.userId == currentUser.id,
-							)
-						)
-							showUsers = true;
-					break;
-			}
-			if (showUsers == false) return;
-
-			// turning user sessions into users to display
-			for (let userSession of domainUserSessions) {
-				const user = await this.userService.findById(
-					userSession.userId,
-				);
-				if (user == null) continue;
-
-				let connection = null;
-				if (currentUser != null) {
-					if (currentUser.username == user.username)
-						connection = UsersConnectionType.self;
-				}
-
-				users.push({
-					username: user.username,
+				return {
+					username,
 					online: true,
-					connection,
+					connection: UsersConnectionType.connection,
 					location: {
-						path: userSession.location.path,
-						node_id: userSession.location.node_id,
+						path: session.location.path,
+						node_id: session.location.node_id,
 						root: {
-							// fill up
+							id: domainId,
+							name: domainId,
+							domain: {
+								id: domainId,
+								network_address:
+									session.location.network_address,
+								network_port: session.location.network_port,
+								cloud_domain: false,
+								online: true,
+								default_place_name: domainId,
+							},
 						},
 					},
 					images: {
-						hero:
-							HOSTNAME + "/api/user/" + user.username + "/image",
-						thumbnail:
-							HOSTNAME + "/api/user/" + user.username + "/image",
-						tiny:
-							HOSTNAME + "/api/user/" + user.username + "/image",
+						hero: userImageUrl,
+						thumbnail: userImageUrl,
+						tiny: userImageUrl,
 					},
-				});
-			}
-		})(currentUser);
+				};
+			});
+		} else {
+			users = await this.getNearbyUsers(currentUser, status);
+		}
 
 		const sliced = pagination(page, per_page, users);
 
