@@ -15,6 +15,7 @@ import {
 	UsersConnectionType,
 	UsersDto,
 	UsersUser,
+	UsersLocation,
 } from "./users.dto";
 import { HttpException } from "@nestjs/common/exceptions";
 import { UsersConnection } from "./users.dto";
@@ -85,9 +86,7 @@ export class UsersController {
 				location: {
 					path: userSession.location.path,
 					node_id: userSession.location.node_id,
-					root: {
-						// fill up
-					},
+					root: {},
 				},
 				images: {
 					hero: userImageUrl,
@@ -115,84 +114,10 @@ export class UsersController {
 		let users: UsersUser[] = [];
 
 		if (filter == "connections" && status == "online") {
-			// completely useless
-			// const usernames = Object.keys(this.userService.sessions);
-			// const sessions = Object.values(this.userService.sessions);
-			// users = sessions.map((session, i) => {
-			// 	const username = usernames[i];
-			// 	const userImageUrl =
-			// 		HOSTNAME + "/api/user/" + username + "/image";
-			// 	const domainId = session.location.domain_id;
-			// 	return {
-			// 		username,
-			// 		online: true,
-			// 		connection: UsersConnectionType.connection,
-			// 		location: {
-			// 			path: session.location.path,
-			// 			node_id: session.location.node_id,
-			// 			root: {
-			// 				id: domainId,
-			// 				name: domainId,
-			// 				domain: {
-			// 					id: domainId,
-			// 					network_address:
-			// 						session.location.network_address,
-			// 					network_port: session.location.network_port,
-			// 					cloud_domain: false,
-			// 					online: true,
-			// 					default_place_name: domainId,
-			// 				},
-			// 			},
-			// 		},
-			// 		images: {
-			// 			hero: userImageUrl,
-			// 			thumbnail: userImageUrl,
-			// 			tiny: userImageUrl,
-			// 		},
-			// 	};
-			// });
+			// not needed
 		} else {
 			users = await this.getNearbyUsers(currentUser, status);
 		}
-
-		const sliced = pagination(page, per_page, users);
-
-		return {
-			status: "success",
-			...sliced.info,
-			data: {
-				users: sliced.data,
-			},
-		};
-	}
-
-	@Get("connections")
-	@ApiOperation({ deprecated: true })
-	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard())
-	async getConnections(@Query() connectionsDto: UsersConnectionsDto) {
-		const { per_page, page, sort } = connectionsDto;
-
-		const usernames = Object.keys(this.userService.sessions);
-		const sessions = Object.values(this.userService.sessions);
-
-		const users = sessions.map((session, i) => {
-			const username = usernames[i];
-
-			return {
-				username,
-				online: true,
-				connection: UsersConnectionType.connection,
-				location: {
-					root: {
-						name: session.location.domain_id,
-					},
-				},
-				images: {
-					thumbnail: HOSTNAME + "/api/user/" + username + "/image",
-				},
-			} as UsersConnection;
-		});
 
 		const sliced = pagination(page, per_page, users);
 
@@ -222,6 +147,47 @@ export class UsersController {
 					status: "fail",
 					data: {
 						public_key: "there is no public key for that user",
+					},
+				},
+				404,
+			);
+		}
+	}
+
+	@Get(":username/location")
+	async getUserLocation(@Param("username") username: string) {
+		const session = this.userService.sessions[username];
+
+		// TODO: check whether they're friends or not
+
+		if (session != null) {
+			const location = session.location;
+			const domainId = location.domain_id;
+
+			return {
+				status: "success",
+				data: {
+					location: {
+						path: location.path,
+						node_id: location.node_id,
+						root: {
+							id: domainId,
+							network_address: location.network_address,
+							network_port: location.network_port,
+							cloud_domain: false,
+							online: true,
+							default_place_name: domainId,
+						},
+						online: true,
+					} as UsersLocation,
+				},
+			};
+		} else {
+			throw new HttpException(
+				{
+					status: "fail",
+					data: {
+						location: "there is no location for that user",
 					},
 				},
 				404,

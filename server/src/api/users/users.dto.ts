@@ -52,28 +52,31 @@ export enum UsersConnectionType {
 	//friend = "friend",
 }
 
+export interface UsersLocation {
+	path: string;
+	node_id: string;
+	root:
+		| {
+				id: string; // id of place name? so domain id
+				name: string;
+				domain: {
+					id: string;
+					network_address: string;
+					network_port: number;
+					cloud_domain: boolean;
+					online: boolean;
+					default_place_name: string;
+				};
+		  }
+		| {};
+	online?: boolean;
+}
+
 export interface UsersUser {
 	username: string;
 	online: boolean;
 	connection: UsersConnectionType;
-	location: {
-		path: string;
-		node_id: string;
-		root:
-			| {
-					id: string;
-					name: string;
-					domain: {
-						id: string;
-						network_address: string;
-						network_port: number;
-						cloud_domain: boolean;
-						online: boolean;
-						default_place_name: string;
-					};
-			  }
-			| {};
-	};
+	location: UsersLocation;
 	images: {
 		hero: string;
 		thumbnail: string;
@@ -83,35 +86,35 @@ export interface UsersUser {
 
 // connections
 
-export interface UsersConnection {
-	username: string;
-	online: boolean;
-	connection: UsersConnectionType;
-	location: {
-		root?: {
-			name: string; // place name (domain id)
-		};
-	};
-	images: {
-		thumbnail: string;
-	};
-}
+// export interface UsersConnection {
+// 	username: string;
+// 	online: boolean;
+// 	connection: UsersConnectionType;
+// 	location: {
+// 		root?: {
+// 			name: string; // place name (domain id)
+// 		};
+// 	};
+// 	images: {
+// 		thumbnail: string;
+// 	};
+// }
 
-export class UsersConnectionsDto {
-	@ApiPropertyOptional({ default: 1000 })
-	@IsInt()
-	@Transform(value => Number(value))
-	per_page?: number = 1000;
+// export class UsersConnectionsDto {
+// 	@ApiPropertyOptional({ default: 1000 })
+// 	@IsInt()
+// 	@Transform(value => Number(value))
+// 	per_page?: number = 1000;
 
-	@ApiPropertyOptional({ default: 1 })
-	@IsInt()
-	@Transform(value => Number(value))
-	page?: number = 1;
+// 	@ApiPropertyOptional({ default: 1 })
+// 	@IsInt()
+// 	@Transform(value => Number(value))
+// 	page?: number = 1;
 
-	@ApiPropertyOptional({ default: "location,DESC" })
-	@IsString()
-	sort?: string = "location,DESC";
-	// location,DESC/ASC
-	// is_friend,DESC/ASC
-	// username,DESC/ASC
-}
+// 	@ApiPropertyOptional({ default: "location,DESC" })
+// 	@IsString()
+// 	sort?: string = "location,DESC";
+// 	// location,DESC/ASC
+// 	// is_friend,DESC/ASC
+// 	// username,DESC/ASC
+// }
