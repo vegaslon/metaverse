@@ -7,4 +7,4 @@ import { UserModule } from "../../user/user.module";
 	imports: [DomainModule, UserModule],
 	controllers: [PlacesController],
 })
-export class PlacesModule {}
+export class ApiPlacesModule {}

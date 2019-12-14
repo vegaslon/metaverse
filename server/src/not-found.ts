@@ -4,7 +4,10 @@ import { Request, Response } from "express";
 import { existsSync } from "fs";
 import * as path from "path";
 
-const frontendIndexPath = path.resolve(__dirname, "../frontend/index.html");
+const frontendIndexPath = path.resolve(
+	__dirname,
+	"../../frontend/dist/browser/index.html",
+);
 
 @Catch(NotFoundException)
 export class NotFoundExceptionFilter extends BaseExceptionFilter {
@@ -18,7 +21,8 @@ export class NotFoundExceptionFilter extends BaseExceptionFilter {
 		const res: Response = ctx.getResponse();
 
 		if (!existsSync(frontendIndexPath)) return super.catch(exception, host);
-
 		res.sendFile(frontendIndexPath);
+
+		res.render("index", { req });
 	}
 }

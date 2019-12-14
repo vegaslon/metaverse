@@ -11,10 +11,10 @@ import { DEV } from "./environment";
 import { NotFoundExceptionFilter } from "./not-found";
 import bodyParser = require("body-parser");
 
-function initFrontend(app: NestExpressApplication) {
+function initNonSsrFrontend(app: NestExpressApplication) {
 	const { httpAdapter } = app.get(HttpAdapterHost);
 	app.useGlobalFilters(new NotFoundExceptionFilter(httpAdapter));
-	app.useStaticAssets(path.resolve(__dirname, "../frontend"));
+	app.useStaticAssets(path.join(__dirname, "../../frontend/dist/browser"));
 }
 
 function initSwagger(app: NestExpressApplication) {
@@ -67,11 +67,10 @@ async function bootstrap() {
 		}),
 	);
 
-	initFrontend(app);
-
 	initSwagger(app); // while in alpha
 	if (DEV) {
 		initDebugging(app);
+		initNonSsrFrontend(app);
 	}
 
 	await app.listen(3000);

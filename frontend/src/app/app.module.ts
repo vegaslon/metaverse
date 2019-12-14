@@ -53,7 +53,7 @@ const routes: Routes = [
 		DownloadComponent,
 	],
 	imports: [
-		BrowserModule,
+		BrowserModule.withServerTransition({ appId: "serverApp" }),
 		MaterialModule,
 		BrowserAnimationsModule,
 		HttpClientModule,
