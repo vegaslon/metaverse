@@ -1,7 +1,6 @@
-import { Controller, Get, Param, Query, Req, UseGuards } from "@nestjs/common";
-import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
-import { Request } from "express";
-import { MetaverseAuthGuard } from "../../auth/auth.guard";
+import { Controller, Get, Param, Query, UseGuards } from "@nestjs/common";
+import { HttpException } from "@nestjs/common/exceptions";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { OptionalAuthGuard } from "../../auth/optional.guard";
 import { CurrentUser } from "../../auth/user.decorator";
 import { pagination } from "../../common/utils";
@@ -11,14 +10,11 @@ import { HOSTNAME } from "../../environment";
 import { User } from "../../user/user.schema";
 import { UserService } from "../../user/user.service";
 import {
-	UsersConnectionsDto,
 	UsersConnectionType,
 	UsersDto,
-	UsersUser,
 	UsersLocation,
+	UsersUser,
 } from "./users.dto";
-import { HttpException } from "@nestjs/common/exceptions";
-import { UsersConnection } from "./users.dto";
 
 @ApiTags("from hifi")
 @Controller("/api/v1/users")
