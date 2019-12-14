@@ -152,6 +152,7 @@ export class UsersController {
 
 	@Get(":username/location")
 	async getUserLocation(@Param("username") username: string) {
+		username = username.toLowerCase();
 		const session = this.userService.sessions[username];
 
 		// TODO: check whether they're friends or not
