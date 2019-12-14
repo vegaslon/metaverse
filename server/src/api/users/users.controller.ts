@@ -16,6 +16,7 @@ import {
 	UsersDto,
 	UsersUser,
 } from "./users.dto";
+import { HttpException } from "@nestjs/common/exceptions";
 
 @ApiTags("from hifi")
 @Controller("/api/v1/users")
@@ -184,12 +185,15 @@ export class UsersController {
 				},
 			};
 		} else {
-			return {
-				status: "fail",
-				data: {
-					public_key: "there is no public key for that user",
+			throw new HttpException(
+				{
+					status: "fail",
+					data: {
+						public_key: "there is no public key for that user",
+					},
 				},
-			};
+				404,
+			);
 		}
 	}
 }
