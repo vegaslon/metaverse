@@ -39,22 +39,6 @@ export class DomainService implements OnModuleInit {
 		this.images = new GridFSBucket(connection.db, {
 			bucketName: "domains.thumbnails",
 		});
-
-		// TODO: delete this after pushing once!
-		this.domainModel.find({}).then(async domains => {
-			for (let domain of domains) {
-				await this.domainModel.updateOne(
-					{
-						_id: domain._id,
-					},
-					{
-						$set: {
-							networkPort: Number(domain.networkPort),
-						},
-					},
-				);
-			}
-		});
 	}
 
 	onModuleInit() {

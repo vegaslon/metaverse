@@ -211,13 +211,14 @@ export class UsersController {
 		// username is case sensetive
 		const session = this.userService.sessions[user.username];
 		if (session == null) throw NoLocation();
+		const location = session.location;
+
+		const domain = await this.domainService.findById(location.domain_id);
+		if (domain == null) throw NoLocation();
 
 		// TODO: check whether they're friends or not
 
 		if (session != null) {
-			const location = session.location;
-			const domainId = location.domain_id;
-
 			return {
 				status: "success",
 				data: {
@@ -225,14 +226,14 @@ export class UsersController {
 						path: location.path,
 						node_id: location.node_id,
 						root: {
-							id: domainId,
-							name: domainId,
+							id: domain._id,
+							name: domain._id,
 							domain: {
-								id: domainId,
-								network_address: location.network_address,
-								network_port: location.network_port,
+								id: domain._id,
+								network_address: domain.networkAddress,
+								network_port: domain.networkPort,
 								online: true,
-								default_place_name: domainId,
+								default_place_name: domain._id,
 							},
 						},
 						online: true,
