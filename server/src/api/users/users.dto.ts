@@ -63,7 +63,7 @@ export interface UsersLocation {
 					id: string;
 					network_address: string;
 					network_port: number;
-					cloud_domain: boolean;
+					cloud_domain?: boolean;
 					online: boolean;
 					default_place_name: string;
 				};

@@ -7,7 +7,7 @@ export interface Place {
 	domain: {
 		id: string;
 		network_address: string;
-		network_port: string;
+		network_port: number;
 		cloud_domain?: false; // we're not using this
 		online: boolean;
 		default_place_name: string;

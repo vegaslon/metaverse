@@ -60,8 +60,8 @@ export class UserUpdateLocation {
 	network_address?: string;
 
 	@IsOptional()
-	@Transform(n => n + "")
-	network_port?: string;
+	@Transform(n => Number(n))
+	network_port?: number;
 
 	@IsString()
 	@IsOptional()

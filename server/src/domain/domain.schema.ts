@@ -30,7 +30,7 @@ export const DomainSchema = new Schema({
 	},
 
 	networkAddress: { type: String, default: "" },
-	networkPort: { type: String, default: "40102" },
+	networkPort: { type: Number, default: 40102 },
 
 	online: { type: Boolean, default: false },
 	onlineUsers: { type: Number, default: 0 },
@@ -74,7 +74,7 @@ export interface Domain extends Document {
 	automaticNetworking: DomainAutomaticNetworking;
 
 	networkAddress: string;
-	networkPort: string;
+	networkPort: number;
 
 	online: boolean;
 	onlineUsers: number;

@@ -178,7 +178,7 @@ export class UserService implements OnModuleInit {
 					connected: false,
 					domain_id: null,
 					network_address: "",
-					network_port: "",
+					network_port: NaN,
 					node_id: null,
 					path: "",
 					place_id: null,
