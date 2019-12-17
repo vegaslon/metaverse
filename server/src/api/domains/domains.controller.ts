@@ -58,9 +58,7 @@ export class DomainsController {
 	@ApiOperation({ deprecated: true })
 	@ApiBearerAuth()
 	@UseGuards(MetaverseAuthGuard())
-	@ApiNotImplementedResponse({
-		description: "Not implemented because we're using an in-house system",
-	})
+	@ApiNotImplementedResponse({})
 	async createDomain(@CurrentUser() user: User, @Body() body: any) {
 		throw new NotImplementedException();
 
@@ -80,9 +78,7 @@ export class DomainsController {
 
 	@Post("temporary")
 	@ApiOperation({ deprecated: true })
-	@ApiNotImplementedResponse({
-		description: "Not implemented because we're using an in-house system",
-	})
+	@ApiNotImplementedResponse({})
 	async createTemporaryDomain() {
 		throw new NotImplementedException();
 	}

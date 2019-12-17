@@ -1,4 +1,9 @@
-import { Injectable, OnModuleInit, NotFoundException } from "@nestjs/common";
+import {
+	Injectable,
+	OnModuleInit,
+	NotFoundException,
+	BadRequestException,
+} from "@nestjs/common";
 import { ModuleRef } from "@nestjs/core";
 import { InjectModel, InjectConnection } from "@nestjs/mongoose";
 import { Model, Connection } from "mongoose";
@@ -50,6 +55,11 @@ export class DomainService implements OnModuleInit {
 	}
 
 	async createDomain(user: User, createDomainDto: CreateDomainDto) {
+		if (user.domains.length > 100)
+			throw new BadRequestException(
+				"You can't make more than 100 domains",
+			);
+
 		const domain = new this.domainModel({
 			_id: uuid(),
 			author: user,
