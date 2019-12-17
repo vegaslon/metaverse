@@ -45,10 +45,10 @@ export function patchDoc(doc: Object, patches: Object) {
 	patchObject(doc, patches, Object.keys((doc as any)._doc));
 }
 
-export function pagination(
+export function pagination<T>(
 	current_page: number,
 	per_page: number,
-	entries: any[],
+	entries: T[],
 ) {
 	// page 1 is the minimum
 	current_page = current_page <= 0 ? 1 : current_page;

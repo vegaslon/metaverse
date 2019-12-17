@@ -1,36 +1,42 @@
 import {
-	Injectable,
-	OnModuleInit,
 	BadRequestException,
-	NotFoundException,
 	ConflictException,
+	Injectable,
 	InternalServerErrorException,
+	NotFoundException,
+	OnModuleInit,
 } from "@nestjs/common";
 import { ModuleRef } from "@nestjs/core";
+import { JwtService } from "@nestjs/jwt";
 import { InjectConnection, InjectModel } from "@nestjs/mongoose";
 import { ObjectID } from "bson";
+import * as mailchecker from "mailchecker";
 import { GridFSBucket } from "mongodb";
 import { Connection, Model } from "mongoose";
 import fetch from "node-fetch";
 import * as sharp from "sharp";
+import { Domain } from "src/domain/domain.schema";
 import { AuthSignUpDto } from "../auth/auth.dto";
 import { derPublicKeyHeader } from "../common/der-public-key-header";
 import { heartbeat, HeartbeatSession } from "../common/heartbeat";
 import { MulterFile } from "../common/multer-file.model";
-import { patchObject, renderDomain, renderFriend } from "../common/utils";
+import {
+	pagination,
+	patchObject,
+	renderDomain,
+	renderFriend,
+} from "../common/utils";
 import { DomainService } from "../domain/domain.service";
+import { EmailService } from "../email/email.service";
 import { UserSettings } from "./user-settings.schema";
 import {
+	GetUserDomainsLikesDto,
 	UserAvailability,
 	UserUpdateLocation,
 	UserUpdateLocationDto,
-	GetUserDomainsLikesDto,
 } from "./user.dto";
 import { User } from "./user.schema";
 import uuid = require("uuid");
-import { JwtService } from "@nestjs/jwt";
-import { EmailService } from "../email/email.service";
-import * as mailchecker from "mailchecker";
 
 export interface UserSession {
 	id: string;
@@ -317,7 +323,10 @@ export class UserService implements OnModuleInit {
 			.populate({ path: "domainLikes", populate: { path: "author" } })
 			.execPopulate();
 
-		return user.domainLikes.map(domain => {
+		const domainLikes = pagination<Domain>(page, amount, user.domainLikes)
+			.data;
+
+		return domainLikes.map(domain => {
 			return renderDomain(domain, user);
 		});
 	}
