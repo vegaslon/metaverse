@@ -10,6 +10,7 @@ import {
 	UploadedFile,
 	UseGuards,
 	UseInterceptors,
+	Post,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from "@nestjs/swagger";
@@ -28,6 +29,8 @@ import {
 } from "./user.dto";
 import { User } from "./user.schema";
 import { UserService } from "./user.service";
+import { MetaverseUnverifiedAuthGuard } from "src/auth/auth-unverified.guard";
+import { HOSTNAME } from "src/environment";
 
 const defaultUserImage = fs.readFileSync(
 	path.resolve(__dirname, "../../assets/user-image.jpg"),
@@ -158,5 +161,22 @@ export class UserController {
 	@UseGuards(MetaverseAuthGuard())
 	getFriends(@CurrentUser() user: User) {
 		return this.userService.getFriends(user);
+	}
+
+	@Post("verify")
+	@ApiBearerAuth()
+	@UseGuards(MetaverseUnverifiedAuthGuard())
+	sendVerify(@CurrentUser() user: User, @Body("email") email: string) {
+		return this.userService.sendVerify(user, email);
+	}
+
+	@Get("verify/:verifyString")
+	verifyUser(
+		@Param("verifyString") verifyString: string,
+		@Res() res: Response,
+	) {
+		this.userService.verifyUser(verifyString).then(() => {
+			res.redirect(HOSTNAME + "?emailVerified");
+		});
 	}
 }

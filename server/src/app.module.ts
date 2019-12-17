@@ -1,4 +1,5 @@
 import { Module } from "@nestjs/common";
+import { JwtModule, JwtService } from "@nestjs/jwt";
 import { MongooseModule } from "@nestjs/mongoose";
 import { AngularUniversalModule } from "@nestjs/ng-universal";
 import * as domino from "domino";
@@ -12,7 +13,15 @@ import { ApiUserModule } from "./api/user/user.module";
 import { ApiUsersModule } from "./api/users/users.module";
 import { AuthModule } from "./auth/auth.module";
 import { DomainModule } from "./domain/domain.module";
-import { DB_HOST, DB_NAME, DB_PASS, DB_USER, DEV } from "./environment";
+import { EmailModule } from "./email/email.module";
+import {
+	DB_HOST,
+	DB_NAME,
+	DB_PASS,
+	DB_USER,
+	DEV,
+	JWT_SECRET,
+} from "./environment";
 import { UserModule } from "./user/user.module";
 import { VideoStreamModule } from "./video-stream/video-stream.module";
 
@@ -57,6 +66,7 @@ global["localStorage"] = {
 						liveReload: false,
 					}),
 			  ]),
+		EmailModule,
 
 		AuthModule,
 		UserModule,
@@ -75,6 +85,4 @@ global["localStorage"] = {
 	providers: [],
 	controllers: [],
 })
-export class AppModule {
-	constructor() {}
-}
+export class AppModule {}

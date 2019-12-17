@@ -4,6 +4,7 @@
 		"start": "rimraf dist && cross-env DEV=true nest start --watch"
 	},
 	"dependencies": {
+		"@nest-modules/mailer": "^1.1.3",
 		"@nestjs/common": "^6.10.7",
 		"@nestjs/core": "^6.10.7",
 		"@nestjs/jwt": "^6.1.1",
@@ -22,6 +23,7 @@
 		"domino": "^2.1.3",
 		"escape-string-regexp": "^2.0.0",
 		"helmet": "^3.21.2",
+		"mailchecker": "^3.3.3",
 		"mongo-gridfs": "^1.1.0",
 		"mongoose": "^5.7.13",
 		"node-fetch": "^2.6.0",

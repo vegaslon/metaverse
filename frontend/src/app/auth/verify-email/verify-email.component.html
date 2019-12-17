@@ -1,0 +1,80 @@
+<ng-container *ngIf="!isVerified">
+	<ng-container *ngIf="!isSent">
+		<h2 style="margin-top: 0;">Verify your email to continue</h2>
+		<p>
+			We will send you an email with a button to verify your account. You
+			may change your email below if you don't have access to it anymore.
+		</p>
+		<mat-card
+			*ngIf="error"
+			class="bg-warn"
+			style="
+			margin-bottom: 16px; color: #fff;
+			display: flex; vertical-align: middle;
+		"
+		>
+			<mat-icon style="margin-top: -3px; margin-right: 8px;">
+				error_outline
+			</mat-icon>
+			{{ error }}
+		</mat-card>
+		<form [formGroup]="emailForm" (ngSubmit)="onSendEmail()">
+			<mat-form-field style="width: 100%;">
+				<input
+					matInput
+					required
+					type="email"
+					formControlName="email"
+					placeholder="Email"
+				/>
+			</mat-form-field>
+			<div class="buttons">
+				<button mat-flat-button type="button" (click)="onLogout()">
+					Logout
+				</button>
+				<button
+					mat-flat-button
+					type="submit"
+					color="primary"
+					[disabled]="emailForm.invalid || isLoading"
+				>
+					<mat-icon>send</mat-icon> Send email!
+				</button>
+			</div>
+		</form>
+		<div *ngIf="isLoading">
+			<br />
+			<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+		</div>
+	</ng-container>
+	<ng-container *ngIf="isSent">
+		<h2 style="margin-top:0;">Your email has been sent!</h2>
+		<p>
+			Please check <b>{{ emailForm.value.email }}</b> for a verification
+			email. Make sure you check spam if you can't find it.
+		</p>
+		<div class="buttons">
+			<a
+				mat-flat-button
+				color="primary"
+				[href]="'http://' + getEmailDomain()"
+			>
+				<mat-icon>email</mat-icon> Visit {{ getEmailDomain() }}
+			</a>
+		</div>
+	</ng-container>
+</ng-container>
+<ng-container *ngIf="isVerified">
+	<h2 style="margin-top: 0; display: flex; align-items: center;">
+		<mat-icon style="margin-right: 8px;">
+			verified_user
+		</mat-icon>
+		Your email has been verified!
+	</h2>
+	<p>You may now use Tivoli! Feel free to download our launcher.</p>
+	<div class="buttons">
+		<button mat-flat-button color="primary" (click)="onClose()">
+			Dismiss
+		</button>
+	</div>
+</ng-container>

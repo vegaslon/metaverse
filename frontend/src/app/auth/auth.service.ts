@@ -8,6 +8,8 @@ import { Router } from "@angular/router";
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { BehaviorSubject, Observable, throwError } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
+import { MatDialog } from "@angular/material/dialog";
+import { VerifyEmailComponent } from "./verify-email/verify-email.component";
 
 export interface AuthToken {
 	access_token: string;
@@ -18,13 +20,19 @@ export interface AuthToken {
 	token_type: "Bearer";
 }
 
+export interface UserProfile {
+	id: string;
+	username: string;
+	email: string;
+	emailVerified: boolean;
+	minutes: number;
+}
+
 export class User {
 	constructor(
-		public id: string,
-		public username: string,
-		public email: string,
-		public admin: boolean,
 		public token: AuthToken,
+		public profile: UserProfile,
+		public admin: boolean,
 	) {}
 }
 
@@ -37,7 +45,11 @@ export class AuthService {
 	private tokenExpirationTimer: any;
 	private jwtHelper = new JwtHelperService();
 
-	constructor(private http: HttpClient, private router: Router) {}
+	constructor(
+		private http: HttpClient,
+		private router: Router,
+		private dialog: MatDialog,
+	) {}
 
 	private handleError = (err: HttpErrorResponse): Observable<never> => {
 		//console.log(err);
@@ -45,6 +57,26 @@ export class AuthService {
 		if (err.status == 401)
 			return throwError("Invalid username and password");
 	};
+
+	openEmailVerifyDialog(verified = false) {
+		this.dialog.open(VerifyEmailComponent, {
+			width: "400px",
+			disableClose: !verified,
+			data: verified,
+		});
+	}
+
+	sendEmailVerify(email: string) {
+		return this.http
+			.post<string>("/api/user/verify", {
+				email,
+			})
+			.pipe(
+				catchError(err => {
+					return throwError(err.error.message);
+				}),
+			);
+	}
 
 	handleAuthentication = (token: AuthToken) => {
 		const jwt = token.access_token;
@@ -56,10 +88,7 @@ export class AuthService {
 			.get<{
 				status: boolean;
 				data: {
-					user: {
-						id: string;
-						username: string;
-						email: string;
+					user: UserProfile & {
 						roles: string[];
 					};
 				};
@@ -70,11 +99,13 @@ export class AuthService {
 				}),
 			})
 			.subscribe(
-				profile => {
-					const { id, username, email, roles } = profile.data.user;
-					const admin = roles.includes("admin");
+				res => {
+					const profile = res.data.user;
+					const admin = profile.roles.includes("admin");
 
-					const user = new User(id, username, email, admin, token);
+					const user = new User(token, profile, admin);
+					if (profile.emailVerified == false)
+						this.openEmailVerifyDialog();
 
 					const payload = this.jwtHelper.decodeToken(jwt);
 					const msTillExpire =

@@ -18,7 +18,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 	updateUserImage() {
 		if (this.user == null) return;
 		this.userImageSrc =
-			"/api/user/" + this.user.username + "/image?" + +new Date();
+			"/api/user/" + this.user.profile.username + "/image?" + +new Date();
 	}
 
 	constructor(
@@ -30,7 +30,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 			this.user = user;
 			this.updateUserImage();
 
-			this.userForm.controls.email.setValue(this.user.email);
+			this.userForm.controls.email.setValue(this.user.profile.email);
 		});
 	}
 

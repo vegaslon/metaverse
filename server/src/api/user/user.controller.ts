@@ -8,7 +8,8 @@ import {
 	UseInterceptors,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { ApiBearerAuth, ApiTags, ApiOperation } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
+import { MetaverseUnverifiedAuthGuard } from "../../auth/auth-unverified.guard";
 import { MetaverseAuthGuard } from "../../auth/auth.guard";
 import { CurrentUser } from "../../auth/user.decorator";
 import { MulterFile } from "../../common/multer-file.model";
@@ -23,7 +24,7 @@ export class UserController {
 	constructor(private userService: UserService) {}
 
 	@Get("profile")
-	@UseGuards(MetaverseAuthGuard())
+	@UseGuards(MetaverseUnverifiedAuthGuard())
 	getProfile(@CurrentUser() user: User) {
 		let roles = [];
 		if (user.admin) roles.push("admin");
@@ -37,6 +38,7 @@ export class UserController {
 					// not part of hifi
 					id: user._id,
 					email: user.email,
+					emailVerified: user.emailVerified,
 					minutes: user.minutes,
 				},
 			},

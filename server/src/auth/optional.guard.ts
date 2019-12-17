@@ -1,5 +1,6 @@
 import { mixin, UnauthorizedException } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
+import { User } from "../user/user.schema";
 
 // function notAuthorized() {
 // 	throw new HttpException(
@@ -17,6 +18,7 @@ export function OptionalAuthGuard() {
 			handleRequest(err, user, info, context) {
 				if (err) throw new UnauthorizedException();
 				if (user == false) return null;
+				if ((user as User).emailVerified == false) return null;
 				return user;
 			}
 		},

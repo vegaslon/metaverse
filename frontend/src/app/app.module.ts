@@ -14,6 +14,7 @@ import { HeaderComponent } from "./header/header.component";
 import { SignInComponent } from "./header/sign-in/sign-in.component";
 import { HomeComponent } from "./home/home.component";
 import { MaterialModule } from "./material.module";
+import { VerifyEmailComponent } from "./auth/verify-email/verify-email.component";
 
 const routes: Routes = [
 	{ path: "", component: HomeComponent },
@@ -51,6 +52,7 @@ const routes: Routes = [
 		SignInComponent,
 		HomeComponent,
 		DownloadComponent,
+		VerifyEmailComponent,
 	],
 	imports: [
 		BrowserModule.withServerTransition({ appId: "serverApp" }),
@@ -73,6 +75,6 @@ const routes: Routes = [
 		},
 	],
 	bootstrap: [AppComponent],
-	entryComponents: [SignInComponent, DownloadComponent],
+	entryComponents: [SignInComponent, DownloadComponent, VerifyEmailComponent],
 })
 export class AppModule {}

@@ -1,4 +1,11 @@
-import { Injectable, OnModuleInit } from "@nestjs/common";
+import {
+	Injectable,
+	OnModuleInit,
+	BadRequestException,
+	NotFoundException,
+	ConflictException,
+	InternalServerErrorException,
+} from "@nestjs/common";
 import { ModuleRef } from "@nestjs/core";
 import { InjectConnection, InjectModel } from "@nestjs/mongoose";
 import { ObjectID } from "bson";
@@ -21,6 +28,9 @@ import {
 } from "./user.dto";
 import { User } from "./user.schema";
 import uuid = require("uuid");
+import { JwtService } from "@nestjs/jwt";
+import { EmailService } from "../email/email.service";
+import * as mailchecker from "mailchecker";
 
 export interface UserSession {
 	id: string;
@@ -43,6 +53,9 @@ export class UserService implements OnModuleInit {
 		private readonly userSettingsModel: Model<UserSettings>,
 
 		@InjectConnection() private connection: Connection,
+
+		private readonly jwtService: JwtService,
+		private readonly emailService: EmailService,
 
 		private moduleRef: ModuleRef,
 	) {
@@ -102,10 +115,15 @@ export class UserService implements OnModuleInit {
 		});
 	}
 
-	async createUser(authSignUpDto: AuthSignUpDto, hash: string) {
+	async createUser(
+		authSignUpDto: AuthSignUpDto,
+		hash: string,
+		emailVerify = false,
+	) {
 		return await new this.userModel({
 			username: authSignUpDto.username,
 			email: authSignUpDto.email,
+			emailVerify,
 			hash,
 		}).save();
 	}
@@ -316,5 +334,50 @@ export class UserService implements OnModuleInit {
 			);
 		}
 		return friends;
+	}
+
+	async sendVerify(user: User, email: string) {
+		if (email == null) throw new BadRequestException();
+
+		if (!mailchecker.isValid(email))
+			throw new BadRequestException("Invalid email address");
+
+		if (user.email != email)
+			if ((await this.findByEmail(email)) != null)
+				throw new ConflictException("Email already exists");
+
+		const verifyString = this.jwtService.sign(
+			{
+				id: user.id,
+				email: email,
+			},
+			{
+				expiresIn: "1d",
+			},
+		);
+
+		try {
+			this.emailService.sendUserVerify(user, verifyString);
+		} catch (err) {
+			throw new InternalServerErrorException();
+		}
+	}
+
+	async verifyUser(verifyString: string) {
+		const { id, email } = this.jwtService.verify(verifyString); // will throw if invalid
+
+		if (id == null) throw new BadRequestException();
+		if (email == null) throw new BadRequestException();
+
+		const user = await this.findById(id);
+		if (user == null) throw new NotFoundException();
+
+		if (user.email != email)
+			if ((await this.findByEmail(email)) != null)
+				throw new ConflictException("Email already exists");
+
+		user.email = email;
+		user.emailVerified = true;
+		await user.save();
 	}
 }

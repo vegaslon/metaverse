@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { NavigationEnd, Router, ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { AuthService } from "./auth/auth.service";
 
 @Component({
@@ -16,10 +16,15 @@ export class AppComponent implements OnInit {
 	) {}
 
 	ngOnInit() {
-		this.route.queryParams.subscribe(querys => {
-			if (querys.noHeader != null) {
+		this.route.queryParams.subscribe(query => {
+			if (query.noHeader != null) {
 				this.showHeader = false;
 			}
+			if (query.emailVerified != null) {
+				this.authService.openEmailVerifyDialog(true);
+			}
+			if (Object.keys(query).length > 0)
+				this.router.navigate(["."], { relativeTo: this.route });
 		});
 
 		this.authService.autoLogin();

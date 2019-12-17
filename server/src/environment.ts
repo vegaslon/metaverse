@@ -4,6 +4,10 @@ export const {
 	DB_PASS = "",
 	DB_NAME = "metaverse",
 
+	EMAIL_USER = "",
+	EMAIL_PASS = "",
+	EMAIL_NAME = "",
+
 	JWT_SECRET = "thisIsSoVerySecretyou literally have no idealol1610239012",
 
 	HOSTNAME = "http://127.0.0.1:3000",
