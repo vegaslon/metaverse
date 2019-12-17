@@ -46,7 +46,9 @@ export class UserController {
 	}
 
 	@Get("locker")
-	@ApiOperation({ deprecated: true })
+	@ApiOperation({
+		summary: "Doesn't do anything and I don't know what it's purpose is",
+	})
 	@UseGuards(MetaverseAuthGuard())
 	getLocker(@CurrentUser() user: User) {
 		return {
@@ -69,7 +71,10 @@ export class UserController {
 	}
 
 	@Get("friends")
-	@ApiOperation({ deprecated: true })
+	@ApiOperation({
+		summary:
+			"Required for the domain server I think. Currently not implmented ",
+	})
 	@UseGuards(MetaverseAuthGuard())
 	getFriends(@CurrentUser() user) {
 		return {

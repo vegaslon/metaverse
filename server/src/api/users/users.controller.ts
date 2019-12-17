@@ -99,6 +99,9 @@ export class UsersController {
 	}
 
 	@Get()
+	@ApiOperation({
+		summary: "Gets all users in an online domain",
+	})
 	@ApiBearerAuth()
 	@UseGuards(OptionalAuthGuard())
 	async getUsers(
@@ -129,44 +132,44 @@ export class UsersController {
 		};
 	}
 
-	@Get("connections")
-	@ApiOperation({ deprecated: true })
-	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard())
-	async getConnections(@Query() connectionsDto: UsersConnectionsDto) {
-		const { per_page, page, sort } = connectionsDto;
+	// @Get("connections")
+	// @ApiOperation({ deprecated: true })
+	// @ApiBearerAuth()
+	// @UseGuards(MetaverseAuthGuard())
+	// async getConnections(@Query() connectionsDto: UsersConnectionsDto) {
+	// 	const { per_page, page, sort } = connectionsDto;
 
-		const usernames = Object.keys(this.userService.sessions);
-		const sessions = Object.values(this.userService.sessions);
+	// 	const usernames = Object.keys(this.userService.sessions);
+	// 	const sessions = Object.values(this.userService.sessions);
 
-		const users = sessions.map((session, i) => {
-			const username = usernames[i];
+	// 	const users = sessions.map((session, i) => {
+	// 		const username = usernames[i];
 
-			return {
-				username,
-				online: true,
-				connection: UsersConnectionType.connection,
-				location: {
-					root: {
-						name: session.location.domain_id,
-					},
-				},
-				images: {
-					thumbnail: HOSTNAME + "/api/user/" + username + "/image",
-				},
-			} as UsersConnection;
-		});
+	// 		return {
+	// 			username,
+	// 			online: true,
+	// 			connection: UsersConnectionType.connection,
+	// 			location: {
+	// 				root: {
+	// 					name: session.location.domain_id,
+	// 				},
+	// 			},
+	// 			images: {
+	// 				thumbnail: HOSTNAME + "/api/user/" + username + "/image",
+	// 			},
+	// 		} as UsersConnection;
+	// 	});
 
-		const sliced = pagination(page, per_page, users);
+	// 	const sliced = pagination(page, per_page, users);
 
-		return {
-			status: "success",
-			...sliced.info,
-			data: {
-				users: sliced.data,
-			},
-		};
-	}
+	// 	return {
+	// 		status: "success",
+	// 		...sliced.info,
+	// 		data: {
+	// 			users: sliced.data,
+	// 		},
+	// 	};
+	// }
 
 	@Get(":username/public_key")
 	async getPublicKey(@Param("username") username: string) {

@@ -4,31 +4,21 @@ import {
 	ForbiddenException,
 	Get,
 	NotFoundException,
-	NotImplementedException,
 	Param,
-	Post,
 	Put,
 	UploadedFile,
 	UseGuards,
 	UseInterceptors,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
-import {
-	ApiBearerAuth,
-	ApiNotImplementedResponse,
-	ApiOperation,
-	ApiTags,
-} from "@nestjs/swagger";
-import { MetaverseAuthGuard } from "../../auth/auth.guard";
+import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { CurrentDomain } from "../../auth/domain.decorator";
 import { DomainAuthGuard } from "../../auth/domain.guard";
-import { CurrentUser } from "../../auth/user.decorator";
 import { MulterFile } from "../../common/multer-file.model";
 import { renderDomainForHifi } from "../../common/utils";
 import { UpdateDomainDto } from "../../domain/domain.dto";
 import { Domain } from "../../domain/domain.schema";
 import { DomainService } from "../../domain/domain.service";
-import { User } from "../../user/user.schema";
 
 @ApiTags("from hifi")
 @Controller("api/v1/domains")
@@ -36,6 +26,9 @@ export class DomainsController {
 	constructor(private domainService: DomainService) {}
 
 	@Get()
+	@ApiOperation({
+		summary: "Retrieves the domain from the domain token",
+	})
 	@ApiBearerAuth()
 	@UseGuards(DomainAuthGuard())
 	async getDomains(@CurrentDomain() domain: Domain) {
@@ -52,35 +45,6 @@ export class DomainsController {
 				domains: [renderDomainForHifi(domain)],
 			},
 		};
-	}
-
-	@Post()
-	@ApiOperation({ deprecated: true })
-	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard())
-	@ApiNotImplementedResponse({})
-	async createDomain(@CurrentUser() user: User, @Body() body: any) {
-		throw new NotImplementedException();
-
-		// if (body == null) throw new BadRequestException();
-		// if (body.domain == null) throw new BadRequestException();
-		// if (body.domain.label == null) throw new BadRequestException();
-
-		// const domain = await this.domainService.createDomain(user, {
-		// 	label: body.domain.label,
-		// });
-
-		// return {
-		// 	status: "success",
-		// 	domain: renderDomainForHifi(domain, null),
-		// };
-	}
-
-	@Post("temporary")
-	@ApiOperation({ deprecated: true })
-	@ApiNotImplementedResponse({})
-	async createTemporaryDomain() {
-		throw new NotImplementedException();
 	}
 
 	@Put(":id")
@@ -164,7 +128,9 @@ export class DomainsController {
 		}
 	}
 
+	// TODO: is this necessary anymore?
 	@Get(":id")
+	@ApiOperation({ deprecated: true })
 	async getDomain(@Param("id") id: string) {
 		const domain = await this.domainService.findById(id);
 		if (domain == null) {
