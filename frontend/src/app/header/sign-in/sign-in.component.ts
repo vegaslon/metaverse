@@ -129,9 +129,7 @@ export class SignInComponent implements OnInit {
 
 	onSignInExt(serviceName: string) {
 		const authWindow = window.open(
-			(environment.production ? "" : "http://127.0.0.1:3000") +
-				"/api/auth/" +
-				serviceName,
+			window.location.origin + "/api/auth/" + serviceName,
 			"",
 			"toolbar=no,menubar=no,width=500,height=600",
 		);

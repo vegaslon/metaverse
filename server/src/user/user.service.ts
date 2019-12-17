@@ -118,12 +118,12 @@ export class UserService implements OnModuleInit {
 	async createUser(
 		authSignUpDto: AuthSignUpDto,
 		hash: string,
-		emailVerify = false,
+		emailVerified = false,
 	) {
 		return await new this.userModel({
 			username: authSignUpDto.username,
 			email: authSignUpDto.email,
-			emailVerify,
+			emailVerified,
 			hash,
 		}).save();
 	}
