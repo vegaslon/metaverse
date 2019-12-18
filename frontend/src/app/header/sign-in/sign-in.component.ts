@@ -1,6 +1,12 @@
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import {
+	Component,
+	ElementRef,
+	OnInit,
+	ViewChild,
+	Inject,
+} from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { MatDialogRef } from "@angular/material/dialog";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { RecaptchaComponent } from "ng-recaptcha";
 import { environment } from "../../../environments/environment";
 import { AuthService, AuthToken } from "../../auth/auth.service";
@@ -30,7 +36,15 @@ export class SignInComponent implements OnInit {
 	constructor(
 		public dialogRef: MatDialogRef<SignInComponent>,
 		private authService: AuthService,
-	) {}
+		@Inject(MAT_DIALOG_DATA)
+		private data: { mode: "signIn" | "signUp" | "extSignUp" },
+	) {
+		if (data != null) {
+			if (data.mode != null) {
+				this.mode = data.mode;
+			}
+		}
+	}
 
 	usernameValidator(control: FormControl): { [s: string]: boolean } | null {
 		let value: string = control.value + "";

@@ -78,48 +78,54 @@ export class AuthService {
 			);
 	}
 
+	getUserProfile = (jwt: string) => {
+		return this.http.get<{
+			status: boolean;
+			statusCode?: 401; // unauthorized
+			data: {
+				user: UserProfile & {
+					roles: string[];
+				};
+			};
+		}>("/api/v1/user/profile", {
+			headers: new HttpHeaders({
+				// user isnt available yet in the auth interceptor
+				Authorization: "Bearer " + jwt,
+			}),
+		});
+	};
+
 	handleAuthentication = (token: AuthToken) => {
 		const jwt = token.access_token;
 
 		if (this.jwtHelper.isTokenExpired(jwt))
 			return throwError("Token expired");
 
-		const sub = this.http
-			.get<{
-				status: boolean;
-				data: {
-					user: UserProfile & {
-						roles: string[];
-					};
-				};
-			}>("/api/v1/user/profile", {
-				headers: new HttpHeaders({
-					// user isnt available yet in the auth interceptor
-					Authorization: "Bearer " + jwt,
-				}),
-			})
-			.subscribe(
-				res => {
-					const profile = res.data.user;
-					const admin = profile.roles.includes("admin");
+		const sub = this.getUserProfile(jwt).subscribe(
+			res => {
+				if (res.statusCode == 401) {
+					return;
+				}
+				const profile = res.data.user;
+				const admin = profile.roles.includes("admin");
 
-					const user = new User(token, profile, admin);
-					if (profile.emailVerified == false)
-						this.openEmailVerifyDialog();
+				const user = new User(token, profile, admin);
+				if (profile.emailVerified == false)
+					this.openEmailVerifyDialog();
 
-					const payload = this.jwtHelper.decodeToken(jwt);
-					const msTillExpire =
-						+new Date(payload.exp * 1000) - +new Date();
+				const payload = this.jwtHelper.decodeToken(jwt);
+				const msTillExpire =
+					+new Date(payload.exp * 1000) - +new Date();
 
-					this.autoLogout(msTillExpire);
-					this.user.next(user);
-					localStorage.setItem("auth", JSON.stringify(token));
-				},
-				() => {},
-				() => {
-					sub.unsubscribe();
-				},
-			);
+				this.autoLogout(msTillExpire);
+				this.user.next(user);
+				localStorage.setItem("auth", JSON.stringify(token));
+			},
+			() => {},
+			() => {
+				sub.unsubscribe();
+			},
+		);
 	};
 
 	signIn(signInDto: { username: string; password: string }) {
@@ -156,6 +162,7 @@ export class AuthService {
 	}
 
 	logout() {
+		console.log("LGOGGING OUT");
 		this.user.next(null);
 		this.router.navigate(["/"]);
 		localStorage.removeItem("auth");

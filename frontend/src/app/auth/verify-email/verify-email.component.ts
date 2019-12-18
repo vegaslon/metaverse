@@ -21,9 +21,7 @@ export class VerifyEmailComponent implements OnInit {
 		private authService: AuthService,
 		private dialogRef: MatDialogRef<VerifyEmailComponent>,
 		@Inject(MAT_DIALOG_DATA) public isVerified: boolean,
-	) {
-		console.log(isVerified);
-	}
+	) {}
 
 	ngOnInit() {
 		this.authService.user.subscribe(user => {
