@@ -171,12 +171,19 @@ export class UserController {
 	}
 
 	@Get("verify/:verifyString")
-	verifyUser(
+	async verifyUser(
 		@Param("verifyString") verifyString: string,
 		@Res() res: Response,
 	) {
-		this.userService.verifyUser(verifyString).then(() => {
-			res.redirect(HOSTNAME + "?emailVerified");
-		});
+		const { user, justVerified } = await this.userService.verifyUser(
+			verifyString,
+		);
+
+		res.redirect(
+			HOSTNAME +
+				(justVerified
+					? "?emailVerified&token=" + this.authService.login(user)
+					: ""),
+		);
 	}
 }

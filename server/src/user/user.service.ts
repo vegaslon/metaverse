@@ -5,6 +5,7 @@ import {
 	InternalServerErrorException,
 	NotFoundException,
 	OnModuleInit,
+	ImATeapotException,
 } from "@nestjs/common";
 import { ModuleRef } from "@nestjs/core";
 import { JwtService } from "@nestjs/jwt";
@@ -380,6 +381,7 @@ export class UserService implements OnModuleInit {
 
 		const user = await this.findById(id);
 		if (user == null) throw new NotFoundException();
+		if (user.emailVerified) return { user, justVerified: false };
 
 		if (user.email != email)
 			if ((await this.findByEmail(email)) != null)
@@ -388,5 +390,6 @@ export class UserService implements OnModuleInit {
 		user.email = email;
 		user.emailVerified = true;
 		await user.save();
+		return { user, justVerified: true };
 	}
 }

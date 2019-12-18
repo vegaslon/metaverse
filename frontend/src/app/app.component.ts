@@ -36,6 +36,8 @@ export class AppComponent implements OnInit {
 
 		if (query.get("token") != null) {
 			isQuery = true;
+			autoLogin = false;
+
 			this.authService.handleAuthentication({
 				access_token: query.get("token"),
 				created_at: 0,
