@@ -179,11 +179,10 @@ export class UserController {
 			verifyString,
 		);
 
+		const token = this.authService.login(user).access_token;
+
 		res.redirect(
-			HOSTNAME +
-				(justVerified
-					? "?emailVerified&token=" + this.authService.login(user)
-					: ""),
+			HOSTNAME + (justVerified ? "?emailVerified&token=" + token : ""),
 		);
 	}
 }
