@@ -1,4 +1,4 @@
-import { HOSTNAME } from "src/environment";
+import { HOSTNAME } from "../environment";
 import { Domain } from "../domain/domain.schema";
 import { DomainService } from "../domain/domain.service";
 import { User } from "../user/user.schema";
@@ -39,6 +39,8 @@ export function patchObject(object: Object, patches: Object, keys?: string[]) {
 		if (!objectKeys.includes(key)) continue;
 		object[key] = patches[key];
 	}
+
+	return object;
 }
 
 export function patchDoc(doc: Object, patches: Object) {

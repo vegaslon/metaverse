@@ -1,9 +1,8 @@
 import { HandlebarsAdapter, MailerModule } from "@nest-modules/mailer";
 import { Module } from "@nestjs/common";
-import { EmailService } from "./email.service";
-import { EMAIL_USER, EMAIL_PASS, EMAIL_NAME } from "src/environment";
 import * as path from "path";
-import { UserModule } from "../user/user.module";
+import { EMAIL_NAME, EMAIL_PASS, EMAIL_USER } from "../environment";
+import { EmailService } from "./email.service";
 
 @Module({
 	imports: [

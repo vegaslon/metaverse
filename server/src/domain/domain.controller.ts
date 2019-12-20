@@ -19,7 +19,7 @@ import { User } from "../user/user.schema";
 import { DomainService } from "./domain.service";
 import { GetDomainsDto } from "./domain.dto";
 import { renderDomain } from "../common/utils";
-import { MetaverseAuthGuard } from "src/auth/auth.guard";
+import { MetaverseAuthGuard } from "../auth/auth.guard";
 
 const defaultDomainImage = fs.readFileSync(
 	path.resolve(__dirname, "../../assets/domain-image.jpg"),

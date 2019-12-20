@@ -29,8 +29,8 @@ import {
 } from "./user.dto";
 import { User } from "./user.schema";
 import { UserService } from "./user.service";
-import { MetaverseUnverifiedAuthGuard } from "src/auth/auth-unverified.guard";
-import { HOSTNAME } from "src/environment";
+import { MetaverseUnverifiedAuthGuard } from "../auth/auth-unverified.guard";
+import { HOSTNAME } from "../environment";
 
 const defaultUserImage = fs.readFileSync(
 	path.resolve(__dirname, "../../assets/user-image.jpg"),

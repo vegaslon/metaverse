@@ -5,7 +5,6 @@ import {
 	InternalServerErrorException,
 	NotFoundException,
 	OnModuleInit,
-	ImATeapotException,
 } from "@nestjs/common";
 import { ModuleRef } from "@nestjs/core";
 import { JwtService } from "@nestjs/jwt";
@@ -16,7 +15,7 @@ import { GridFSBucket } from "mongodb";
 import { Connection, Model } from "mongoose";
 import fetch from "node-fetch";
 import * as sharp from "sharp";
-import { Domain } from "src/domain/domain.schema";
+import { Domain } from "../domain/domain.schema";
 import { AuthSignUpDto } from "../auth/auth.dto";
 import { derPublicKeyHeader } from "../common/der-public-key-header";
 import { heartbeat, HeartbeatSession } from "../common/heartbeat";
