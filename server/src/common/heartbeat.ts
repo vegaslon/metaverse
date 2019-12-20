@@ -31,7 +31,7 @@ export function heartbeat<T>(
 		}
 
 		return sessions[id];
-	} else if (sessions[id] != null) {
+	} else {
 		// reset timer back to timeout
 		const oldTimer = sessions[id]._timer;
 		clearTimeout(oldTimer);
@@ -40,8 +40,6 @@ export function heartbeat<T>(
 			destroy();
 		}, timeout);
 
-		return sessions[id];
-	} else {
 		return sessions[id];
 	}
 }

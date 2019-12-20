@@ -1,3 +1,4 @@
+import { patchDoc } from "./utils";
 import {
 	snakeToCamelCase,
 	snakeToCamelCaseObject,
@@ -65,6 +66,28 @@ describe("utils", () => {
 			ipAddress: "2.2.2.2",
 			ipPort: 1234,
 			domainName: "Domain",
+		});
+	});
+
+	it("should patch a mongo doc with an object", () => {
+		const doc = {
+			ipAddress: "1.1.1.1",
+			ipPort: 1234,
+			domainName: "Domain",
+			_doc: null,
+		};
+		doc._doc = doc;
+
+		expect(
+			patchDoc(doc, {
+				ipAddress: "2.2.2.2",
+				notHere: false,
+			}),
+		).toEqual({
+			ipAddress: "2.2.2.2",
+			ipPort: 1234,
+			domainName: "Domain",
+			_doc: doc, // unchanged from patch
 		});
 	});
 

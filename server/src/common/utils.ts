@@ -45,6 +45,7 @@ export function patchObject(object: Object, patches: Object, keys?: string[]) {
 
 export function patchDoc(doc: Object, patches: Object) {
 	patchObject(doc, patches, Object.keys((doc as any)._doc));
+	return doc;
 }
 
 export function pagination<T>(

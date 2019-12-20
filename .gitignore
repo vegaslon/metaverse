@@ -5,6 +5,7 @@ frontend/dist
 
 server/dist
 server/ecosystem.config.js
+server/coverage
 
 docker/docker-compose.yml
 docker/db

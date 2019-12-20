@@ -3,7 +3,8 @@
 		"build": "npm run test && rimraf dist && nest build",
 		"start": "rimraf dist && cross-env DEV=true nest start --watch",
 		"test": "jest",
-		"test:watch": "jest --watch"
+		"test:watch": "jest --watch",
+		"test:cov": "jest --coverage"
 	},
 	"dependencies": {
 		"@nest-modules/mailer": "^1.1.3",
