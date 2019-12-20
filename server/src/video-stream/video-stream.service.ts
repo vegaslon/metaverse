@@ -41,6 +41,7 @@ export class VideoStreamService {
 	addClient(socket: Socket, host: VideoStreamHost) {
 		const client = { socket, host };
 		this.clients.push(client);
+		host.clients.push(client);
 		return client;
 	}
 
