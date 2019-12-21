@@ -2,7 +2,6 @@ import { ValidationPipe } from "@nestjs/common";
 import { HttpAdapterHost, NestFactory } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
-import * as compression from "compression";
 import { Request, Response } from "express";
 import * as helmet from "helmet";
 import * as path from "path";
@@ -56,7 +55,10 @@ async function bootstrap() {
 		app.enableCors();
 	}
 
-	app.use(helmet(), compression());
+	app.use(
+		helmet(),
+		//compression()
+	);
 
 	app.useGlobalPipes(
 		new ValidationPipe({

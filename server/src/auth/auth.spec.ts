@@ -1,12 +1,9 @@
-import { getConnectionToken } from "@nestjs/mongoose";
+import { JwtModule, JwtService } from "@nestjs/jwt";
 import { Test } from "@nestjs/testing";
 import * as bcrypt from "bcrypt";
-import { AuthModule } from "./auth.module";
-import { AuthService } from "./auth.service";
-import { DomainModule } from "../domain/domain.module";
-import { JwtModule, JwtService } from "@nestjs/jwt";
 import { JWT_SECRET } from "../environment";
-import { UserService } from "src/user/user.service";
+import { UserService } from "../user/user.service";
+import { AuthService } from "./auth.service";
 
 describe("AuthService", () => {
 	let authService: AuthService;

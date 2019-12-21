@@ -1,5 +1,4 @@
 import { Module } from "@nestjs/common";
-import { JwtModule, JwtService } from "@nestjs/jwt";
 import { MongooseModule } from "@nestjs/mongoose";
 import { AngularUniversalModule } from "@nestjs/ng-universal";
 import * as domino from "domino";
@@ -14,30 +13,25 @@ import { ApiUsersModule } from "./api/users/users.module";
 import { AuthModule } from "./auth/auth.module";
 import { DomainModule } from "./domain/domain.module";
 import { EmailModule } from "./email/email.module";
-import {
-	DB_HOST,
-	DB_NAME,
-	DB_PASS,
-	DB_USER,
-	DEV,
-	JWT_SECRET,
-} from "./environment";
+import { DB_HOST, DB_NAME, DB_PASS, DB_USER, DEV } from "./environment";
 import { UserModule } from "./user/user.module";
 import { VideoStreamModule } from "./video-stream/video-stream.module";
 
 // angular ssr issue https://github.com/akveo/nebular/issues/2008
-const template = fs.readFileSync(
-	path.resolve(__dirname, "../../frontend/dist/browser/index.html"),
-	"utf8",
-);
-const win = domino.createWindow(template);
-global["window"] = win;
-global["navigator"] = win.navigator;
-global["document"] = win.document;
-global["localStorage"] = {
-	...win.localStorage,
-	...{ getItem: () => {}, setItem: () => {} },
-};
+if (!DEV) {
+	const template = fs.readFileSync(
+		path.resolve(__dirname, "../../frontend/dist/browser/index.html"),
+		"utf8",
+	);
+	const win = domino.createWindow(template);
+	global["window"] = win;
+	global["navigator"] = win.navigator;
+	global["document"] = win.document;
+	global["localStorage"] = {
+		...win.localStorage,
+		...{ getItem: () => {}, setItem: () => {} },
+	};
+}
 
 @Module({
 	imports: [
