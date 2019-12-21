@@ -187,7 +187,7 @@ export class DomainService implements OnModuleInit {
 			})
 			.sort({ onlineUsers: -1, lastUpdated: -1 })
 			.skip(page * amount)
-			.limit(page);
+			.limit(amount);
 	}
 
 	async deleteDomain(domainId: string) {

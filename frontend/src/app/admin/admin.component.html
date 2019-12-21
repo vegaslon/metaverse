@@ -1,94 +1,235 @@
-<div class="container">
+<div class="container-fluid">
 	<h1>The secret fairy admin page! 🌸🎉🍣</h1>
 	<mat-tab-group animationDuration="0" dynamicHeight>
 		<mat-tab label="All users">
+			<!-- <mat-card
+				*ngIf="usersError"
+				class="bg-warn"
+				style="
+					margin-bottom: 16px; color: #fff;
+					display: flex; vertical-align: middle;
+				"
+			>
+				<mat-icon style="margin-top: -3px; margin-right: 8px;">
+					error_outline
+				</mat-icon>
+				{{ usersError }}
+			</mat-card> -->
+
 			<br />
-			<button mat-flat-button (click)="fetchUsers()">
+			<button mat-flat-button (click)="fetchUsersReset()">
 				<mat-icon>refresh</mat-icon> Refresh
 			</button>
 
-			<table mat-table [dataSource]="users" style="width: 100%;">
-				<ng-container matColumnDef="image">
-					<th mat-header-cell *matHeaderCellDef></th>
-					<td mat-cell *matCellDef="let element">
-						<img
-							class="user-image"
-							src="/api/user/{{ element.username }}/image"
-						/>
-					</td>
-				</ng-container>
+			<div
+				infiniteScroll
+				[scrollWindow]="false"
+				(scrolled)="fetchUsersMore()"
+				style="height: 650px; overflow-y: auto;"
+			>
+				<table mat-table [dataSource]="users" style="width: 100%">
+					<ng-container matColumnDef="image">
+						<th mat-header-cell *matHeaderCellDef></th>
+						<td mat-cell *matCellDef="let element">
+							<app-user-image
+								[online]="element.online"
+								[url]="
+									'/api/user/' + element.username + '/image'
+								"
+							></app-user-image>
+						</td>
+					</ng-container>
 
-				<ng-container matColumnDef="username">
-					<th mat-header-cell *matHeaderCellDef>Username</th>
-					<td mat-cell *matCellDef="let element">
-						{{ element.username }}
-					</td>
-				</ng-container>
+					<ng-container matColumnDef="username">
+						<th mat-header-cell *matHeaderCellDef>Username</th>
+						<td mat-cell *matCellDef="let element">
+							{{ element.username }}
+						</td>
+					</ng-container>
 
-				<ng-container matColumnDef="email">
-					<th mat-header-cell *matHeaderCellDef>Email</th>
-					<td mat-cell *matCellDef="let element">
-						{{ element.email }}
-					</td>
-				</ng-container>
+					<ng-container matColumnDef="created">
+						<th mat-header-cell *matHeaderCellDef>Created</th>
+						<td mat-cell *matCellDef="let element">
+							{{ element.created | date: "MMM d, y, HH:mm" }}
+						</td>
+					</ng-container>
 
-				<ng-container matColumnDef="minutes">
-					<th mat-header-cell *matHeaderCellDef>Minutes</th>
-					<td mat-cell *matCellDef="let element">
-						{{ element.minutes }}
-					</td>
-				</ng-container>
+					<ng-container matColumnDef="email">
+						<th mat-header-cell *matHeaderCellDef>Email</th>
+						<td mat-cell *matCellDef="let element">
+							{{ element.email }}
+						</td>
+					</ng-container>
 
-				<tr mat-header-row *matHeaderRowDef="usersCols"></tr>
-				<tr mat-row *matRowDef="let row; columns: usersCols"></tr>
-			</table>
+					<ng-container matColumnDef="minutes">
+						<th mat-header-cell *matHeaderCellDef>Total minutes</th>
+						<td mat-cell *matCellDef="let element">
+							{{ element.minutes }} mins
+						</td>
+					</ng-container>
+
+					<ng-container matColumnDef="onlineMinutes">
+						<th mat-header-cell *matHeaderCellDef>
+							Online minutes
+						</th>
+						<td
+							mat-cell
+							*matCellDef="let element"
+							[style.opacity]="element.session != null ? 1 : 0.5"
+						>
+							{{
+								element.session != null
+									? element.session.minutes + " mins"
+									: "Offline"
+							}}
+						</td>
+					</ng-container>
+
+					<ng-container matColumnDef="onlineLocation">
+						<th mat-header-cell *matHeaderCellDef>
+							Current Location
+						</th>
+						<td
+							mat-cell
+							*matCellDef="let element"
+							[style.opacity]="
+								element.session != null
+									? element.session.location != null
+										? 1
+										: 0.5
+									: 0.5
+							"
+						>
+							{{
+								element.session != null
+									? element.session.location != null
+										? element.session.location
+										: "Unknown"
+									: "Offline"
+							}}
+						</td>
+					</ng-container>
+
+					<tr mat-header-row *matHeaderRowDef="usersCols"></tr>
+					<tr mat-row *matRowDef="let row; columns: usersCols"></tr>
+				</table>
+			</div>
 		</mat-tab>
 		<mat-tab label="Online users">
+			<!-- <mat-card
+				*ngIf="usersError"
+				class="bg-warn"
+				style="
+					margin-bottom: 16px; color: #fff;
+					display: flex; vertical-align: middle;
+				"
+			>
+				<mat-icon style="margin-top: -3px; margin-right: 8px;">
+					error_outline
+				</mat-icon>
+				{{ usersError }}
+			</mat-card> -->
+
 			<br />
-			<button mat-flat-button (click)="fetchOnlineUsers()">
+			<button mat-flat-button (click)="fetchOnlineUsersReset()">
 				<mat-icon>refresh</mat-icon> Refresh
 			</button>
+			<div
+				infiniteScroll
+				[scrollWindow]="false"
+				(scrolled)="fetchOnlineUsersMore()"
+				style="height: 650px; overflow-y: auto;"
+			>
+				<table mat-table [dataSource]="onlineUsers" style="width: 100%">
+					<ng-container matColumnDef="image">
+						<th mat-header-cell *matHeaderCellDef></th>
+						<td mat-cell *matCellDef="let element">
+							<app-user-image
+								[online]="element.online"
+								[url]="
+									'/api/user/' + element.username + '/image'
+								"
+							></app-user-image>
+						</td>
+					</ng-container>
 
-			<table mat-table [dataSource]="onlineUsers" style="width: 100%;">
-				<ng-container matColumnDef="image">
-					<th mat-header-cell *matHeaderCellDef></th>
-					<td mat-cell *matCellDef="let element">
-						<img
-							class="user-image"
-							src="/api/user/{{ element.username }}/image"
-						/>
-					</td>
-				</ng-container>
+					<ng-container matColumnDef="username">
+						<th mat-header-cell *matHeaderCellDef>Username</th>
+						<td mat-cell *matCellDef="let element">
+							{{ element.username }}
+						</td>
+					</ng-container>
 
-				<ng-container matColumnDef="username">
-					<th mat-header-cell *matHeaderCellDef>Username</th>
-					<td mat-cell *matCellDef="let element">
-						{{ element.username }}
-					</td>
-				</ng-container>
+					<ng-container matColumnDef="created">
+						<th mat-header-cell *matHeaderCellDef>Created</th>
+						<td mat-cell *matCellDef="let element">
+							{{ element.created | date: "MMM d, y, HH:mm" }}
+						</td>
+					</ng-container>
 
-				<ng-container matColumnDef="minutes">
-					<th mat-header-cell *matHeaderCellDef>Minutes online</th>
-					<td mat-cell *matCellDef="let element">
-						{{ element.minutes }}
-					</td>
-				</ng-container>
+					<ng-container matColumnDef="email">
+						<th mat-header-cell *matHeaderCellDef>Email</th>
+						<td mat-cell *matCellDef="let element">
+							{{ element.email }}
+						</td>
+					</ng-container>
 
-				<ng-container matColumnDef="location">
-					<th mat-header-cell *matHeaderCellDef>Location</th>
-					<td mat-cell *matCellDef="let element">
-						{{
-							"hifi://" +
-								element.location.network_address +
-								":" +
-								element.location.network_port
-						}}
-					</td>
-				</ng-container>
+					<ng-container matColumnDef="minutes">
+						<th mat-header-cell *matHeaderCellDef>Total minutes</th>
+						<td mat-cell *matCellDef="let element">
+							{{ element.minutes }} mins
+						</td>
+					</ng-container>
 
-				<tr mat-header-row *matHeaderRowDef="onlineUsersCols"></tr>
-				<tr mat-row *matRowDef="let row; columns: onlineUsersCols"></tr>
-			</table>
+					<ng-container matColumnDef="onlineMinutes">
+						<th mat-header-cell *matHeaderCellDef>
+							Online minutes
+						</th>
+						<td
+							mat-cell
+							*matCellDef="let element"
+							[style.opacity]="element.session != null ? 1 : 0.5"
+						>
+							{{
+								element.session != null
+									? element.session.minutes + " mins"
+									: "Offline"
+							}}
+						</td>
+					</ng-container>
+
+					<ng-container matColumnDef="onlineLocation">
+						<th mat-header-cell *matHeaderCellDef>
+							Current Location
+						</th>
+						<td
+							mat-cell
+							*matCellDef="let element"
+							[style.opacity]="
+								element.session != null
+									? element.session.location != null
+										? 1
+										: 0.5
+									: 0.5
+							"
+						>
+							{{
+								element.session != null
+									? element.session.location != null
+										? element.session.location
+										: "Unknown"
+									: "Offline"
+							}}
+						</td>
+					</ng-container>
+
+					<tr mat-header-row *matHeaderRowDef="onlineUsersCols"></tr>
+					<tr
+						mat-row
+						*matRowDef="let row; columns: onlineUsersCols"
+					></tr>
+				</table>
+			</div>
 		</mat-tab>
 	</mat-tab-group>
 </div>

@@ -10,12 +10,14 @@ import { ModuleRef } from "@nestjs/core";
 import { JwtService } from "@nestjs/jwt";
 import { InjectConnection, InjectModel } from "@nestjs/mongoose";
 import { ObjectID } from "bson";
+import * as fs from "fs";
 import * as mailchecker from "mailchecker";
 import { GridFSBucket } from "mongodb";
 import { Connection, Model } from "mongoose";
 import fetch from "node-fetch";
+import * as path from "path";
 import * as sharp from "sharp";
-import { Domain } from "../domain/domain.schema";
+import { Readable } from "stream";
 import { AuthSignUpDto } from "../auth/auth.dto";
 import { derPublicKeyHeader } from "../common/der-public-key-header";
 import { heartbeat, HeartbeatSession } from "../common/heartbeat";
@@ -26,8 +28,10 @@ import {
 	renderDomain,
 	renderFriend,
 } from "../common/utils";
+import { Domain } from "../domain/domain.schema";
 import { DomainService } from "../domain/domain.service";
 import { EmailService } from "../email/email.service";
+import { DEV } from "../environment";
 import { UserSettings } from "./user-settings.schema";
 import {
 	GetUserDomainsLikesDto,
@@ -37,6 +41,8 @@ import {
 } from "./user.dto";
 import { User } from "./user.schema";
 import uuid = require("uuid");
+import { GetUsersDto } from "src/admin/admin.dto";
+import { generateRandomString } from "../common/utils";
 
 export interface UserSession {
 	id: string;
@@ -46,6 +52,10 @@ export interface UserSession {
 
 	location: UserUpdateLocation;
 }
+
+const defaultUserImage = fs.readFileSync(
+	path.resolve(__dirname, "../../assets/user-image.jpg"),
+);
 
 @Injectable()
 export class UserService implements OnModuleInit {
@@ -65,6 +75,10 @@ export class UserService implements OnModuleInit {
 
 		private moduleRef: ModuleRef,
 	) {
+		this.userModel
+			.updateMany({}, { $set: { online: false, onlineMinutes: 0 } })
+			.exec();
+
 		this.images = new GridFSBucket(connection.db, {
 			bucketName: "users.images",
 		});
@@ -115,17 +129,19 @@ export class UserService implements OnModuleInit {
 		}
 	}
 
-	findByUsernameRegex(regexp: RegExp) {
-		return this.userModel.findOne({
-			username: regexp,
-		});
-	}
+	// findByUsernameRegex(regexp: RegExp) {
+	// 	return this.userModel.findOne({
+	// 		username: regexp,
+	// 	});
+	// }
 
 	async createUser(
 		authSignUpDto: AuthSignUpDto,
 		hash: string,
 		emailVerified = false,
 	) {
+		if (DEV) emailVerified = true;
+
 		return await new this.userModel({
 			username: authSignUpDto.username,
 			email: authSignUpDto.email,
@@ -142,7 +158,7 @@ export class UserService implements OnModuleInit {
 				});
 			});
 
-			const stream = sharp(file.buffer)
+			const imageStream = sharp(file.buffer)
 				.resize(128, 128, {
 					fit: "cover",
 					position: "centre",
@@ -151,19 +167,23 @@ export class UserService implements OnModuleInit {
 					quality: 80,
 				});
 
-			stream.pipe(
-				this.images.openUploadStreamWithId(user._id, null, {
+			const uploadStream = this.images.openUploadStreamWithId(
+				user._id,
+				null,
+				{
 					contentType: "image/jpg",
-				}),
+				},
 			);
 
-			stream.on("error", err => {
-				reject(err);
+			imageStream.on("error", err => {
+				return reject(err);
 			});
 
-			stream.on("end", () => {
-				resolve();
+			uploadStream.on("finish", () => {
+				return resolve();
 			});
+
+			imageStream.pipe(uploadStream);
 		});
 	}
 
@@ -184,11 +204,38 @@ export class UserService implements OnModuleInit {
 		}
 	}
 
-	async findAll() {
-		return this.userModel.find({});
+	async getUserImage(username: string) {
+		const contentType = "image/jpg";
+
+		const returnDefault = () => {
+			let read = false;
+			const stream = new Readable({
+				read() {
+					if (read) {
+						this.push(null);
+					} else {
+						read = true;
+						this.push(defaultUserImage);
+					}
+					return;
+				},
+			});
+			return { stream, contentType };
+		};
+
+		let user = await this.findByUsername(username);
+		if (user == null) user = await this.findById(username);
+		if (user == null) return returnDefault();
+		if ((await this.images.find({ _id: user._id }).count()) < 1)
+			return returnDefault();
+
+		const stream = this.images.openDownloadStream(user._id);
+		return { stream, contentType };
 	}
 
 	async heartbeatUser(user: User) {
+		const wasOnline = this.sessions[user.username] != null;
+
 		const session = heartbeat<UserSession>(
 			this.sessions,
 			user.username,
@@ -208,7 +255,7 @@ export class UserService implements OnModuleInit {
 					place_id: null,
 				};
 			},
-			session => {
+			async session => {
 				// clean up session from domains
 				const domainId = session.location.domain_id;
 				if (domainId == null) return;
@@ -217,12 +264,22 @@ export class UserService implements OnModuleInit {
 				if (domainSession == null) return;
 
 				delete domainSession.users[user._id];
+
+				// go offline in database
+				const offlineUser = await this.findById(user._id);
+				offlineUser.online = false;
+				offlineUser.onlineMinutes = 0;
+				await offlineUser.save();
 			},
 			1000 * 30, // maybe 15
 		);
 
 		// minutes since online
-		const minutes = Math.floor((+new Date() - +session._since) / 1000 / 60);
+		const minutes = Math.floor(
+			(+new Date(Date.now()) - +session._since) / 1000 / 60,
+		);
+
+		let updateUser = false;
 
 		// session.minutes needs to be updated
 		if (session.minutes < minutes) {
@@ -231,8 +288,17 @@ export class UserService implements OnModuleInit {
 
 			// update user
 			user.minutes += minutesToAddToUser;
-			await user.save();
+			user.onlineMinutes = session.minutes;
+
+			updateUser = true;
 		}
+
+		if (!wasOnline) {
+			user.online = true;
+			updateUser = true;
+		}
+
+		if (updateUser) await user.save();
 
 		return session.id;
 	}
@@ -390,5 +456,23 @@ export class UserService implements OnModuleInit {
 		user.emailVerified = true;
 		await user.save();
 		return { user, justVerified: true };
+	}
+
+	findUsers(getUsersDto: GetUsersDto) {
+		let { page, amount, onlineSorted } = getUsersDto;
+
+		if (page <= 0) page = 1;
+		page -= 1;
+
+		if (amount > 50) amount = 50;
+
+		return this.userModel
+			.find(onlineSorted ? { online: true } : {})
+			.sort({
+				created: -1,
+				...(onlineSorted ? { onlineMinutes: -1 } : {}),
+			})
+			.skip(page * amount)
+			.limit(amount);
 	}
 }

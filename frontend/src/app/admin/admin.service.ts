@@ -1,27 +1,31 @@
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import {
+	HttpClient,
+	HttpErrorResponse,
+	HttpParams,
+} from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
 
-export interface AdminOnlineUser {
-	username: string;
-	minutes: number;
-	location: {
-		availability: string;
-		connected: boolean;
-		domain_id: string;
-		network_address: string;
-		network_port: string;
-		node_id: string;
-		path: string;
-		place_id: string;
-	};
-}
-
 export interface AdminUser {
+	online: boolean;
 	username: string;
+	created: string;
 	email: string;
 	mintues: number;
+	session: {
+		minutes: number;
+		location: {
+			availability: string;
+			connected: boolean;
+			domain_id: string;
+			network_address: string;
+			network_port: string;
+			node_id: string;
+			path: string;
+			place_id: string;
+		};
+	} | null;
 }
 
 @Injectable({
@@ -35,15 +39,15 @@ export class AdminService {
 		if (err.error.message) return throwError(err.error.message);
 	};
 
-	getOnlineUsers() {
+	getUsers(page = 1, amount = 50, onlineSorted = false) {
+		console.log(onlineSorted);
 		return this.http
-			.get<AdminOnlineUser[]>("/api/admin/users/online")
-			.pipe(catchError(this.handleError));
-	}
-
-	getUsers() {
-		return this.http
-			.get<AdminUser[]>("/api/admin/users")
+			.get<AdminUser[]>("/api/admin/users", {
+				params: new HttpParams()
+					.set("page", page + "")
+					.set("amount", amount + "")
+					.set("onlineSorted", onlineSorted + ""),
+			})
 			.pipe(catchError(this.handleError));
 	}
 }

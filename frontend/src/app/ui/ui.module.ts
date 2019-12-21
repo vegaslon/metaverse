@@ -7,8 +7,10 @@ import { DomainTokenComponent } from "./domain-card/domain-token/domain-token.co
 import { EditDomainComponent } from "./edit-domain/edit-domain.component";
 import { ImagePickerComponent } from "./image-picker/image-picker.component";
 import { DeleteConfirmComponent } from "./delete-confirm/delete-confirm.component";
+import { UserImageComponent } from "./user-image/user-image.component";
 
 const components = [
+	UserImageComponent,
 	ImagePickerComponent,
 	DeleteConfirmComponent,
 

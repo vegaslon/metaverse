@@ -32,10 +32,6 @@ import { UserService } from "./user.service";
 import { MetaverseUnverifiedAuthGuard } from "../auth/auth-unverified.guard";
 import { HOSTNAME } from "../environment";
 
-const defaultUserImage = fs.readFileSync(
-	path.resolve(__dirname, "../../assets/user-image.jpg"),
-);
-
 @Controller("api/user")
 @ApiTags("user")
 export class UserController {
@@ -92,35 +88,10 @@ export class UserController {
 		@Param("username") username: string,
 		@Res() res: Response,
 	) {
-		const defaultUserImageURL = "/api/user/_/image";
+		const response = await this.userService.getUserImage(username);
 
-		res.set("Content-Type", "image/jpg");
-
-		if (username == "_") {
-			const stream = new Readable();
-			stream.push(defaultUserImage);
-			stream.push(null);
-			stream.pipe(res);
-			return;
-		}
-
-		let user = await this.userService.findByUsername(username);
-		if (user == null) user = await this.userService.findById(username);
-		if (user == null) return res.redirect(defaultUserImageURL);
-
-		const stream = this.userService.images.openDownloadStream(user._id);
-
-		stream.on("data", chunk => {
-			res.write(chunk);
-		});
-
-		stream.on("error", () => {
-			res.redirect(defaultUserImageURL);
-		});
-
-		stream.on("end", () => {
-			res.end();
-		});
+		res.set("Content-Type", response.contentType);
+		if (response.stream) return response.stream.pipe(res);
 	}
 
 	// @Get("settings")

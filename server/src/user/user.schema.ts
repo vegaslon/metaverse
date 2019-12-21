@@ -19,6 +19,9 @@ export const UserSchema = new Schema({
 
 	created: { type: Date, default: new Date() },
 	minutes: { type: Number, default: 0 },
+
+	online: { type: Boolean, default: false },
+	onlineMinutes: { type: Number, default: 0 },
 });
 
 export interface User extends Document {
@@ -36,4 +39,7 @@ export interface User extends Document {
 
 	created: Date;
 	minutes: number;
+
+	online: Boolean;
+	onlineMinutes: Number;
 }
