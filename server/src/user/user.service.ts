@@ -147,6 +147,7 @@ export class UserService implements OnModuleInit {
 			email: authSignUpDto.email,
 			emailVerified,
 			hash,
+			created: new Date(),
 		}).save();
 	}
 

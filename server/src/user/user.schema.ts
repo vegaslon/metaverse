@@ -17,7 +17,7 @@ export const UserSchema = new Schema({
 
 	domainLikes: [{ type: String, ref: "domains" }],
 
-	created: { type: Date, default: new Date() },
+	created: { type: Date, required: true },
 	minutes: { type: Number, default: 0 },
 
 	online: { type: Boolean, default: false },
