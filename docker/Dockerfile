@@ -5,7 +5,7 @@ apk add --no-cache vips --repository https://alpine.global.ssl.fastly.net/alpine
 
 COPY app /app
 WORKDIR /app/server
-RUN npm i
+RUN npm i --only=prod
 
 RUN apk del builds-deps
 
