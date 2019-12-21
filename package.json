@@ -2,7 +2,7 @@
 	"name": "tivoli-cloud",
 	"scripts": {
 		"format": "prettier --write **/*.ts **/*.json **/*.html **/*.scss",
-		"install": "cd server && npm i -D && cd ../frontend && npm i -D",
+		"install": "cd server && npm i && cd ../frontend && npm i",
 		"start:frontend": "cd frontend && npm run start",
 		"start:server": "cd server && npm run start",
 		"build:frontend": "cd frontend && npm run build",
