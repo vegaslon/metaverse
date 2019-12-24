@@ -4,43 +4,41 @@ export interface HeartbeatSession {
 }
 
 export function heartbeat<T>(
-	sessions: {
-		[s: string]: T & HeartbeatSession;
-	},
+	sessions: Map<string, T & HeartbeatSession>,
 	id: string,
 	init?: (s: T & HeartbeatSession) => any,
 	cleanup?: (s: T & HeartbeatSession) => any,
 	timeout: number = 1000 * 60,
 ): T & HeartbeatSession {
 	const destroy = () => {
-		if (cleanup) cleanup(sessions[id]);
-		delete sessions[id];
+		if (cleanup) cleanup(sessions.get(id));
+		sessions.delete(id);
 	};
 
-	if (sessions[id] == null) {
+	const session = sessions.get(id);
+
+	if (session == null) {
 		// create new session
-		if (sessions[id] == null) {
-			(sessions[id] as HeartbeatSession) = {
-				_timer: setTimeout(() => {
-					destroy();
-				}, timeout),
-				_since: new Date(),
-			};
+		const session = {
+			_timer: setTimeout(() => {
+				destroy();
+			}, timeout),
+			_since: new Date(),
+		} as T & HeartbeatSession;
 
-			if (init) init(sessions[id]);
-		}
+		sessions.set(id, session);
+		if (init) init(session);
 
-		return sessions[id];
+		return session;
 	} else {
 		// reset timer back to timeout
-		const oldTimer = sessions[id]._timer;
-		clearTimeout(oldTimer);
+		clearTimeout(session._timer);
 
-		sessions[id]._timer = setTimeout(() => {
+		session._timer = setTimeout(() => {
 			destroy();
 		}, timeout);
 
-		return sessions[id];
+		return session;
 	}
 }
 

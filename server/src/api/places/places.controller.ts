@@ -27,7 +27,6 @@ export class PlacesController {
 				404,
 			);
 
-		//const domainSession = this.domainService.sessions[domain._id];
 		const thumbnailUrl = HOSTNAME + "/api/domain/" + domain._id + "/image";
 
 		return {

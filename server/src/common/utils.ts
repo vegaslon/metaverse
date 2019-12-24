@@ -169,7 +169,7 @@ export async function renderFriend(
 	userService: UserService,
 	domainService: DomainService,
 ) {
-	const userSession = userService.sessions[username];
+	const userSession = userService.sessions.get(username);
 
 	const domain =
 		userSession != null

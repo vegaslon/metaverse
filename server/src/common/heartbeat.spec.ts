@@ -1,17 +1,17 @@
-import { heartbeat } from "./heartbeat";
+import { heartbeat, HeartbeatSession } from "./heartbeat";
 
 jest.useFakeTimers();
 
 describe("heartbeat", () => {
-	let sessions = {};
-
 	const username = "Maki";
 	interface User {
 		cute: boolean;
 	}
 
+	let sessions: Map<string, User & HeartbeatSession>;
+
 	beforeEach(() => {
-		sessions = {};
+		sessions = new Map();
 	});
 
 	it("should heart beat once and die", () => {
@@ -25,9 +25,9 @@ describe("heartbeat", () => {
 			1000,
 		);
 
-		const wasOnceCute = sessions[username].cute;
+		const wasOnceCute = sessions.get(username).cute;
 		jest.advanceTimersByTime(2000);
-		expect(sessions[username] == null && wasOnceCute).toBe(true);
+		expect(sessions.get(username) == null && wasOnceCute).toBe(true);
 	});
 
 	it("should heart beat a couple of times and die", () => {
@@ -48,8 +48,8 @@ describe("heartbeat", () => {
 		beat();
 		jest.advanceTimersByTime(500);
 
-		const wasOnceCute = sessions[username].cute;
+		const wasOnceCute = sessions.get(username).cute;
 		jest.advanceTimersByTime(1500);
-		expect(sessions[username] == null && wasOnceCute).toBe(true);
+		expect(sessions.get(username) == null && wasOnceCute).toBe(true);
 	});
 });

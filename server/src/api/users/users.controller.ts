@@ -35,7 +35,7 @@ export class UsersController {
 		const domain = await this.domainService.findById(domainId);
 		if (domain == null) return users;
 
-		const domainSession = this.domainService.sessions[domainId];
+		const domainSession = this.domainService.sessions.get(domainId);
 		if (domainSession == null) return users;
 
 		const domainUserSessions = Object.values(domainSession.users);
@@ -139,8 +139,8 @@ export class UsersController {
 	// async getConnections(@Query() connectionsDto: UsersConnectionsDto) {
 	// 	const { per_page, page, sort } = connectionsDto;
 
-	// 	const usernames = Object.keys(this.userService.sessions);
-	// 	const sessions = Object.values(this.userService.sessions);
+	// 	const usernames = [...this.userService.sessions.keys()];
+	// 	const sessions = [...this.userService.sessions.values()];
 
 	// 	const users = sessions.map((session, i) => {
 	// 		const username = usernames[i];
@@ -212,7 +212,7 @@ export class UsersController {
 		if (user == null) throw NoLocation();
 
 		// username is case sensetive
-		const session = this.userService.sessions[user.username];
+		const session = this.userService.sessions.get(user.username);
 		if (session == null) throw NoLocation();
 		const location = session.location;
 

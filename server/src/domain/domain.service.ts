@@ -27,7 +27,7 @@ export interface DomainSession {
 @Injectable()
 export class DomainService implements OnModuleInit {
 	// current online domains. this can get big!
-	sessions: { [id: string]: DomainSession & HeartbeatSession } = {};
+	sessions = new Map<string, DomainSession & HeartbeatSession>();
 
 	private userService: UserService;
 	public images: GridFSBucket;
@@ -231,8 +231,8 @@ export class DomainService implements OnModuleInit {
 	}
 
 	async getDomainsStats() {
-		const onlineUsers = Object.keys(this.userService.sessions).length;
-		const onlineDomains = Object.keys(this.sessions).length;
+		const onlineUsers = this.userService.sessions.size;
+		const onlineDomains = this.sessions.size;
 
 		// const stats = await this.domainModel.aggregate([
 		// 	{ $match: { onlineUsers: { $gt: 0 } } },

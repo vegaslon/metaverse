@@ -17,6 +17,7 @@ import { Connection, Model } from "mongoose";
 import fetch from "node-fetch";
 import * as path from "path";
 import * as sharp from "sharp";
+import { GetUsersDto } from "src/admin/admin.dto";
 import { Readable } from "stream";
 import { AuthSignUpDto } from "../auth/auth.dto";
 import { derPublicKeyHeader } from "../common/der-public-key-header";
@@ -41,8 +42,6 @@ import {
 } from "./user.dto";
 import { User } from "./user.schema";
 import uuid = require("uuid");
-import { GetUsersDto } from "src/admin/admin.dto";
-import { generateRandomString } from "../common/utils";
 
 export interface UserSession {
 	id: string;
@@ -90,8 +89,8 @@ export class UserService implements OnModuleInit {
 		});
 	}
 
-	// current online users. this can get big!
-	sessions: { [username: string]: UserSession & HeartbeatSession } = {};
+	// current online users keyed with username. this can get big!
+	sessions = new Map<string, UserSession & HeartbeatSession>();
 
 	findByUsername(username: string) {
 		// https://stackoverflow.com/a/45650164
@@ -235,7 +234,7 @@ export class UserService implements OnModuleInit {
 	}
 
 	async heartbeatUser(user: User) {
-		const wasOnline = this.sessions[user.username] != null;
+		const wasOnline = this.sessions.has(user.username);
 
 		const session = heartbeat<UserSession>(
 			this.sessions,
@@ -261,7 +260,7 @@ export class UserService implements OnModuleInit {
 				const domainId = session.location.domain_id;
 				if (domainId == null) return;
 
-				const domainSession = this.domainService.sessions[domainId];
+				const domainSession = this.domainService.sessions.get(domainId);
 				if (domainSession == null) return;
 
 				delete domainSession.users[user._id];
@@ -320,7 +319,7 @@ export class UserService implements OnModuleInit {
 		userUpdateLocationDto: UserUpdateLocationDto,
 	) {
 		await this.heartbeatUser(user);
-		let session = this.sessions[user.username];
+		let session = this.sessions.get(user.username);
 
 		patchObject(session.location, userUpdateLocationDto.location);
 
@@ -328,7 +327,7 @@ export class UserService implements OnModuleInit {
 		if (userUpdateLocationDto.location.domain_id) {
 			const domainId = userUpdateLocationDto.location.domain_id;
 
-			const domainSession = this.domainService.sessions[domainId];
+			const domainSession = this.domainService.sessions.get(domainId);
 			if (domainSession != null) {
 				domainSession.users[user._id] = session;
 
@@ -401,7 +400,7 @@ export class UserService implements OnModuleInit {
 	async getFriends(user: User) {
 		// TODO: replace with actual friends
 
-		const usernames = Object.keys(this.sessions);
+		const usernames = [...this.sessions.keys()];
 
 		const friends = [];
 		for (const username of usernames) {

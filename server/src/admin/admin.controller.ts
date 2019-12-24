@@ -23,7 +23,7 @@ export class AdminController {
 
 		return Promise.all(
 			users.map(async user => {
-				const session = this.userService.sessions[user.username];
+				const session = this.userService.sessions.get(user.username);
 				const online = session != null;
 
 				let location = null;
@@ -58,8 +58,8 @@ export class AdminController {
 	// @ApiBearerAuth()
 	// @UseGuards(AdminAuthGuard())
 	// getOnlineUsers() {
-	// 	return Object.keys(this.userService.sessions).map(username => {
-	// 		const { minutes, location } = this.userService.sessions[username];
+	// 	return [...this.userService.sessions.keys()].map(username => {
+	// 		const { minutes, location } = this.userService.get(username);
 
 	// 		return {
 	// 			username,
