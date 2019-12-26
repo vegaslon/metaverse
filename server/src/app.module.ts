@@ -16,6 +16,7 @@ import { EmailModule } from "./email/email.module";
 import { DB_HOST, DB_NAME, DB_PASS, DB_USER, DEV } from "./environment";
 import { UserModule } from "./user/user.module";
 import { VideoStreamModule } from "./video-stream/video-stream.module";
+import { PuppeteerModule } from "./puppeteer/puppeteer.module";
 
 // angular ssr issue https://github.com/akveo/nebular/issues/2008
 if (!DEV) {
@@ -61,6 +62,7 @@ if (!DEV) {
 					}),
 			  ]),
 		EmailModule,
+		PuppeteerModule,
 
 		AuthModule,
 		UserModule,

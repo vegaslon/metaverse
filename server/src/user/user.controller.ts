@@ -4,24 +4,24 @@ import {
 	Get,
 	Param,
 	Patch,
+	Post,
 	Put,
 	Query,
 	Res,
 	UploadedFile,
 	UseGuards,
 	UseInterceptors,
-	Post,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { Response } from "express";
-import * as fs from "fs";
-import * as path from "path";
-import { Readable } from "stream";
+import { MetaverseUnverifiedAuthGuard } from "../auth/auth-unverified.guard";
 import { MetaverseAuthGuard } from "../auth/auth.guard";
 import { AuthService } from "../auth/auth.service";
 import { CurrentUser } from "../auth/user.decorator";
 import { MulterFile } from "../common/multer-file.model";
+import { HOSTNAME } from "../environment";
+import { PuppeteerService } from "../puppeteer/puppeteer.service";
 import {
 	GetUserDomainsLikesDto,
 	UserUpdateDto,
@@ -29,8 +29,6 @@ import {
 } from "./user.dto";
 import { User } from "./user.schema";
 import { UserService } from "./user.service";
-import { MetaverseUnverifiedAuthGuard } from "../auth/auth-unverified.guard";
-import { HOSTNAME } from "../environment";
 
 @Controller("api/user")
 @ApiTags("user")
@@ -38,6 +36,7 @@ export class UserController {
 	constructor(
 		private userService: UserService,
 		private authService: AuthService,
+		private puppeteerService: PuppeteerService,
 	) {}
 
 	@Patch("")
@@ -92,6 +91,23 @@ export class UserController {
 
 		res.set("Content-Type", response.contentType);
 		if (response.stream) return response.stream.pipe(res);
+	}
+
+	@Get(":username/nametag")
+	async getUserNametag(
+		@Param("username") username: string,
+		@Query("admin") admin: string,
+		@Query("friend") friend: string,
+		@Res() res: Response,
+	) {
+		const buffer = await this.puppeteerService.renderNametag(
+			username,
+			admin == "true",
+			friend == "true",
+		);
+
+		res.set("Content-Type", "image/png");
+		res.send(buffer);
 	}
 
 	// @Get("settings")

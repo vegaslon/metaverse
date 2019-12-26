@@ -9,6 +9,7 @@ import { UserSettingsSchema } from "./user-settings.schema";
 import { UserController } from "./user.controller";
 import { UserSchema } from "./user.schema";
 import { UserService } from "./user.service";
+import { PuppeteerModule } from "../puppeteer/puppeteer.module";
 
 @Module({
 	imports: [
@@ -29,6 +30,7 @@ import { UserService } from "./user.service";
 		forwardRef(() => AuthModule),
 		forwardRef(() => DomainModule),
 		EmailModule,
+		PuppeteerModule,
 	],
 	controllers: [UserController],
 	providers: [UserService],
