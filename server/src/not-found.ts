@@ -3,6 +3,7 @@ import { BaseExceptionFilter } from "@nestjs/core";
 import { Request, Response } from "express";
 import { existsSync } from "fs";
 import * as path from "path";
+import { DEV } from "./environment";
 
 const frontendIndexPath = path.resolve(
 	__dirname,
@@ -20,9 +21,12 @@ export class NotFoundExceptionFilter extends BaseExceptionFilter {
 
 		const res: Response = ctx.getResponse();
 
-		if (!existsSync(frontendIndexPath)) return super.catch(exception, host);
-		res.sendFile(frontendIndexPath);
-
-		res.render("index", { req });
+		if (DEV) {
+			if (!existsSync(frontendIndexPath))
+				return super.catch(exception, host);
+			res.sendFile(frontendIndexPath);
+		} else {
+			res.render("index", { req });
+		}
 	}
 }
