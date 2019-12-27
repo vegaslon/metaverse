@@ -101,11 +101,6 @@ export class UserController {
 		@Query("friend") friend: string,
 		@Res() res: Response,
 	) {
-		console.log(username);
-		console.log(displayName);
-		console.log(admin);
-		console.log(friend);
-
 		const buffer = await this.puppeteerService.renderNametag(
 			username,
 			displayName,
