@@ -44,14 +44,14 @@ export class PuppeteerService implements OnModuleInit {
 		});
 	}
 
-	renderNametag(username: string, admin = false, friend = false) {
+	renderNametag(username: string, displayName: string = null, admin = false, friend = false) {
 		const html = Handlebars.compile(
 			fs.readFileSync(
-				path.resolve(__dirname, "../../assets/nametag.hbs"),
+				path.resolve(__dirname, "../../assets/nametag.html"),
 				"utf8",
 			),
 		)({
-			username,
+			displayName: displayName || username,
 			avatarUrl: "http://127.0.0.1:3000/api/user/" + username + "/image",
 			admin,
 			friend,

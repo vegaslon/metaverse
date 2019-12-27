@@ -18,17 +18,7 @@ vips \
 # for: puppeteer
 chromium nss \
 ttf-roboto font-noto font-noto-cjk \
-# custom fonts
-wget fontconfig \
 && \
-
-# custom fonts
-mkdir -p /usr/share/fonts/noto /usr/share/fonts/TTF && \
-# font: noto color emoji
-wget -qO- https://noto-website-2.storage.googleapis.com/pkgs/NotoColorEmoji-unhinted.zip | \
-busybox unzip -p - NotoColorEmoji.ttf > /usr/share/fonts/noto/NotoColorEmoji.ttf && \
-
-fc-cache -fv
 
 COPY app /app
 WORKDIR /app/server
