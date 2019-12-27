@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM alpine:latest
 
 ENV \
 CHROME_BIN="/usr/bin/chromium-browser" \
@@ -13,17 +13,18 @@ echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositorie
 apk add --no-cache --virtual builds-deps build-base python3 && \
 
 apk add --no-cache \
+# node
+nodejs npm \
 # for: sharp
 vips \
 # for: puppeteer
 chromium nss \
-ttf-roboto font-noto font-noto-cjk \
-&& \
+ttf-roboto font-noto font-noto-cjk
 
 COPY app /app
 WORKDIR /app/server
-RUN npm i --only=prod
-
-RUN apk del builds-deps
+RUN \
+npm i --only=prod && \
+apk del builds-deps
 
 CMD node /app/server/dist/main.js
