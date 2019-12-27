@@ -17,7 +17,15 @@ nodejs npm \
 vips \
 # for: puppeteer
 chromium nss \
-ttf-roboto font-noto font-noto-cjk
+ttf-roboto font-noto font-noto-cjk \
+# custom fonts
+wget fontconfig \
+&& \
+mkdir -p /usr/share/fonts/TTF && \
+# font: Twemoji Mozilla
+wget -P /usr/share/fonts/TTF https://github.com/mozilla/twemoji-colr/releases/download/v0.5.0/TwemojiMozilla.ttf && \
+fc-cache -fv
+
 
 COPY app/server/package.json /app/server/package.json
 WORKDIR /app/server
