@@ -8,10 +8,8 @@ RUN \
 echo "http://dl-cdn.alpinelinux.org/alpine/edge/main" > /etc/apk/repositories && \
 echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories && \
 echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
-
 # compiling: bcrypt 
 apk add --no-cache --virtual builds-deps build-base python3 && \
-
 apk add --no-cache \
 # node
 nodejs npm \
@@ -21,10 +19,11 @@ vips \
 chromium nss \
 ttf-roboto font-noto font-noto-cjk
 
-COPY app /app
+COPY app/server/package.json /app/server/package.json
 WORKDIR /app/server
 RUN \
 npm i --only=prod && \
 apk del builds-deps
 
+COPY app /app
 CMD node /app/server/dist/main.js
