@@ -4,6 +4,7 @@ import * as path from "path";
 import * as fs from "fs";
 import * as Handlebars from "handlebars";
 import { HOSTNAME } from "src/environment";
+import * as os from "os";
 
 @Injectable()
 export class PuppeteerService implements OnModuleInit {
@@ -12,7 +13,14 @@ export class PuppeteerService implements OnModuleInit {
 	constructor() {}
 
 	async onModuleInit() {
-		this.browser = await Puppeteer.launch();
+		// https://github.com/puppeteer/puppeteer/issues/1793
+
+		this.browser = await Puppeteer.launch({
+			executablePath: process.env.CHROME_BIN || null,
+			// only for root (in docker container)
+			args:
+				process.getuid && process.getuid() == 0 ? ["--no-sandbox"] : [],
+		});
 	}
 
 	renderHTML(html: string, width?: number, height?: number): Promise<Buffer> {
@@ -24,18 +32,15 @@ export class PuppeteerService implements OnModuleInit {
 				deviceScaleFactor: 1,
 			});
 
-			page.on("load", async () => {
-				const buffer = await page.screenshot({
-					type: "png",
-					omitBackground: true,
-				});
-
-				resolve(buffer);
-
-				page.close();
+			await page.setContent(html, { waitUntil: "networkidle0" });
+			const buffer = await page.screenshot({
+				type: "png",
+				omitBackground: true,
 			});
 
-			page.setContent(html, { waitUntil: "networkidle0" });
+			resolve(buffer);
+
+			page.close();
 		});
 	}
 
@@ -47,7 +52,7 @@ export class PuppeteerService implements OnModuleInit {
 			),
 		)({
 			username,
-			avatarUrl: HOSTNAME + "/api/user/" + username + "/image",
+			avatarUrl: "http://127.0.0.1:3000/api/user/" + username + "/image",
 			admin,
 			friend,
 		});
