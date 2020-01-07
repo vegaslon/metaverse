@@ -51,8 +51,6 @@ async function bootstrap() {
 		app.enableCors({
 			origin: /^((null)|(file:\/\/))$/i, // null from chrome file://
 		});
-	} else {
-		app.enableCors();
 	}
 
 	app.use(
