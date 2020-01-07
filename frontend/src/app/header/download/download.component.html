@@ -1,7 +1,32 @@
-<h1 style="text-align: center;">Download <b>Tivoli Cloud</b> today!</h1>
-<table class="platform-table">
+<h1 style="text-align: center; margin-top: 24px;">
+	Download
+	<b class="wiggle">
+		<span>T</span>
+		<span>i</span>
+		<span>v</span>
+		<span>o</span>
+		<span>l</span>
+		<span>i</span>
+		<span style="padding-left: 0.25em"></span>
+		<span>C</span>
+		<span>l</span>
+		<span>o</span>
+		<span>u</span>
+		<span>d</span>
+		<span style="padding-left: 0.25em"></span>
+		<span>V</span>
+		<span>R</span>
+	</b>
+	today!
+</h1>
+<mat-progress-bar
+	*ngIf="!found"
+	mode="indeterminate"
+	style="margin-top: 16px; margin-bottom: 24px;"
+></mat-progress-bar>
+<table class="platform-table" *ngIf="found">
 	<tr>
-		<td [class.disabled]="os != 'win'">
+		<td>
 			<h2>
 				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 723 725">
 					<path
@@ -13,12 +38,12 @@
 			<a
 				mat-flat-button
 				color="primary"
-				href="https://cdn.tivolicloud.com/releases/tivoli-cloud-setup.exe"
+				[href]="releasesPath + '/' + filename"
 			>
-				Download<span>tivoli-cloud-setup.exe</span>
+				Download now<span>{{ filename }} ({{ filesize }})</span>
 			</a>
 		</td>
-		<td [class.disabled]="os != 'mac'">
+		<!-- <td [class.disabled]="os != 'mac'">
 			<h2>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -37,6 +62,6 @@
 			>
 				Download<span>tivoli-cloud.dmg</span>
 			</a>
-		</td>
+		</td> -->
 	</tr>
 </table>

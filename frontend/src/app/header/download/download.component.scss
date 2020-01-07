@@ -1,3 +1,54 @@
+@function hsv($h-hsv, $s-hsv, $v-hsv, $a: 1) {
+	@if $v-hsv == 0 {
+		@return hsla(0, 0, 0, $a);
+	} @else {
+		$l-hsl: ($v-hsv/2) * (2 - ($s-hsv/100));
+		$s-hsl: ($v-hsv * $s-hsv) /
+			if($l-hsl < 50, $l-hsl * 2, 200 - $l-hsl * 2);
+		@return hsla($h-hsv, $s-hsl, $l-hsl, $a);
+	}
+}
+
+.wiggle {
+	$height: 5px;
+	$duration: 1s;
+	$delay: 50ms;
+
+	@keyframes wiggle {
+		0% {
+			transform: translateY(-$height);
+		}
+		50% {
+			transform: translateY($height);
+		}
+		100% {
+			transform: translateY(-$height);
+		}
+	}
+
+	@keyframes rainbow {
+		@for $i from 0 to 24 {
+			#{$i/23*100 + "%"} {
+				color: hsv($i * 360/23, 50, 80);
+			}
+		}
+	}
+
+	span {
+		display: inline-block;
+		//text-shadow: 2px 2px 0px rgba(#000, 0.5);
+
+		@for $i from 1 to 100 {
+			$negativeDelay: -$delay * $i;
+
+			&:nth-child(#{$i}) {
+				animation: wiggle $duration ease-in-out $negativeDelay infinite,
+					rainbow $duration * 2 linear $negativeDelay infinite;
+			}
+		}
+	}
+}
+
 .platform-table {
 	width: 500px;
 	table-layout: fixed;
