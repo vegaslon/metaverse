@@ -6,7 +6,7 @@ import { Request, Response } from "express";
 import * as helmet from "helmet";
 import * as path from "path";
 import { AppModule } from "./app.module";
-import { DEV } from "./environment";
+import { DEV, WWW_PATH } from "./environment";
 import { NotFoundExceptionFilter } from "./not-found";
 import bodyParser = require("body-parser");
 
@@ -32,7 +32,7 @@ function initSwagger(app: NestExpressApplication) {
 	SwaggerModule.setup("api", app, document);
 }
 
-function initDebugging(app: NestExpressApplication) {
+function initDebugLogs(app: NestExpressApplication) {
 	app.use((req: Request, res: Response, next: () => void) => {
 		bodyParser.json()(req, res, () => {
 			bodyParser.urlencoded()(req, res, () => {
@@ -67,10 +67,22 @@ async function bootstrap() {
 		}),
 	);
 
-	initSwagger(app); // while in alpha
 	if (DEV) {
-		initDebugging(app);
-		initNonSsrFrontend(app);
+		initSwagger(app);
+		initDebugLogs(app);
+		initNonSsrFrontend(app); // ssr frontend only in production
+	}
+
+	if (WWW_PATH) app.useStaticAssets(WWW_PATH);
+
+	const redirects = {
+		"/discord": "https://discord.gg/FhuzTwR",
+	};
+
+	for (const [path, redirect] of Object.entries(redirects)) {
+		app.use(path, (_, res: Response) => {
+			res.redirect(redirect);
+		});
 	}
 
 	await app.listen(3000);

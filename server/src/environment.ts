@@ -1,4 +1,9 @@
 export const {
+	HOSTNAME = "http://127.0.0.1:3000",
+	DEV = false,
+
+	WWW_PATH = "C:\\cute",
+
 	DB_HOST = "localhost",
 	DB_USER = "",
 	DB_PASS = "",
@@ -9,9 +14,6 @@ export const {
 	EMAIL_NAME = "",
 
 	JWT_SECRET = "thisIsSoVerySecretyou literally have no idealol1610239012",
-
-	HOSTNAME = "http://127.0.0.1:3000",
-	DEV = false,
 
 	// https://console.cloud.google.com/apis/credentials
 	AUTH_GOOGLE_ID = " ",
