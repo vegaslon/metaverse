@@ -475,4 +475,74 @@ export class UserService implements OnModuleInit {
 			.skip(page * amount)
 			.limit(amount);
 	}
+
+	private async canSendFriendRequest(currentUser: User, user: User) {
+		// check current user
+		if (currentUser.friends.includes(user))
+			throw new ConflictException(
+				"Already friends with " + user.username,
+			);
+		if (currentUser.friendRequests.includes(user))
+			throw new ConflictException(
+				user.username + " already sent you a friend request",
+			);
+
+		// check user
+		if (user.friends.includes(currentUser))
+			throw new ConflictException(
+				"Already friends with " + user.username,
+			);
+		if (user.friendRequests.includes(currentUser))
+			throw new ConflictException(
+				"Already sent a friend request to " + user.username,
+			);
+	}
+
+	async sendFriendRequest(currentUser: User, username: string) {
+		// find user and populate
+		const user = await this.findByUsername(username)
+			.populate("friends")
+			.populate("friendRequests");
+		if (user == null) throw new NotFoundException("User not found");
+
+		await currentUser
+			.populate("friends")
+			.populate("friendRequests")
+			.execPopulate();
+
+		// check if possible
+		await this.canSendFriendRequest(currentUser, user);
+
+		// add current user to user friend requiests
+		user.friendRequests.unshift(currentUser);
+		await user.save();
+	}
+
+	async acceptFriendRequest(currentUser: User, username: string) {
+		// find user and populate
+		const user = await this.findByUsername(username);
+		if (user == null) throw new NotFoundException("User not found");
+
+		await currentUser.populate("friendRequests").execPopulate();
+
+		// check if user sent a friend request
+		const friendRequestI = currentUser.friendRequests.indexOf(user);
+		if (friendRequestI < 0)
+			throw new NotFoundException(
+				"You don't have a friend request from " + user.username,
+			);
+
+		// remove friend request
+		currentUser.friendRequests.splice(friendRequestI, 1);
+
+		// become friends!
+		currentUser.friends.push(user);
+		user.friends.push(currentUser);
+
+		await currentUser.save();
+		await user.save();
+	}
+
+	// will also delete friend request
+	async deleteFriend(currentUser: User, username: string) {}
 }
