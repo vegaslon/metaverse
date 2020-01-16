@@ -28,7 +28,7 @@ export class ImagePickerComponent implements ControlValueAccessor {
 
 	imagePreview = "";
 
-	@ViewChild("imageInput", { static: false }) imageInput: ElementRef;
+	@ViewChild("imageInput") imageInput: ElementRef;
 	onChange: Function = () => {};
 
 	constructor(private ref: ChangeDetectorRef) {}

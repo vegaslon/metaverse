@@ -22,7 +22,7 @@
 						"main": "src/main.ts",
 						"polyfills": "src/polyfills.ts",
 						"tsConfig": "tsconfig.app.json",
-						"aot": false,
+						"aot": true,
 						"assets": ["src/favicon.png", "src/assets"],
 						"styles": ["src/styles.scss"],
 						"scripts": []
@@ -40,7 +40,6 @@
 							"sourceMap": false,
 							"extractCss": true,
 							"namedChunks": false,
-							"aot": true,
 							"extractLicenses": true,
 							"vendorChunk": false,
 							"buildOptimizer": true,
@@ -92,11 +91,32 @@
 								}
 							],
 							"sourceMap": false,
-							"optimization": {
-								"scripts": false,
-								"styles": true
-							}
+							"optimization": true
 						}
+					}
+				},
+				"serve-ssr": {
+					"builder": "@nguniversal/builders:ssr-dev-server",
+					"options": {
+						"browserTarget": "frontend:build",
+						"serverTarget": "frontend:server"
+					},
+					"configurations": {
+						"production": {
+							"browserTarget": "frontend:build:production",
+							"serverTarget": "frontend:server:production"
+						}
+					}
+				},
+				"prerender": {
+					"builder": "@nguniversal/builders:prerender",
+					"options": {
+						"browserTarget": "frontend:build:production",
+						"serverTarget": "frontend:server:production",
+						"routes": []
+					},
+					"configurations": {
+						"production": {}
 					}
 				}
 			}

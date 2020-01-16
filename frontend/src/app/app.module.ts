@@ -61,8 +61,7 @@ const routes: Routes = [
 		HttpClientModule,
 		ReactiveFormsModule,
 		RouterModule.forRoot(routes, {
-			//scrollPositionRestoration: "enabled",
-			//preloadingStrategy: PreloadAllModules,
+			initialNavigation: "enabled",
 		}),
 		RecaptchaModule,
 		RecaptchaFormsModule,

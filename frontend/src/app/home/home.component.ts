@@ -7,6 +7,7 @@ import {
 } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { DownloadComponent } from "../header/download/download.component";
+import { Subscription, interval } from "rxjs";
 
 @Component({
 	selector: "app-home",
@@ -14,23 +15,33 @@ import { DownloadComponent } from "../header/download/download.component";
 	styleUrls: ["./home.component.scss"],
 })
 export class HomeComponent implements OnInit, OnDestroy {
-	@ViewChild("video", { static: true }) videoEl: ElementRef;
-	video: HTMLVideoElement;
+	@ViewChild("video", { static: true }) videoRef: ElementRef<
+		HTMLVideoElement
+	>;
 
-	videoInterval: NodeJS.Timer;
+	videoSub: Subscription;
 
 	constructor(public dialog: MatDialog) {}
 
 	ngOnInit() {
-		this.video = this.videoEl.nativeElement;
+		const video = this.videoRef.nativeElement;
 
-		this.videoInterval = setInterval(() => {
-			if (this.video.paused) this.video.play();
-		}, 100);
+		const videoSub = interval(100).subscribe(() => {
+			if (video.paused) {
+				video
+					.play()
+					.then(() => {
+						videoSub.unsubscribe();
+					})
+					.catch(err => {});
+			} else {
+				videoSub.unsubscribe();
+			}
+		});
 	}
 
 	ngOnDestroy() {
-		clearInterval(this.videoInterval);
+		if (this.videoSub) this.videoSub.unsubscribe();
 	}
 
 	openDownload() {

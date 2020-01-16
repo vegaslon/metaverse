@@ -11,7 +11,7 @@ export class VideoStreamComponent implements OnInit {
 	client: WebRTCClient = null;
 	stream: MediaStream = null;
 
-	@ViewChild("video", { static: false }) video: ElementRef;
+	@ViewChild("video") video: ElementRef;
 
 	constructor(private router: Router, private route: ActivatedRoute) {
 		this.router.navigate([], {
