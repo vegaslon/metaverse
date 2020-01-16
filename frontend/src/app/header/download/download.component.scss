@@ -50,9 +50,14 @@
 }
 
 .platform-table {
-	width: 500px;
-	table-layout: fixed;
+	width: 700px;
 	text-align: center;
+	margin-top: 32px;
+	margin-bottom: 16px;
+
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
 
 	td {
 		padding: 16px 0;
@@ -73,7 +78,6 @@
 	a {
 		span {
 			display: block;
-			opacity: 0.75;
 			margin-top: -16px;
 		}
 	}
@@ -90,4 +94,13 @@
 		// 	color: #000;
 		// }
 	}
+}
+
+.current-info {
+	display: flex;
+	width: 100%;
+	align-items: center;
+	justify-content: space-evenly;
+	opacity: 0.75;
+	text-align: center;
 }

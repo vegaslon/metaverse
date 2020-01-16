@@ -12,8 +12,10 @@ export class DownloadComponent implements OnInit {
 	//os = null;
 
 	found = false;
-	filename = "";
-	filesize = "";
+	version: string;
+	fileName: string;
+	fileSize: string;
+	releaseDate: Date;
 
 	constructor(private http: HttpClient) {}
 
@@ -25,21 +27,29 @@ export class DownloadComponent implements OnInit {
 		//if (navigator.platform.indexOf("Win") != -1) this.os = "win";
 		//if (navigator.platform.indexOf("Mac") != -1) this.os = "mac";
 
-		this.http
+		const sub = this.http
 			.get(this.releasesPath + "/latest.yml", { responseType: "text" })
 			.subscribe(
 				ymlStr => {
+					this.version = ymlStr.match(/version: ([^]*?)\n/i)[1];
+
 					const matches = ymlStr.match(
 						/files:[^]*?url: ([^]*?)\n[^]*?size: ([^]*?)\n/,
 					);
-					if (matches.length < 3) return;
+					this.fileName = matches[1];
+					this.fileSize =
+						this.bytesToMB(parseInt(matches[2])) + " MB";
+
+					this.releaseDate = new Date(
+						ymlStr.match(/releaseDate: '([^]*?)'/i)[1],
+					);
 
 					this.found = true;
-					this.filename = matches[1];
-					this.filesize =
-						this.bytesToMB(parseInt(matches[2])) + " MB";
+					sub.unsubscribe();
 				},
-				err => {},
+				err => {
+					sub.unsubscribe();
+				},
 			);
 	}
 }

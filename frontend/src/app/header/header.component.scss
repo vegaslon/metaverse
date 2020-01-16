@@ -10,7 +10,12 @@
 }
 
 .menu-item {
-	//margin: 0 8px;
+	margin: 0 4px;
+
+	img,
+	mat-icon {
+		margin-right: 4px;
+	}
 }
 
 .admin-button {
