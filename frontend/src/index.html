@@ -30,6 +30,19 @@
 			content="https://alpha.tivolicloud.com/assets/logo-circle.png"
 		/>
 		<meta property="og:locale" content="en_US" />
+		<script>
+			(function() {
+				window.goatcounter = window.goatcounter || {};
+				window.goatcounter.vars = { no_onload: true };
+				window.counter = "https://tivolicloud.goatcounter.com/count";
+
+				var script = document.createElement("script");
+				script.async = 1;
+				script.src = "//gc.zgo.at/count.js";
+				var ins = document.getElementsByTagName("script")[0];
+				ins.parentNode.insertBefore(script, ins);
+			})();
+		</script>
 	</head>
 	<body>
 		<app-root></app-root>
