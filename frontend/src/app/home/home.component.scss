@@ -2,20 +2,72 @@ $bgDim: 0.2;
 
 .header {
 	width: 100vw;
-	height: 250px;
-	padding: 50px 0;
 	text-align: center;
+	color: #fff;
+	position: relative;
+	overflow: hidden;
+	height: 480px;
 
-	background-image: url(/assets/header.jpg);
+	// background-image: linear-gradient(0deg, rgba(#000, 0.1), rgba(#000, 0.1)),
+	// 	url(/assets/header.jpg);
+	// background-size: cover;
+	// background-position: center;
+	// background-repeat: repeat;
 
-	background-size: cover;
-	background-position: center;
-	background-repeat: repeat;
+	.background {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
 
-	img {
-		display: block;
-		margin: 0 auto;
-		height: 100%;
+		video {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			background: #000;
+		}
+
+		&:after {
+			content: "";
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: linear-gradient(
+				90deg,
+				transparent 0%,
+				transparent 20%,
+				rgba(#000, 0.2) 50%,
+				transparent 80%,
+				transparent 100%
+			);
+		}
+	}
+
+	.content {
+		padding: 64px 0;
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+
+		img {
+			display: block;
+			margin: 0 auto;
+			height: 150px;
+		}
+
+		.title {
+			font-size: 2.4rem;
+			margin-top: 36px;
+			//font-weight: 700;
+		}
+
+		.buttons {
+			margin-top: 36px;
+		}
 	}
 }
 

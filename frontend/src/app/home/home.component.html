@@ -1,5 +1,42 @@
 <div class="header">
-	<img src="/assets/logo-light.svg" alt="Tivoli Cloud VR logo" />
+	<div class="background">
+		<video preload autoplay muted loop #video>
+			<source src="/assets/silence.webm" type="video/webm" />
+		</video>
+	</div>
+	<div class="content">
+		<img src="/assets/logo-light.svg" alt="Tivoli Cloud VR logo" />
+		<h1 class="title">
+			Massive online social platform
+			<span style="font-size: 0.9em; display: block; font-weight: 400;">
+				for virtual reality and desktop
+			</span>
+			<!-- <span style="font-size: 0.6em; display: block; font-weight: 400;">
+			for people, artists, developers and professionals!
+		</span> -->
+		</h1>
+		<div class="buttons">
+			<button
+				style="padding: 4px 24px"
+				mat-flat-button
+				color="primary"
+				(click)="openDownload()"
+			>
+				<mat-icon>get_app</mat-icon>
+				Download
+			</button>
+			<span style="margin: 0 16px"></span>
+			<a
+				style="padding: 4px 24px"
+				mat-flat-button
+				href="https://docs.tivolicloud.com"
+				target="_blank"
+			>
+				<mat-icon>bookmarks</mat-icon>
+				Docs
+			</a>
+		</div>
+	</div>
 </div>
 <div class="container">
 	<div class="row">
