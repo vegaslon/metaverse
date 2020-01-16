@@ -14,4 +14,3 @@ cp -r package.json ../docker/app/server
 
 cd ../docker
 docker build -t tivolicloud/metaverse:latest .
-sh upload.sh
