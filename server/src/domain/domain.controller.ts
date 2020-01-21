@@ -30,6 +30,14 @@ const defaultDomainImage = fs.readFileSync(
 export class DomainController {
 	constructor(private domainService: DomainService) {}
 
+	@Get("domain/:id")
+	@ApiBearerAuth()
+	@UseGuards(OptionalAuthGuard())
+	async getDomain(@CurrentUser() currentUser: User, @Param("id") id: string) {
+		const domain = await this.domainService.findById(id).populate("author");
+		return renderDomain(domain, currentUser);
+	}
+
 	@Get("domain/:id/image")
 	async getDomainImage(@Param("id") id: string, @Res() res: Response) {
 		const defaultDomainImageURL = "/api/domain/_/image";
@@ -66,18 +74,18 @@ export class DomainController {
 	@ApiBearerAuth()
 	@UseGuards(OptionalAuthGuard())
 	async findOnlineDomains(
-		@CurrentUser() user: User,
+		@CurrentUser() currentUser: User,
 		@Query() getDomainsDto: GetDomainsDto,
 	) {
 		const domains = await this.domainService
 			.findOnlineDomains(
 				getDomainsDto,
-				//(user as any) == false,
+				//(currentUser as any) == false,
 			)
 			.populate("author");
 
 		return domains.map(domain => {
-			return renderDomain(domain, user);
+			return renderDomain(domain, currentUser);
 		});
 	}
 
