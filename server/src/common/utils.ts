@@ -185,6 +185,7 @@ export async function renderFriend(
 		image: HOSTNAME + "/api/user/" + username + "/image",
 		domain: showDomain
 			? {
+					id: domain.id,
 					name: domain.label,
 			  }
 			: null,
