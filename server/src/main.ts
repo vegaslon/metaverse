@@ -121,11 +121,9 @@ function initFrontend(app: NestExpressApplication) {
 
 async function bootstrap() {
 	const app = await NestFactory.create<NestExpressApplication>(AppModule);
-	if (!DEV) {
-		app.enableCors({
-			origin: /^((null)|(file:\/\/))$/i, // null from chrome file://
-		});
-	}
+	app.enableCors({
+		origin: /^((null)|(file:\/\/))$/i, // null from chrome file://
+	});
 
 	app.use(
 		helmet(),
