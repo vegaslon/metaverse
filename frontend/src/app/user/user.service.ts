@@ -15,7 +15,6 @@ export interface Domain {
 
 	networkAddress: string;
 	networkPort: string;
-	path: string;
 }
 
 @Injectable({

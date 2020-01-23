@@ -1,23 +1,23 @@
 import {
-	Injectable,
-	OnModuleInit,
-	NotFoundException,
 	BadRequestException,
+	Injectable,
+	NotFoundException,
+	OnModuleInit,
 } from "@nestjs/common";
 import { ModuleRef } from "@nestjs/core";
-import { InjectModel, InjectConnection } from "@nestjs/mongoose";
-import { Model, Connection } from "mongoose";
+import { InjectConnection, InjectModel } from "@nestjs/mongoose";
+import { GridFSBucket } from "mongodb";
+import { Connection, Model } from "mongoose";
 import { derPublicKeyHeader } from "../common/der-public-key-header";
 import { heartbeat, HeartbeatSession } from "../common/heartbeat";
+import { MulterFile } from "../common/multer-file.model";
 import { patchDoc, snakeToCamelCaseObject } from "../common/utils";
 import { User } from "../user/user.schema";
 import { UserService, UserSession } from "../user/user.service";
-import { CreateDomainDto, UpdateDomainDto, GetDomainsDto } from "./domain.dto";
+import { CreateDomainDto, GetDomainsDto, UpdateDomainDto } from "./domain.dto";
 import { Domain } from "./domain.schema";
 import uuid = require("uuid");
-import { MulterFile } from "../common/multer-file.model";
 import sharp = require("sharp");
-import { GridFSBucket } from "mongodb";
 import escapeString = require("escape-string-regexp");
 
 export interface DomainSession {
@@ -38,7 +38,16 @@ export class DomainService implements OnModuleInit {
 		private moduleRef: ModuleRef,
 	) {
 		this.domainModel
-			.updateMany({}, { $set: { online: false, onlineUsers: 0 } })
+			.updateMany(
+				{},
+				{
+					$set: {
+						online: false,
+						onlineUsers: 0,
+						path: "", // not being used at the moment because domain servers handle paths
+					},
+				},
+			)
 			.exec();
 
 		this.images = new GridFSBucket(connection.db, {
@@ -51,7 +60,11 @@ export class DomainService implements OnModuleInit {
 	}
 
 	findById(id: string) {
-		return this.domainModel.findById(id);
+		try {
+			return this.domainModel.findById(id);
+		} catch (err) {
+			throw new BadRequestException();
+		}
 	}
 
 	async createDomain(user: User, createDomainDto: CreateDomainDto) {
@@ -87,7 +100,7 @@ export class DomainService implements OnModuleInit {
 			// dont want the domain to update crucial info
 			delete updateDomainDto.domain.label;
 			delete updateDomainDto.domain.description;
-			delete updateDomainDto.domain.path;
+			//delete updateDomainDto.domain.path;
 		}
 
 		const dto = snakeToCamelCaseObject(updateDomainDto.domain);

@@ -1,6 +1,5 @@
-import { Document, Schema, MongooseDocumentOptionals } from "mongoose";
+import { Document, Schema } from "mongoose";
 import { User } from "../user/user.schema";
-import { MongoClient } from "mongodb";
 
 export enum DomainAutomaticNetworking {
 	full = "full",
@@ -58,7 +57,7 @@ export const DomainSchema = new Schema({
 	publicKey: { type: String, default: "" },
 
 	// not from hifi
-	path: { type: String, default: "/0,0,0/0,0,0,0" },
+	path: { type: String, default: "" }, // if empty, domain server will handle path
 
 	userLikes: [{ type: Schema.Types.ObjectId, ref: "users" }],
 });

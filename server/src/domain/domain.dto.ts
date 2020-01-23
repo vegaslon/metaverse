@@ -108,9 +108,9 @@ class UpdateDomain {
 	@MaxLength(128)
 	label?: string;
 
-	@IsOptional()
-	@MaxLength(128)
-	path?: string;
+	// @IsOptional()
+	// @MaxLength(128)
+	// path?: string;
 }
 
 export class UpdateDomainDto {

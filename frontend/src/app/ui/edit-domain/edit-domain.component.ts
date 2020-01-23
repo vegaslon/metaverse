@@ -47,10 +47,10 @@ export class EditDomainComponent implements OnInit {
 			description: new FormControl(this.domain.description || "", [
 				Validators.maxLength(8192),
 			]),
-			path: new FormControl(this.domain.path || "/0,0,0/0,0,0,0", [
-				Validators.required,
-				Validators.maxLength(128),
-			]),
+			// path: new FormControl(this.domain.path || "/0,0,0/0,0,0,0", [
+			// 	Validators.required,
+			// 	Validators.maxLength(128),
+			// ]),
 			thumbnail: new FormControl(null),
 		});
 	}

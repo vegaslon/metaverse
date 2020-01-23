@@ -53,20 +53,19 @@ export class DomainCardComponent implements OnInit {
 	}
 
 	onJoinDomain() {
-		if (this.inInterface == false) return;
-		const EventBridge = (window as any).EventBridge;
-
-		EventBridge.emitWebEvent(
-			JSON.stringify({
-				uuid: "com.tivolicloud.explore",
-				key: "joinDomain",
-				value:
-					this.domain.networkAddress +
-					":" +
-					this.domain.networkPort +
-					this.domain.path,
-			}),
-		);
+		// if (this.inInterface == false) return;
+		// const EventBridge = (window as any).EventBridge;
+		// EventBridge.emitWebEvent(
+		// 	JSON.stringify({
+		// 		uuid: "com.tivolicloud.explore",
+		// 		key: "joinDomain",
+		// 		value:
+		// 			this.domain.networkAddress +
+		// 			":" +
+		// 			this.domain.networkPort +
+		// 			this.domain.path,
+		// 	}),
+		// );
 	}
 
 	onEditDomain() {

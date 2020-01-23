@@ -37,7 +37,7 @@ export class PlacesController {
 					description: domain.description,
 					path: domain.path,
 					name: domain.label,
-					address: "hifi://" + domain._id + domain.path,
+					address: domain._id, // hifi://address/path
 					domain: {
 						id: domain._id,
 						network_address: domain.networkAddress,
