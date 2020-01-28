@@ -15,7 +15,9 @@ import { UserUpdateLocationDto } from "./user.dto";
 import { User, UserSchema } from "./user.schema";
 import { UserService } from "./user.service";
 
-//jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000 * 30;
+// let mongo server download if it hasn't already
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000 * 60 * 10;
+
 jest.useFakeTimers();
 
 describe("UserService", () => {
