@@ -17,13 +17,6 @@ import { SentryModule } from "@ntegral/nestjs-sentry";
 
 @Module({
 	imports: [
-		SentryModule.forRoot({
-			dsn:
-				"https://35ced4ee7098404393553430f8d78e79@sentry.tivolicloud.com/3",
-			debug: DEV as boolean,
-			environment: DEV ? "dev" : "production",
-		}),
-
 		// https://mongoosejs.com/docs/connections.html#options
 		MongooseModule.forRoot("mongodb://" + DB_HOST, {
 			user: DB_USER,
@@ -32,6 +25,18 @@ import { SentryModule } from "@ntegral/nestjs-sentry";
 			useNewUrlParser: true,
 			useUnifiedTopology: true,
 		}),
+
+		// only in production
+		...(!DEV
+			? [
+					SentryModule.forRoot({
+						dsn:
+							"https://35ced4ee7098404393553430f8d78e79@sentry.tivolicloud.com/3",
+						environment: "production",
+						debug: false,
+					}),
+			  ]
+			: []),
 
 		// angular ssr
 		// ...(() => {

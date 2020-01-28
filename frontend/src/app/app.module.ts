@@ -20,8 +20,8 @@ import { environment } from "../environments/environment";
 
 Sentry.init({
 	dsn: "https://35ced4ee7098404393553430f8d78e79@sentry.tivolicloud.com/3",
-	debug: !environment.production,
-	environment: environment.production ? "production" : "dev",
+	environment: "production",
+	enabled: environment.production,
 });
 
 @Injectable()
