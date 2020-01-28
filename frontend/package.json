@@ -23,6 +23,7 @@
 		"@angular/router": "~9.0.0-rc.9",
 		"@auth0/angular-jwt": "^3.0.1",
 		"@nguniversal/express-engine": "^9.0.0-rc.0",
+		"@sentry/browser": "^5.11.1",
 		"@types/node": "^12.11.1",
 		"bootstrap": "^4.3.1",
 		"express": "^4.15.2",

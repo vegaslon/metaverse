@@ -9,20 +9,22 @@ import { ApiUsersModule } from "./api/users/users.module";
 import { AuthModule } from "./auth/auth.module";
 import { DomainModule } from "./domain/domain.module";
 import { EmailModule } from "./email/email.module";
-import { DB_HOST, DB_NAME, DB_PASS, DB_USER } from "./environment";
+import { DB_HOST, DB_NAME, DB_PASS, DB_USER, DEV } from "./environment";
 import { PuppeteerModule } from "./puppeteer/puppeteer.module";
 import { UserModule } from "./user/user.module";
 import { VideoStreamModule } from "./video-stream/video-stream.module";
+import { SentryModule } from "@ntegral/nestjs-sentry";
 
 @Module({
 	imports: [
-		// SentryModule.forRoot({
-		// 	dsn: "https://4fb2a3460640491bb5f8751c1d538619@sentry.io/1813272",
-		// 	debug: true,
-		// 	environment: "dev",
-		// }),
-		// https://mongoosejs.com/docs/connections.html#options
+		SentryModule.forRoot({
+			dsn:
+				"https://35ced4ee7098404393553430f8d78e79@sentry.tivolicloud.com/3",
+			debug: DEV as boolean,
+			environment: DEV ? "dev" : "production",
+		}),
 
+		// https://mongoosejs.com/docs/connections.html#options
 		MongooseModule.forRoot("mongodb://" + DB_HOST, {
 			user: DB_USER,
 			pass: DB_PASS,

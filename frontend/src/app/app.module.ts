@@ -1,20 +1,37 @@
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
-import { NgModule } from "@angular/core";
+import { ErrorHandler, Injectable, NgModule } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouterModule, Routes } from "@angular/router";
+import * as Sentry from "@sentry/browser";
 import { RecaptchaFormsModule, RecaptchaModule } from "ng-recaptcha";
 import { AppComponent } from "./app.component";
 import { AdminGuard } from "./auth/admin.guard";
 import { AuthInterceptorService } from "./auth/auth-interceptor.service";
 import { AuthGuard } from "./auth/auth.guard";
+import { VerifyEmailComponent } from "./auth/verify-email/verify-email.component";
 import { DownloadComponent } from "./header/download/download.component";
 import { HeaderComponent } from "./header/header.component";
 import { SignInComponent } from "./header/sign-in/sign-in.component";
 import { HomeComponent } from "./home/home.component";
 import { MaterialModule } from "./material.module";
-import { VerifyEmailComponent } from "./auth/verify-email/verify-email.component";
+import { environment } from "../environments/environment";
+
+Sentry.init({
+	dsn: "https://35ced4ee7098404393553430f8d78e79@sentry.tivolicloud.com/3",
+	debug: !environment.production,
+	environment: environment.production ? "production" : "dev",
+});
+
+@Injectable()
+export class SentryErrorHandler implements ErrorHandler {
+	constructor() {}
+	handleError(error) {
+		const eventId = Sentry.captureException(error.originalError || error);
+		Sentry.showReportDialog({ eventId });
+	}
+}
 
 const routes: Routes = [
 	{ path: "", component: HomeComponent },
@@ -67,6 +84,10 @@ const routes: Routes = [
 		RecaptchaFormsModule,
 	],
 	providers: [
+		{
+			provide: ErrorHandler,
+			useClass: SentryErrorHandler,
+		},
 		{
 			provide: HTTP_INTERCEPTORS,
 			useClass: AuthInterceptorService,
