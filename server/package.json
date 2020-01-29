@@ -1,6 +1,6 @@
 {
 	"scripts": {
-		"build": "npm run test && rimraf dist && nest build",
+		"build": "rimraf dist && nest build",
 		"start": "rimraf dist && cross-env DEV=true nest start --watch",
 		"test": "jest",
 		"test:watch": "jest --watch",
