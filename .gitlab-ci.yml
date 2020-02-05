@@ -13,18 +13,18 @@ server tests:
         - npm i
         - npm run test:cov
     coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
-    artifacts:
-        expire_in: 7 days
-        paths:
-            - server/coverage/
+    #artifacts:
+    #    expire_in: 7 days
+    #    paths:
+    #        - server/coverage/
     
-pages:
-    stage: deploy
-    dependencies:
-        - server tests
-    script:
-        - mv server/coverage/lcov-report public/
-    artifacts:
-        expire_in: 7 days
-        paths:
-            - public
+#pages:
+#    stage: deploy
+#    dependencies:
+#        - server tests
+#    script:
+#        - mv server/coverage/lcov-report public/
+#    artifacts:
+#        expire_in: 7 days
+#        paths:
+#            - public
