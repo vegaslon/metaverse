@@ -1,9 +1,9 @@
 stages:
     - test
 
-#cache:
-#    paths:
-#        - server/node_modules/
+cache:
+    paths:
+        - server/node_modules/
 
 Server tests:
     image: node:latest
