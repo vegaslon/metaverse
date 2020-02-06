@@ -20,14 +20,14 @@ export class AppComponent implements OnInit {
 
 	ngOnInit() {
 		// goatcounter
-		const w = window as any;
-		let referrer = "";
-		this.router.events.subscribe(val => {
-			if (!(val instanceof NavigationEnd)) return;
+		// const w = window as any;
+		// let referrer = "";
+		// this.router.events.subscribe(val => {
+		// 	if (!(val instanceof NavigationEnd)) return;
 
-			if (w.goatcounter != null) w.goatcounter.count({ referrer });
-			referrer = window.location.href;
-		});
+		// 	if (w.goatcounter != null) w.goatcounter.count({ referrer });
+		// 	referrer = window.location.href;
+		// });
 
 		const query = new URLSearchParams(window.location.search);
 
