@@ -84,10 +84,14 @@ class FrontendRenderFilter extends BaseExceptionFilter {
 
 		const res: Response = ctx.getResponse();
 
-		res.render("index", {
-			req,
-			//providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }],
-		});
+		if (DEV) {
+			res.sendFile(frontend.browserIndex);
+		} else {
+			res.render("index", {
+				req,
+				//providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }],
+			});
+		}
 	}
 }
 
@@ -113,10 +117,10 @@ function initFrontend(app: NestExpressApplication) {
 		app.useStaticAssets(frontend.browser, {
 			index: null,
 		});
-
-		const { httpAdapter } = app.get(HttpAdapterHost);
-		app.useGlobalFilters(new FrontendRenderFilter(httpAdapter));
 	}
+
+	const { httpAdapter } = app.get(HttpAdapterHost);
+	app.useGlobalFilters(new FrontendRenderFilter(httpAdapter));
 }
 
 async function bootstrap() {
