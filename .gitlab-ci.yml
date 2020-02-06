@@ -58,10 +58,10 @@ dockerize:
         - docker:dind
 
     script:
-        - docker build -t registry.tivolicloud.com/tivolicloud/metaverse:latest .
+        - docker build -t registry.tivolicloud.com/tivolicloud-private/metaverse:latest .
 
         - docker login registry.tivolicloud.com -u makitsune -p $GITLAB_TOKEN
-        - docker push registry.tivolicloud.com/tivolicloud/metaverse:latest
+        - docker push registry.tivolicloud.com/tivolicloud-private/metaverse:latest
 #pages:
 #    stage: deploy
 #    dependencies:
