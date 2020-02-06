@@ -58,13 +58,10 @@ dockerize:
         - docker:dind
 
     script:
-        - docker build -t tivolicloud/metaverse:latest .
-        - docker save -o metaverse.tar tivolicloud/metaverse:latest
+        - docker build -t registry.tivolicloud.com/tivolicloud/metaverse:latest .
 
-    artifacts:
-        expire_in: 7 days
-        paths:
-            - metaverse.tar
+        - docker login registry.tivolicloud.com -u makitsune -p $GITLAB_TOKEN
+        - docker push registry.tivolicloud.com/tivolicloud/metaverse
 #pages:
 #    stage: deploy
 #    dependencies:
