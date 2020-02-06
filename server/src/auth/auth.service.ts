@@ -13,7 +13,7 @@ import { User } from "../user/user.schema";
 import { UserService } from "../user/user.service";
 import { AuthExtSignUpDto, AuthSignUpDto, AuthTokenDto } from "./auth.dto";
 import { JwtPayload, JwtPayloadType } from "./jwt.strategy";
-import { HOSTNAME } from "src/environment";
+import { HOSTNAME } from "../environment";
 
 // aaah... cant camel case here
 export interface InterfaceAuthToken {

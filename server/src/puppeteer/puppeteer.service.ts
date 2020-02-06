@@ -1,10 +1,8 @@
 import { Injectable, OnModuleInit } from "@nestjs/common";
-import * as Puppeteer from "puppeteer";
-import * as path from "path";
 import * as fs from "fs";
 import * as Handlebars from "handlebars";
-import { HOSTNAME } from "src/environment";
-import * as os from "os";
+import * as path from "path";
+import * as Puppeteer from "puppeteer";
 
 @Injectable()
 export class PuppeteerService implements OnModuleInit {
@@ -44,7 +42,12 @@ export class PuppeteerService implements OnModuleInit {
 		});
 	}
 
-	renderNametag(username: string, displayName: string = null, admin = false, friend = false) {
+	renderNametag(
+		username: string,
+		displayName: string = null,
+		admin = false,
+		friend = false,
+	) {
 		const html = Handlebars.compile(
 			fs.readFileSync(
 				path.resolve(__dirname, "../../assets/nametag.html"),

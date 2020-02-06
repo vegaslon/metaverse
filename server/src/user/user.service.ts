@@ -17,7 +17,7 @@ import { Connection, Model } from "mongoose";
 import fetch from "node-fetch";
 import * as path from "path";
 import * as sharp from "sharp";
-import { GetUsersDto } from "src/admin/admin.dto";
+import { GetUsersDto } from "../admin/admin.dto";
 import { Readable } from "stream";
 import { AuthSignUpDto } from "../auth/auth.dto";
 import { derPublicKeyHeader } from "../common/der-public-key-header";
