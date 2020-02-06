@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
 import {
 	ActivatedRouteSnapshot,
 	CanActivate,
@@ -7,39 +8,65 @@ import {
 	UrlTree,
 } from "@angular/router";
 import { Observable } from "rxjs";
-import { map, take } from "rxjs/operators";
+import { map, mergeMap } from "rxjs/operators";
+import { SignInComponent } from "../header/sign-in/sign-in.component";
 import { AuthService } from "./auth.service";
 
 @Injectable({
 	providedIn: "root",
 })
 export class AuthGuard implements CanActivate {
-	constructor(private authService: AuthService, private router: Router) {}
+	constructor(
+		private authService: AuthService,
+		private router: Router,
+		public dialog: MatDialog,
+	) {}
 
 	canActivate(
 		route: ActivatedRouteSnapshot,
 		state: RouterStateSnapshot,
 	): Observable<boolean | UrlTree> {
-		const handleUser = () => {
+		const afterLoggingIn = (): Observable<unknown> =>
+			new Observable(sub => {
+				// check if still logging in
+
+				if (this.authService.loggingIn$.value) {
+					const loggingInSub = this.authService.loggingIn$.subscribe(
+						loggingIn => {
+							if (loggingIn != false) return; // wait until its false
+							loggingInSub.unsubscribe();
+							sub.next();
+						},
+					);
+				} else {
+					sub.next();
+				}
+			});
+
+		const handleUser = (): Observable<boolean | UrlTree> => {
+			// if user, continue to page!
+
 			const user = this.authService.user$.value;
-			if (user != null) return true;
-			return this.router.createUrlTree(["/"]);
+			if (user != null) return new Observable(sub => sub.next(true));
+
+			// if not, login popup
+
+			const dialog = this.dialog.open(SignInComponent, {
+				width: "400px",
+			});
+
+			return dialog.afterClosed().pipe(
+				mergeMap(() => afterLoggingIn()),
+				map(() => {
+					const user = this.authService.user$.value;
+
+					return user != null
+						? true
+						: this.router.createUrlTree(["/"]);
+				}),
+			);
 		};
 
-		return new Observable(sub => {
-			const loggingIn = this.authService.loggingIn$.value;
-
-			if (loggingIn) {
-				const loggingIngSub = this.authService.loggingIn$.subscribe(
-					loggingIn => {
-						if (loggingIn != false) return; // wait until its done
-						sub.next(handleUser());
-						loggingIngSub.unsubscribe();
-					},
-				);
-			} else {
-				sub.next(handleUser());
-			}
-		});
+		return afterLoggingIn().pipe(mergeMap(() => handleUser()));
 	}
 }
