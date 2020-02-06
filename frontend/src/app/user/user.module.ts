@@ -11,6 +11,7 @@ const routes: Routes = [
 	{ path: "", redirectTo: "settings", pathMatch: "full" },
 	{ path: "settings", component: SettingsComponent },
 	{ path: "worlds", component: DomainsComponent },
+	{ path: "**", redirectTo: "/" },
 ];
 
 @NgModule({

@@ -5,7 +5,10 @@ import { Routes, RouterModule } from "@angular/router";
 import { UiModule } from "../ui/ui.module";
 import { MaterialModule } from "../material.module";
 
-const routes: Routes = [{ path: "", component: ExploreComponent }];
+const routes: Routes = [
+	{ path: "", component: ExploreComponent },
+	{ path: "**", redirectTo: "/" },
+];
 
 @NgModule({
 	declarations: [ExploreComponent],
