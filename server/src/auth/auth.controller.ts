@@ -7,7 +7,7 @@ import {
 	Req,
 	Res,
 } from "@nestjs/common";
-import { ApiTags, ApiExcludeEndpoint } from "@nestjs/swagger";
+import { ApiTags, ApiExcludeEndpoint, ApiBearerAuth } from "@nestjs/swagger";
 import { AuthSignUpDto, AuthExtSignUpDto } from "./auth.dto";
 import {
 	AuthService,
@@ -17,6 +17,8 @@ import {
 import { AuthGuard } from "@nestjs/passport";
 import { Request, Response } from "express";
 import { User } from "../user/user.schema";
+import { MetaverseAuthGuard } from "./auth.guard";
+import { CurrentUser } from "./user.decorator";
 
 @ApiTags("auth")
 @Controller("api/auth")
@@ -84,5 +86,13 @@ export class AuthController {
 		res.send(
 			`<script>if(window.opener)window.opener.postMessage(${json},"*")</script>`,
 		);
+	}
+
+	// gitlab sso
+	@Post("sso/gitlab")
+	@UseGuards(MetaverseAuthGuard())
+	@ApiBearerAuth()
+	ssoGitlab(@CurrentUser() user: User) {
+		return this.authService.ssoGitlabToken(user);
 	}
 }

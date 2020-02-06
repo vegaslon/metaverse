@@ -10,11 +10,17 @@
 }
 
 .menu-item {
-	margin: 0 4px;
+	// margin: 0 4px;
 
 	img,
 	mat-icon {
 		margin-right: 4px;
+	}
+
+	&.white {
+		background: #fff;
+		color: #000;
+		margin: 0 4px;
 	}
 }
 

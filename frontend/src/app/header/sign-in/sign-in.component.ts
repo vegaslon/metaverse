@@ -1,14 +1,7 @@
-import {
-	Component,
-	ElementRef,
-	OnInit,
-	ViewChild,
-	Inject,
-} from "@angular/core";
+import { Component, Inject, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { RecaptchaComponent } from "ng-recaptcha";
-import { environment } from "../../../environments/environment";
+import { Subject } from "rxjs";
 import { AuthService, AuthToken } from "../../auth/auth.service";
 
 @Component({
@@ -37,12 +30,12 @@ export class SignInComponent implements OnInit {
 		public dialogRef: MatDialogRef<SignInComponent>,
 		private authService: AuthService,
 		@Inject(MAT_DIALOG_DATA)
-		private data: { mode: "signIn" | "signUp" | "extSignUp" },
+		private data: {
+			mode: "signIn" | "signUp" | "extSignUp";
+		},
 	) {
 		if (data != null) {
-			if (data.mode != null) {
-				this.mode = data.mode;
-			}
+			if (data.mode != null) this.mode = data.mode;
 		}
 	}
 
@@ -126,6 +119,8 @@ export class SignInComponent implements OnInit {
 		const sub = service.subscribe(
 			data => {
 				this.dialogRef.close();
+
+				sub.unsubscribe();
 			},
 			err => {
 				this.errorMessage = err;
@@ -134,8 +129,7 @@ export class SignInComponent implements OnInit {
 
 				//if (captchaRef)
 				//	(captchaRef.grecaptcha as RecaptchaComponent).reset();
-			},
-			() => {
+
 				sub.unsubscribe();
 			},
 		);

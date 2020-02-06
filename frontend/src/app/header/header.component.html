@@ -20,7 +20,12 @@
 					target="_blank"
 					mat-button
 				>
-					<mat-icon>create</mat-icon> Blog
+					<img
+						src="/assets/icons/ghost-white.svg"
+						alt="Ghost"
+						style="height: 20px"
+					/>
+					Blog
 				</a>
 
 				<a
@@ -32,20 +37,40 @@
 					<mat-icon>bookmarks</mat-icon> Docs
 				</a>
 
-				<a class="menu-item" href="/discord" target="_blank" mat-button>
+				<!-- <button class="menu-item" mat-button routerLink="/explore">
+					<mat-icon>public</mat-icon> Explore
+				</button> -->
+
+				<span style="flex-grow: 1"></span>
+
+				<a
+					class="menu-item white"
+					href="/discord"
+					target="_blank"
+					mat-button
+				>
 					<img
-						src="/assets/icons/discord-white.svg"
+						src="/assets/icons/discord.svg"
 						alt="Discord"
 						style="height: 24px"
 					/>
 					Discord
 				</a>
 
-				<button class="menu-item" mat-button routerLink="/explore">
-					<mat-icon>public</mat-icon> Explore
+				<button
+					class="menu-item white"
+					mat-button
+					routerLink="/auth/sso/gitlab"
+				>
+					<img
+						src="/assets/icons/gitlab.svg"
+						alt="GitLab"
+						style="height: 22px"
+					/>
+					GitLab
 				</button>
 
-				<span style="flex: 1 1 auto"></span>
+				<span style="flex-grow: 1"></span>
 
 				<a *ngIf="!user" mat-flat-button (click)="onSignIn()">
 					<mat-icon>account_circle</mat-icon> Sign in

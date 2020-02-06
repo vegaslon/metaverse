@@ -13,6 +13,7 @@ import { User } from "../user/user.schema";
 import { UserService } from "../user/user.service";
 import { AuthExtSignUpDto, AuthSignUpDto, AuthTokenDto } from "./auth.dto";
 import { JwtPayload, JwtPayloadType } from "./jwt.strategy";
+import { HOSTNAME } from "src/environment";
 
 // aaah... cant camel case here
 export interface InterfaceAuthToken {
@@ -169,5 +170,24 @@ export class AuthService {
 			id: domain._id,
 			s,
 		} as JwtPayload);
+	}
+
+	// sso
+
+	async ssoGitlabToken(user: User) {
+		return this.jwtService.sign(
+			{
+				id: user.id,
+				name: user.username,
+				username: user.username,
+				email: user.email,
+				avatar_url: HOSTNAME + "/api/user/" + user.username + "/image",
+			},
+			{
+				algorithm: "HS256",
+				expiresIn: 3600,
+				noTimestamp: false,
+			},
+		);
 	}
 }

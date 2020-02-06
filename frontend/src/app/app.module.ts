@@ -60,6 +60,12 @@ const routes: Routes = [
 				m => m.VideoStreamModule,
 			),
 	},
+	{
+		path: "auth",
+		canActivate: [AuthGuard],
+		loadChildren: () =>
+			import("./auth/auth.module").then(m => m.AuthModule),
+	},
 	{ path: "**", redirectTo: "/" },
 ];
 
