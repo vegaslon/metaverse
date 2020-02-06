@@ -1,23 +1,70 @@
 stages:
     - test
+    - build
     - deploy
 
 server tests:
-    image: node:latest
     stage: test
+    image: node:latest
+
     cache:
         paths:
             - server/node_modules/
+
     script:
         - cd server
         - npm i
         - npm run test:cov
+
     coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
+
     #artifacts:
     #    expire_in: 7 days
     #    paths:
     #        - server/coverage/
-    
+
+build all:
+    stage: build
+    image: node:latest
+
+    dependencies:
+        - server tests
+
+    cache:
+        paths:
+            - frontend/node_modules/
+            - server/node_modules/
+
+    script:
+        - npm run install
+        - sh build.sh
+
+    artifacts:
+        expire_in: 7 days
+        paths:
+            - app/
+
+dockerize:
+    stage: deploy
+    image: docker:latest
+
+    dependencies:
+        - build all
+
+    variables:
+        DOCKER_TLS_CERTDIR: ""
+
+    services:
+        - docker:dind
+
+    script:
+        - docker build -t tivolicloud/metaverse:latest .
+        - docker save -o metaverse.tar tivolicloud/metaverse:latest
+
+    artifacts:
+        expire_in: 7 days
+        paths:
+            - metaverse.tar
 #pages:
 #    stage: deploy
 #    dependencies:
