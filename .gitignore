@@ -1,13 +1,10 @@
 *node_modules
 *package-lock.json
 
-frontend/dist
+/frontend/dist/
 
-server/dist
-server/ecosystem.config.js
-server/coverage
+/server/dist/
+/server/ecosystem.config.js
+/server/coverage/
 
-docker/docker-compose.yml
-docker/db
-docker/app
-app
+/app/
