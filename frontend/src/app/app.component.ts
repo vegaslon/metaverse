@@ -31,23 +31,12 @@ export class AppComponent implements OnInit {
 
 		const query = new URLSearchParams(window.location.search);
 
-		let isQuery = false;
-		let autoLogin = true;
+		if (query.has("noHeader")) this.showHeader = false;
 
-		if (query.get("noHeader") != null) {
-			isQuery = true;
-			this.showHeader = false;
-		}
-
-		if (query.get("emailVerified") != null) {
-			isQuery = true;
+		if (query.has("emailVerified"))
 			this.authService.openEmailVerifyDialog(true);
-		}
 
-		if (query.get("token") != null) {
-			isQuery = true;
-			autoLogin = false;
-
+		if (query.has("token")) {
 			this.authService.handleAuthentication({
 				access_token: query.get("token"),
 				created_at: 0,
@@ -58,10 +47,7 @@ export class AppComponent implements OnInit {
 			});
 		}
 
-		if (query.get("signUp") != null) {
-			isQuery = true;
-			autoLogin = false;
-
+		if (query.has("signUp")) {
 			this.dialog.open(SignInComponent, {
 				width: "400px",
 				data: {
@@ -70,7 +56,7 @@ export class AppComponent implements OnInit {
 			});
 		}
 
-		if (isQuery) this.router.navigate(["."], { relativeTo: this.route });
-		if (autoLogin) this.authService.autoLogin();
+		if (query.toString().length > 0)
+			this.router.navigate(["."], { relativeTo: this.route });
 	}
 }
