@@ -26,7 +26,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 		private authService: AuthService,
 		private snackBar: MatSnackBar,
 	) {
-		this.userSub = this.authService.user.subscribe(user => {
+		this.userSub = this.authService.user$.subscribe(user => {
 			this.user = user;
 			this.updateUserImage();
 

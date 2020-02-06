@@ -18,7 +18,7 @@ export class AuthInterceptorService implements HttpInterceptor {
 		req: HttpRequest<any>,
 		next: HttpHandler,
 	): Observable<HttpEvent<any>> {
-		const user = this.authService.user.getValue();
+		const user = this.authService.user$.value;
 
 		if (user == null || req.url.indexOf("cdn.") > -1) {
 			return next.handle(req);

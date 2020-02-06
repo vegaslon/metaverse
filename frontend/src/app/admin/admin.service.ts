@@ -40,7 +40,6 @@ export class AdminService {
 	};
 
 	getUsers(page = 1, amount = 50, onlineSorted = false) {
-		console.log(onlineSorted);
 		return this.http
 			.get<AdminUser[]>("/api/admin/users", {
 				params: new HttpParams()
