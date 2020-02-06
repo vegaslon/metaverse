@@ -41,6 +41,7 @@ export class User {
 })
 export class AuthService {
 	user$ = new BehaviorSubject<User>(null);
+	loggingIn$ = new BehaviorSubject<boolean>(false);
 
 	private tokenExpirationTimer: any;
 	private jwtHelper = new JwtHelperService();
@@ -98,14 +99,15 @@ export class AuthService {
 	handleAuthentication = (token: AuthToken) => {
 		const jwt = token.access_token;
 
-		if (this.jwtHelper.isTokenExpired(jwt))
+		if (this.jwtHelper.isTokenExpired(jwt)) {
+			this.loggingIn$.next(false);
 			return throwError("Token expired");
+		}
 
 		const sub = this.getUserProfile(jwt).subscribe(
 			res => {
-				if (res.statusCode == 401) {
-					return;
-				}
+				if (res.statusCode == 401) return this.loggingIn$.next(false);
+
 				const profile = res.data.user;
 				const admin = profile.roles.includes("admin");
 
@@ -120,9 +122,12 @@ export class AuthService {
 				this.autoLogout(msTillExpire);
 				this.user$.next(user);
 				localStorage.setItem("auth", JSON.stringify(token));
+
+				this.loggingIn$.next(false);
+				sub.unsubscribe();
 			},
-			() => {},
 			() => {
+				this.loggingIn$.next(false);
 				sub.unsubscribe();
 			},
 		);
@@ -157,6 +162,7 @@ export class AuthService {
 
 		try {
 			const token = JSON.parse(tokenStr);
+			this.loggingIn$.next(true);
 			this.handleAuthentication(token);
 		} catch (err) {}
 	}
