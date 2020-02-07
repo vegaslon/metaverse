@@ -106,9 +106,11 @@ build frontend:
         paths:
             - app/frontend
 
-dockerize:
+deploy docker image:
     stage: deploy
     image: docker:latest
+
+    when: manual
 
     dependencies:
         - build server
