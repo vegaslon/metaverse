@@ -20,10 +20,6 @@ install dependencies:
         - cd ../frontend
         - npm ci
 
-        - ls node_modules/@angular
-        - npm i @angular/cli
-        - ls node_modules/@angular
-
     # only:
     #     changes:
     #         - server/package-lock.json
@@ -87,6 +83,8 @@ build frontend:
             - frontend/node_modules/
 
     script:
+        - npm i @angular/cli
+
         - mkdir -p app app/frontend
 
         - cd frontend
