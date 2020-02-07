@@ -83,7 +83,7 @@ build frontend:
             - frontend/node_modules/
 
     script:
-        - npm i @angular/cli
+        - npm i @angular/cli -g # weird bug
 
         - mkdir -p app app/frontend
 
