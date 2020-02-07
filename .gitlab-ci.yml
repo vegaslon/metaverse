@@ -23,7 +23,7 @@ server tests:
     #    paths:
     #        - server/coverage/
 
-build all:
+build server:
     stage: build
     image: node:latest
 
@@ -32,24 +32,54 @@ build all:
 
     cache:
         paths:
-            - frontend/node_modules/
             - server/node_modules/
 
     script:
-        - npm run install
-        - sh build.sh
+        - mkdir -p app app/server
+
+        - cd server
+        - npm i
+        - npm run build
+
+        - cp -r dist ../app/server
+        - cp -r assets ../app/server
+        - cp -r templates ../app/server
+        - cp -r package.json ../app/server
 
     artifacts:
         expire_in: 7 days
         paths:
-            - app/
+            - app/server
+
+build frontend:
+    stage: build
+    image: node:latest
+
+    cache:
+        paths:
+            - frontend/node_modules/
+
+    script:
+        - mkdir -p app app/frontend
+
+        - cd frontend
+        - npm i
+        - npm run build:ssr
+
+        - cp -r dist ../app/frontend
+
+    artifacts:
+        expire_in: 7 days
+        paths:
+            - app/frontend
 
 dockerize:
     stage: deploy
     image: docker:latest
 
     dependencies:
-        - build all
+        - build server
+        - build frontend
 
     variables:
         DOCKER_TLS_CERTDIR: ""
