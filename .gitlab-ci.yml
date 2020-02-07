@@ -6,7 +6,7 @@ stages:
 
 server deps:
     stage: dependencies
-    image: node:latest
+    image: node:lts
 
     cache:
         paths:
@@ -22,7 +22,7 @@ server deps:
 
 frontend deps:
     stage: dependencies
-    image: node:latest
+    image: node:lts
 
     cache:
         paths:
@@ -38,7 +38,7 @@ frontend deps:
 
 server tests:
     stage: test
-    image: node:latest
+    image: node:lts
 
     cache:
         policy: pull
@@ -58,7 +58,7 @@ server tests:
 
 build server:
     stage: build
-    image: node:latest
+    image: node:lts
 
     dependencies:
         - server tests
@@ -86,7 +86,7 @@ build server:
 
 build frontend:
     stage: build
-    image: node:latest
+    image: node:lts
 
     cache:
         policy: pull
