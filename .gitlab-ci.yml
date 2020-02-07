@@ -1,5 +1,5 @@
 stages:
-    # - dependencies
+    - dependencies
     - test
     - build
     - deploy
