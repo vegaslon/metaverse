@@ -1,41 +1,42 @@
 stages:
-    - dependencies
+    # - dependencies
     - test
     - build
     - deploy
 
-install dependencies:
-    stage: dependencies
-    image: node:latest
+# install dependencies:
+#     stage: dependencies
+#     image: node:latest
 
-    cache:
-        paths:
-            - server/node_modules/
-            - frontend/node_modules/
+#     cache:
+#         paths:
+#             - server/node_modules/
+#             - frontend/node_modules/
 
-    script:
-        - cd server
-        - npm ci
+#     script:
+#         - cd server
+#         - npm ci
 
-        - cd ../frontend
-        - npm i
+#         - cd ../frontend
+#         - npm ci
 
-    # only:
-    #     changes:
-    #         - server/package-lock.json
-    #         - frontend/package-lock.json
+#     # only:
+#     #     changes:
+#     #         - server/package-lock.json
+#     #         - frontend/package-lock.json
 
 server tests:
     stage: test
     image: node:latest
 
     cache:
-        policy: pull
+        # policy: pull
         paths:
             - server/node_modules/
 
     script:
         - cd server
+        - npm i
         - npm run test:cov
 
     coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
@@ -53,7 +54,7 @@ build server:
         - server tests
 
     cache:
-        policy: pull
+        # policy: pull
         paths:
             - server/node_modules/
 
@@ -61,6 +62,7 @@ build server:
         - mkdir -p app app/server
 
         - cd server
+        - npm i
         - npm run build
 
         - cp -r dist ../app/server
@@ -78,7 +80,7 @@ build frontend:
     image: node:latest
 
     cache:
-        policy: pull
+        # policy: pull
         paths:
             - frontend/node_modules/
 
@@ -86,6 +88,7 @@ build frontend:
         - mkdir -p app app/frontend
 
         - cd frontend
+        - npm i
         - npm run build:ssr
 
         - cp -r dist ../app/frontend
