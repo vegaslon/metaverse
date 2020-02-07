@@ -110,7 +110,7 @@ deploy docker image:
     stage: deploy
     image: docker:latest
 
-    when: manual
+    # when: manual
 
     dependencies:
         - build server
