@@ -13,7 +13,7 @@ server tests:
 
     script:
         - cd server
-        - npm i
+        - npm ci
         - npm run test:cov
 
     coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
@@ -38,7 +38,7 @@ build server:
         - mkdir -p app app/server
 
         - cd server
-        - npm i
+        - npm ci
         - npm run build
 
         - cp -r dist ../app/server
@@ -63,7 +63,7 @@ build frontend:
         - mkdir -p app app/frontend
 
         - cd frontend
-        - npm i
+        - npm ci
         - npm run build:ssr
 
         - cp -r dist ../app/frontend
