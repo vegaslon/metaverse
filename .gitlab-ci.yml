@@ -1,11 +1,11 @@
 stages:
-    - dependencies
+    - deps
     - test
     - build
     - deploy
 
 install dependencies:
-    stage: dependencies
+    stage: deps
     image: node:latest
 
     cache:
@@ -16,6 +16,7 @@ install dependencies:
     script:
         - cd server
         - npm ci
+
         - cd ../frontend
         - npm ci
 
