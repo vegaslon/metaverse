@@ -29,6 +29,7 @@ server tests:
     image: node:latest
 
     cache:
+        policy: pull
         paths:
             - server/node_modules/
 
@@ -51,6 +52,7 @@ build server:
         - server tests
 
     cache:
+        policy: pull
         paths:
             - server/node_modules/
 
@@ -75,6 +77,7 @@ build frontend:
     image: node:latest
 
     cache:
+        policy: pull
         paths:
             - frontend/node_modules/
 
