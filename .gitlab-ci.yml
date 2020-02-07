@@ -4,40 +4,50 @@ stages:
     - build
     - deploy
 
-# install dependencies:
-#     stage: dependencies
-#     image: node:latest
+server deps:
+    stage: dependencies
+    image: node:latest
 
-#     cache:
-#         paths:
-#             - server/node_modules/
-#             - frontend/node_modules/
+    cache:
+        paths:
+            - server/node_modules/
 
-#     script:
-#         - cd server
-#         - npm ci
+    script:
+        - cd server
+        - yarn install
 
-#         - cd ../frontend
-#         - npm ci
+    only:
+        changes:
+            - server/yarn.lock
 
-#     # only:
-#     #     changes:
-#     #         - server/package-lock.json
-#     #         - frontend/package-lock.json
+frontend deps:
+    stage: dependencies
+    image: node:latest
+
+    cache:
+        paths:
+            - frontend/node_modules/
+
+    script:
+        - cd frontend
+        - yarn install
+
+    only:
+        changes:
+            - frontend/yarn.lock
 
 server tests:
     stage: test
     image: node:latest
 
     cache:
-        # policy: pull
+        policy: pull
         paths:
             - server/node_modules/
 
     script:
         - cd server
-        - npm i
-        - npm run test:cov
+        - yarn run test:cov
 
     coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
 
@@ -54,7 +64,7 @@ build server:
         - server tests
 
     cache:
-        # policy: pull
+        policy: pull
         paths:
             - server/node_modules/
 
@@ -62,8 +72,7 @@ build server:
         - mkdir -p app app/server
 
         - cd server
-        - npm i
-        - npm run build
+        - yarn run build
 
         - cp -r dist ../app/server
         - cp -r assets ../app/server
@@ -80,7 +89,7 @@ build frontend:
     image: node:latest
 
     cache:
-        # policy: pull
+        policy: pull
         paths:
             - frontend/node_modules/
 
@@ -88,8 +97,7 @@ build frontend:
         - mkdir -p app app/frontend
 
         - cd frontend
-        - npm i
-        - npm run build:ssr
+        - yarn run build:ssr
 
         - cp -r dist ../app/frontend
 
