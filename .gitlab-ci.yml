@@ -20,6 +20,10 @@ install dependencies:
         - cd ../frontend
         - npm ci
 
+        - ls node_modules/@angular
+        - npm i @angular/cli
+        - ls node_modules/@angular
+
     # only:
     #     changes:
     #         - server/package-lock.json
