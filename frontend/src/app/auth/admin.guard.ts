@@ -1,4 +1,5 @@
-import { Injectable } from "@angular/core";
+import { isPlatformServer } from "@angular/common";
+import { Inject, Injectable, PLATFORM_ID } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import {
 	ActivatedRouteSnapshot,
@@ -19,7 +20,8 @@ export class AdminGuard implements CanActivate {
 	constructor(
 		private authService: AuthService,
 		private router: Router,
-		public dialog: MatDialog,
+		private dialog: MatDialog,
+		@Inject(PLATFORM_ID) private platform: Object,
 	) {}
 
 	canActivate(
@@ -67,6 +69,11 @@ export class AdminGuard implements CanActivate {
 				}),
 			);
 		};
+
+		if (isPlatformServer(this.platform))
+			return new Observable(sub =>
+				sub.next(this.router.createUrlTree(["/"])),
+			);
 
 		return afterLoggingIn().pipe(mergeMap(() => handleUser()));
 	}
