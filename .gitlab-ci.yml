@@ -1,11 +1,11 @@
 stages:
-    - dependencies
+    - deps
     - test
     - build
     - deploy
 
 install dependencies:
-    stage: dependencies
+    stage: deps
     image: node:latest
 
     cache:
