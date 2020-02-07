@@ -16,13 +16,14 @@ install dependencies:
     script:
         - cd server
         - npm ci
+
         - cd ../frontend
         - npm ci
 
-    only:
-        changes:
-            - server/package-lock.json
-            - frontend/package-lock.json
+    # only:
+    #     changes:
+    #         - server/package-lock.json
+    #         - frontend/package-lock.json
 
 server tests:
     stage: test
