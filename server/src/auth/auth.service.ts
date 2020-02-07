@@ -177,11 +177,15 @@ export class AuthService {
 	async ssoGitlabToken(user: User) {
 		return this.jwtService.sign(
 			{
-				id: user.id,
+				//id: user.id,
 				name: user.username,
-				username: user.username,
+				username: user.username.toLowerCase(),
 				email: user.email,
-				avatar_url: HOSTNAME + "/api/user/" + user.username + "/image",
+				avatar_url:
+					HOSTNAME +
+					"/api/user/" +
+					user.username.toLowerCase() +
+					"/image",
 			},
 			{
 				algorithm: "HS256",
