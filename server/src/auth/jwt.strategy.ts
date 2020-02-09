@@ -1,10 +1,9 @@
-import { Injectable } from "@nestjs/common";
+import { forwardRef, Inject, Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { DomainService } from "../domain/domain.service";
 import { JWT_SECRET } from "../environment";
 import { UserService } from "../user/user.service";
-import { JwtService } from "@nestjs/jwt";
 
 export enum JwtPayloadType {
 	USER,
@@ -22,9 +21,11 @@ export interface JwtPayload {
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
 	constructor(
-		private userService: UserService,
-		private domainService: DomainService,
-		private jwtService: JwtService,
+		@Inject(forwardRef(() => UserService))
+		private readonly userService: UserService,
+
+		@Inject(forwardRef(() => DomainService))
+		private readonly domainService: DomainService,
 	) {
 		super({
 			jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

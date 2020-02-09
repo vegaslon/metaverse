@@ -9,11 +9,13 @@ import * as bcrypt from "bcrypt";
 import * as mailchecker from "mailchecker";
 import { generateRandomString } from "../common/utils";
 import { Domain } from "../domain/domain.schema";
+import { HOSTNAME } from "../environment";
 import { User } from "../user/user.schema";
 import { UserService } from "../user/user.service";
 import { AuthExtSignUpDto, AuthSignUpDto, AuthTokenDto } from "./auth.dto";
 import { JwtPayload, JwtPayloadType } from "./jwt.strategy";
-import { HOSTNAME } from "../environment";
+import { ModuleRef } from "@nestjs/core";
+import { OnModuleInit } from "@nestjs/common";
 
 // aaah... cant camel case here
 export interface InterfaceAuthToken {
@@ -36,11 +38,20 @@ interface JwtRegisterPayload {
 }
 
 @Injectable()
-export class AuthService {
+export class AuthService implements OnModuleInit {
+	private userService: UserService;
+
 	constructor(
-		private readonly userService: UserService,
 		private readonly jwtService: JwtService,
+
+		private readonly moduleRef: ModuleRef,
 	) {}
+
+	onModuleInit() {
+		this.userService = this.moduleRef.get(UserService, {
+			strict: false,
+		});
+	}
 
 	async hashPassword(password: string): Promise<string> {
 		try {

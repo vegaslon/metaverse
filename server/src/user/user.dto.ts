@@ -12,20 +12,32 @@ import {
 	IsNumber,
 } from "class-validator";
 
-export class UserUpdateDto {
+export class UserUpdateEmailDto {
 	@ApiPropertyOptional({ example: "fairy@cutelab.space" })
 	@IsString({ message: "Email is not a string" })
 	@IsEmail({}, { message: "Email is not valid" })
 	@MaxLength(64, { message: "Email cannot be longer than 64 characters" })
-	@IsOptional()
-	email?: string = "";
+	email: string = "";
+}
+
+export class UserUpdatePasswordDto {
+	@ApiPropertyOptional({ example: "MyS3cretPa55w0rd" })
+	@IsString({ message: "Current password is not a string" })
+	@MinLength(6, {
+		message: "Current password cannot be less than 6 characters",
+	})
+	@MaxLength(64, {
+		message: "Current password cannot be longer than 64 characters",
+	})
+	currentPassword: string = "";
 
 	@ApiPropertyOptional({ example: "MyS3cretPa55w0rd" })
-	@IsString({ message: "Password is not a string" })
-	@MinLength(6, { message: "Password cannot be less than 6 characters" })
-	@MaxLength(64, { message: "Password cannot be longer than 64 characters" })
-	@IsOptional()
-	password?: string = "";
+	@IsString({ message: "New password is not a string" })
+	@MinLength(6, { message: "New password cannot be less than 6 characters" })
+	@MaxLength(64, {
+		message: "New password cannot be longer than 64 characters",
+	})
+	newPassword: string = "";
 }
 
 export class UserUpdateImageDto {

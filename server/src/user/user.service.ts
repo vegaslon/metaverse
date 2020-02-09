@@ -9,6 +9,7 @@ import {
 import { ModuleRef } from "@nestjs/core";
 import { JwtService } from "@nestjs/jwt";
 import { InjectConnection, InjectModel } from "@nestjs/mongoose";
+import * as bcrypt from "bcrypt";
 import { ObjectID } from "bson";
 import * as fs from "fs";
 import * as mailchecker from "mailchecker";
@@ -17,13 +18,15 @@ import { Connection, Model } from "mongoose";
 import fetch from "node-fetch";
 import * as path from "path";
 import * as sharp from "sharp";
-import { GetUsersDto } from "../admin/admin.dto";
 import { Readable } from "stream";
+import { GetUsersDto } from "../admin/admin.dto";
 import { AuthSignUpDto } from "../auth/auth.dto";
+import { AuthService } from "../auth/auth.service";
 import { derPublicKeyHeader } from "../common/der-public-key-header";
 import { heartbeat, HeartbeatSession } from "../common/heartbeat";
 import { MulterFile } from "../common/multer-file.model";
 import {
+	generateRandomString,
 	pagination,
 	patchObject,
 	renderDomain,
@@ -37,8 +40,10 @@ import { UserSettings } from "./user-settings.schema";
 import {
 	GetUserDomainsLikesDto,
 	UserAvailability,
+	UserUpdateEmailDto,
 	UserUpdateLocation,
 	UserUpdateLocationDto,
+	UserUpdatePasswordDto,
 } from "./user.dto";
 import { User } from "./user.schema";
 import uuid = require("uuid");
@@ -59,6 +64,8 @@ const defaultUserImage = fs.readFileSync(
 @Injectable()
 export class UserService implements OnModuleInit {
 	private domainService: DomainService;
+	private authService: AuthService;
+
 	public images: GridFSBucket;
 
 	constructor(
@@ -73,19 +80,22 @@ export class UserService implements OnModuleInit {
 		private readonly emailService: EmailService,
 
 		private moduleRef: ModuleRef,
-	) {
-		this.userModel
-			.updateMany({}, { $set: { online: false, onlineMinutes: 0 } })
-			.exec();
-
-		this.images = new GridFSBucket(connection.db, {
-			bucketName: "users.images",
-		});
-	}
+	) {}
 
 	onModuleInit() {
 		this.domainService = this.moduleRef.get(DomainService, {
 			strict: false,
+		});
+		this.authService = this.moduleRef.get(AuthService, {
+			strict: false,
+		});
+
+		this.userModel
+			.updateMany({}, { $set: { online: false, onlineMinutes: 0 } })
+			.exec();
+
+		this.images = new GridFSBucket(this.connection.db, {
+			bucketName: "users.images",
 		});
 	}
 
@@ -148,6 +158,46 @@ export class UserService implements OnModuleInit {
 			hash,
 			created: new Date(),
 		}).save();
+	}
+
+	async updateUserEmail(user: User, userUpdateEmailDto: UserUpdateEmailDto) {
+		const { email } = userUpdateEmailDto;
+
+		if (user.email == email)
+			throw new BadRequestException(
+				'Email already set to "' + email + '"',
+			);
+
+		if (await this.findByEmail(email))
+			throw new ConflictException("Email is already in use");
+
+		await this.sendVerify(user, email);
+		// will expire after an hour
+
+		return {
+			message:
+				'Check "' + email + '" for a verification to change your email',
+		};
+	}
+
+	async updateUserPassword(
+		user: User,
+		userUpdatePasswordDto: UserUpdatePasswordDto,
+	) {
+		const { currentPassword, newPassword } = userUpdatePasswordDto;
+
+		const hash = (await this.findById(user.id).select("hash")).hash;
+
+		console.log(currentPassword, newPassword);
+		console.log(hash);
+
+		if (await bcrypt.compare(hash, currentPassword))
+			throw new ConflictException("Current password is incorrect");
+
+		user.hash = await this.authService.hashPassword(newPassword);
+		await user.save();
+
+		return { message: "Password has been changed" };
 	}
 
 	async changeUserImage(user: User, file: MulterFile) {
@@ -417,14 +467,18 @@ export class UserService implements OnModuleInit {
 		if (!mailchecker.isValid(email))
 			throw new BadRequestException("Invalid email address");
 
-		if (user.email != email)
-			if ((await this.findByEmail(email)) != null)
-				throw new ConflictException("Email already exists");
+		if (user.email != email && (await this.findByEmail(email)) != null)
+			throw new ConflictException("Email already exists");
+
+		const secret = generateRandomString(32);
+		user.emailVerifySecret = secret;
+		await user.save();
 
 		const verifyString = this.jwtService.sign(
 			{
 				id: user.id,
-				email: email,
+				email,
+				secret,
 			},
 			{
 				expiresIn: "1d",
@@ -432,29 +486,31 @@ export class UserService implements OnModuleInit {
 		);
 
 		try {
-			this.emailService.sendUserVerify(user, verifyString);
+			this.emailService.sendVerify(user, email, verifyString);
 		} catch (err) {
 			throw new InternalServerErrorException();
 		}
 	}
 
 	async verifyUser(verifyString: string) {
-		const { id, email } = this.jwtService.verify(verifyString); // will throw if invalid
+		const { id, email, secret } = this.jwtService.verify(verifyString); // will throw if invalid
 
 		if (id == null) throw new BadRequestException();
-		if (email == null) throw new BadRequestException();
 
 		const user = await this.findById(id);
 		if (user == null) throw new NotFoundException();
-		if (user.emailVerified) return { user, justVerified: false };
 
-		if (user.email != email)
-			if ((await this.findByEmail(email)) != null)
-				throw new ConflictException("Email already exists");
+		if (user.email != email && (await this.findByEmail(email)) != null)
+			throw new ConflictException("Email already exists");
 
-		user.email = email;
-		user.emailVerified = true;
+		if (user.emailVerifySecret == secret) {
+			user.email = email;
+			user.emailVerified = true;
+			user.emailVerifySecret = "";
+		}
+
 		await user.save();
+
 		return { user, justVerified: true };
 	}
 

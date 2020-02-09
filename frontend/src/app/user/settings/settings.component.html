@@ -3,10 +3,10 @@
 	<div class="row">
 		<div class="col-md-6">
 			<mat-card>
-				<h2>Update details</h2>
+				<h2>Update email</h2>
 
 				<mat-card
-					*ngIf="imageFormError"
+					*ngIf="emailFormError"
 					class="bg-warn"
 					style="
 						margin-bottom: 16px; color: #fff;
@@ -16,10 +16,14 @@
 					<mat-icon style="margin-top: -3px; margin-right: 8px;">
 						error_outline
 					</mat-icon>
-					{{ imageFormError }}
+					{{ emailFormError }}
 				</mat-card>
 
-				<form [formGroup]="userForm" (ngSubmit)="onUserFormSubmit()">
+				<form
+					*ngIf="!emailFormSuccess"
+					[formGroup]="emailForm"
+					(ngSubmit)="onEmailFormSubmit()"
+				>
 					<mat-form-field style="width: 100%;">
 						<input
 							matInput
@@ -27,37 +31,13 @@
 							placeholder="Email"
 							formControlName="email"
 						/>
-						<mat-error *ngIf="userForm.hasError('email', 'email')">
+						<mat-error *ngIf="emailForm.hasError('email', 'email')">
 							Email is invalid
 						</mat-error>
 						<mat-error
-							*ngIf="userForm.hasError('maxLength', 'email')"
+							*ngIf="emailForm.hasError('maxlength', 'email')"
 						>
 							Email is too long
-						</mat-error>
-					</mat-form-field>
-
-					<mat-form-field style="width: 100%;">
-						<input
-							matInput
-							type="password"
-							placeholder="Password"
-							formControlName="password"
-						/>
-						<mat-error
-							*ngIf="userForm.hasError('required', 'label')"
-						>
-							Password is required
-						</mat-error>
-						<mat-error
-							*ngIf="userForm.hasError('minLength', 'label')"
-						>
-							Password is too short
-						</mat-error>
-						<mat-error
-							*ngIf="userForm.hasError('maxLength', 'label')"
-						>
-							Password is too long
 						</mat-error>
 					</mat-form-field>
 
@@ -65,16 +45,157 @@
 						type="submit"
 						mat-stroked-button
 						[disabled]="
-							userForm.pristine ||
-							userForm.invalid ||
-							userForm.disabled
+							emailForm.pristine ||
+							emailForm.invalid ||
+							emailForm.disabled
 						"
 					>
 						<mat-icon>save</mat-icon> Save changes
 					</button>
 				</form>
 
-				<div *ngIf="userForm.disabled">
+				<mat-card
+					*ngIf="emailFormSuccess"
+					class="bg-success"
+					style="
+						margin-bottom: 16px; color: #fff;
+						display: flex; vertical-align: middle;
+					"
+				>
+					<mat-icon style="margin-top: -3px; margin-right: 8px;">
+						done
+					</mat-icon>
+					{{ emailFormSuccess }}
+				</mat-card>
+
+				<div *ngIf="emailForm.disabled">
+					<br />
+					<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+				</div>
+			</mat-card>
+			<mat-card>
+				<h2>Update password</h2>
+
+				<mat-card
+					*ngIf="passwordFormError"
+					class="bg-warn"
+					style="
+						margin-bottom: 16px; color: #fff;
+						display: flex; vertical-align: middle;
+					"
+				>
+					<mat-icon style="margin-top: -3px; margin-right: 8px;">
+						error_outline
+					</mat-icon>
+					{{ passwordFormError }}
+				</mat-card>
+
+				<form
+					*ngIf="!passwordFormSuccess"
+					[formGroup]="passwordForm"
+					(ngSubmit)="onPasswordFormSubmit()"
+				>
+					<mat-form-field
+						style="width: 100%;"
+						*ngFor="
+							let type of [
+								{
+									label: 'Current password',
+									name: 'currentPassword'
+								},
+								{
+									label: 'New password',
+									name: 'newPassword'
+								},
+								{
+									label: 'Confirm password',
+									name: 'confirmPassword'
+								}
+							]
+						"
+					>
+						<input
+							matInput
+							type="password"
+							[placeholder]="type.label"
+							[formControlName]="type.name"
+							#password
+						/>
+						<mat-error
+							*ngIf="passwordForm.hasError('required', type.name)"
+						>
+							{{ type.label }} is required
+						</mat-error>
+						<mat-error
+							*ngIf="
+								passwordForm.hasError('minlength', type.name)
+							"
+						>
+							{{ type.label }} is too short
+						</mat-error>
+						<mat-error
+							*ngIf="
+								passwordForm.hasError('maxlength', type.name)
+							"
+						>
+							{{ type.label }} is too long
+						</mat-error>
+						<mat-error
+							*ngIf="
+								passwordForm.hasError('cantBeSame', type.name)
+							"
+						>
+							{{ type.label }} cant be the same as current
+							password
+						</mat-error>
+						<mat-error
+							*ngIf="passwordForm.hasError('mismatch', type.name)"
+						>
+							{{ type.label }} does not match new password
+						</mat-error>
+					</mat-form-field>
+
+					<p
+						style="color: #f44336; font-size: 75%; margin-top: 0;"
+						*ngIf="passwordForm.hasError('cantBeSame')"
+					>
+						Current password can't be same as new password
+					</p>
+					<p
+						style="color: #f44336; font-size: 75%; margin-top: 0;"
+						*ngIf="passwordForm.hasError('mismatch')"
+					>
+						New password doesn't match confirm password
+					</p>
+
+					<button
+						type="submit"
+						mat-stroked-button
+						[disabled]="
+							passwordForm.pristine ||
+							passwordForm.invalid ||
+							passwordForm.disabled
+						"
+					>
+						<mat-icon>save</mat-icon> Save changes
+					</button>
+				</form>
+
+				<mat-card
+					*ngIf="passwordFormSuccess"
+					class="bg-success"
+					style="
+						margin-bottom: 16px; color: #fff;
+						display: flex; vertical-align: middle;
+					"
+				>
+					<mat-icon style="margin-top: -3px; margin-right: 8px;">
+						done
+					</mat-icon>
+					{{ passwordFormSuccess }}
+				</mat-card>
+
+				<div *ngIf="passwordForm.disabled">
 					<br />
 					<mat-progress-bar mode="indeterminate"></mat-progress-bar>
 				</div>

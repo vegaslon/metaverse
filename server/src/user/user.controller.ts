@@ -24,11 +24,12 @@ import { HOSTNAME } from "../environment";
 import { PuppeteerService } from "../puppeteer/puppeteer.service";
 import {
 	GetUserDomainsLikesDto,
-	UserUpdateDto,
+	UserUpdatePasswordDto,
 	UserUpdateImageDto,
 } from "./user.dto";
 import { User } from "./user.schema";
 import { UserService } from "./user.service";
+import { UserUpdateEmailDto } from "./user.dto";
 
 @Controller("api/user")
 @ApiTags("user")
@@ -39,24 +40,24 @@ export class UserController {
 		private puppeteerService: PuppeteerService,
 	) {}
 
-	@Patch("")
+	@Put("email")
 	@ApiBearerAuth()
 	@UseGuards(MetaverseAuthGuard())
-	async updateUser(
+	async updateUserEmail(
 		@CurrentUser() user,
-		@Body() userUpdateDto: UserUpdateDto,
+		@Body() userUpdateEmailDto: UserUpdateEmailDto,
 	) {
-		if (userUpdateDto.email != null) user.email = userUpdateDto.email;
+		return this.userService.updateUserEmail(user, userUpdateEmailDto);
+	}
 
-		if (userUpdateDto.password != null) {
-			const hash = await this.authService.hashPassword(
-				userUpdateDto.password,
-			);
-			user.hash = hash;
-		}
-
-		await user.save();
-		return { success: true };
+	@Put("password")
+	@ApiBearerAuth()
+	@UseGuards(MetaverseAuthGuard())
+	async updateUserPassword(
+		@CurrentUser() user,
+		@Body() userUpdatePasswordDto: UserUpdatePasswordDto,
+	) {
+		return this.userService.updateUserPassword(user, userUpdatePasswordDto);
 	}
 
 	@Put("image")

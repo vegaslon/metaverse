@@ -3,8 +3,10 @@ import { Domain } from "../domain/domain.schema";
 
 export const UserSchema = new Schema({
 	username: { type: String, required: true },
+
 	email: { type: String, required: true },
 	emailVerified: { type: Boolean, default: false },
+	emailVerifySecret: { type: String, default: "" },
 
 	domains: {
 		type: [{ type: String, ref: "domains" }],
@@ -29,8 +31,10 @@ export const UserSchema = new Schema({
 
 export interface User extends Document {
 	username: string;
+
 	email: string;
 	emailVerified: boolean;
+	emailVerifySecret: string;
 
 	domains: Domain[];
 

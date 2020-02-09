@@ -41,16 +41,24 @@
 				font-weight: 400;
 			"
 		>
-			Account verification for <b>{{ username }}</b>
+			Email verification for <b>{{ username }}</b>
 		</h2>
 		<div style="padding: 20px 20px">
 			<p style="margin:0;">
-				Thank you for signing up. We're so happy to see you're
-				interested! In order to complete the registration and have
-				access, click the following button to verify your account.
+				Thank you for interest in Tivoli Cloud VR! This is the
+				verification email for your account.
+				<br />
+				<br />
+				The button below will verify:
+				<br />
+				<b>{{ email }}</b>
+				<br />
+				<br />
+				If you think this is a mistake, please ignore! and let us know
+				as soon as possible. Your account security is important to us.
 			</p>
 			<br />
-			<a href="{{ verifyUrl }}">
+			<a href="{{ verifyUrl }}" style="text-decoration: none;">
 				<h3
 					style="
 						display: inline-block;
@@ -62,9 +70,17 @@
 						font-weight: 400;
 					"
 				>
-					Verify account!
+					Verify email
 				</h3>
 			</a>
+			<br />
+			<br />
+			<span style="opacity: 0.75;">
+				You can reach us at
+				<a href="mailto:support@tivolicloud.com">
+					support@tivolicloud.com
+				</a>
+			</span>
 		</div>
 	</div>
 	<div
@@ -76,6 +92,6 @@
 			text-align: center;
 		"
 	>
-		Copyright &copy; Tivoli Cloud VR Inc., 2020
+		Copyright &copy; Tivoli Cloud VR Inc, 2020
 	</div>
 </div>

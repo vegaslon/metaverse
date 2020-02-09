@@ -100,14 +100,13 @@ export class AuthService {
 		const jwt = token.access_token;
 
 		if (this.jwtHelper.isTokenExpired(jwt)) {
+			localStorage.removeItem("auth");
 			this.loggingIn$.next(false);
 			return throwError("Token expired");
 		}
 
 		const sub = this.getUserProfile(jwt).subscribe(
 			res => {
-				if (res.statusCode == 401) return this.loggingIn$.next(false);
-
 				const profile = res.data.user;
 				const admin = profile.roles.includes("admin");
 
@@ -127,6 +126,8 @@ export class AuthService {
 				sub.unsubscribe();
 			},
 			() => {
+				localStorage.removeItem("auth");
+
 				this.loggingIn$.next(false);
 				sub.unsubscribe();
 			},

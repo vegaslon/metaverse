@@ -25,12 +25,21 @@ export class UserService {
 
 	private handleError = (err: HttpErrorResponse): Observable<never> => {
 		//console.log(err);
-		return throwError(err.statusText);
+		return throwError(err.error.message);
 	};
 
-	updateUserDetails(data: { email: string; password: string }) {
+	updateUserEmail(data: { email?: string }) {
 		return this.http
-			.patch("/api/user", data)
+			.put<{ message: string }>("/api/user/email", data)
+			.pipe(catchError(this.handleError));
+	}
+
+	updateUserPassword(data: {
+		currentPassword?: string;
+		newPassword?: string;
+	}) {
+		return this.http
+			.put<{ message: string }>("/api/user/password", data)
 			.pipe(catchError(this.handleError));
 	}
 

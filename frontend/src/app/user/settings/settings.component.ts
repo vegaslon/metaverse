@@ -1,9 +1,9 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { User, AuthService } from "../../auth/auth.service";
-import { Subscription } from "rxjs";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { UserService } from "../user.service";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { Subscription } from "rxjs";
+import { AuthService, User } from "../../auth/auth.service";
+import { UserService } from "../user.service";
 
 @Component({
 	selector: "app-settings",
@@ -13,6 +13,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 export class SettingsComponent implements OnInit, OnDestroy {
 	user: User = {} as User;
 	userSub: Subscription = null;
+
 	userImageSrc = "";
 
 	updateUserImage() {
@@ -30,44 +31,98 @@ export class SettingsComponent implements OnInit, OnDestroy {
 			this.user = user;
 			this.updateUserImage();
 
-			this.userForm.controls.email.setValue(this.user.profile.email);
+			// this.emailForm.controls.email.setValue(this.user.profile.email);
 		});
 	}
 
-	userForm: FormGroup = new FormGroup({
+	emailForm: FormGroup = new FormGroup({
 		email: new FormControl(null, [
 			Validators.email,
 			Validators.maxLength(64),
 		]),
-		password: new FormControl(null, [
-			Validators.minLength(6),
-			Validators.maxLength(64),
-		]),
 	});
-	userFormError = "";
+	emailFormError = "";
+	emailFormSuccess = "";
 
-	onUserFormSubmit() {
-		if (this.userForm.invalid) return;
+	onEmailFormSubmit() {
+		if (this.emailForm.invalid) return;
 
-		this.userForm.disable();
+		this.emailForm.disable();
 
 		const sub = this.userService
-			.updateUserDetails(this.userForm.value)
+			.updateUserEmail(this.emailForm.value)
 			.subscribe(
 				res => {
-					this.userForm.enable();
-
-					this.snackBar.open(
-						"User details have been updated",
-						"Dismiss",
-						{
-							duration: 2000,
-						},
-					);
+					this.emailForm.enable();
+					this.emailFormSuccess = res.message;
 				},
 				err => {
-					this.userForm.enable();
-					this.userFormError = err;
+					this.emailForm.enable();
+					this.emailFormError = err;
+				},
+				() => {
+					sub.unsubscribe();
+				},
+			);
+	}
+
+	passwordForm: FormGroup = new FormGroup(
+		{
+			currentPassword: new FormControl(null, [
+				Validators.required,
+				Validators.minLength(6),
+				Validators.maxLength(64),
+			]),
+			newPassword: new FormControl(null, [
+				Validators.required,
+				Validators.minLength(6),
+				Validators.maxLength(64),
+			]),
+			confirmPassword: new FormControl(null, [Validators.required]),
+		},
+		(form: FormGroup) => {
+			const cantBeSame =
+				form.get("currentPassword").value != null &&
+				form.get("newPassword").value != null &&
+				form.get("currentPassword").value ===
+					form.get("newPassword").value;
+
+			const mismatch =
+				form.get("newPassword").value != null &&
+				form.get("confirmPassword").value != null &&
+				form.get("newPassword").value !==
+					form.get("confirmPassword").value;
+
+			return !cantBeSame && !mismatch
+				? null
+				: {
+						...(cantBeSame ? { cantBeSame } : {}),
+						...(mismatch ? { mismatch } : {}),
+				  };
+		},
+	);
+
+	passwordFormError = "";
+	passwordFormSuccess = "";
+
+	onPasswordFormSubmit() {
+		if (this.passwordForm.invalid) return;
+
+		this.passwordForm.disable();
+
+		const sub = this.userService
+			.updateUserPassword({
+				currentPassword: this.passwordForm.value.currentPassword,
+				newPassword: this.passwordForm.value.newPassword,
+			})
+			.subscribe(
+				res => {
+					this.passwordForm.enable();
+					this.passwordFormSuccess = res.message;
+				},
+				err => {
+					this.passwordForm.enable();
+					this.passwordFormError = err;
 				},
 				() => {
 					sub.unsubscribe();

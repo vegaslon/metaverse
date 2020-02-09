@@ -7,13 +7,14 @@ import { User } from "../user/user.schema";
 export class EmailService {
 	constructor(private readonly mailerService: MailerService) {}
 
-	async sendUserVerify(user: User, verifyString: string) {
+	async sendVerify(user: User, email: string, verifyString: string) {
 		return this.mailerService.sendMail({
-			to: user.email,
-			subject: "Verify your new account!",
-			template: "user-verify",
+			to: email,
+			subject: "Verify your account!",
+			template: "email-verify",
 			context: {
 				username: user.username,
+				email,
 				verifyUrl: HOSTNAME + "/api/user/verify/" + verifyString,
 			},
 		});
