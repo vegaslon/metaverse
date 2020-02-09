@@ -1,8 +1,8 @@
+import { ModuleRef } from "@nestjs/core";
 import { JwtModule, JwtService } from "@nestjs/jwt";
 import { Test } from "@nestjs/testing";
 import * as bcrypt from "bcrypt";
 import { JWT_SECRET } from "../environment";
-import { UserService } from "../user/user.service";
 import { AuthService } from "./auth.service";
 
 describe("AuthService", () => {
@@ -21,8 +21,9 @@ describe("AuthService", () => {
 		}).compile();
 
 		authService = new AuthService(
-			{} as UserService,
+			//{} as UserService,
 			module.get<JwtService>(JwtService),
+			module.get<ModuleRef>(ModuleRef),
 		);
 	});
 

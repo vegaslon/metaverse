@@ -7,7 +7,10 @@ import { Model, Mongoose } from "mongoose";
 import * as path from "path";
 import { Writable } from "stream";
 import { AuthSignUpDto } from "../auth/auth.dto";
+import { AuthService } from "../auth/auth.service";
 import { generateRandomString } from "../common/utils";
+import { Domain, DomainSchema } from "../domain/domain.schema";
+import { DomainService } from "../domain/domain.service";
 import { EmailModule } from "../email/email.module";
 import { JWT_SECRET } from "../environment";
 import { UserSettings, UserSettingsSchema } from "./user-settings.schema";
@@ -24,7 +27,7 @@ describe("UserService", () => {
 	let mongoServer: MongoMemoryServer;
 	let mongoose: typeof import("mongoose");
 
-	//let domainModel: Model<Domain, {}>;
+	let domainModel: Model<Domain, {}>;
 	let userModel: Model<User, {}>;
 	let userSettingsModel: Model<UserSettings, {}>;
 
@@ -39,7 +42,7 @@ describe("UserService", () => {
 		});
 		await mongoose.connect(await mongoServer.getUri());
 
-		//	domainModel = mongoose.model("users", UserSchema, "users");
+		domainModel = mongoose.model("domains", DomainSchema, "domains");
 		userModel = mongoose.model("users", UserSchema, "users");
 		userSettingsModel = mongoose.model(
 			"users.settings",
@@ -58,10 +61,10 @@ describe("UserService", () => {
 				EmailModule,
 			],
 			providers: [
-				// {
-				// 	provide: getModelToken("domain"),
-				// 	useValue: domainModel,
-				// },
+				{
+					provide: getModelToken("domains"),
+					useValue: domainModel,
+				},
 				{
 					provide: getModelToken("users"),
 					useValue: userModel,
@@ -75,10 +78,13 @@ describe("UserService", () => {
 					useValue: mongoose.connection,
 				},
 				UserService,
+				DomainService,
+				AuthService,
 			],
 		}).compile();
 
 		userService = module.get<UserService>(UserService);
+		userService.onModuleInit();
 	});
 
 	afterAll(async () => {
