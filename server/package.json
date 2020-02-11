@@ -63,6 +63,7 @@
 		"@types/uuid": "^3.4.6",
 		"cross-env": "^6.0.3",
 		"jest": "^24.9.0",
+		"jest-junit": "^10.0.0",
 		"mongodb-memory-server": "^6.1.1",
 		"prettier": "^1.19.1",
 		"rimraf": "^3.0.0",
@@ -86,6 +87,10 @@
 			"^.+\\.(t|j)s$": "ts-jest"
 		},
 		"coverageDirectory": "../coverage",
-		"testEnvironment": "node"
+		"testEnvironment": "node",
+		"reporters": [
+			"default",
+			"jest-junit"
+		]
 	}
 }

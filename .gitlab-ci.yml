@@ -51,10 +51,12 @@ server tests:
 
     coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
 
-    #artifacts:
-    #    expire_in: 7 days
-    #    paths:
-    #        - server/coverage/
+    artifacts:
+        expire_in: 7 days
+        paths:
+            - server/coverage/
+        reports:
+            junit: server/junit.xml
 
 build server:
     stage: build
