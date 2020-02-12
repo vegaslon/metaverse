@@ -26,9 +26,9 @@ import { SentryModule } from "@ntegral/nestjs-sentry";
 			useUnifiedTopology: true,
 		}),
 
-		// only in production
 		...(!DEV
 			? [
+					// in production
 					SentryModule.forRoot({
 						dsn:
 							"https://35ced4ee7098404393553430f8d78e79@sentry.tivolicloud.com/3",
@@ -36,31 +36,9 @@ import { SentryModule } from "@ntegral/nestjs-sentry";
 						debug: false,
 					}),
 			  ]
-			: []),
-
-		// angular ssr
-		// ...(() => {
-		// 	if (DEV) return [];
-
-		// 	// const { ngExpressEngine, AppServerModule } = require(path.join(
-		// 	// 	__dirname,
-		// 	// 	"../../frontend/dist/server/main.js",
-		// 	// ));
-
-		// 	return [
-		// 		AngularUniversalModule.forRoot({
-		// 			viewsPath: path.resolve(
-		// 				__dirname,
-		// 				"../../frontend/dist/browser",
-		// 			),
-		// 			bundle: require(path.join(
-		// 				__dirname,
-		// 				"../../frontend/dist/server/main.js",
-		// 			)),
-		// 			liveReload: false,
-		// 		}),
-		// 	];
-		// })(),
+			: [
+					// in development
+			  ]),
 
 		EmailModule,
 		PuppeteerModule,
