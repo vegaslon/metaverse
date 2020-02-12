@@ -9,6 +9,10 @@ export const {
 	DB_PASS = "",
 	DB_NAME = "metaverse",
 
+	REDIS_HOST = "localhost",
+	REDIS_PASS = "",
+	REDIS_INDEX = "0",
+
 	EMAIL_USER = "",
 	EMAIL_PASS = "",
 	EMAIL_NAME = "",
