@@ -23,7 +23,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 	constructor(
 		@Inject(forwardRef(() => UserService))
 		private readonly userService: UserService,
-
 		@Inject(forwardRef(() => DomainService))
 		private readonly domainService: DomainService,
 	) {

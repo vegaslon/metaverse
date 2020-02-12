@@ -1,6 +1,8 @@
 import {
 	BadRequestException,
 	ConflictException,
+	forwardRef,
+	Inject,
 	Injectable,
 	InternalServerErrorException,
 } from "@nestjs/common";
@@ -14,8 +16,6 @@ import { User } from "../user/user.schema";
 import { UserService } from "../user/user.service";
 import { AuthExtSignUpDto, AuthSignUpDto, AuthTokenDto } from "./auth.dto";
 import { JwtPayload, JwtPayloadType } from "./jwt.strategy";
-import { ModuleRef } from "@nestjs/core";
-import { OnModuleInit } from "@nestjs/common";
 
 // aaah... cant camel case here
 export interface InterfaceAuthToken {
@@ -38,20 +38,13 @@ interface JwtRegisterPayload {
 }
 
 @Injectable()
-export class AuthService implements OnModuleInit {
-	private userService: UserService;
-
+export class AuthService {
 	constructor(
 		private readonly jwtService: JwtService,
 
-		private readonly moduleRef: ModuleRef,
+		@Inject(forwardRef(() => UserService))
+		private readonly userService: UserService,
 	) {}
-
-	onModuleInit() {
-		this.userService = this.moduleRef.get(UserService, {
-			strict: false,
-		});
-	}
 
 	async hashPassword(password: string): Promise<string> {
 		try {

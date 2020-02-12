@@ -1,14 +1,14 @@
-import { ModuleRef } from "@nestjs/core";
-import { JwtModule, JwtService } from "@nestjs/jwt";
+import { JwtModule } from "@nestjs/jwt";
 import { Test } from "@nestjs/testing";
 import * as bcrypt from "bcrypt";
 import { JWT_SECRET } from "../environment";
+import { UserService } from "../user/user.service";
 import { AuthService } from "./auth.service";
 
 describe("AuthService", () => {
 	let authService: AuthService;
 
-	beforeEach(async () => {
+	beforeAll(async () => {
 		const module = await Test.createTestingModule({
 			imports: [
 				JwtModule.register({
@@ -18,13 +18,16 @@ describe("AuthService", () => {
 					},
 				}),
 			],
+			providers: [
+				AuthService,
+				{
+					provide: UserService,
+					useValue: {},
+				},
+			],
 		}).compile();
 
-		authService = new AuthService(
-			//{} as UserService,
-			module.get<JwtService>(JwtService),
-			module.get<ModuleRef>(ModuleRef),
-		);
+		authService = module.get<AuthService>(AuthService);
 	});
 
 	it("should hash a password", async () => {

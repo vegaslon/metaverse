@@ -1,12 +1,13 @@
 import {
 	BadRequestException,
 	ConflictException,
+	forwardRef,
+	Inject,
 	Injectable,
 	InternalServerErrorException,
 	NotFoundException,
 	OnModuleInit,
 } from "@nestjs/common";
-import { ModuleRef } from "@nestjs/core";
 import { JwtService } from "@nestjs/jwt";
 import { InjectConnection, InjectModel } from "@nestjs/mongoose";
 import * as bcrypt from "bcrypt";
@@ -63,33 +64,26 @@ const defaultUserImage = fs.readFileSync(
 
 @Injectable()
 export class UserService implements OnModuleInit {
-	private domainService: DomainService;
-	private authService: AuthService;
-
 	public images: GridFSBucket;
 
 	constructor(
+		// database
+		@InjectConnection() private connection: Connection,
 		@InjectModel("users") private readonly userModel: Model<User>,
-
 		@InjectModel("users.settings")
 		private readonly userSettingsModel: Model<UserSettings>,
 
-		@InjectConnection() private connection: Connection,
+		// services
+		@Inject(forwardRef(() => DomainService))
+		private readonly domainService: DomainService,
+		@Inject(forwardRef(() => AuthService))
+		private readonly authService: AuthService,
 
 		private readonly jwtService: JwtService,
 		private readonly emailService: EmailService,
-
-		private moduleRef: ModuleRef,
 	) {}
 
 	onModuleInit() {
-		this.domainService = this.moduleRef.get(DomainService, {
-			strict: false,
-		});
-		this.authService = this.moduleRef.get(AuthService, {
-			strict: false,
-		});
-
 		this.userModel
 			.updateMany({}, { $set: { online: false, onlineMinutes: 0 } })
 			.exec();

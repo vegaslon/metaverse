@@ -1,10 +1,11 @@
 import {
 	BadRequestException,
+	forwardRef,
+	Inject,
 	Injectable,
 	NotFoundException,
 	OnModuleInit,
 } from "@nestjs/common";
-import { ModuleRef } from "@nestjs/core";
 import { InjectConnection, InjectModel } from "@nestjs/mongoose";
 import { GridFSBucket } from "mongodb";
 import { Connection, Model } from "mongoose";
@@ -29,14 +30,19 @@ export class DomainService implements OnModuleInit {
 	// current online domains. this can get big!
 	sessions = new Map<string, DomainSession & HeartbeatSession>();
 
-	private userService: UserService;
 	public images: GridFSBucket;
 
 	constructor(
-		@InjectModel("domains") private readonly domainModel: Model<Domain>,
+		// database
 		@InjectConnection() private connection: Connection,
-		private moduleRef: ModuleRef,
-	) {
+		@InjectModel("domains") private readonly domainModel: Model<Domain>,
+
+		// services
+		@Inject(forwardRef(() => UserService))
+		private readonly userService: UserService,
+	) {}
+
+	onModuleInit() {
 		this.domainModel
 			.updateMany(
 				{},
@@ -50,13 +56,9 @@ export class DomainService implements OnModuleInit {
 			)
 			.exec();
 
-		this.images = new GridFSBucket(connection.db, {
+		this.images = new GridFSBucket(this.connection.db, {
 			bucketName: "domains.thumbnails",
 		});
-	}
-
-	onModuleInit() {
-		this.userService = this.moduleRef.get(UserService, { strict: false });
 	}
 
 	findById(id: string) {
