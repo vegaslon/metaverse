@@ -4,6 +4,9 @@ stages:
     - build
     - deploy
 
+include:
+    - template: Dependency-Scanning.gitlab-ci.yml
+
 server deps:
     stage: dependencies
     image: node:lts
