@@ -34,7 +34,7 @@ export class SessionService {
 	getDomainCount = () => this.domainSessionModel.countDocuments();
 
 	private getExpireTime() {
-		return new Date().valueOf() + this.heartbeatMs;
+		return Date.now() + this.heartbeatMs;
 	}
 
 	async heartbeatUser(user: User): Promise<UserSession> {
@@ -55,7 +55,7 @@ export class SessionService {
 			// minutes since online
 			const oldMinutes = session.minutes;
 			const newMinutes = Math.floor(
-				(+new Date(Date.now()) - +session.createdAt) / 1000 / 60,
+				(Date.now() - session.createdAt.valueOf()) / 1000 / 60,
 			);
 
 			// session.minutes needs to be updated

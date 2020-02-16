@@ -3,7 +3,7 @@ import { getConnectionToken, getModelToken } from "@nestjs/mongoose";
 import { Test } from "@nestjs/testing";
 import * as fs from "fs";
 import { MongoMemoryServer } from "mongodb-memory-server";
-import { Model, Mongoose } from "mongoose";
+import { Model, Mongoose, Schema } from "mongoose";
 import * as path from "path";
 import { Writable } from "stream";
 import { AuthSignUpDto } from "../auth/auth.dto";
@@ -13,10 +13,17 @@ import { Domain, DomainSchema } from "../domain/domain.schema";
 import { DomainService } from "../domain/domain.service";
 import { EmailModule } from "../email/email.module";
 import { JWT_SECRET } from "../environment";
+import {
+	UserSession,
+	UserSessionSchema,
+	DomainSessionSchema,
+} from "../session/session.schema";
+import { SessionService } from "../session/session.service";
 import { UserSettings, UserSettingsSchema } from "./user-settings.schema";
 import { UserUpdateLocationDto } from "./user.dto";
 import { User, UserSchema } from "./user.schema";
 import { UserService } from "./user.service";
+import uuid = require("uuid");
 
 // let mongo server download if it hasn't already
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000 * 60 * 10;
@@ -30,8 +37,11 @@ describe("UserService", () => {
 	let domainModel: Model<Domain, {}>;
 	let userModel: Model<User, {}>;
 	let userSettingsModel: Model<UserSettings, {}>;
+	let userSessionModel: Model<UserSession, {}>;
+	let domainSessionModel: Model<UserSession, {}>;
 
 	let userService: UserService;
+	let sessionService: SessionService;
 
 	beforeAll(async () => {
 		mongoServer = new MongoMemoryServer();
@@ -42,13 +52,14 @@ describe("UserService", () => {
 		});
 		await mongoose.connect(await mongoServer.getUri());
 
-		domainModel = mongoose.model("domains", DomainSchema, "domains");
-		userModel = mongoose.model("users", UserSchema, "users");
-		userSettingsModel = mongoose.model(
-			"users.settings",
-			UserSettingsSchema,
-			"users.settings",
-		);
+		const makeModel = (name: string, schema: Schema<any>): Model<any, {}> =>
+			mongoose.model(name, schema, name);
+
+		domainModel = makeModel("domains", DomainSchema);
+		userModel = makeModel("users", UserSchema);
+		userSettingsModel = makeModel("users.settings", UserSettingsSchema);
+		userSessionModel = makeModel("users.sessions", UserSessionSchema);
+		domainSessionModel = makeModel("domains.sessions", DomainSessionSchema);
 
 		const module = await Test.createTestingModule({
 			imports: [
@@ -74,17 +85,28 @@ describe("UserService", () => {
 					useValue: userSettingsModel,
 				},
 				{
+					provide: getModelToken("users.sessions"),
+					useValue: userSessionModel,
+				},
+				{
+					provide: getModelToken("domains.sessions"),
+					useValue: domainSessionModel,
+				},
+				{
 					provide: getConnectionToken(""),
 					useValue: mongoose.connection,
 				},
 				UserService,
 				DomainService,
 				AuthService,
+				SessionService,
 			],
 		}).compile();
 
 		userService = module.get<UserService>(UserService);
 		userService.onModuleInit();
+
+		sessionService = module.get<SessionService>(SessionService);
 	});
 
 	afterAll(async () => {
@@ -155,35 +177,35 @@ describe("UserService", () => {
 	it("should heart beat a user, count more than a minute and die", async () => {
 		const user = await createUser();
 
-		expect(userService.sessions.get(user.username)).toBeUndefined();
+		expect(await sessionService.findUserById(user._id)).toBeNull();
 
 		let secondsPassed = 0;
 		const startDate = new Date();
 		const advanceTime = (seconds: number) => {
 			jest.advanceTimersByTime(1000 * seconds);
 			jest.spyOn(Date, "now").mockImplementation(
-				() => +startDate + 1000 * secondsPassed,
+				() => startDate.valueOf() + 1000 * secondsPassed,
 			);
 			secondsPassed += seconds;
 		};
 
-		await userService.heartbeatUser(user);
-		expect(userService.sessions.get(user.username)).toBeDefined();
+		await sessionService.heartbeatUser(user);
+		expect(await sessionService.findUserById(user._id)).toBeDefined();
 
 		// pass more than a minute
 		for (let i = 0; i < 60; i++) {
 			advanceTime(5);
 
-			await userService.heartbeatUser(user);
-			expect(userService.sessions.get(user.username)).toBeDefined();
+			await sessionService.heartbeatUser(user);
+			expect(await sessionService.findUserById(user._id)).toBeDefined();
 		}
 
-		expect(userService.sessions.get(user.username).minutes).toBeGreaterThan(
-			0,
-		);
+		expect(
+			(await sessionService.findUserById(user._id)).minutes,
+		).toBeGreaterThan(0);
 
 		advanceTime(60);
-		expect(userService.sessions.get(user.username)).toBeUndefined();
+		expect(await sessionService.findUserById(user._id)).toBeNull();
 	});
 
 	it("should set a users public key", async () => {
@@ -201,21 +223,19 @@ describe("UserService", () => {
 	it("should set a users location twice", async () => {
 		const user = await createUser();
 
-		expect(userService.sessions.get(user.username)).toBeUndefined();
+		expect(await sessionService.findUserById(user._id)).toBeNull();
+
+		const currentDomainId = uuid();
 
 		const dto = new UserUpdateLocationDto();
 		dto.location = {};
-		dto.location.network_address = "localhost";
+		dto.location.domain_id = currentDomainId;
 
-		await userService.setUserLocation(user, dto);
-		expect(
-			userService.sessions.get(user.username).location.network_address,
-		).toBe("localhost");
+		//await userService.setUserLocation(user, dto); // looks for domain session
+		await sessionService.updateUserLocation(user, dto);
 
-		await userService.setUserLocation(user, dto);
-		expect(
-			userService.sessions.get(user.username).location.network_address,
-		).toBe("localhost");
+		const foundSession = await sessionService.findUserById(user._id);
+		expect(foundSession.domain).toBe(currentDomainId); // not populated
 	});
 
 	// it("should get a users domain likes", async () => {

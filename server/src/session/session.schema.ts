@@ -58,8 +58,9 @@ export interface DomainSession extends Document {
 		try {
 			const model = (this as any).model as Model<any, {}>;
 
-			const deleted = await model.deleteMany({
-				expireAt: { $lt: new Date().valueOf() },
+			// TODO: just delete one? like below
+			await model.deleteMany({
+				expireAt: { $lt: Date.now() },
 			});
 		} catch (err) {}
 
