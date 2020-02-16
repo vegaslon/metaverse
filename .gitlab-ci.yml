@@ -10,8 +10,7 @@ server deps:
 
     cache:
         paths:
-            - server/node_modules
-            - server/.yarn
+            - server/node_modules/
 
     script:
         - cd server
@@ -27,8 +26,7 @@ frontend deps:
 
     cache:
         paths:
-            - frontend/node_modules
-            - frontend/.yarn
+            - frontend/node_modules/
 
     script:
         - cd frontend
@@ -45,8 +43,7 @@ server tests:
     cache:
         policy: pull
         paths:
-            - server/node_modules
-            - server/.yarn
+            - server/node_modules/
 
     script:
         - cd server
@@ -71,8 +68,7 @@ build server:
     cache:
         policy: pull
         paths:
-            - server/node_modules
-            - server/.yarn
+            - server/node_modules/
 
     script:
         - mkdir -p app app/server
@@ -97,8 +93,7 @@ build frontend:
     cache:
         policy: pull
         paths:
-            - frontend/node_modules
-            - frontend/.yarn
+            - frontend/node_modules/
 
     script:
         - mkdir -p app app/frontend
