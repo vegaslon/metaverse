@@ -77,8 +77,7 @@ export class SessionService {
 		user: User,
 		userUpdateLocationDto: UserUpdateLocationDto,
 	): Promise<UserSession> {
-		let session = await this.findUserById(user._id);
-		if (!session) session = await this.heartbeatUser(user);
+		const session = await this.heartbeatUser(user);
 
 		const {
 			path,

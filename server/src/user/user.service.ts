@@ -300,7 +300,7 @@ export class UserService implements OnModuleInit {
 			}
 		}
 
-		return session.id;
+		return session.sessionId;
 	}
 
 	// async getUserSettings(user: User) {
