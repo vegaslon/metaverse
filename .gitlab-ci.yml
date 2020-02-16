@@ -47,6 +47,7 @@ server tests:
 
     script:
         - cd server
+        - yarn install
         - yarn run test:cov
 
     coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
@@ -74,6 +75,7 @@ build server:
         - mkdir -p app app/server
 
         - cd server
+        - yarn install
         - yarn run build
 
         - cp -r dist ../app/server
@@ -99,6 +101,7 @@ build frontend:
         - mkdir -p app app/frontend
 
         - cd frontend
+        - yarn install
         - yarn run build:ssr
 
         - cp -r dist ../app/frontend
