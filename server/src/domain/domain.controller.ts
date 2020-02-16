@@ -1,25 +1,26 @@
 import {
 	Controller,
 	Get,
+	NotFoundException,
 	Param,
+	Post,
+	Query,
 	Res,
 	UseGuards,
-	Query,
-	Post,
-	NotFoundException,
 } from "@nestjs/common";
-import { ApiTags, ApiBearerAuth } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { Response } from "express";
 import * as fs from "fs";
 import * as path from "path";
+import { SessionService } from "src/session/session.service";
 import { Readable } from "stream";
+import { MetaverseAuthGuard } from "../auth/auth.guard";
 import { OptionalAuthGuard } from "../auth/optional.guard";
 import { CurrentUser } from "../auth/user.decorator";
-import { User } from "../user/user.schema";
-import { DomainService } from "./domain.service";
-import { GetDomainsDto } from "./domain.dto";
 import { renderDomain } from "../common/utils";
-import { MetaverseAuthGuard } from "../auth/auth.guard";
+import { User } from "../user/user.schema";
+import { GetDomainsDto } from "./domain.dto";
+import { DomainService } from "./domain.service";
 
 const defaultDomainImage = fs.readFileSync(
 	path.resolve(__dirname, "../../assets/domain-image.jpg"),
@@ -28,14 +29,21 @@ const defaultDomainImage = fs.readFileSync(
 @Controller("api")
 @ApiTags("domains")
 export class DomainController {
-	constructor(private domainService: DomainService) {}
+	constructor(
+		private domainService: DomainService,
+		private sessionService: SessionService,
+	) {}
 
 	@Get("domain/:id")
 	@ApiBearerAuth()
 	@UseGuards(OptionalAuthGuard())
 	async getDomain(@CurrentUser() currentUser: User, @Param("id") id: string) {
 		const domain = await this.domainService.findById(id).populate("author");
-		return renderDomain(domain, currentUser);
+		if (domain == null) throw new NotFoundException();
+
+		const session = await this.sessionService.findDomainById(domain.id);
+
+		return renderDomain(domain, session, currentUser);
 	}
 
 	@Get("domain/:id/image")
@@ -77,16 +85,14 @@ export class DomainController {
 		@CurrentUser() currentUser: User,
 		@Query() getDomainsDto: GetDomainsDto,
 	) {
-		const domains = await this.domainService
-			.findOnlineDomains(
-				getDomainsDto,
-				//(currentUser as any) == false,
-			)
-			.populate("author");
+		const domainSessions = await this.domainService.findOnlineDomains(
+			getDomainsDto,
+			// currentUser == null,
+		);
 
-		return domains.map(domain => {
-			return renderDomain(domain, currentUser);
-		});
+		return domainSessions.map(session =>
+			renderDomain(session.domain, session, currentUser),
+		);
 	}
 
 	@Get("domains/stats")

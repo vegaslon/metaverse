@@ -26,6 +26,7 @@ import {
 import { DomainService } from "./domain.service";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { MulterFile } from "../common/multer-file.model";
+import { SessionService } from "../session/session.service";
 
 @ApiTags("user domains")
 @Controller("api/user")
@@ -33,6 +34,7 @@ export class UserDomainController {
 	constructor(
 		private authService: AuthService,
 		private domainService: DomainService,
+		private sessionService: SessionService,
 	) {}
 
 	@Post("domain")
@@ -46,9 +48,8 @@ export class UserDomainController {
 			user,
 			createDomainDto,
 		);
-		domain.author = user; // populate
 
-		return renderDomain(domain, user);
+		return renderDomain(domain, null, user);
 	}
 
 	@Post("domain/:id/token")
@@ -71,10 +72,17 @@ export class UserDomainController {
 	async getAllUserDomains(@CurrentUser() user: User) {
 		await user.populate("domains").execPopulate();
 
-		return user.domains.map(domain => {
-			domain.author = user; // populate
-			return renderDomain(domain, user);
-		});
+		return Promise.all(
+			user.domains.map(async domain => {
+				domain.author = user; // populate
+
+				const session = await this.sessionService.findDomainById(
+					domain.id,
+				);
+
+				return renderDomain(domain, session, user);
+			}),
+		);
 	}
 
 	@Patch("domain/:id")
@@ -97,7 +105,9 @@ export class UserDomainController {
 		);
 		updatedDomain.author = user;
 
-		return renderDomain(updatedDomain, user);
+		const session = await this.sessionService.findDomainById(domain.id);
+
+		return renderDomain(updatedDomain, session, user);
 	}
 
 	@Delete("domain/:id")

@@ -30,7 +30,6 @@
 		"mailchecker": "^3.3.3",
 		"mongo-gridfs": "^1.1.0",
 		"mongoose": "^5.7.13",
-		"nestjs-redis": "^1.2.5",
 		"node-fetch": "^2.6.0",
 		"passport": "^0.4.0",
 		"passport-discord": "^0.1.3",

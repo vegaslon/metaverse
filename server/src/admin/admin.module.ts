@@ -4,9 +4,16 @@ import { UserModule } from "../user/user.module";
 import { VideoStreamModule } from "../video-stream/video-stream.module";
 import { AdminController } from "./admin.controller";
 import { DomainModule } from "../domain/domain.module";
+import { SessionModule } from "src/session/session.module";
 
 @Module({
-	imports: [AuthModule, UserModule, DomainModule, VideoStreamModule],
+	imports: [
+		AuthModule,
+		UserModule,
+		DomainModule,
+		VideoStreamModule,
+		SessionModule,
+	],
 	controllers: [AdminController],
 })
 export class AdminModule {}

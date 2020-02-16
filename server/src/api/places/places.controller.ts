@@ -1,7 +1,8 @@
 import { Controller, Get, HttpException, Param } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { HOSTNAME } from "../../environment";
+import { SessionService } from "src/session/session.service";
 import { DomainService } from "../../domain/domain.service";
+import { HOSTNAME } from "../../environment";
 import { UserService } from "../../user/user.service";
 import { Place } from "./places.dto";
 
@@ -11,6 +12,7 @@ export class PlacesController {
 	constructor(
 		private domainService: DomainService,
 		private userService: UserService,
+		private sessionService: SessionService,
 	) {}
 
 	@Get(":placeName")
@@ -29,6 +31,9 @@ export class PlacesController {
 
 		const thumbnailUrl = HOSTNAME + "/api/domain/" + domain._id + "/image";
 
+		const session = await this.sessionService.findDomainById(domain.id);
+		const online = session != null;
+
 		return {
 			status: "success",
 			data: {
@@ -42,7 +47,7 @@ export class PlacesController {
 						id: domain._id,
 						network_address: domain.networkAddress,
 						network_port: domain.networkPort,
-						online: domain.online,
+						online,
 						default_place_name: domain._id,
 					},
 					previews: {

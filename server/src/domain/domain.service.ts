@@ -10,25 +10,26 @@ import { InjectConnection, InjectModel } from "@nestjs/mongoose";
 import { GridFSBucket } from "mongodb";
 import { Connection, Model } from "mongoose";
 import { derPublicKeyHeader } from "../common/der-public-key-header";
-import { heartbeat, HeartbeatSession } from "../common/heartbeat";
 import { MulterFile } from "../common/multer-file.model";
 import { patchDoc, snakeToCamelCaseObject } from "../common/utils";
+import { SessionService } from "../session/session.service";
 import { User } from "../user/user.schema";
-import { UserService, UserSession } from "../user/user.service";
+import { UserService } from "../user/user.service";
 import { CreateDomainDto, GetDomainsDto, UpdateDomainDto } from "./domain.dto";
 import { Domain } from "./domain.schema";
 import uuid = require("uuid");
 import sharp = require("sharp");
 import escapeString = require("escape-string-regexp");
+import { DomainSession } from "src/session/session.schema";
 
-export interface DomainSession {
-	users: { [id: string]: UserSession };
-}
+// export interface DomainSession {
+// 	users: { [id: string]: UserSession };
+// }
 
 @Injectable()
 export class DomainService implements OnModuleInit {
 	// current online domains. this can get big!
-	sessions = new Map<string, DomainSession & HeartbeatSession>();
+	//sessions = new Map<string, DomainSession & HeartbeatSession>();
 
 	public images: GridFSBucket;
 
@@ -40,22 +41,11 @@ export class DomainService implements OnModuleInit {
 		// services
 		@Inject(forwardRef(() => UserService))
 		private readonly userService: UserService,
+		@Inject(forwardRef(() => SessionService))
+		private readonly sessionService: SessionService,
 	) {}
 
 	onModuleInit() {
-		this.domainModel
-			.updateMany(
-				{},
-				{
-					$set: {
-						online: false,
-						onlineUsers: 0,
-						path: "", // not being used at the moment because domain servers handle paths
-					},
-				},
-			)
-			.exec();
-
 		this.images = new GridFSBucket(this.connection.db, {
 			bucketName: "domains.thumbnails",
 		});
@@ -76,17 +66,17 @@ export class DomainService implements OnModuleInit {
 			);
 
 		const domain = new this.domainModel({
-			_id: uuid(),
 			author: user,
 			label: createDomainDto.label, // required
 		});
 
 		patchDoc(domain, createDomainDto);
+		const newDomain = await domain.save();
 
 		user.domains.push(domain);
 		await user.save();
 
-		return await domain.save();
+		return newDomain;
 	}
 
 	async updateDomain(
@@ -108,31 +98,18 @@ export class DomainService implements OnModuleInit {
 		const dto = snakeToCamelCaseObject(updateDomainDto.domain);
 		patchDoc(domain, dto);
 
-		const heartbeatDto = updateDomainDto.domain.heartbeat;
-		if (heartbeatDto) {
-			heartbeat<DomainSession>(
-				this.sessions,
-				domain._id,
-				session => {
-					// initialize
-					session.users = {};
-				},
-				async () => {
-					// cleanup if it goes offline
-					const offlineDomain = await this.findById(domain._id);
-					offlineDomain.online = false;
-					offlineDomain.onlineUsers = 0;
-					await offlineDomain.save();
-				},
-			);
+		if (updateDomainDto.domain.heartbeat) {
+			const session = await this.sessionService.heartbeatDomain(domain);
 
-			// update domain in db
-			domain.online = true;
+			const heartbeatDto = updateDomainDto.domain.heartbeat;
 
 			if (heartbeatDto.num_users != null)
-				if (heartbeatDto.num_users != domain.onlineUsers) {
+				if (heartbeatDto.num_users != session.onlineUsers) {
+					// move this to sessions?
 					domain.lastUpdated = new Date();
-					domain.onlineUsers = heartbeatDto.num_users;
+
+					session.onlineUsers = heartbeatDto.num_users;
+					await session.save();
 				}
 		}
 
@@ -167,8 +144,8 @@ export class DomainService implements OnModuleInit {
 		if (amount > 50) amount = 50;
 
 		const restrictionQuery = [
-			{ restriction: "open" },
-			...(!anonymousOnly ? [{ restriction: "hifi" }] : []),
+			{ "domain.restriction": "open" },
+			...(anonymousOnly ? [] : [{ "domain.restriction": "hifi" }]),
 		];
 
 		const searchRegExp = new RegExp(
@@ -195,14 +172,45 @@ export class DomainService implements OnModuleInit {
 			? [{ label: searchRegExp }, { description: searchRegExp }]
 			: [{}];
 
-		return this.domainModel
-			.find({
-				online: true,
-				$and: [{ $or: restrictionQuery }, { $or: searchQuery }],
-			})
-			.sort({ onlineUsers: -1, lastUpdated: -1 })
-			.skip(page * amount)
-			.limit(amount);
+		return this.sessionService.domainSessionModel.aggregate<DomainSession>([
+			// populate domain
+			{
+				$lookup: {
+					from: "domains",
+					localField: "domain",
+					foreignField: "_id",
+					as: "domain",
+				},
+			},
+			{ $unwind: "$domain" }, // unwind domain from array
+
+			{
+				$match: {
+					$and: [{ $or: restrictionQuery }, { $or: searchQuery }],
+				},
+			},
+			//{ $match: { $text: { $search: search } } },
+			{
+				$sort: {
+					onlineUsers: -1,
+					"domain.lastUpdated": -1,
+					//score: { $meta: "textScore" },
+				},
+			},
+			{ $skip: page * amount },
+			{ $limit: amount },
+
+			// populate author
+			{
+				$lookup: {
+					from: "users",
+					localField: "domain.author",
+					foreignField: "_id",
+					as: "domain.author",
+				},
+			},
+			{ $unwind: "$domain.author" },
+		]);
 	}
 
 	async deleteDomain(domainId: string) {
@@ -246,24 +254,24 @@ export class DomainService implements OnModuleInit {
 	}
 
 	async getDomainsStats() {
-		const onlineUsers = this.userService.sessions.size;
-		const onlineDomains = this.sessions.size;
+		const onlineUsers = await this.sessionService.getUserCount();
+		const onlineDomains = await this.sessionService.getDomainCount();
 
-		// const stats = await this.domainModel.aggregate([
-		// 	{ $match: { onlineUsers: { $gt: 0 } } },
-		// 	{
-		// 		$group: {
-		// 			_id: null,
-		// 			onlineDomainsWithUsers: { $sum: 1 },
-		// 		},
-		// 	},
-		// ]);
+		const stats = await this.sessionService.domainSessionModel.aggregate([
+			{ $match: { onlineUsers: { $gt: 0 } } },
+			{
+				$group: {
+					_id: null,
+					onlineDomainsWithUsers: { $sum: 1 },
+				},
+			},
+		]);
 
 		return {
 			onlineUsers,
 			onlineDomains,
-			// onlineDomainsWithUsers:
-			// 	stats.length > 0 ? stats[0].onlineDomainsWithUsers : 0,
+			onlineDomainsWithUsers:
+				stats.length > 0 ? stats[0].onlineDomainsWithUsers : 0,
 		};
 	}
 

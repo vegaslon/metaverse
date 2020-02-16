@@ -19,11 +19,15 @@ import { renderDomainForHifi } from "../../common/utils";
 import { UpdateDomainDto } from "../../domain/domain.dto";
 import { Domain } from "../../domain/domain.schema";
 import { DomainService } from "../../domain/domain.service";
+import { SessionService } from "src/session/session.service";
 
 @ApiTags("from hifi")
 @Controller("api/v1/domains")
 export class DomainsController {
-	constructor(private domainService: DomainService) {}
+	constructor(
+		private domainService: DomainService,
+		private sessionService: SessionService,
+	) {}
 
 	@Get()
 	@ApiOperation({
@@ -39,10 +43,12 @@ export class DomainsController {
 		// 	domains.push(renderDomainForHifi(doc));
 		// }
 
+		const session = await this.sessionService.findDomainById(domain.id);
+
 		return {
 			status: "success",
 			data: {
-				domains: [renderDomainForHifi(domain)],
+				domains: [renderDomainForHifi(domain, session)],
 			},
 		};
 	}
@@ -62,9 +68,13 @@ export class DomainsController {
 			updateDomainDto,
 		);
 
+		const session = await this.sessionService.findDomainById(
+			updatedDomain.id,
+		);
+
 		return {
 			status: "success",
-			domain: renderDomainForHifi(updatedDomain),
+			domain: renderDomainForHifi(updatedDomain, session),
 		};
 	}
 
@@ -83,9 +93,13 @@ export class DomainsController {
 			updateDomainDto,
 		);
 
+		const session = await this.sessionService.findDomainById(
+			updatedDomain.id,
+		);
+
 		return {
 			status: "success",
-			domain: renderDomainForHifi(updatedDomain),
+			domain: renderDomainForHifi(updatedDomain, session),
 		};
 	}
 
@@ -137,9 +151,11 @@ export class DomainsController {
 			throw new NotFoundException();
 		}
 
+		const session = await this.sessionService.findDomainById(domain.id);
+
 		return {
 			status: "success",
-			domain: renderDomainForHifi(domain),
+			domain: renderDomainForHifi(domain, session),
 		};
 	}
 }

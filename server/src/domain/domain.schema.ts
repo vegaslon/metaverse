@@ -1,5 +1,6 @@
 import { Document, Schema } from "mongoose";
 import { User } from "../user/user.schema";
+import uuid = require("uuid");
 
 export enum DomainAutomaticNetworking {
 	full = "full",
@@ -14,11 +15,11 @@ export enum DomainRestriction {
 }
 
 export const DomainSchema = new Schema({
-	_id: { type: String, required: true },
+	_id: { type: String, default: () => uuid() },
 	lastUpdated: { type: Date, default: new Date() },
 
 	author: { type: Schema.Types.ObjectId, ref: "users", required: true },
-	secret: { type: String, default: "" }, // require for auth
+	secret: { type: String, default: "" }, // require for jwt auth
 
 	iceServerAddress: { type: String, default: "" },
 	//cloudDomain: { type: Boolean, default: false },
@@ -30,15 +31,6 @@ export const DomainSchema = new Schema({
 
 	networkAddress: { type: String, default: "" },
 	networkPort: { type: Number, default: 40102 },
-
-	online: { type: Boolean, default: false },
-	onlineUsers: { type: Number, default: 0 },
-
-	// -- not present in domain/:id put|post request
-	//defaultPlaceName: { type: String, default: "" },
-	ownerPlaces: { type: [String], default: [] },
-	label: { type: String, default: "" },
-	// --
 
 	description: { type: String, default: "" },
 	capacity: { type: Number, default: 0 },
@@ -57,8 +49,9 @@ export const DomainSchema = new Schema({
 	publicKey: { type: String, default: "" },
 
 	// not from hifi
+	label: { type: String, default: "" },
 	path: { type: String, default: "" }, // if empty, domain server will handle path
-
+	ownerPlaces: { type: [String], default: [] }, // not really sure  [{id, name, path}]
 	userLikes: [{ type: Schema.Types.ObjectId, ref: "users" }],
 });
 
@@ -75,13 +68,6 @@ export interface Domain extends Document {
 	networkAddress: string;
 	networkPort: number;
 
-	online: boolean;
-	onlineUsers: number;
-
-	//defaultPlaceName: string;
-	ownerPlaces: string[]; // [{id, name, path}]
-	label: string;
-
 	description: string;
 	capacity: number;
 	restriction: DomainRestriction;
@@ -95,8 +81,9 @@ export interface Domain extends Document {
 	publicKey: string;
 
 	// not from hifi
+	label: string;
 	path: string;
-
+	ownerPlaces: string[];
 	userLikes: User[];
 }
 

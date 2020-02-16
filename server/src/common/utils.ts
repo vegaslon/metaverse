@@ -1,8 +1,7 @@
-import { HOSTNAME } from "../environment";
+import { DomainSession, UserSession } from "src/session/session.schema";
 import { Domain } from "../domain/domain.schema";
-import { DomainService } from "../domain/domain.service";
+import { HOSTNAME } from "../environment";
 import { User } from "../user/user.schema";
-import { UserService } from "../user/user.service";
 
 export function snakeToCamelCase(snake: string) {
 	const split = snake.split("_");
@@ -103,7 +102,9 @@ export function generateRandomString(
 	return out;
 }
 
-export function renderDomainForHifi(d: Domain) {
+export function renderDomainForHifi(d: Domain, session: DomainSession) {
+	const online = session != null;
+
 	return {
 		id: d._id,
 
@@ -112,7 +113,7 @@ export function renderDomainForHifi(d: Domain) {
 
 		network_address: d.networkAddress,
 		network_port: d.networkPort,
-		online: d.online,
+		online,
 
 		default_place_name: null,
 		owner_places: d.ownerPlaces,
@@ -128,12 +129,16 @@ export function renderDomainForHifi(d: Domain) {
 		version: d.version,
 		protocol: d.protocol,
 
-		online_users: d.onlineUsers,
+		online_users: online ? session.onlineUsers : 0,
 		online_anonymous_users: null,
 	};
 }
 
-export function renderDomain(domain: Domain, currentUser: User) {
+export function renderDomain(
+	domain: Domain,
+	session: DomainSession,
+	currentUser: User,
+) {
 	const liked =
 		currentUser == null
 			? false
@@ -145,6 +150,8 @@ export function renderDomain(domain: Domain, currentUser: User) {
 					}
 			  });
 
+	const online = session != null;
+
 	return {
 		id: domain._id,
 		label: domain.label,
@@ -152,8 +159,8 @@ export function renderDomain(domain: Domain, currentUser: User) {
 		description: domain.description,
 		restriction: domain.restriction,
 
-		online: domain.online,
-		numUsers: domain.onlineUsers,
+		online,
+		numUsers: online ? session.onlineUsers : 0,
 
 		likes: domain.userLikes.length,
 		liked,
@@ -164,25 +171,15 @@ export function renderDomain(domain: Domain, currentUser: User) {
 	};
 }
 
-export async function renderFriend(
-	username: string,
-	userService: UserService,
-	domainService: DomainService,
-) {
-	const userSession = userService.sessions.get(username);
-
-	const domain =
-		userSession != null
-			? await domainService.findById(userSession.location.domain_id)
-			: null;
-
+export function renderFriend(user: User, userSession: UserSession) {
+	const domain = userSession.domain;
 	const showDomain = domain == null ? false : domain.restriction != "acl";
 
 	return {
-		username: username,
+		username: user.username,
 		online: userSession != null,
 		trusted: false,
-		image: HOSTNAME + "/api/user/" + username + "/image",
+		image: HOSTNAME + "/api/user/" + user.username + "/image",
 		domain: showDomain
 			? {
 					id: domain.id,

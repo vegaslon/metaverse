@@ -22,11 +22,8 @@ export const UserSchema = new Schema({
 	friends: [{ type: Schema.Types.ObjectId, ref: "users" }],
 	friendRequests: [{ type: Schema.Types.ObjectId, ref: "users" }],
 
-	created: { type: Date, required: true },
+	created: { type: Date, default: () => new Date() },
 	minutes: { type: Number, default: 0 },
-
-	online: { type: Boolean, default: false },
-	onlineMinutes: { type: Number, default: 0 },
 });
 
 export interface User extends Document {
@@ -49,7 +46,4 @@ export interface User extends Document {
 
 	created: Date;
 	minutes: number;
-
-	online: Boolean;
-	onlineMinutes: Number;
 }

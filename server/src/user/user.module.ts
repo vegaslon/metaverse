@@ -3,6 +3,7 @@ import { JwtModule } from "@nestjs/jwt";
 import { MongooseModule } from "@nestjs/mongoose";
 import { AuthModule } from "../auth/auth.module";
 import { DomainModule } from "../domain/domain.module";
+import { SessionModule } from "../session/session.module";
 import { EmailModule } from "../email/email.module";
 import { JWT_SECRET } from "../environment";
 import { UserSettingsSchema } from "./user-settings.schema";
@@ -29,6 +30,7 @@ import { PuppeteerModule } from "../puppeteer/puppeteer.module";
 		}),
 		forwardRef(() => AuthModule),
 		forwardRef(() => DomainModule),
+		forwardRef(() => SessionModule),
 		EmailModule,
 		PuppeteerModule,
 	],

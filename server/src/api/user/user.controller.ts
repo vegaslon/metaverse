@@ -16,12 +16,16 @@ import { MulterFile } from "../../common/multer-file.model";
 import { UserUpdateLocationDto } from "../../user/user.dto";
 import { User } from "../../user/user.schema";
 import { UserService } from "../../user/user.service";
+import { SessionService } from "../../session/session.service";
 
 @ApiTags("from hifi")
 @ApiBearerAuth()
 @Controller("api/v1/user")
 export class UserController {
-	constructor(private userService: UserService) {}
+	constructor(
+		private readonly userService: UserService,
+		private readonly sessionService: SessionService,
+	) {}
 
 	@Get("profile")
 	@UseGuards(MetaverseUnverifiedAuthGuard())
@@ -59,8 +63,10 @@ export class UserController {
 
 	@Put("heartbeat")
 	@UseGuards(MetaverseAuthGuard())
-	async heartbeart(@CurrentUser() user) {
-		const session_id = await this.userService.heartbeatUser(user);
+	async heartbeart(@CurrentUser() user: User) {
+		const {
+			sessionId: session_id,
+		} = await this.sessionService.heartbeatUser(user);
 
 		return {
 			status: "success",

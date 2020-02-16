@@ -2,16 +2,12 @@ export const {
 	HOSTNAME = "http://127.0.0.1:3000",
 	DEV = false,
 
-	WWW_PATH = "C:\\cute",
+	WWW_PATH = "",
 
 	DB_HOST = "localhost",
 	DB_USER = "",
 	DB_PASS = "",
 	DB_NAME = "metaverse",
-
-	REDIS_HOST = "localhost",
-	REDIS_PASS = "",
-	REDIS_INDEX = "0",
 
 	EMAIL_USER = "",
 	EMAIL_PASS = "",

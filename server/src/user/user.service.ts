@@ -24,12 +24,10 @@ import { GetUsersDto } from "../admin/admin.dto";
 import { AuthSignUpDto } from "../auth/auth.dto";
 import { AuthService } from "../auth/auth.service";
 import { derPublicKeyHeader } from "../common/der-public-key-header";
-import { heartbeat, HeartbeatSession } from "../common/heartbeat";
 import { MulterFile } from "../common/multer-file.model";
 import {
 	generateRandomString,
 	pagination,
-	patchObject,
 	renderDomain,
 	renderFriend,
 } from "../common/utils";
@@ -37,26 +35,15 @@ import { Domain } from "../domain/domain.schema";
 import { DomainService } from "../domain/domain.service";
 import { EmailService } from "../email/email.service";
 import { DEV } from "../environment";
+import { SessionService } from "../session/session.service";
 import { UserSettings } from "./user-settings.schema";
 import {
 	GetUserDomainsLikesDto,
-	UserAvailability,
 	UserUpdateEmailDto,
-	UserUpdateLocation,
 	UserUpdateLocationDto,
 	UserUpdatePasswordDto,
 } from "./user.dto";
 import { User } from "./user.schema";
-import uuid = require("uuid");
-
-export interface UserSession {
-	id: string;
-	userId: string;
-
-	minutes: number;
-
-	location: UserUpdateLocation;
-}
 
 const defaultUserImage = fs.readFileSync(
 	path.resolve(__dirname, "../../assets/user-image.jpg"),
@@ -78,23 +65,22 @@ export class UserService implements OnModuleInit {
 		private readonly domainService: DomainService,
 		@Inject(forwardRef(() => AuthService))
 		private readonly authService: AuthService,
-
-		private readonly jwtService: JwtService,
+		@Inject(forwardRef(() => SessionService))
+		private readonly sessionService: SessionService,
 		private readonly emailService: EmailService,
+
+		// external services
+		private readonly jwtService: JwtService,
 	) {}
 
 	onModuleInit() {
-		this.userModel
-			.updateMany({}, { $set: { online: false, onlineMinutes: 0 } })
-			.exec();
-
 		this.images = new GridFSBucket(this.connection.db, {
 			bucketName: "users.images",
 		});
 	}
 
 	// current online users keyed with username. this can get big!
-	sessions = new Map<string, UserSession & HeartbeatSession>();
+	//sessions = new Map<string, UserSession & HeartbeatSession>();
 
 	findByUsername(username: string) {
 		// https://stackoverflow.com/a/45650164
@@ -150,7 +136,6 @@ export class UserService implements OnModuleInit {
 			email: authSignUpDto.email,
 			emailVerified,
 			hash,
-			created: new Date(),
 		}).save();
 	}
 
@@ -181,9 +166,6 @@ export class UserService implements OnModuleInit {
 		const { currentPassword, newPassword } = userUpdatePasswordDto;
 
 		const hash = (await this.findById(user.id).select("hash")).hash;
-
-		console.log(currentPassword, newPassword);
-		console.log(hash);
 
 		if (await bcrypt.compare(hash, currentPassword))
 			throw new ConflictException("Current password is incorrect");
@@ -277,76 +259,6 @@ export class UserService implements OnModuleInit {
 		return { stream, contentType };
 	}
 
-	async heartbeatUser(user: User) {
-		const wasOnline = this.sessions.has(user.username);
-
-		const session = heartbeat<UserSession>(
-			this.sessions,
-			user.username,
-			session => {
-				// initialize
-				session.id = uuid();
-				session.userId = user._id;
-				session.minutes = 0;
-				session.location = {
-					availability: UserAvailability.none,
-					connected: false,
-					domain_id: null,
-					network_address: "",
-					network_port: NaN,
-					node_id: null,
-					path: "",
-					place_id: null,
-				};
-			},
-			async session => {
-				// clean up session from domains
-				const domainId = session.location.domain_id;
-				if (domainId == null) return;
-
-				const domainSession = this.domainService.sessions.get(domainId);
-				if (domainSession == null) return;
-
-				delete domainSession.users[user._id];
-
-				// go offline in database
-				const offlineUser = await this.findById(user._id);
-				offlineUser.online = false;
-				offlineUser.onlineMinutes = 0;
-				await offlineUser.save();
-			},
-			1000 * 30, // maybe 15
-		);
-
-		// minutes since online
-		const minutes = Math.floor(
-			(+new Date(Date.now()) - +session._since) / 1000 / 60,
-		);
-
-		let updateUser = false;
-
-		// session.minutes needs to be updated
-		if (session.minutes < minutes) {
-			const minutesToAddToUser = minutes - session.minutes;
-			session.minutes = minutes; // sync again
-
-			// update user
-			user.minutes += minutesToAddToUser;
-			user.onlineMinutes = session.minutes;
-
-			updateUser = true;
-		}
-
-		if (!wasOnline) {
-			user.online = true;
-			updateUser = true;
-		}
-
-		if (updateUser) await user.save();
-
-		return session.id;
-	}
-
 	async setPublicKey(user: User, buffer: Buffer) {
 		const publicKey =
 			Buffer.concat([derPublicKeyHeader, buffer])
@@ -362,18 +274,21 @@ export class UserService implements OnModuleInit {
 		user: User,
 		userUpdateLocationDto: UserUpdateLocationDto,
 	) {
-		await this.heartbeatUser(user);
-		let session = this.sessions.get(user.username);
-
-		patchObject(session.location, userUpdateLocationDto.location);
+		const session = await this.sessionService.updateUserLocation(
+			user,
+			userUpdateLocationDto,
+		);
 
 		// update user in domain
 		if (userUpdateLocationDto.location.domain_id) {
 			const domainId = userUpdateLocationDto.location.domain_id;
 
-			const domainSession = this.domainService.sessions.get(domainId);
+			const domainSession = await this.sessionService.findDomainById(
+				domainId,
+			);
+
 			if (domainSession != null) {
-				domainSession.users[user._id] = session;
+				domainSession.userSessions[user._id] = session;
 
 				// move domain to top in user's likes if it exists
 				if ((user.domainLikes as any[]).includes(domainId)) {
@@ -385,7 +300,6 @@ export class UserService implements OnModuleInit {
 			}
 		}
 
-		// return session id
 		return session.id;
 	}
 
@@ -436,23 +350,25 @@ export class UserService implements OnModuleInit {
 		const domainLikes = pagination<Domain>(page, amount, user.domainLikes)
 			.data;
 
-		return domainLikes.map(domain => {
-			return renderDomain(domain, user);
-		});
+		return Promise.all(
+			domainLikes.map(async domain => {
+				const session = await this.sessionService.findDomainById(
+					domain._id,
+				);
+
+				return renderDomain(domain, session, user);
+			}),
+		);
 	}
 
+	// TODO: replace with actual friends
 	async getFriends(user: User) {
-		// TODO: replace with actual friends
+		const userSessions = await this.sessionService.userSessionModel
+			.find()
+			.populate("user")
+			.populate("domain");
 
-		const usernames = [...this.sessions.keys()];
-
-		const friends = [];
-		for (const username of usernames) {
-			friends.push(
-				await renderFriend(username, this, this.domainService),
-			);
-		}
-		return friends;
+		return userSessions.map(session => renderFriend(session.user, session));
 	}
 
 	async sendVerify(user: User, email: string) {
@@ -508,7 +424,7 @@ export class UserService implements OnModuleInit {
 		return { user, justVerified: true };
 	}
 
-	findUsers(getUsersDto: GetUsersDto) {
+	async findUsers(getUsersDto: GetUsersDto) {
 		let { page, amount, onlineSorted } = getUsersDto;
 
 		if (page <= 0) page = 1;
@@ -516,14 +432,26 @@ export class UserService implements OnModuleInit {
 
 		if (amount > 50) amount = 50;
 
-		return this.userModel
-			.find(onlineSorted ? { online: true } : {})
-			.sort({
-				created: -1,
-				...(onlineSorted ? { onlineMinutes: -1 } : {}),
-			})
-			.skip(page * amount)
-			.limit(amount);
+		if (onlineSorted) {
+			const sessions = await this.sessionService.userSessionModel
+				.find()
+				.sort({
+					minutes: -1,
+				})
+				.populate("user")
+				.skip(page * amount)
+				.limit(amount);
+
+			return sessions.map(session => session.user);
+		} else {
+			return await this.userModel
+				.find()
+				.sort({
+					created: -1,
+				})
+				.skip(page * amount)
+				.limit(amount);
+		}
 	}
 
 	private async canSendFriendRequest(currentUser: User, user: User) {

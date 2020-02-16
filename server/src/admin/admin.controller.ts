@@ -5,6 +5,7 @@ import { UserService } from "../user/user.service";
 import { VideoStreamService } from "../video-stream/video-stream.service";
 import { GetUsersDto } from "./admin.dto";
 import { DomainService } from "../domain/domain.service";
+import { SessionService } from "src/session/session.service";
 
 @Controller("api/admin")
 @ApiTags("admin")
@@ -13,6 +14,7 @@ export class AdminController {
 		private userService: UserService,
 		private domainService: DomainService,
 		private videoStreamService: VideoStreamService,
+		private sessionService: SessionService,
 	) {}
 
 	@Get("users")
@@ -23,15 +25,17 @@ export class AdminController {
 
 		return Promise.all(
 			users.map(async user => {
-				const session = this.userService.sessions.get(user.username);
+				const session = await this.sessionService
+					.findUserById(user._id)
+					.populate("domain");
+
 				const online = session != null;
 
 				let location = null;
 				if (online) {
-					const domainId = session.location.domain_id;
-					if (domainId) {
+					if (session.domain != null) {
 						const domain = await this.domainService.findById(
-							domainId,
+							session.domain._id,
 						);
 						if (domain != null) location = domain.label;
 					}
@@ -74,7 +78,7 @@ export class AdminController {
 	@UseGuards(AdminAuthGuard())
 	getVideoStreams() {
 		return this.videoStreamService.hosts.map(host => {
-			console.log(host.socket.request.connection);
+			// console.log(host.socket.request.connection);
 			return {
 				id: host.socket.client.id,
 				clients: host.clients.map(client => client.socket.client.id),

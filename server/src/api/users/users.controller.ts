@@ -1,7 +1,6 @@
 import { Controller, Get, Param, Query, UseGuards } from "@nestjs/common";
 import { HttpException } from "@nestjs/common/exceptions";
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
-import { MetaverseAuthGuard } from "../../auth/auth.guard";
 import { OptionalAuthGuard } from "../../auth/optional.guard";
 import { CurrentUser } from "../../auth/user.decorator";
 import { pagination } from "../../common/utils";
@@ -10,14 +9,13 @@ import { DomainService } from "../../domain/domain.service";
 import { HOSTNAME } from "../../environment";
 import { User } from "../../user/user.schema";
 import { UserService } from "../../user/user.service";
-import { UsersConnection } from "./users.dto";
 import {
-	UsersConnectionsDto,
 	UsersConnectionType,
 	UsersDto,
 	UsersLocation,
 	UsersUser,
 } from "./users.dto";
+import { SessionService } from "../../session/session.service";
 
 @ApiTags("from hifi")
 @Controller("/api/v1/users")
@@ -25,6 +23,7 @@ export class UsersController {
 	constructor(
 		private userService: UserService,
 		private domainService: DomainService,
+		private sessionService: SessionService,
 	) {}
 
 	private async getNearbyUsers(currentUser: User, domainId: string) {
@@ -35,10 +34,10 @@ export class UsersController {
 		const domain = await this.domainService.findById(domainId);
 		if (domain == null) return users;
 
-		const domainSession = this.domainService.sessions.get(domainId);
+		const domainSession = await this.sessionService
+			.findDomainById(domainId)
+			.populate("userSessions");
 		if (domainSession == null) return users;
-
-		const domainUserSessions = Object.values(domainSession.users);
 
 		// logic if allowed to see users in domain
 		let showUsers = false;
@@ -55,8 +54,8 @@ export class UsersController {
 				if (currentUser != null)
 					if (
 						// only if logged in user is in domain
-						domainUserSessions.some(
-							user => user.userId == currentUser.id,
+						domainSession.userSessions.some(
+							userSession => userSession.id == currentUser.id,
 						)
 					)
 						showUsers = true;
@@ -65,8 +64,8 @@ export class UsersController {
 		if (showUsers == false) return users;
 
 		// turning user sessions into UsersUser
-		for (let userSession of domainUserSessions) {
-			const user = await this.userService.findById(userSession.userId);
+		for (let userSession of domainSession.userSessions) {
+			const user = await this.userService.findById(userSession.id);
 			if (user == null) continue;
 
 			let connection = null;
@@ -83,8 +82,8 @@ export class UsersController {
 				online: true,
 				connection,
 				location: {
-					path: userSession.location.path,
-					node_id: userSession.location.node_id,
+					path: userSession.path,
+					node_id: userSession.nodeId,
 					root: {},
 				},
 				images: {
@@ -211,39 +210,35 @@ export class UsersController {
 		const user = await this.userService.findByUsername(username);
 		if (user == null) throw NoLocation();
 
-		// username is case sensetive
-		const session = this.userService.sessions.get(user.username);
+		const session = await this.sessionService
+			.findUserById(user._id)
+			.populate("domain");
 		if (session == null) throw NoLocation();
-		const location = session.location;
 
-		const domain = await this.domainService.findById(location.domain_id);
-		if (domain == null) throw NoLocation();
+		const domain = session.domain;
 
 		// TODO: check whether they're friends or not
 
-		if (session != null) {
-			return {
-				status: "success",
-				data: {
-					location: {
-						path: location.path,
-						node_id: location.node_id,
-						root: {
+		return {
+			status: "success",
+			data: {
+				location: {
+					path: session.path,
+					node_id: session.nodeId,
+					root: {
+						id: domain._id,
+						name: domain.label,
+						domain: {
 							id: domain._id,
-							name: domain._id,
-							domain: {
-								id: domain._id,
-								network_address: domain.networkAddress,
-								network_port: domain.networkPort,
-								online: true,
-								default_place_name: domain._id,
-							},
+							network_address: domain.networkAddress,
+							network_port: domain.networkPort,
+							online: true,
+							default_place_name: domain._id,
 						},
-						online: true,
-					} as UsersLocation,
-				},
-			};
-		} else {
-		}
+					},
+					online: true,
+				} as UsersLocation,
+			},
+		};
 	}
 }

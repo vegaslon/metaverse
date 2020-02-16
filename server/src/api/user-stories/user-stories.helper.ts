@@ -35,33 +35,33 @@ import {
 // 	};
 // }
 
-export function createConcurrency(domain: Domain): UserStory {
-	const concurrency = domain.online ? domain.onlineUsers : 0;
-	const thumbnail_url = HOSTNAME + "/api/domain/" + domain._id + "/image";
+// export function createConcurrency(domain: Domain): UserStory {
+// 	const concurrency = domain.online ? domain.onlineUsers : 0;
+// 	const thumbnail_url = HOSTNAME + "/api/domain/" + domain._id + "/image";
 
-	return {
-		id: domain._id,
-		user_id: domain.author._id,
-		username: domain.author.username,
-		action: UserStoryAction.concurrency,
-		action_string: "",
-		audience: UserStroyAudience.for_feed,
-		place_id: domain._id,
-		place_name: domain._id,
-		path: domain.path,
-		thumbnail_url,
-		details: {
-			image_url: thumbnail_url,
-			concurrency,
-		},
-		updated_at: domain.lastUpdated.toISOString(),
-		domain_id: domain._id,
-		hold_time: null,
-		is_stacked: false,
-		isStacked: false,
-		standalone_optimized: false,
-	};
-}
+// 	return {
+// 		id: domain._id,
+// 		user_id: domain.author._id,
+// 		username: domain.author.username,
+// 		action: UserStoryAction.concurrency,
+// 		action_string: "",
+// 		audience: UserStroyAudience.for_feed,
+// 		place_id: domain._id,
+// 		place_name: domain._id,
+// 		path: domain.path,
+// 		thumbnail_url,
+// 		details: {
+// 			image_url: thumbnail_url,
+// 			concurrency,
+// 		},
+// 		updated_at: domain.lastUpdated.toISOString(),
+// 		domain_id: domain._id,
+// 		hold_time: null,
+// 		is_stacked: false,
+// 		isStacked: false,
+// 		standalone_optimized: false,
+// 	};
+// }
 
 // export function createSnapshot(name: string, image: string): UserStory {
 // 	return {

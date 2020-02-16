@@ -1,7 +1,6 @@
 import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
 import { SentryModule } from "@ntegral/nestjs-sentry";
-import { RedisModule } from "nestjs-redis";
 import { AdminModule } from "./admin/admin.module";
 import { ApiDomainsModule } from "./api/domains/domains.module";
 import { ApiPlacesModule } from "./api/places/places.module";
@@ -11,16 +10,7 @@ import { ApiUsersModule } from "./api/users/users.module";
 import { AuthModule } from "./auth/auth.module";
 import { DomainModule } from "./domain/domain.module";
 import { EmailModule } from "./email/email.module";
-import {
-	DB_HOST,
-	DB_NAME,
-	DB_PASS,
-	DB_USER,
-	DEV,
-	REDIS_HOST,
-	REDIS_INDEX,
-	REDIS_PASS,
-} from "./environment";
+import { DB_HOST, DB_NAME, DB_PASS, DB_USER, DEV } from "./environment";
 import { PuppeteerModule } from "./puppeteer/puppeteer.module";
 import { UserModule } from "./user/user.module";
 import { VideoStreamModule } from "./video-stream/video-stream.module";
@@ -48,13 +38,6 @@ import { VideoStreamModule } from "./video-stream/video-stream.module";
 			dbName: DB_NAME,
 			useNewUrlParser: true,
 			useUnifiedTopology: true,
-		}),
-
-		RedisModule.register({
-			name: "metaverse",
-			host: REDIS_HOST,
-			password: REDIS_PASS,
-			db: parseInt(REDIS_INDEX),
 		}),
 
 		EmailModule,
