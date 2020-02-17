@@ -4,6 +4,7 @@ import { NestExpressApplication } from "@nestjs/platform-express";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { Request, Response } from "express";
 import * as helmet from "helmet";
+import * as os from "os";
 import { AppModule } from "./app.module";
 import { DEV, WWW_PATH } from "./environment";
 import { initFrontend } from "./frontend";
@@ -58,6 +59,12 @@ async function bootstrap() {
 		}),
 	);
 
+	// add hostname header for traefik testing
+	app.use((req: Request, res: Response, next: () => any) => {
+		res.setHeader("Hostname", os.hostname());
+		next();
+	});
+
 	if (DEV) {
 		initSwagger(app);
 		initDebugLogs(app);
@@ -65,8 +72,10 @@ async function bootstrap() {
 
 	initFrontend(app);
 
+	/// www path
 	if (WWW_PATH) app.useStaticAssets(WWW_PATH);
 
+	// redirects
 	const redirects = {
 		"/discord": "https://discord.gg/FhuzTwR",
 		"/docs": "https://docs.tivolicloud.com",
