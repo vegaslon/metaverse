@@ -1,9 +1,7 @@
 import { ArgumentsHost, Catch, NotFoundException } from "@nestjs/common";
 import { BaseExceptionFilter, HttpAdapterHost } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
-import * as domino from "domino";
 import { Request, Response } from "express";
-import * as fs from "fs";
 import * as path from "path";
 import "zone.js";
 import { DEV } from "./environment";
@@ -21,18 +19,6 @@ const frontend = {
 
 	serverMain: path.join(__dirname, "../../frontend/dist/server/main.js"),
 };
-
-if (!DEV) {
-	const template = fs.readFileSync(frontend.browserIndex, "utf8");
-	const win = domino.createWindow(template);
-	global["window"] = win;
-	global["navigator"] = win.navigator;
-	global["document"] = win.document;
-	global["localStorage"] = {
-		...win.localStorage,
-		...{ getItem: () => {}, setItem: () => {} },
-	};
-}
 
 @Catch(NotFoundException)
 class FrontendRenderFilter extends BaseExceptionFilter {

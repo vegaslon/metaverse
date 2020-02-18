@@ -2,7 +2,9 @@
 	"scripts": {
 		"start": "ng build --watch",
 		"build": "ng build --prod",
-		"build:ssr": "ng build --prod && ng run frontend:server:production"
+		"dev:ssr": "ng run frontend:serve-ssr",
+		"build:ssr": "ng build --prod && ng run frontend:server:production",
+		"prerender": "ng run frontend:prerender"
 	},
 	"dependencies": {
 		"@angular-devkit/build-angular": "~0.900.0",

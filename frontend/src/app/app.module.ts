@@ -121,7 +121,7 @@ export class AppModule {
 			const query = new URLSearchParams(window.location.search);
 
 			if (!query.has("token") && !query.has("signUp"))
-				this.authService.autoLogin();
+				this.authService.autoLogin(); // has window
 		}
 	}
 }
