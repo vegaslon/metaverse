@@ -1,8 +1,9 @@
-import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
-import { AuthService } from "./auth/auth.service";
+import { Component, OnInit, Inject, PLATFORM_ID } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
+import { ActivatedRoute, Router } from "@angular/router";
+import { AuthService } from "./auth/auth.service";
 import { SignInComponent } from "./header/sign-in/sign-in.component";
+import { isPlatformBrowser, isPlatformServer } from "@angular/common";
 
 @Component({
 	selector: "app-root",
@@ -16,6 +17,7 @@ export class AppComponent implements OnInit {
 		private router: Router,
 		private route: ActivatedRoute,
 		private dialog: MatDialog,
+		@Inject(PLATFORM_ID) private platformId: Object,
 	) {}
 
 	ngOnInit() {
@@ -28,6 +30,8 @@ export class AppComponent implements OnInit {
 		// 	if (w.goatcounter != null) w.goatcounter.count({ referrer });
 		// 	referrer = window.location.href;
 		// });
+
+		if (isPlatformServer(this.platformId)) return; // ssr has no window
 
 		const query = new URLSearchParams(window.location.search);
 
@@ -56,6 +60,7 @@ export class AppComponent implements OnInit {
 			});
 		}
 
+		// remove from url
 		if (query.toString().length > 0)
 			this.router.navigate(["."], { relativeTo: this.route });
 	}

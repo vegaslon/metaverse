@@ -17,10 +17,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 	constructor(public dialog: MatDialog, private authService: AuthService) {}
 
 	ngOnInit() {
-		if ((window as any).qt) {
-			// interface code
-		}
-
 		this.userSub = this.authService.user$.subscribe(user => {
 			this.user = user;
 		});

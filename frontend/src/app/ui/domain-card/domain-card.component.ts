@@ -17,7 +17,7 @@ export class DomainCardComponent implements OnInit {
 	thumbnailURL = "";
 	domainSettings = "";
 
-	inInterface = (window as any).qt != null;
+	inInterface = ((window || {}) as any).qt != null;
 
 	private displayAmount(thing: string, amount: number): string {
 		return amount + " " + (amount == 1 ? thing : thing + "s");

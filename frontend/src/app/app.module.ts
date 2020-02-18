@@ -1,5 +1,12 @@
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
-import { ErrorHandler, Injectable, NgModule, OnInit } from "@angular/core";
+import {
+	ErrorHandler,
+	Injectable,
+	NgModule,
+	OnInit,
+	Inject,
+	PLATFORM_ID,
+} from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -18,6 +25,7 @@ import { HomeComponent } from "./home/home.component";
 import { MaterialModule } from "./material.module";
 import { environment } from "../environments/environment";
 import { AuthService } from "./auth/auth.service";
+import { isPlatformBrowser } from "@angular/common";
 
 Sentry.init({
 	dsn: "https://35ced4ee7098404393553430f8d78e79@sentry.tivolicloud.com/3",
@@ -105,10 +113,15 @@ const routes: Routes = [
 	entryComponents: [SignInComponent, DownloadComponent, VerifyEmailComponent],
 })
 export class AppModule {
-	constructor(private authService: AuthService) {
-		const query = new URLSearchParams(window.location.search);
+	constructor(
+		private authService: AuthService,
+		@Inject(PLATFORM_ID) private platformId: Object,
+	) {
+		if (isPlatformBrowser(platformId)) {
+			const query = new URLSearchParams(window.location.search);
 
-		if (!query.has("token") && !query.has("signUp"))
-			this.authService.autoLogin();
+			if (!query.has("token") && !query.has("signUp"))
+				this.authService.autoLogin();
+		}
 	}
 }

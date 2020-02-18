@@ -1,9 +1,10 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, PLATFORM_ID, Inject } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { SsoRedirectingComponent } from "./sso-redirecting/sso-redirecting.component";
 import { HttpClient } from "@angular/common/http";
 import { Router, ActivatedRoute, ParamMap } from "@angular/router";
 import { switchMap, map } from "rxjs/operators";
+import { isPlatformBrowser } from "@angular/common";
 
 @Component({
 	selector: "app-sso",
@@ -15,6 +16,7 @@ export class SsoComponent implements OnInit {
 		private http: HttpClient,
 		private router: Router,
 		private route: ActivatedRoute,
+		@Inject(PLATFORM_ID) private platformId: Object,
 	) {}
 
 	private readonly services = ["gitlab"];
@@ -40,9 +42,10 @@ export class SsoComponent implements OnInit {
 				})
 				.subscribe(
 					token => {
-						window.location.href =
-							"https://git.tivolicloud.com/users/auth/jwt/callback?jwt=" +
-							token;
+						if (isPlatformBrowser(this.platformId))
+							window.location.href =
+								"https://git.tivolicloud.com/users/auth/jwt/callback?jwt=" +
+								token;
 					},
 					err => {
 						console.log(err);
