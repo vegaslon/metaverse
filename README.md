@@ -25,11 +25,3 @@ yarn run start
 
 They will both incrementally watch for file changes. The metaverse should now be available at http://localhost:3000
 
-### Distribute
-
-```bash
-cd docker
-sh build.sh
-```
-
-Which will create a docker image that you can use. See `upload.sh` on how to upload the image to a Linux server.
