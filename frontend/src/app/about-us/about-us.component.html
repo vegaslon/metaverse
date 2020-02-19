@@ -24,11 +24,23 @@
 				</span>
 			</h2>
 
-			<div class="contributor" *ngFor="let c of contributors">
+			<!-- <div class="contributor" *ngFor="let c of contributors">
 				<img
 					[src]="c.avatarUrl"
-					[title]="c.email + ' (' + c.commits + ' commits)'"
+					[
 				/>
+			</div> -->
+
+			<div
+				class="contributor"
+				*ngFor="let c of contributors"
+				[title]="c.email + ' (' + c.commits + ' commits)'"
+			>
+				<div class="initials">{{ initials(c.email) }}</div>
+				<div
+					class="image"
+					[style.backgroundImage]="'url(' + c.avatarUrl + ')'"
+				></div>
 			</div>
 		</div>
 	</div>

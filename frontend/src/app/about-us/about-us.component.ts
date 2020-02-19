@@ -20,15 +20,12 @@ export class AboutUsComponent implements OnInit {
 			.reverse()
 			.join("");
 
-	ngOnInit() {
-		console.log(this.prettyNumber(1));
-		console.log(this.prettyNumber(12));
-		console.log(this.prettyNumber(123));
-		console.log(this.prettyNumber(1234));
-		console.log(this.prettyNumber(12345));
-		console.log(this.prettyNumber(123456));
-		console.log(this.prettyNumber(1234567));
+	initials = (name: string) =>
+		Array.from(name.slice(0, 2))
+			.map((c, i) => (i == 0 ? c.toUpperCase() : c.toLowerCase()))
+			.join("");
 
+	ngOnInit() {
 		const size = 32;
 
 		const sub = this.http.get("/api/interface-contributors.json").subscribe(
@@ -38,20 +35,12 @@ export class AboutUsComponent implements OnInit {
 
 					const emailHash = Md5.hashStr(email);
 
-					const alternateAvatarUrl =
-						"https://ui-avatars.com/api/" +
-						encodeURIComponent(email.split("@")[0]) +
-						"/" +
-						size;
-
 					const avatarUrl =
 						"https://www.gravatar.com/avatar/" +
 						emailHash +
-						"?s=32&d=" +
-						encodeURIComponent(alternateAvatarUrl);
+						"?s=32&d=none";
 
 					const commits = contributor[1];
-
 					this.commits += commits;
 
 					this.contributors.push({
