@@ -31,7 +31,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 			this.user = user;
 			this.updateUserImage();
 
-			// this.emailForm.controls.email.setValue(this.user.profile.email);
+			this.emailForm.controls.email.setValue(this.user.profile.email);
 		});
 	}
 
