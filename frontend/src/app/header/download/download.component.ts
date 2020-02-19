@@ -7,7 +7,8 @@ import { HttpClient } from "@angular/common/http";
 	styleUrls: ["./download.component.scss"],
 })
 export class DownloadComponent implements OnInit {
-	readonly releasesPath = "	";
+	readonly releasesPath =
+		"https://nyc3.digitaloceanspaces.com/tivolicloud/releases";
 
 	//os = null;
 
