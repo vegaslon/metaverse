@@ -38,6 +38,11 @@ b {
 	font-weight: 500;
 }
 
+a {
+	text-decoration: inherit;
+	color: mat-color($mat-pink, 500);
+}
+
 // .mat-button-wrapper {
 // 	text-transform: uppercase;
 // }

@@ -1,10 +1,10 @@
+import { isPlatformBrowser } from "@angular/common";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import {
 	ErrorHandler,
+	Inject,
 	Injectable,
 	NgModule,
-	OnInit,
-	Inject,
 	PLATFORM_ID,
 } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
@@ -13,19 +13,18 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouterModule, Routes } from "@angular/router";
 import * as Sentry from "@sentry/browser";
 import { RecaptchaFormsModule, RecaptchaModule } from "ng-recaptcha";
+import { environment } from "../environments/environment";
 import { AppComponent } from "./app.component";
 import { AdminGuard } from "./auth/admin.guard";
 import { AuthInterceptorService } from "./auth/auth-interceptor.service";
 import { AuthGuard } from "./auth/auth.guard";
+import { AuthService } from "./auth/auth.service";
 import { VerifyEmailComponent } from "./auth/verify-email/verify-email.component";
 import { DownloadComponent } from "./header/download/download.component";
 import { HeaderComponent } from "./header/header.component";
 import { SignInComponent } from "./header/sign-in/sign-in.component";
 import { HomeComponent } from "./home/home.component";
 import { MaterialModule } from "./material.module";
-import { environment } from "../environments/environment";
-import { AuthService } from "./auth/auth.service";
-import { isPlatformBrowser } from "@angular/common";
 
 Sentry.init({
 	dsn: "https://35ced4ee7098404393553430f8d78e79@sentry.tivolicloud.com/3",
@@ -44,6 +43,11 @@ export class SentryErrorHandler implements ErrorHandler {
 
 const routes: Routes = [
 	{ path: "", component: HomeComponent },
+	{
+		path: "about-us",
+		loadChildren: () =>
+			import("./about-us/about-us.module").then(m => m.AboutUsModule),
+	},
 	{
 		path: "explore",
 		loadChildren: () =>

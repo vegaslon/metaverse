@@ -1,0 +1,35 @@
+<div class="container">
+	<div class="row">
+		<div class="col-12">
+			<h1>About us</h1>
+
+			<h2 *ngIf="commits">
+				<a
+					href="https://git.tivolicloud.com/tivolicloud/interface"
+					target="_blank"
+				>
+					Interface
+				</a>
+				contributors
+				<span
+					style="display: block; font-size: 0.8em; margin-top: 8px;"
+				>
+					Over {{ prettyNumber(commits) }}+ code commits
+					<span style="font-size: 0.7em;">
+						including
+						<a href="http://highfidelity.com" target="_blank">
+							High Fidelity
+						</a>
+					</span>
+				</span>
+			</h2>
+
+			<div class="contributor" *ngFor="let c of contributors">
+				<img
+					[src]="c.avatarUrl"
+					[title]="c.email + ' (' + c.commits + ' commits)'"
+				/>
+			</div>
+		</div>
+	</div>
+</div>
