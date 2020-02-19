@@ -1,7 +1,6 @@
+import { HttpClient } from "@angular/common/http";
 import { Component, OnInit } from "@angular/core";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Md5 } from "ts-md5/dist/md5";
-import { ArrayType } from "@angular/compiler";
 
 @Component({
 	selector: "app-about-us",
@@ -14,7 +13,7 @@ export class AboutUsComponent implements OnInit {
 	contributors: { email: string; avatarUrl: string; commits: number }[] = [];
 	commits = 0;
 
-	private prettyNumber = (n: number) =>
+	prettyNumber = (n: number) =>
 		Array.from(n.toString())
 			.reverse()
 			.map((char, i) => char + (i % 3 == 0 && i != 0 ? "," : ""))
