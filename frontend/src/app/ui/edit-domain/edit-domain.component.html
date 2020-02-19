@@ -64,7 +64,7 @@ display: flex; vertical-align: middle;"
 		mat-flat-button
 		color="primary"
 		*ngIf="!editMode"
-		[disabled]="form.invalid || isLoading"
+		[disabled]="form.invalid || form.pristine || isLoading"
 	>
 		<mat-icon>add</mat-icon> Add world
 	</button>
@@ -73,7 +73,7 @@ display: flex; vertical-align: middle;"
 		mat-flat-button
 		color="primary"
 		*ngIf="editMode"
-		[disabled]="form.invalid || isLoading"
+		[disabled]="form.invalid || form.pristine || isLoading"
 	>
 		<mat-icon>save</mat-icon> Save world
 	</button>
@@ -96,7 +96,7 @@ display: flex; vertical-align: middle;"
 		(click)="onDiscard()"
 		[disabled]="isLoading"
 	>
-		<mat-icon>close</mat-icon> Discard
+		<mat-icon>close</mat-icon> Discard changes
 	</button>
 </form>
 
