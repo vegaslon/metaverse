@@ -43,6 +43,7 @@
 		"swagger-ui-express": "^4.1.2",
 		"uuid": "^3.3.3",
 		"validator": "^12.1.0",
+		"yaml": "^1.7.2",
 		"zone.js": "^0.10.2"
 	},
 	"devDependencies": {
@@ -63,6 +64,7 @@
 		"@types/socket.io": "^2.1.4",
 		"@types/supertest": "^2.0.8",
 		"@types/uuid": "^3.4.6",
+		"@types/yaml": "^1.2.0",
 		"cross-env": "^6.0.3",
 		"jest": "^24.9.0",
 		"jest-junit": "^10.0.0",

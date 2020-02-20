@@ -14,6 +14,7 @@ import { DB_HOST, DB_NAME, DB_PASS, DB_USER, DEV } from "./environment";
 import { PuppeteerModule } from "./puppeteer/puppeteer.module";
 import { UserModule } from "./user/user.module";
 import { VideoStreamModule } from "./video-stream/video-stream.module";
+import { AppController } from "./app.controller";
 
 @Module({
 	imports: [
@@ -58,6 +59,6 @@ import { VideoStreamModule } from "./video-stream/video-stream.module";
 		VideoStreamModule,
 	],
 	providers: [],
-	controllers: [],
+	controllers: [AppController],
 })
 export class AppModule {}

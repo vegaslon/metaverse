@@ -29,21 +29,32 @@ export class DownloadComponent implements OnInit {
 		//if (navigator.platform.indexOf("Mac") != -1) this.os = "mac";
 
 		const sub = this.http
-			.get(this.releasesPath + "/latest.yml", { responseType: "text" })
+			.get<{
+				version: string;
+				files: { url: string; sha512: string }[];
+				path: string;
+				sha512: string;
+				packages: {
+					x64: {
+						size: number;
+						sha512: string;
+						blockMapSize: number;
+						path: string;
+						file: string;
+					};
+				};
+				releaseDate: string;
+			}>("/api/releases/latest")
 			.subscribe(
-				ymlStr => {
-					this.version = ymlStr.match(/version: ([^]*?)\n/i)[1];
+				release => {
+					this.version = release.version;
 
-					const matches = ymlStr.match(
-						/files:[^]*?url: ([^]*?)\n[^]*?size: ([^]*?)\n/,
-					);
-					this.fileName = matches[1];
+					this.fileName = release.path;
+
 					this.fileSize =
-						this.bytesToMB(parseInt(matches[2])) + " MB";
+						this.bytesToMB(release.packages.x64.size) + " MB";
 
-					this.releaseDate = new Date(
-						ymlStr.match(/releaseDate: '([^]*?)'/i)[1],
-					);
+					this.releaseDate = new Date(release.releaseDate);
 
 					this.found = true;
 					sub.unsubscribe();
