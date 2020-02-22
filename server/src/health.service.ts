@@ -25,12 +25,16 @@ export class HealthService implements TerminusOptionsFactory {
 		const healthEndpoint: TerminusEndpoint = {
 			url: "/health",
 			healthIndicators: [
-				async () => this.dns.pingCheck("google", "https://google.com"),
+				async () =>
+					this.dns.pingCheck(
+						"spaces",
+						"https://nyc3.digitaloceanspaces.com",
+					),
 				async () =>
 					this.mongoose.pingCheck("mongoose", {
 						connection: this.mongooseConnection,
 					}),
-				async () => this.memory.checkRSS("memory", 150 * 1024 * 1024),
+				//async () => this.memory.checkRSS("memory", 150 * 1024 * 1024),
 				// async () => this.disk.checkStorage("disk", {}),
 			],
 		};
