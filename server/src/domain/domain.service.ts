@@ -148,69 +148,70 @@ export class DomainService implements OnModuleInit {
 			...(anonymousOnly ? [] : [{ "domain.restriction": "hifi" }]),
 		];
 
+		// AND = /(?=.*hello)(?=.*world).*/
+		// OR  = /((?:hello)|(?:world))/
 		const searchRegExp = new RegExp(
 			search
 				.split(" ")
-				.map(word => {
-					word = word.trim();
-					if (word == "") return null;
-
-					word = word
-						.trim()
-						.split("")
-						.map(char => escapeString(char))
-						.join("['\\-_+=#^&]?");
-
-					return "(" + word + ")";
-				})
+				.map(word =>
+					word.trim() == ""
+						? null
+						: "(?=.*" +
+						  word
+								.trim()
+								.split("")
+								.map(char => escapeString(char))
+								.join("['\\-_+=#^&]?") +
+						  ")",
+				)
 				.filter(word => word != null)
-				.join("|"),
+				.join("") + ".*",
 			"gi",
 		);
 
 		const searchQuery = search
-			? [{ label: searchRegExp }, { description: searchRegExp }]
+			? [
+					{ "domain.label": searchRegExp },
+					{ "domain.description": searchRegExp },
+			  ]
 			: [{}];
 
-		return this.sessionService.domainSessionModel.aggregate<DomainSession>([
-			// populate domain
-			{
-				$lookup: {
+		const matchArgs = {
+			$and: [{ $or: restrictionQuery }, { $or: searchQuery }],
+		};
+
+		return (
+			this.sessionService.domainSessionModel
+				.aggregate<DomainSession>()
+				// populate domain
+				.lookup({
 					from: "domains",
 					localField: "domain",
 					foreignField: "_id",
 					as: "domain",
-				},
-			},
-			{ $unwind: "$domain" }, // unwind domain from array
+				})
+				.unwind("$domain")
 
-			{
-				$match: {
-					$and: [{ $or: restrictionQuery }, { $or: searchQuery }],
-				},
-			},
-			//{ $match: { $text: { $search: search } } },
-			{
-				$sort: {
+				// match and paginate
+				.match(matchArgs)
+				//.match({ $text: { $search: search } })
+				.sort({
 					onlineUsers: -1,
 					"domain.lastUpdated": -1,
 					//score: { $meta: "textScore" },
-				},
-			},
-			{ $skip: page * amount },
-			{ $limit: amount },
+				})
+				.skip(page * amount)
+				.limit(amount)
 
-			// populate author
-			{
-				$lookup: {
+				// populate author
+				.lookup({
 					from: "users",
 					localField: "domain.author",
 					foreignField: "_id",
 					as: "domain.author",
-				},
-			},
-			{ $unwind: "$domain.author" },
-		]);
+				})
+				.unwind("$domain.author")
+		);
 	}
 
 	async deleteDomain(domainId: string) {
