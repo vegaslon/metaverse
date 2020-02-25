@@ -65,11 +65,9 @@ async function bootstrap() {
 		next();
 	});
 
-	if (DEV) {
-		initSwagger(app);
-		initDebugLogs(app);
-	}
+	if (DEV) initDebugLogs(app);
 
+	initSwagger(app);
 	initFrontend(app);
 
 	/// www path
