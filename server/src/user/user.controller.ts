@@ -71,7 +71,7 @@ export class UserController {
 	@UseInterceptors(
 		FileInterceptor("image", {
 			limits: {
-				fileSize: 1000 * 1000 * 8, // 8mb
+				fileSize: 1000 * 1000 * 8, // 8 MB
 			},
 		}),
 	)

@@ -13,6 +13,12 @@ export const {
 	EMAIL_PASS = "",
 	EMAIL_NAME = "",
 
+	FILES_S3_URL = "",
+	FILES_S3_BUCKET = "",
+	FILES_S3_ENDPOINT = "nyc3.digitaloceanspaces.com",
+	FILES_S3_KEY_ID = "",
+	FILES_S3_SECRET_KEY = "",
+
 	JWT_SECRET = "thisIsSoVerySecretyou literally have no idealol1610239012",
 
 	// https://console.cloud.google.com/apis/credentials

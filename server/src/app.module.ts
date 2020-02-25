@@ -17,6 +17,7 @@ import { HealthService } from "./health.service";
 import { PuppeteerModule } from "./puppeteer/puppeteer.module";
 import { UserModule } from "./user/user.module";
 import { VideoStreamModule } from "./video-stream/video-stream.module";
+import { FilesModule } from "./files/files.module";
 
 @Module({
 	imports: [
@@ -49,6 +50,7 @@ import { VideoStreamModule } from "./video-stream/video-stream.module";
 
 		EmailModule,
 		PuppeteerModule,
+		FilesModule,
 
 		AuthModule,
 		UserModule,
