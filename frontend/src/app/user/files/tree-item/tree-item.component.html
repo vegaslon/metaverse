@@ -1,0 +1,20 @@
+<ng-container *ngFor="let folder of folder.folders">
+	<div (click)="toggleCollapsed(folder.name)" class="folder">
+		<mat-icon>folder</mat-icon>
+		<mat-icon *ngIf="collapsed[folder.name]">arrow_drop_down</mat-icon>
+		<mat-icon *ngIf="!collapsed[folder.name]">arrow_right</mat-icon>
+		{{ folder.name }}
+	</div>
+	<div *ngIf="collapsed[folder.name]" style="margin-left: 24px;">
+		<app-tree-item [folder]="folder"></app-tree-item>
+	</div>
+</ng-container>
+<ng-container *ngFor="let file of folder.files">
+	<div class="file">
+		<mat-icon class="icon">{{ file.icon }}</mat-icon>
+		<span>
+			<p>{{ file.name }}</p>
+			<p class="size">{{ formatBytes(file.size) }}</p>
+		</span>
+	</div>
+</ng-container>

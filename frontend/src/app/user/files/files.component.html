@@ -1,0 +1,49 @@
+<mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+<div class="container-fluid">
+	<div class="row">
+		<div class="sidebar">
+			<br />
+			<div class="storage" style="display: flex; align-items: top;">
+				<mat-icon style="margin-right: 8px;">storage</mat-icon>
+				<p style="margin: 0; width: 100%">
+					Storage of {{ total }} files
+					<mat-progress-bar
+						[value]="(status.usedSize / status.maxSize) * 100"
+						style="margin: 8px 0"
+					></mat-progress-bar>
+					{{ formatBytes(status.usedSize) }} of
+					{{ formatBytes(status.maxSize) }} used
+				</p>
+			</div>
+			<br />
+			<button mat-flat-button color="primary" (click)="onUpload()">
+				<mat-icon style="margin-right: 4px;">cloud_upload</mat-icon>
+				Upload
+			</button>
+			<br />
+			<div class="tree">
+				<app-tree-item [folder]="rootFolder"></app-tree-item>
+			</div>
+		</div>
+		<div class="files">
+			<div class="breadcrumbs">
+				<button mat-button (click)="changeCurrentFolder(rootFolder)">
+					{{ user.profile.username }}'s Files
+				</button>
+				<ng-container *ngFor="let folder of getBreadcrumbs()">
+					<mat-icon class="icon">keyboard_arrow_right</mat-icon>
+					<button mat-button (click)="changeCurrentFolder(folder)">
+						{{ folder.name }}
+					</button>
+				</ng-container>
+			</div>
+			<app-folder-view
+				[folder]="currentFolder"
+				(onFolderClick)="changeCurrentFolder($event)"
+			></app-folder-view>
+		</div>
+	</div>
+</div>
+<!-- <div *ngIf="dragOver" class="drag-over" #dragOver>
+	<h1>yay dragging over</h1>
+</div> -->

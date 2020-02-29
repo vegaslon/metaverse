@@ -1,0 +1,28 @@
+<input hidden (change)="onFilesChanged()" #filesInput type="file" multiple />
+<button mat-flat-button color="primary" (click)="filesInput.click()">
+	<mat-icon>insert_drive_file</mat-icon> Choose files
+</button>
+<button mat-flat-button (click)="onClearFiles()">
+	Clear files
+</button>
+<br />
+<h2>{{ formatBytes(totalSize) }} to upload</h2>
+<br />
+<div class="files">
+	<div class="file" *ngFor="let file of fileList">
+		<mat-icon class="icon">{{ formatExt(file.name).icon }}</mat-icon>
+		<div>
+			{{ file.name }}
+			<br />
+			<span class="size">{{ formatBytes(file.size) }}</span>
+		</div>
+	</div>
+</div>
+<button
+	mat-flat-button
+	color="primary"
+	(click)="filesInput.click()"
+	style="width: 100%;"
+>
+	<mat-icon>cloud_upload</mat-icon> Upload
+</button>

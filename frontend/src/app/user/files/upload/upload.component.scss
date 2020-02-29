@@ -1,0 +1,22 @@
+.files {
+	max-height: 60vh;
+	overflow: auto;
+
+	.file {
+		display: flex;
+		align-items: center;
+		padding: 4px 0;
+
+		&:nth-child(even) {
+			background: rgba(#000, 0.05);
+		}
+
+		.icon {
+			margin-right: 8px;
+		}
+
+		.size {
+			opacity: 0.6;
+		}
+	}
+}

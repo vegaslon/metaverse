@@ -117,4 +117,13 @@ export class FilesService {
 
 		return size;
 	}
+
+	async getStatus(userId: string) {
+		const size = await this.getUserSize(userId);
+
+		return {
+			usedSize: size,
+			maxSize: this.maxSize,
+		};
+	}
 }

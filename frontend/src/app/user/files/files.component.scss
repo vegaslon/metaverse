@@ -1,0 +1,61 @@
+$headerHeight: 64px;
+$sidebarWidth: 300px;
+
+.sidebar {
+	position: fixed;
+	top: $headerHeight;
+	bottom: 0;
+	left: 0;
+	width: $sidebarWidth;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	padding: 0 16px;
+
+	.tree {
+		overflow-y: auto;
+		width: 100%;
+		height: auto;
+	}
+}
+
+.files {
+	position: fixed;
+	top: $headerHeight;
+	bottom: 0;
+	left: $sidebarWidth;
+	right: 16px;
+
+	.breadcrumbs {
+		display: flex;
+		align-items: center;
+		margin-top: 16px;
+		margin-bottom: 4px;
+		user-select: none;
+
+		button {
+			font-size: 1.4em;
+			font-weight: 400;
+			padding-left: 8px;
+			padding-right: 8px;
+		}
+
+		.icon {
+			opacity: 0.75;
+		}
+	}
+}
+
+.drag-over {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(#1d1f21, 0.8);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #fff;
+	user-select: none;
+}

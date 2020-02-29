@@ -31,6 +31,13 @@ export class FilesController {
 		return this.filesService.getFiles(user.id, "/");
 	}
 
+	@Get("status")
+	@ApiBearerAuth()
+	@UseGuards(MetaverseAuthGuard())
+	getStatus(@CurrentUser() user: User) {
+		return this.filesService.getStatus(user.id);
+	}
+
 	@Put("")
 	@ApiBearerAuth()
 	@ApiConsumes("multipart/form-data")

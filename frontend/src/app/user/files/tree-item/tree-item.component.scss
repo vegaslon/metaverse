@@ -1,0 +1,25 @@
+.folder,
+.file {
+	padding: 4px 0;
+	font-size: 0.9em;
+	user-select: none;
+	display: flex;
+	align-items: center;
+
+	.icon {
+		margin-right: 8px;
+	}
+
+	p {
+		margin: 0;
+	}
+
+	.size {
+		opacity: 0.6;
+		//font-size: 0.7em;
+	}
+}
+
+.folder {
+	cursor: pointer;
+}
