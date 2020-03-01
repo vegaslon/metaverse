@@ -174,7 +174,7 @@ export class UtilsService {
 				if (type == "code") return { type, icon: "code" };
 				if (type == "video") return { type, icon: "videocam" };
 				if (type == "audio") return { type, icon: "audiotrack" };
-				if (type == "model") return { type, icon: "3d_rotation" };
+				if (type == "model") return { type, icon: "layers" };
 				if (type == "text") return { type, icon: "description" };
 				if (type == "font") return { type, icon: "text_format" };
 				return { type, icon: "insert_drive_file" };
