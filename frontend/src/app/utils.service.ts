@@ -162,7 +162,7 @@ export class UtilsService {
 	// 	document.removeEventListener("copy", listener, false);
 	// }
 
-	formatExt(fileName: string) {
+	formatExt(fileName: string): { type: string; icon: string } {
 		const ext = fileName
 			.split(".")
 			.pop()

@@ -39,6 +39,13 @@
 			>
 				<source [src]="file.url + '?' + previewCache" />
 			</video>
+			<audio
+				class="preview"
+				style="background: #fff;"
+				*ngIf="file.type == 'audio'"
+				[src]="file.url"
+				controls
+			></audio>
 		</div>
 		<div class="contents">
 			<mat-icon class="icon">{{ file.icon }}</mat-icon>
