@@ -61,7 +61,9 @@ export class UploadComponent {
 
 		const uploads = this.uploads.map(upload =>
 			this.filesService.uploadFile(
-				this.data.currentPath + "/" + upload.file.name,
+				this.data.currentPath +
+					(this.data.currentPath.endsWith("/") ? "" : "/") +
+					upload.file.name,
 				upload.file,
 				upload,
 			),
