@@ -24,7 +24,10 @@ $sidebarWidth: 300px;
 	top: $headerHeight;
 	bottom: 0;
 	left: $sidebarWidth;
-	right: 16px;
+	right: 0;
+
+	padding-right: 16px;
+	overflow: auto;
 
 	.breadcrumbs {
 		display: flex;
