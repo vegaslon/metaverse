@@ -1,3 +1,4 @@
+import { Clipboard } from "@angular/cdk/clipboard";
 import { isPlatformBrowser } from "@angular/common";
 import {
 	Component,
@@ -8,10 +9,8 @@ import {
 	Output,
 	PLATFORM_ID,
 } from "@angular/core";
-import { downloadFile } from "src/app/utils";
-import { formatBytes } from "../../../utils";
+import { UtilsService } from "../../../utils.service";
 import { File, FilesService, Folder } from "../files.service";
-import { Clipboard } from "@angular/cdk/clipboard";
 
 interface ContextMenu {
 	type: "file" | "folder";
@@ -32,8 +31,6 @@ interface ContextMenu {
 	styleUrls: ["./folder-view.component.scss"],
 })
 export class FolderViewComponent {
-	public formatBytes = formatBytes;
-
 	@Input() folder: Folder;
 	@Output() onFolderClick = new EventEmitter<Folder>();
 	@Output() onRefresh = new EventEmitter<null>();
@@ -41,6 +38,7 @@ export class FolderViewComponent {
 	previewCache = Date.now();
 
 	constructor(
+		public readonly utilsService: UtilsService,
 		public readonly filesService: FilesService,
 		@Inject(PLATFORM_ID) private readonly platformId: any,
 		private clipboard: Clipboard,
@@ -106,7 +104,10 @@ export class FolderViewComponent {
 	}
 
 	onContextMenuDownload() {
-		downloadFile(this.contextMenu.file.url, this.contextMenu.file.name);
+		this.utilsService.downloadFile(
+			this.contextMenu.file.url,
+			this.contextMenu.file.name,
+		);
 		this.contextMenu = null;
 	}
 

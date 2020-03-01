@@ -14,7 +14,7 @@
 		<mat-icon class="icon">{{ file.icon }}</mat-icon>
 		<span>
 			<p>{{ file.name }}</p>
-			<p class="size">{{ formatBytes(file.size) }}</p>
+			<p class="size">{{ utilsService.formatBytes(file.size) }}</p>
 		</span>
 	</div>
 </ng-container>

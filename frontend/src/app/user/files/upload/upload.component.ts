@@ -1,8 +1,8 @@
-import { Component, ElementRef, ViewChild, Inject } from "@angular/core";
+import { Component, ElementRef, Inject, ViewChild } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { displayPlural, formatBytes, formatExt } from "../../../utils";
-import { FilesService } from "../files.service";
 import { concat } from "rxjs";
+import { UtilsService } from "../../../utils.service";
+import { FilesService } from "../files.service";
 
 interface Upload {
 	uploaded: boolean;
@@ -15,10 +15,6 @@ interface Upload {
 	styleUrls: ["./upload.component.scss"],
 })
 export class UploadComponent {
-	public formatBytes = formatBytes;
-	public formatExt = formatExt;
-	public displayPlural = displayPlural;
-
 	@ViewChild("filesInput") filesInput: ElementRef<HTMLInputElement>;
 	uploads: Upload[] = [];
 	totalSize = 0;
@@ -27,6 +23,7 @@ export class UploadComponent {
 	error = "";
 
 	constructor(
+		public readonly utilsService: UtilsService,
 		public readonly filesService: FilesService,
 		private readonly dialogRef: MatDialogRef<UploadComponent>,
 		@Inject(MAT_DIALOG_DATA) private readonly data: { currentPath: string },

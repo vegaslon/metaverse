@@ -11,11 +11,11 @@
 						[value]="(status.usedSize / status.maxSize) * 100"
 						style="margin: 8px 0"
 					></mat-progress-bar>
-					{{ formatBytes(status.usedSize) }} of
+					{{ utilsService.formatBytes(status.usedSize) }} of
 					{{
 						status.maxSize == -1
 							? "unlimited"
-							: formatBytes(status.maxSize)
+							: utilsService.formatBytes(status.maxSize)
 					}}
 					used
 				</p>

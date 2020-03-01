@@ -3,11 +3,11 @@ import { MatDialog } from "@angular/material/dialog";
 import { User } from "@sentry/browser";
 import { forkJoin } from "rxjs";
 import { AuthService } from "src/app/auth/auth.service";
-import { formatBytes } from "../../utils";
 import { FilesService, Folder, Status } from "./files.service";
 import { UploadComponent } from "./upload/upload.component";
 import { CreateFolderComponent } from "./create-folder/create-folder.component";
 import { Router, ActivatedRoute } from "@angular/router";
+import { UtilsService } from "../../utils.service";
 
 @Component({
 	selector: "app-files",
@@ -15,8 +15,6 @@ import { Router, ActivatedRoute } from "@angular/router";
 	styleUrls: ["./files.component.scss"],
 })
 export class FilesComponent implements OnInit {
-	public formatBytes = formatBytes;
-
 	rootFolder = new Folder("");
 	currentFolder = new Folder("");
 
@@ -27,6 +25,7 @@ export class FilesComponent implements OnInit {
 	user: User;
 
 	constructor(
+		public readonly utilsService: UtilsService,
 		public readonly filesService: FilesService,
 		private readonly authService: AuthService,
 		private readonly dialog: MatDialog,

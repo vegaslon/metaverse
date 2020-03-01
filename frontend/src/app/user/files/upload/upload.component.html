@@ -1,9 +1,9 @@
 <input hidden (change)="onFilesChanged()" #filesInput type="file" multiple />
 
 <h2 *ngIf="uploads.length != 0" style="margin-top: 0;">
-	<b>{{ displayPlural(getUnuploaded().length, "file") }}</b>
+	<b>{{ utilsService.displayPlural(getUnuploaded().length, "file") }}</b>
 	of
-	<b>{{ formatBytes(totalSize) }}</b>
+	<b>{{ utilsService.formatBytes(totalSize) }}</b>
 	{{ !uploading ? "to upload" : "uploading..." }}
 </h2>
 <mat-card
@@ -47,11 +47,15 @@
 		>
 			done
 		</mat-icon>
-		<mat-icon class="icon">{{ formatExt(upload.file.name).icon }}</mat-icon>
+		<mat-icon class="icon">{{
+			utilsService.formatExt(upload.file.name).icon
+		}}</mat-icon>
 		<div>
 			{{ upload.file.name }}
 			<br />
-			<span class="size">{{ formatBytes(upload.file.size) }}</span>
+			<span class="size">{{
+				utilsService.formatBytes(upload.file.size)
+			}}</span>
 		</div>
 	</div>
 </div>

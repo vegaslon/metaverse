@@ -44,7 +44,7 @@
 			<mat-icon class="icon">{{ file.icon }}</mat-icon>
 			<span>
 				<p>{{ file.name }}</p>
-				<p class="size">{{ formatBytes(file.size) }}</p>
+				<p class="size">{{ utilsService.formatBytes(file.size) }}</p>
 			</span>
 		</div>
 	</div>
@@ -61,7 +61,7 @@
 			{{ contextMenu.file.name }}
 			<br />
 			<span style="opacity: 0.6;">
-				{{ formatBytes(contextMenu.file.size) }}
+				{{ utilsService.formatBytes(contextMenu.file.size) }}
 			</span>
 		</div>
 		<button mat-button (click)="onContextMenuCopyUrl()">

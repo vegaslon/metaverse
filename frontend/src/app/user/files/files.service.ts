@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { map } from "rxjs/operators";
-import { formatExt } from "src/app/utils";
+import { UtilsService } from "../../utils.service";
 
 export class File {
 	public type: string;
@@ -33,7 +33,10 @@ export class Status {
 	providedIn: "root",
 })
 export class FilesService {
-	constructor(private readonly http: HttpClient) {}
+	constructor(
+		private readonly utilsService: UtilsService,
+		private readonly http: HttpClient,
+	) {}
 
 	private findFolderByName(name: string, currentFolder: Folder) {
 		for (const folder of currentFolder.folders) {
@@ -139,7 +142,7 @@ export class FilesService {
 								keyedFile.size,
 								keyedFile.url,
 							);
-							const ext = formatExt(file.name);
+							const ext = this.utilsService.formatExt(file.name);
 							file.type = ext.type;
 							file.icon = ext.icon;
 
