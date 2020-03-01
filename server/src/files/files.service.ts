@@ -7,7 +7,7 @@ import {
 	FILES_S3_KEY_ID,
 	FILES_S3_SECRET_KEY,
 	FILES_S3_URL,
-} from "src/environment";
+} from "../environment";
 import { ApiProperty } from "@nestjs/swagger";
 import { MulterFile } from "../common/multer-file.model";
 import { User } from "../user/user.schema";
@@ -34,7 +34,7 @@ export class FilesService {
 		});
 	}
 
-	private getMaxSize(user: User) {
+	getMaxSize(user: User) {
 		if (user.admin) {
 			return -1;
 		} else {
@@ -42,11 +42,21 @@ export class FilesService {
 		}
 	}
 
-	private validatePath(user: User, pathStr: string, isFolder = false) {
+	validatePath(user: User, pathStr: string, isFolder = false) {
+		// must start with /
 		if (!path.isAbsolute(pathStr))
 			throw new BadRequestException("Absolute paths only");
 
-		const finalPath = path.posix.join(user.id, pathStr);
+		// no /../
+		if (/\/\.\.\//.test(pathStr))
+			throw new BadRequestException("Invalid path");
+
+		// just making sure we're always in the user folder
+		const finalPath = path.posix.normalize(
+			path.posix.join(user.id, pathStr),
+		);
+		if (!finalPath.startsWith(user.id + "/"))
+			throw new BadRequestException("Invalid path");
 
 		if (!isFolder) {
 			return finalPath;
