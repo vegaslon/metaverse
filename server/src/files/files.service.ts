@@ -78,7 +78,7 @@ export class FilesService {
 	async uploadFile(user: User, pathStr: string, file: MulterFile) {
 		const key = this.validatePath(user, pathStr);
 		const maxSize = this.getMaxSize(user);
-		const userSize = await this.getUserSize(user);
+		const userSize = (await this.getUserSize(user)) + file.buffer.length;
 
 		if (maxSize != -1 && userSize >= maxSize)
 			throw new BadRequestException(

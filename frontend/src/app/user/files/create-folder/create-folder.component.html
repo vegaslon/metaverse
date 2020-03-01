@@ -1,18 +1,21 @@
 <h2 style="margin: 0;">Create a new folder</h2>
-<form [formGroup]="form">
+<form [formGroup]="form" (ngSubmit)="onCreate()">
 	<mat-form-field class="input">
 		<input matInput type="text" formControlName="path" />
 		<span matPrefix>{{ currentPath }}</span>
 	</mat-form-field>
+
+	<div class="buttons">
+		<button mat-flat-button type="button" (click)="onCancel()">
+			Cancel
+		</button>
+		<button
+			mat-flat-button
+			type="submit"
+			color="primary"
+			[disabled]="form.invalid"
+		>
+			<mat-icon>create_new_folder</mat-icon> Create folder
+		</button>
+	</div>
 </form>
-<div class="buttons">
-	<button mat-flat-button (click)="onCancel()">Cancel</button>
-	<button
-		mat-flat-button
-		color="primary"
-		[disabled]="form.invalid"
-		(click)="onCreate()"
-	>
-		<mat-icon>create_new_folder</mat-icon> Create folder
-	</button>
-</div>
