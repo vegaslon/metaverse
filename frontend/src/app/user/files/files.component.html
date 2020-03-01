@@ -1,7 +1,7 @@
 <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
 <div class="container-fluid">
 	<div class="row">
-		<div class="sidebar">
+		<div class="sidebar" *ngIf="status">
 			<br />
 			<div class="storage" style="display: flex; align-items: top;">
 				<mat-icon style="margin-right: 8px;">storage</mat-icon>
@@ -12,7 +12,12 @@
 						style="margin: 8px 0"
 					></mat-progress-bar>
 					{{ formatBytes(status.usedSize) }} of
-					{{ formatBytes(status.maxSize) }} used
+					{{
+						status.maxSize == -1
+							? "unlimited"
+							: formatBytes(status.maxSize)
+					}}
+					used
 				</p>
 			</div>
 			<br />
@@ -20,12 +25,19 @@
 				<mat-icon style="margin-right: 4px;">cloud_upload</mat-icon>
 				Upload
 			</button>
+			<div style="margin: 4px 0;"></div>
+			<button mat-flat-button (click)="onCreateFolder()">
+				<mat-icon style="margin-right: 4px;">
+					create_new_folder
+				</mat-icon>
+				Create folder
+			</button>
 			<br />
 			<div class="tree">
 				<app-tree-item [folder]="rootFolder"></app-tree-item>
 			</div>
 		</div>
-		<div class="files">
+		<div class="files" *ngIf="user">
 			<div class="breadcrumbs">
 				<button mat-button (click)="changeCurrentFolder(rootFolder)">
 					{{ user.profile.username }}'s Files
@@ -40,6 +52,7 @@
 			<app-folder-view
 				[folder]="currentFolder"
 				(onFolderClick)="changeCurrentFolder($event)"
+				(onRefresh)="refresh()"
 			></app-folder-view>
 		</div>
 	</div>

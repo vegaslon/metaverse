@@ -1,28 +1,83 @@
 <input hidden (change)="onFilesChanged()" #filesInput type="file" multiple />
-<button mat-flat-button color="primary" (click)="filesInput.click()">
-	<mat-icon>insert_drive_file</mat-icon> Choose files
-</button>
-<button mat-flat-button (click)="onClearFiles()">
-	Clear files
-</button>
-<br />
-<h2>{{ formatBytes(totalSize) }} to upload</h2>
-<br />
-<div class="files">
-	<div class="file" *ngFor="let file of fileList">
-		<mat-icon class="icon">{{ formatExt(file.name).icon }}</mat-icon>
+
+<h2 *ngIf="uploads.length != 0" style="margin-top: 0;">
+	<b>{{ displayPlural(getUnuploaded().length, "file") }}</b>
+	of
+	<b>{{ formatBytes(totalSize) }}</b>
+	{{ !uploading ? "to upload" : "uploading..." }}
+</h2>
+<mat-card
+	*ngIf="error"
+	class="bg-warn"
+	style="
+		margin-bottom: 16px; color: #fff;
+		display: flex; vertical-align: middle;
+	"
+>
+	<mat-icon style="margin-top: -3px; margin-right: 8px;">
+		error_outline
+	</mat-icon>
+	{{ error }}
+</mat-card>
+<div class="uploads fluid">
+	<div
+		class="drag-over"
+		*ngIf="uploads.length == 0"
+		(click)="filesInput.click()"
+	>
+		<h2 style="margin: 0;">
+			Drag and drop files here
+		</h2>
+		<h2 style="margin: 16px 0;">or</h2>
+		<button mat-button color="primary" (click)="filesInput.click()">
+			<mat-icon>insert_drive_file</mat-icon> Choose files
+		</button>
+	</div>
+	<div class="file" *ngFor="let upload of uploads">
+		<mat-progress-spinner
+			*ngIf="uploading && !upload.uploaded"
+			class="icon"
+			mode="indeterminate"
+			diameter="24"
+		></mat-progress-spinner>
+		<mat-icon
+			*ngIf="uploading && upload.uploaded"
+			class="icon"
+			style="color: #e91e63; width: 32px; height: 32px; font-size: 32px;"
+		>
+			done
+		</mat-icon>
+		<mat-icon class="icon">{{ formatExt(upload.file.name).icon }}</mat-icon>
 		<div>
-			{{ file.name }}
+			{{ upload.file.name }}
 			<br />
-			<span class="size">{{ formatBytes(file.size) }}</span>
+			<span class="size">{{ formatBytes(upload.file.size) }}</span>
 		</div>
 	</div>
 </div>
-<button
-	mat-flat-button
-	color="primary"
-	(click)="filesInput.click()"
-	style="width: 100%;"
+<div
+	*ngIf="!uploading && uploads.length != 0"
+	style="display: flex; width: 100%; margin-top: 24px;"
 >
-	<mat-icon>cloud_upload</mat-icon> Upload
-</button>
+	<button
+		mat-flat-button
+		color="primary"
+		(click)="onUpload()"
+		style="flex-grow: 1;"
+	>
+		<mat-icon>cloud_upload</mat-icon> Upload
+	</button>
+	<button
+		mat-flat-button
+		*ngIf="uploads.length != 0"
+		(click)="onReset()"
+		style="flex-grow: 1;"
+	>
+		Reset
+	</button>
+</div>
+<mat-progress-bar
+	*ngIf="uploading"
+	mode="indeterminate"
+	style="margin-top: 24px;"
+></mat-progress-bar>

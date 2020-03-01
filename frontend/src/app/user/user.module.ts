@@ -1,3 +1,4 @@
+import { ClipboardModule } from "@angular/cdk/clipboard";
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
@@ -5,11 +6,12 @@ import { RouterModule, Routes } from "@angular/router";
 import { MaterialModule } from "../material.module";
 import { UiModule } from "../ui/ui.module";
 import { DomainsComponent } from "./domains/domains.component";
-import { SettingsComponent } from "./settings/settings.component";
+import { CreateFolderComponent } from "./files/create-folder/create-folder.component";
 import { FilesComponent } from "./files/files.component";
-import { TreeItemComponent } from "./files/tree-item/tree-item.component";
 import { FolderViewComponent } from "./files/folder-view/folder-view.component";
+import { TreeItemComponent } from "./files/tree-item/tree-item.component";
 import { UploadComponent } from "./files/upload/upload.component";
+import { SettingsComponent } from "./settings/settings.component";
 
 const routes: Routes = [
 	{ path: "", redirectTo: "settings", pathMatch: "full" },
@@ -27,6 +29,7 @@ const routes: Routes = [
 		TreeItemComponent,
 		FolderViewComponent,
 		UploadComponent,
+		CreateFolderComponent,
 	],
 	imports: [
 		CommonModule,
@@ -34,7 +37,8 @@ const routes: Routes = [
 		UiModule,
 		MaterialModule,
 		ReactiveFormsModule,
+		ClipboardModule,
 	],
-	entryComponents: [UploadComponent],
+	entryComponents: [UploadComponent, CreateFolderComponent],
 })
 export class UserModule {}

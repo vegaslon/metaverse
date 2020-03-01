@@ -1,0 +1,18 @@
+<h2 style="margin: 0;">Create a new folder</h2>
+<form [formGroup]="form">
+	<mat-form-field class="input">
+		<input matInput type="text" formControlName="path" />
+		<span matPrefix>{{ currentPath }}</span>
+	</mat-form-field>
+</form>
+<div class="buttons">
+	<button mat-flat-button (click)="onCancel()">Cancel</button>
+	<button
+		mat-flat-button
+		color="primary"
+		[disabled]="form.invalid"
+		(click)="onCreate()"
+	>
+		<mat-icon>create_new_folder</mat-icon> Create folder
+	</button>
+</div>

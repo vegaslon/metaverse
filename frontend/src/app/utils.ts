@@ -2,7 +2,7 @@ export function formatBytes(b: number) {
 	if (typeof b != "number") return;
 
 	const fixed = (n: number) => {
-		if (n < 10) return n.toFixed(1);
+		if (n < 100) return n.toFixed(1);
 		return Math.floor(n);
 	};
 
@@ -27,17 +27,17 @@ export function downloadFile(url: string, name: string) {
 	document.body.removeChild(a);
 }
 
-export function copyToClipboard(text: string) {
-	const listener = (e: ClipboardEvent) => {
-		const clipboard = e.clipboardData || window["clipboardData"];
-		clipboard.setData("text", text);
-		e.preventDefault();
-	};
+// export function copyToClipboard(text: string) {
+// 	const listener = (e: ClipboardEvent) => {
+// 		const clipboard = e.clipboardData || window["clipboardData"];
+// 		clipboard.setData("text", text);
+// 		e.preventDefault();
+// 	};
 
-	document.addEventListener("copy", listener, false);
-	document.execCommand("copy");
-	document.removeEventListener("copy", listener, false);
-}
+// 	document.addEventListener("copy", listener, false);
+// 	document.execCommand("copy");
+// 	document.removeEventListener("copy", listener, false);
+// }
 
 export function formatExt(fileName: string) {
 	switch (
@@ -72,7 +72,15 @@ export function formatExt(fileName: string) {
 		case "fs":
 		case "vs":
 			return { type: "code", icon: "code" };
+		case "mp4":
+		case "ogv":
+		case "webm":
+		case "avi":
+			return { type: "video", icon: "videocam" };
 		default:
 			return { type: "file", icon: "insert_drive_file" };
 	}
 }
+
+export const displayPlural = (n: number, singular: string, plural?: string) =>
+	n + " " + (n == 1 ? singular : plural != null ? plural : singular + "s");

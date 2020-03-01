@@ -1,4 +1,5 @@
 import {
+	Body,
 	Controller,
 	Delete,
 	Get,
@@ -28,14 +29,14 @@ export class FilesController {
 		@CurrentUser() user: User,
 		//@Query("path") path: string
 	) {
-		return this.filesService.getFiles(user.id, "/");
+		return this.filesService.getFiles(user, "/");
 	}
 
 	@Get("status")
 	@ApiBearerAuth()
 	@UseGuards(MetaverseAuthGuard())
 	getStatus(@CurrentUser() user: User) {
-		return this.filesService.getStatus(user.id);
+		return this.filesService.getStatus(user);
 	}
 
 	@Put("")
@@ -49,22 +50,36 @@ export class FilesController {
 	@UseInterceptors(
 		FileInterceptor("file", {
 			limits: {
-				fileSize: 1000 * 1000 * 16, // 16 MB
+				fileSize: 1000 * 1000 * 100, // 100 MB
 			},
 		}),
 	)
-	updateUserImage(
+	uploadFile(
 		@CurrentUser() user: User,
-		@Query("path") path: string,
+		@Body("path") path: string,
 		@UploadedFile() file: MulterFile,
 	) {
-		return this.filesService.uploadFile(user.id, path, file);
+		return this.filesService.uploadFile(user, path, file);
+	}
+
+	@Put("folder")
+	@ApiBearerAuth()
+	@UseGuards(MetaverseAuthGuard())
+	createFolder(@CurrentUser() user: User, @Query("path") path: string) {
+		return this.filesService.createFolder(user, path);
 	}
 
 	@Delete("")
 	@ApiBearerAuth()
 	@UseGuards(MetaverseAuthGuard())
 	deleteFile(@CurrentUser() user: User, @Query("path") path: string) {
-		return this.filesService.deleteFile(user.id, path);
+		return this.filesService.deleteFile(user, path);
+	}
+
+	@Delete("folder")
+	@ApiBearerAuth()
+	@UseGuards(MetaverseAuthGuard())
+	deleteFolder(@CurrentUser() user: User, @Query("path") path: string) {
+		return this.filesService.deleteFolder(user, path);
 	}
 }

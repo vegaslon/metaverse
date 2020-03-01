@@ -13,11 +13,11 @@ export const {
 	EMAIL_PASS = "",
 	EMAIL_NAME = "",
 
-	FILES_S3_URL = "",
-	FILES_S3_BUCKET = "",
+	FILES_S3_URL = "https://files-dev.tivolicloud.com",
+	FILES_S3_BUCKET = "caitlyn-dev",
 	FILES_S3_ENDPOINT = "nyc3.digitaloceanspaces.com",
-	FILES_S3_KEY_ID = "",
-	FILES_S3_SECRET_KEY = "",
+	FILES_S3_KEY_ID = "QARG6TB2OUK3AI4COE4D",
+	FILES_S3_SECRET_KEY = "pPPTWU2jM7EFr1F8gVHJV85CgZrDXqmyNjf4TkG+kIQ",
 
 	JWT_SECRET = "thisIsSoVerySecretyou literally have no idealol1610239012",
 
