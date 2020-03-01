@@ -1,7 +1,8 @@
-import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
 import { map } from "rxjs/operators";
 import { UtilsService } from "../../utils.service";
+import { Upload } from "./upload/upload.component";
 
 export class File {
 	public type: string;
@@ -163,13 +164,16 @@ export class FilesService {
 		return this.http.get<Status>("/api/user/files/status");
 	}
 
-	uploadFile(path: string, file: any, upload?: any) {
+	uploadFile(path: string, file: any, upload?: Upload) {
 		const formData = new FormData();
 		formData.set("path", path);
 		formData.set("file", file);
 
 		return this.http
-			.put<{ url: string; size: number }>("/api/user/files", formData)
+			.put<{ url: string; size: number }>("/api/user/files", formData, {
+				reportProgress: true,
+				observe: "events",
+			} as any)
 			.pipe(
 				map(data => ({
 					...data,

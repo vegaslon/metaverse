@@ -1,11 +1,13 @@
 import { Component, ElementRef, Inject, ViewChild } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { concat } from "rxjs";
+import { concat, merge, Observable } from "rxjs";
 import { UtilsService } from "../../../utils.service";
 import { FilesService } from "../files.service";
+import { HttpEvent, HttpEventType } from "@angular/common/http";
 
-interface Upload {
-	uploaded: boolean;
+export interface Upload {
+	state: "ready" | "uploading" | "uploaded";
+	progress: number;
 	file: File;
 }
 
@@ -17,7 +19,6 @@ interface Upload {
 export class UploadComponent {
 	@ViewChild("filesInput") filesInput: ElementRef<HTMLInputElement>;
 	uploads: Upload[] = [];
-	totalSize = 0;
 
 	uploading = false;
 	error = "";
@@ -29,24 +30,30 @@ export class UploadComponent {
 		@Inject(MAT_DIALOG_DATA) private readonly data: { currentPath: string },
 	) {}
 
-	getUnuploaded = () => this.uploads.filter(file => !file.uploaded);
+	getTotalSize = () =>
+		this.uploads.reduce((total, upload) => total + upload.file.size, 0);
 
-	private calcTotalSize() {
-		this.totalSize = this.getUnuploaded().reduce(
-			(total, file) => total + file.file.size,
+	getUploadedSize = () =>
+		this.uploads.reduce(
+			(total, upload) =>
+				total + upload.file.size * (upload.progress / 100),
 			0,
 		);
-	}
+
+	//getUnuploadedFiles = () =>
+	//	this.uploads.filter(upload => upload.state != "uploaded");
+
+	getProgressValue = () =>
+		(this.getUploadedSize() / this.getTotalSize()) * 100;
 
 	onFilesChanged() {
 		this.uploads = [...(this.filesInput.nativeElement.files as any)].map(
 			file => ({
-				uploaded: false,
+				state: "ready",
+				progress: 0,
 				file,
 			}),
 		);
-
-		this.calcTotalSize();
 	}
 
 	onReset() {
@@ -60,21 +67,39 @@ export class UploadComponent {
 		this.uploading = true;
 
 		const uploads = this.uploads.map(upload =>
-			this.filesService.uploadFile(
-				this.data.currentPath +
-					(this.data.currentPath.endsWith("/") ? "" : "/") +
-					upload.file.name,
-				upload.file,
-				upload,
+			merge(
+				new Observable(sub => {
+					upload.state = "uploading";
+					sub.complete();
+				}),
+				this.filesService.uploadFile(
+					this.data.currentPath +
+						(this.data.currentPath.endsWith("/") ? "" : "/") +
+						upload.file.name,
+					upload.file,
+					upload,
+				),
 			),
 		);
 
-		concat(...uploads).subscribe(
-			data => {
-				data.upload.uploaded = true;
+		const concurrency = 4;
 
-				if (this.getUnuploaded().length == 0) {
-					this.dialogRef.close();
+		merge(...uploads, concurrency).subscribe(
+			(event: HttpEvent<any> & { upload: Upload }) => {
+				if (event.type == HttpEventType.UploadProgress) {
+					event.upload.progress = Math.round(
+						(event.loaded / event.total) * 100,
+					);
+				}
+
+				if (event.type == HttpEventType.Response) {
+					event.upload.state = "uploaded";
+
+					if (
+						this.uploads.every(upload => upload.state == "uploaded")
+					) {
+						this.dialogRef.close();
+					}
 				}
 			},
 			err => {

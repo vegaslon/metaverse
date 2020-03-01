@@ -20,10 +20,10 @@
 	.file {
 		display: flex;
 		align-items: center;
-		padding: 4px 12px;
+		padding: 4px 24px;
 
-		&:nth-child(odd) {
-			background: rgba(#000, 0.05);
+		&:nth-child(even) {
+			background: rgba(#000, 0.025);
 		}
 
 		.icon {
