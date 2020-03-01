@@ -77,6 +77,15 @@ export function formatExt(fileName: string) {
 		case "webm":
 		case "avi":
 			return { type: "video", icon: "videocam" };
+		case "glb":
+		case "gltf":
+		case "fbx":
+		case "obj":
+		case "stl":
+		case "dae":
+		case "mmd":
+		case "ply":
+			return { type: "model", icon: "3d_rotation" };
 		default:
 			return { type: "file", icon: "insert_drive_file" };
 	}
