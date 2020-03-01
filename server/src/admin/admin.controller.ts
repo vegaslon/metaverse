@@ -1,11 +1,11 @@
-import { Controller, Get, UseGuards, Query } from "@nestjs/common";
-import { ApiBearerAuth, ApiTags, ApiResponse } from "@nestjs/swagger";
+import { Controller, Get, Query, UseGuards } from "@nestjs/common";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { AdminAuthGuard } from "../auth/admin.guard";
+import { DomainService } from "../domain/domain.service";
+import { SessionService } from "../session/session.service";
 import { UserService } from "../user/user.service";
 import { VideoStreamService } from "../video-stream/video-stream.service";
 import { GetUsersDto } from "./admin.dto";
-import { DomainService } from "../domain/domain.service";
-import { SessionService } from "src/session/session.service";
 
 @Controller("api/admin")
 @ApiTags("admin")

@@ -1,6 +1,6 @@
 import { Controller, Get, HttpException, Param } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { SessionService } from "src/session/session.service";
+import { SessionService } from "../../session/session.service";
 import { DomainService } from "../../domain/domain.service";
 import { HOSTNAME } from "../../environment";
 import { UserService } from "../../user/user.service";

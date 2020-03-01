@@ -1,4 +1,4 @@
-import { DomainSession, UserSession } from "src/session/session.schema";
+import { DomainSession, UserSession } from "../session/session.schema";
 import { Domain } from "../domain/domain.schema";
 import { HOSTNAME } from "../environment";
 import { User } from "../user/user.schema";

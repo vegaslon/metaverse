@@ -20,7 +20,7 @@ import { Domain } from "./domain.schema";
 import uuid = require("uuid");
 import sharp = require("sharp");
 import escapeString = require("escape-string-regexp");
-import { DomainSession } from "src/session/session.schema";
+import { DomainSession } from "../session/session.schema";
 
 // export interface DomainSession {
 // 	users: { [id: string]: UserSession };

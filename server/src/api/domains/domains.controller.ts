@@ -19,7 +19,7 @@ import { renderDomainForHifi } from "../../common/utils";
 import { UpdateDomainDto } from "../../domain/domain.dto";
 import { Domain } from "../../domain/domain.schema";
 import { DomainService } from "../../domain/domain.service";
-import { SessionService } from "src/session/session.service";
+import { SessionService } from "../../session/session.service";
 
 @ApiTags("from hifi")
 @Controller("api/v1/domains")

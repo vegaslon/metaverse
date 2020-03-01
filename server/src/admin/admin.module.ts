@@ -4,7 +4,7 @@ import { UserModule } from "../user/user.module";
 import { VideoStreamModule } from "../video-stream/video-stream.module";
 import { AdminController } from "./admin.controller";
 import { DomainModule } from "../domain/domain.module";
-import { SessionModule } from "src/session/session.module";
+import { SessionModule } from "../session/session.module";
 
 @Module({
 	imports: [

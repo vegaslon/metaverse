@@ -1,11 +1,9 @@
-import { forwardRef, Inject, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import { Domain } from "src/domain/domain.schema";
-import { UserUpdateLocationDto } from "src/user/user.dto";
-import { DomainService } from "../domain/domain.service";
+import { UserUpdateLocationDto } from "../user/user.dto";
+import { Domain } from "../domain/domain.schema";
 import { User } from "../user/user.schema";
-import { UserService } from "../user/user.service";
 import { DomainSession, UserSession } from "./session.schema";
 
 @Injectable()

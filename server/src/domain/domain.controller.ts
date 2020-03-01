@@ -12,7 +12,7 @@ import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { Response } from "express";
 import * as fs from "fs";
 import * as path from "path";
-import { SessionService } from "src/session/session.service";
+import { SessionService } from "../session/session.service";
 import { Readable } from "stream";
 import { MetaverseAuthGuard } from "../auth/auth.guard";
 import { OptionalAuthGuard } from "../auth/optional.guard";
