@@ -1,6 +1,8 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
+import { ApiProperty } from "@nestjs/swagger";
 import * as AWS from "aws-sdk";
 import * as path from "path";
+import { MulterStream } from "../common/multer-file.model";
 import {
 	FILES_S3_BUCKET,
 	FILES_S3_ENDPOINT,
@@ -8,8 +10,6 @@ import {
 	FILES_S3_SECRET_KEY,
 	FILES_S3_URL,
 } from "../environment";
-import { ApiProperty } from "@nestjs/swagger";
-import { MulterFile } from "../common/multer-file.model";
 import { User } from "../user/user.schema";
 
 export class UserFileUploadDto {
@@ -85,10 +85,12 @@ export class FilesService {
 		return files;
 	}
 
-	async uploadFile(user: User, pathStr: string, file: MulterFile) {
+	async uploadFile(user: User, pathStr: string, file: MulterStream) {
 		const key = this.validatePath(user, pathStr);
 		const maxSize = this.getMaxSize(user);
-		const userSize = (await this.getUserSize(user)) + file.buffer.length;
+		//const userSize = (await this.getUserSize(user)) + file.buffer.length;
+		const userSize = await this.getUserSize(user);
+		// TODO: fix user size and size down below
 
 		if (maxSize != -1 && userSize >= maxSize)
 			throw new BadRequestException(
@@ -99,7 +101,7 @@ export class FilesService {
 			.upload({
 				Bucket: this.bucket,
 				Key: key,
-				Body: file.buffer,
+				Body: file.stream,
 				ContentType: file.mimetype,
 				ACL: "public-read",
 				//CacheControl: "no-cache",
@@ -110,7 +112,7 @@ export class FilesService {
 
 		return {
 			url: FILES_S3_URL + "/" + key,
-			size: file.buffer.length,
+			size: 0,
 		};
 	}
 
@@ -169,6 +171,11 @@ export class FilesService {
 			deleted: res.Deleted.length,
 		};
 	}
+
+	// async move(user: User, oldPathStr: string, newPathStr: string) {
+
+	// 	this.spaces.
+	// }
 
 	async getUserSize(user: User) {
 		const prefix = this.validatePath(user, "/");

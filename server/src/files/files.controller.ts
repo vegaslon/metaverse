@@ -17,10 +17,15 @@ import { MulterFile } from "../common/multer-file.model";
 import { User } from "../user/user.schema";
 import { FilesService, UserFileUploadDto } from "./files.service";
 
+// for _handleFile
+let _filesService: FilesService;
+
 @Controller("api/user/files")
 @ApiTags("user files")
 export class FilesController {
-	constructor(private readonly filesService: FilesService) {}
+	constructor(public readonly filesService: FilesService) {
+		_filesService = filesService;
+	}
 
 	@Get("")
 	@ApiBearerAuth()
@@ -52,14 +57,26 @@ export class FilesController {
 			limits: {
 				fileSize: 1000 * 1000 * 100, // 100 MB
 			},
+			storage: new (function() {
+				this._handleFile = (req, file, cb) => {
+					_filesService
+						.uploadFile(req.user, req.body.path, file)
+						.then(data => {
+							cb(null, { data });
+						})
+						.catch(err => {
+							cb(err);
+						});
+				};
+			})(),
 		}),
 	)
-	uploadFile(
+	async uploadFile(
 		@CurrentUser() user: User,
 		@Body("path") path: string,
-		@UploadedFile() file: MulterFile,
+		@UploadedFile() file: MulterFile & { data: any },
 	) {
-		return this.filesService.uploadFile(user, path, file);
+		return file.data;
 	}
 
 	@Put("folder")
@@ -82,4 +99,11 @@ export class FilesController {
 	deleteFolder(@CurrentUser() user: User, @Query("path") path: string) {
 		return this.filesService.deleteFolder(user, path);
 	}
+
+	// @Post("move")
+	// @ApiBearerAuth()
+	// @UseGuards(MetaverseAuthGuard())
+	// move(@CurrentUser() user: User, @Query("path") path: string) {
+	// 	return this.filesService.move(user, path);
+	// }
 }
