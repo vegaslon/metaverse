@@ -6,7 +6,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { MaterialModule } from "../material.module";
 import { UiModule } from "../ui/ui.module";
 import { DomainsComponent } from "./domains/domains.component";
-import { CreateFolderComponent } from "./files/create-folder/create-folder.component";
+import { InputComponent } from "./files/input/input.component";
 import { FilesComponent } from "./files/files.component";
 import { FolderViewComponent } from "./files/folder-view/folder-view.component";
 import { TreeItemComponent } from "./files/tree-item/tree-item.component";
@@ -29,7 +29,7 @@ const routes: Routes = [
 		TreeItemComponent,
 		FolderViewComponent,
 		UploadComponent,
-		CreateFolderComponent,
+		InputComponent,
 	],
 	imports: [
 		CommonModule,
@@ -39,6 +39,6 @@ const routes: Routes = [
 		ReactiveFormsModule,
 		ClipboardModule,
 	],
-	entryComponents: [UploadComponent, CreateFolderComponent],
+	entryComponents: [UploadComponent, InputComponent],
 })
 export class UserModule {}

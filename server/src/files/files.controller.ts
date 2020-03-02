@@ -8,6 +8,7 @@ import {
 	UploadedFile,
 	UseGuards,
 	UseInterceptors,
+	Post,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from "@nestjs/swagger";
@@ -100,10 +101,25 @@ export class FilesController {
 		return this.filesService.deleteFolder(user, path);
 	}
 
-	// @Post("move")
+	@Post("move")
+	@ApiBearerAuth()
+	@UseGuards(MetaverseAuthGuard())
+	moveFile(
+		@CurrentUser() user: User,
+		@Query("oldPath") oldPath: string,
+		@Query("newPath") newPath: string,
+	) {
+		return this.filesService.moveFile(user, oldPath, newPath);
+	}
+
+	// @Post("folder/move")
 	// @ApiBearerAuth()
 	// @UseGuards(MetaverseAuthGuard())
-	// move(@CurrentUser() user: User, @Query("path") path: string) {
-	// 	return this.filesService.move(user, path);
+	// moveFolder(
+	// 	@CurrentUser() user: User,
+	// 	@Query("oldPath") oldPath: string,
+	// 	@Query("newPath") newPath: string,
+	// ) {
+	// 	//return this.filesService.moveFile(user, oldPath, newPath);
 	// }
 }

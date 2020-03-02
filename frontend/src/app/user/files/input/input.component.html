@@ -1,0 +1,26 @@
+<h2 style="margin: 0;">{{ data.titleText }}</h2>
+<form [formGroup]="form" (ngSubmit)="onSubmit.emit(form.value.value)">
+	<mat-form-field class="input">
+		<input matInput type="text" formControlName="value" />
+		<span matPrefix>{{ data.inputPrefix }}</span>
+	</mat-form-field>
+
+	<div class="buttons">
+		<button mat-flat-button type="button" (click)="onCancel()">
+			Cancel
+		</button>
+		<button
+			mat-flat-button
+			type="submit"
+			color="primary"
+			[disabled]="form.invalid"
+		>
+			<mat-icon>{{ data.buttonIcon }}</mat-icon> {{ data.buttonText }}
+		</button>
+	</div>
+</form>
+<mat-progress-bar
+	class="loading"
+	*ngIf="loading"
+	mode="indeterminate"
+></mat-progress-bar>

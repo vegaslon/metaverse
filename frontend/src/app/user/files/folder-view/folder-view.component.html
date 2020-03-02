@@ -86,7 +86,15 @@
 		<mat-icon>folder</mat-icon>
 		Move
 	</button>
-	<button mat-button disabled>
+	<button
+		mat-button
+		(click)="onContextMenuRename()"
+		*ngIf="contextMenu.type == 'file'"
+	>
+		<mat-icon>create</mat-icon>
+		Rename
+	</button>
+	<button mat-button disabled *ngIf="contextMenu.type == 'folder'">
 		<mat-icon>create</mat-icon>
 		Rename
 	</button>

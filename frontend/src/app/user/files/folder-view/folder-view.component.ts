@@ -11,6 +11,8 @@ import {
 } from "@angular/core";
 import { UtilsService } from "../../../utils.service";
 import { File, FilesService, Folder } from "../files.service";
+import { InputComponent } from "../input/input.component";
+import { MatDialog } from "@angular/material/dialog";
 
 interface ContextMenu {
 	type: "file" | "folder";
@@ -42,6 +44,7 @@ export class FolderViewComponent {
 		public readonly filesService: FilesService,
 		@Inject(PLATFORM_ID) private readonly platformId: any,
 		private clipboard: Clipboard,
+		private dialog: MatDialog,
 	) {}
 
 	// TODO: outsource together with files.component.ts
@@ -101,6 +104,39 @@ export class FolderViewComponent {
 		this.clipboard.copy(this.contextMenu.file.url);
 		this.contextMenu.urlCopied = true;
 		// this.contextMenu = null;
+	}
+
+	onContextMenuRename() {
+		const oldKey = this.contextMenu.file.key;
+
+		const currentPath =
+			oldKey
+				.split("/")
+				.slice(0, -1)
+				.join("/") + "/";
+
+		const dialog = this.dialog.open(InputComponent, {
+			width: "600px",
+			data: {
+				inputPrefix: currentPath,
+				inputDefault: this.contextMenu.file.name,
+				titleText: "Rename a file",
+				buttonText: "Rename file",
+				buttonIcon: "create",
+			},
+		});
+
+		const submitSub = dialog.componentInstance.onSubmit.subscribe(value => {
+			const newKey = currentPath + value;
+
+			this.filesService.moveFile(oldKey, newKey).subscribe(() => {
+				dialog.close();
+				this.onRefresh.emit();
+				this.contextMenu = null;
+
+				submitSub.unsubscribe();
+			});
+		});
 	}
 
 	onContextMenuDownload() {

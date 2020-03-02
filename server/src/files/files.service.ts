@@ -172,10 +172,32 @@ export class FilesService {
 		};
 	}
 
-	// async move(user: User, oldPathStr: string, newPathStr: string) {
+	async moveFile(user: User, oldPathStr: string, newPathStr: string) {
+		let oldKey = this.validatePath(user, oldPathStr);
+		let newKey = this.validatePath(user, newPathStr);
 
-	// 	this.spaces.
-	// }
+		await this.spaces
+			.copyObject({
+				CopySource: "/" + this.bucket + "/" + oldKey,
+				Bucket: this.bucket,
+				Key: newKey,
+				ACL: "public-read",
+			})
+			.promise();
+
+		if (oldKey != newKey)
+			await this.spaces
+				.deleteObject({
+					Bucket: this.bucket,
+					Key: oldKey,
+				})
+				.promise();
+
+		return {
+			old: oldKey.replace(user.id, ""),
+			new: newKey.replace(user.id, ""),
+		};
+	}
 
 	async getUserSize(user: User) {
 		const prefix = this.validatePath(user, "/");

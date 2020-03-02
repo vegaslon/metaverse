@@ -5,9 +5,9 @@ import { forkJoin } from "rxjs";
 import { AuthService } from "src/app/auth/auth.service";
 import { FilesService, Folder, Status } from "./files.service";
 import { UploadComponent } from "./upload/upload.component";
-import { CreateFolderComponent } from "./create-folder/create-folder.component";
 import { Router, ActivatedRoute } from "@angular/router";
 import { UtilsService } from "../../utils.service";
+import { InputComponent } from "./input/input.component";
 
 @Component({
 	selector: "app-files",
@@ -158,16 +158,28 @@ export class FilesComponent implements OnInit {
 	// }
 
 	onCreateFolder() {
-		const dialog = this.dialog.open(CreateFolderComponent, {
+		const currentPath = "/" + this.getCurrentPath().join("/") + "/";
+
+		const dialog = this.dialog.open(InputComponent, {
 			width: "600px",
 			data: {
-				currentPath: "/" + this.getCurrentPath().join("/"),
+				inputPrefix: currentPath,
+				inputDefault: "",
+				titleText: "Create a new folder",
+				buttonText: "Create folder",
+				buttonIcon: "create_new_folder",
 			},
 		});
 
-		const sub = dialog.afterClosed().subscribe(() => {
-			this.refresh();
-			sub.unsubscribe();
+		const submitSub = dialog.componentInstance.onSubmit.subscribe(value => {
+			this.filesService
+				.createFolder(currentPath + value)
+				.subscribe(() => {
+					dialog.close();
+					this.refresh();
+
+					submitSub.unsubscribe();
+				});
 		});
 	}
 }

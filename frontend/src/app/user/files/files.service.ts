@@ -13,6 +13,7 @@ export class File {
 		public name: string,
 		public size: number,
 		public url: string,
+		public parent: Folder = null,
 	) {}
 }
 
@@ -142,6 +143,7 @@ export class FilesService {
 								fileName,
 								keyedFile.size,
 								keyedFile.url,
+								folder,
 							);
 							const ext = this.utilsService.formatExt(file.name);
 							file.type = ext.type;
@@ -208,5 +210,18 @@ export class FilesService {
 				path,
 			},
 		});
+	}
+
+	moveFile(oldPath: string, newPath: string) {
+		return this.http.post(
+			"/api/user/files/move",
+			{},
+			{
+				params: {
+					oldPath,
+					newPath,
+				},
+			},
+		);
 	}
 }
