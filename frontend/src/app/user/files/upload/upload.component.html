@@ -38,7 +38,6 @@
 			*ngIf="uploading && upload.state == 'uploading'"
 			class="icon"
 			[value]="upload.progress"
-			[mode]="upload.progress == 100 ? 'indeterminate' : 'determinate'"
 			diameter="24"
 		></mat-progress-spinner>
 		<mat-icon
