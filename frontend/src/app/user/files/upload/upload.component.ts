@@ -102,9 +102,9 @@ export class UploadComponent {
 					}
 				}
 			},
-			err => {
+			error => {
 				this.uploading = false;
-				this.error = err.statusText;
+				this.error = error;
 			},
 		);
 	}

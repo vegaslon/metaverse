@@ -1,8 +1,9 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { map } from "rxjs/operators";
+import { map, catchError } from "rxjs/operators";
 import { UtilsService } from "../../utils.service";
 import { Upload } from "./upload/upload.component";
+import { throwError } from "rxjs";
 
 export class File {
 	public type: string;
@@ -177,6 +178,9 @@ export class FilesService {
 				observe: "events",
 			} as any)
 			.pipe(
+				catchError((error: HttpErrorResponse) => {
+					return throwError(error.error.message);
+				}),
 				map(data => ({
 					...data,
 					upload,

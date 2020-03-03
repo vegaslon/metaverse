@@ -2,6 +2,8 @@ import { BadRequestException, Injectable } from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
 import * as AWS from "aws-sdk";
 import * as path from "path";
+import { rxToStream, streamToRx } from "rxjs-stream";
+import { map } from "rxjs/operators";
 import { MulterStream } from "../common/multer-file.model";
 import {
 	FILES_S3_BUCKET,
@@ -35,12 +37,33 @@ export class FilesService {
 		});
 	}
 
-	getMaxSize(user: User) {
+	getMaxUserSize(user: User) {
 		if (user.admin) {
 			return -1;
 		} else {
 			return 1024 * 1024 * 100;
 		}
+	}
+
+	async getUserSize(user: User) {
+		const prefix = this.validatePath(user, "/");
+
+		const objects = await this.spaces
+			.listObjectsV2({
+				Bucket: this.bucket,
+				Prefix: prefix,
+
+				// TODO: count more than 1000 files
+				//ContinuationToken: "",
+			})
+			.promise();
+
+		const size = objects.Contents.reduce(
+			(total, object) => total + object.Size,
+			0,
+		);
+
+		return size;
 	}
 
 	validatePath(user: User, pathStr: string, isFolder = false) {
@@ -88,21 +111,34 @@ export class FilesService {
 
 	async uploadFile(user: User, pathStr: string, file: MulterStream) {
 		const key = this.validatePath(user, pathStr);
-		const maxSize = this.getMaxSize(user);
-		//const userSize = (await this.getUserSize(user)) + file.buffer.length;
+		const maxUserSize = this.getMaxUserSize(user);
 		const userSize = await this.getUserSize(user);
-		// TODO: fix user size and size down below
 
-		if (maxSize != -1 && userSize >= maxSize)
-			throw new BadRequestException(
-				"File storage full " + userSize + "/" + maxSize,
-			);
+		if (maxUserSize != -1 && userSize >= maxUserSize)
+			throw new BadRequestException("Storage is full");
+
+		let bodyLength = 0;
+		const body = rxToStream(
+			streamToRx(file.stream).pipe(
+				map(buffer => {
+					bodyLength += buffer.length;
+
+					if (maxUserSize != -1 && bodyLength >= maxUserSize)
+						throw new BadRequestException("Storage is full");
+
+					return buffer;
+				}),
+			),
+			{
+				objectMode: true,
+			},
+		);
 
 		await this.spaces
 			.upload({
 				Bucket: this.bucket,
 				Key: key,
-				Body: file.stream,
+				Body: body,
 				ContentType: file.mimetype,
 				ACL: "public-read",
 				//CacheControl: "no-cache",
@@ -113,7 +149,7 @@ export class FilesService {
 
 		return {
 			url: FILES_S3_URL + "/" + key,
-			size: 0,
+			size: bodyLength,
 		};
 	}
 
@@ -200,30 +236,9 @@ export class FilesService {
 		};
 	}
 
-	async getUserSize(user: User) {
-		const prefix = this.validatePath(user, "/");
-
-		const objects = await this.spaces
-			.listObjectsV2({
-				Bucket: this.bucket,
-				Prefix: prefix,
-
-				// TODO: count more than 1000 files
-				//ContinuationToken: "",
-			})
-			.promise();
-
-		const size = objects.Contents.reduce(
-			(total, object) => total + object.Size,
-			0,
-		);
-
-		return size;
-	}
-
 	async getStatus(user: User) {
 		const size = await this.getUserSize(user);
-		const maxSize = this.getMaxSize(user);
+		const maxSize = this.getMaxUserSize(user);
 
 		return {
 			usedSize: size,
