@@ -158,7 +158,8 @@ export class FilesComponent implements OnInit {
 	// }
 
 	onCreateFolder() {
-		const currentPath = "/" + this.getCurrentPath().join("/") + "/";
+		let currentPath = "/" + this.getCurrentPath().join("/");
+		if (!currentPath.endsWith("/")) currentPath += "/";
 
 		const dialog = this.dialog.open(InputComponent, {
 			width: "600px",
