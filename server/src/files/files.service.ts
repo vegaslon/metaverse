@@ -31,6 +31,7 @@ export class FilesService {
 			endpoint: FILES_S3_ENDPOINT,
 			accessKeyId: FILES_S3_KEY_ID,
 			secretAccessKey: FILES_S3_SECRET_KEY,
+			// s3ForcePathStyle: true, // when using minio
 		});
 	}
 
