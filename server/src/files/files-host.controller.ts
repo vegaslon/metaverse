@@ -1,15 +1,22 @@
-import { Controller, Get, NotFoundException, Param, Res } from "@nestjs/common";
+import * as babel from "@babel/core";
+import {
+	BadRequestException,
+	Controller,
+	Get,
+	NotFoundException,
+	Param,
+	Res,
+} from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import * as swc from "@swc/core";
 import { ObjectId } from "bson";
 import { Response } from "express";
 import fetch from "node-fetch";
-import { FILES_URL, FILES_S3_BUCKET, FILES_S3_ENDPOINT } from "../environment";
+import { FILES_S3_BUCKET, FILES_S3_ENDPOINT, FILES_URL } from "../environment";
 import { UserService } from "../user/user.service";
+import { functionBindPolyfill } from "./function-bind-polyfill";
 
 @Controller({
 	host: new URL(FILES_URL).hostname,
-	path: "",
 })
 @ApiTags("user files")
 export class FilesHostController {
@@ -20,19 +27,19 @@ export class FilesHostController {
 
 	@Get("*")
 	async getFile(@Param("0") location: string, @Res() res: Response) {
-		const path = location.split("/");
+		const filePath = location.split("/");
 
 		// validate user id
 		try {
-			new ObjectId(path[0]);
+			new ObjectId(filePath[0]);
 		} catch (error) {
-			const user = await this.userService.findByUsername(path[0]);
+			const user = await this.userService.findByUsername(filePath[0]);
 			if (user == null) throw new NotFoundException("User not found");
-			path[0] = user.id;
+			filePath[0] = user.id;
 		}
 
 		// fetch file response
-		const fileUrl = this.s3Url + "/" + path.join("/");
+		const fileUrl = this.s3Url + "/" + filePath.join("/");
 		const fileRes = await fetch(fileUrl);
 
 		// try to find typescript and compile
@@ -41,37 +48,57 @@ export class FilesHostController {
 			if (!tsFileRes.ok) throw new NotFoundException("File not found");
 
 			const src = await tsFileRes.text();
-			const out = await swc.transform(src, {
-				jsc: {
-					parser: {
-						syntax: "typescript",
-					},
-					target: "es3",
-					loose: true,
-				},
-			});
+			// const out = await swc.transform(src, {
+			// 	jsc: {
+			// 		parser: {
+			// 			syntax: "typescript",
+			// 		},
+			// 		target: "es3",
+			// 		loose: true,
+			// 	},
+			// });
 
-			let code = out.code;
-			if (/\.bind\(/i.test(code))
-				code =
-					`if (!Function.prototype.bind) {
-	Function.prototype.bind = function(context) {
-		var fn = this;
-		var args = Array.prototype.slice.call(arguments, 1);
-				  
-		if (typeof fn !== 'function') {
-			throw new TypeError('Function.prototype.bind - context must be a valid function');
-		}
-				  
-		return function() {
-			return fn.apply(context, args.concat(Array.prototype.slice.call(arguments)));
-		}
-	}
-}
-` + code;
+			try {
+				const out = babel.transform(src, {
+					presets: [
+						[
+							"@babel/preset-env",
+							{
+								targets: "ie < 5",
+								loose: true,
+							},
+						],
+						[
+							"@babel/preset-typescript",
+							{
+								allExtensions: true,
+							},
+						],
+					],
+					plugins: [
+						"@babel/plugin-proposal-class-properties",
+						"@babel/plugin-proposal-optional-chaining", // obj?.foo?.bar?.baz
+						"@babel/plugin-proposal-nullish-coalescing-operator", // object.foo ?? "default"
+						[
+							"@babel/plugin-proposal-pipeline-operator",
+							{ proposal: "minimal" },
+						], // 64 |> sqrt
+					],
+				});
 
-			res.header("Content-Type", "text/javascript");
-			return res.send(code);
+				let code = out.code;
+				if (/\.bind\(/i.test(code))
+					code = code.replace(
+						'"use strict";\n',
+						'"use strict";\n\n' + functionBindPolyfill,
+					);
+
+				res.header("Content-Type", "text/javascript");
+				return res.send(code);
+			} catch (err) {
+				console.error(err);
+				throw new BadRequestException("Failed to compile", err);
+			}
 		}
 
 		if (!fileRes.ok) throw new NotFoundException("File not found");
