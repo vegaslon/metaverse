@@ -9,10 +9,11 @@ import {
 	Output,
 	PLATFORM_ID,
 } from "@angular/core";
+import { Validators } from "@angular/forms";
+import { MatDialog } from "@angular/material/dialog";
 import { UtilsService } from "../../../utils.service";
 import { File, FilesService, Folder } from "../files.service";
 import { InputComponent } from "../input/input.component";
-import { MatDialog } from "@angular/material/dialog";
 
 interface ContextMenu {
 	type: "file" | "folder";
@@ -106,7 +107,47 @@ export class FolderViewComponent {
 		// this.contextMenu = null;
 	}
 
-	onContextMenuRename() {
+	onContextMenuMoveFile() {
+		const oldKey = this.contextMenu.file.key;
+
+		const currentPath = oldKey
+			.split("/")
+			.slice(0, -1)
+			.join("/");
+
+		const dialog = this.dialog.open(InputComponent, {
+			width: "600px",
+			data: {
+				inputSuffix: "/" + this.contextMenu.file.name,
+				inputDefault: currentPath || "/",
+
+				titleText: "Move a file",
+				buttonText: "Move file",
+				buttonIcon: "folder",
+
+				validators: [],
+			},
+		});
+
+		const submitSub = dialog.componentInstance.onSubmit.subscribe(
+			(value: string) => {
+				const newKey =
+					value +
+					(value.endsWith("/") ? "" : "/") +
+					this.contextMenu.file.name;
+
+				this.filesService.moveFile(oldKey, newKey).subscribe(() => {
+					dialog.close();
+					this.onRefresh.emit();
+					this.contextMenu = null;
+
+					submitSub.unsubscribe();
+				});
+			},
+		);
+	}
+
+	onContextMenuRenameFile() {
 		const oldKey = this.contextMenu.file.key;
 
 		const currentPath =
@@ -120,23 +161,30 @@ export class FolderViewComponent {
 			data: {
 				inputPrefix: currentPath,
 				inputDefault: this.contextMenu.file.name,
+
 				titleText: "Rename a file",
 				buttonText: "Rename file",
 				buttonIcon: "create",
+
+				validators: [
+					Validators.pattern(/^[^\/]*?$/), // no slashes
+				],
 			},
 		});
 
-		const submitSub = dialog.componentInstance.onSubmit.subscribe(value => {
-			const newKey = currentPath + value;
+		const submitSub = dialog.componentInstance.onSubmit.subscribe(
+			(value: string) => {
+				const newKey = currentPath + value;
 
-			this.filesService.moveFile(oldKey, newKey).subscribe(() => {
-				dialog.close();
-				this.onRefresh.emit();
-				this.contextMenu = null;
+				this.filesService.moveFile(oldKey, newKey).subscribe(() => {
+					dialog.close();
+					this.onRefresh.emit();
+					this.contextMenu = null;
 
-				submitSub.unsubscribe();
-			});
-		});
+					submitSub.unsubscribe();
+				});
+			},
+		);
 	}
 
 	onContextMenuDownload() {

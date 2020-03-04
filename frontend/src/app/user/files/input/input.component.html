@@ -1,8 +1,9 @@
-<h2 style="margin: 0;">{{ data.titleText }}</h2>
+<h2 style="margin: 0;">{{ titleText }}</h2>
 <form [formGroup]="form" (ngSubmit)="onSubmit.emit(form.value.value)">
 	<mat-form-field class="input">
 		<input matInput type="text" formControlName="value" />
-		<span matPrefix>{{ data.inputPrefix }}</span>
+		<span matPrefix *ngIf="inputPrefix">{{ inputPrefix }}</span>
+		<span matSuffix *ngIf="inputSuffix">{{ inputSuffix }}</span>
 	</mat-form-field>
 
 	<div class="buttons">
@@ -15,7 +16,7 @@
 			color="primary"
 			[disabled]="form.invalid"
 		>
-			<mat-icon>{{ data.buttonIcon }}</mat-icon> {{ data.buttonText }}
+			<mat-icon>{{ buttonIcon }}</mat-icon> {{ buttonText }}
 		</button>
 	</div>
 </form>
