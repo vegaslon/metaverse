@@ -6,11 +6,11 @@ import { rxToStream, streamToRx } from "rxjs-stream";
 import { map } from "rxjs/operators";
 import { MulterStream } from "../common/multer-file.model";
 import {
+	FILES_URL,
 	FILES_S3_BUCKET,
 	FILES_S3_ENDPOINT,
 	FILES_S3_KEY_ID,
 	FILES_S3_SECRET_KEY,
-	FILES_S3_URL,
 } from "../environment";
 import { User } from "../user/user.schema";
 
@@ -103,7 +103,7 @@ export class FilesService {
 			key: object.Key.replace(user.id, ""),
 			lastModified: object.LastModified,
 			size: object.Size,
-			url: FILES_S3_URL + "/" + object.Key,
+			url: FILES_URL + "/" + object.Key,
 		}));
 
 		return files;
@@ -134,12 +134,15 @@ export class FilesService {
 			},
 		);
 
+		let mimetype = file.mimetype;
+		if (key.toLowerCase().endsWith(".ts")) mimetype = "text/typescript";
+
 		await this.spaces
 			.upload({
 				Bucket: this.bucket,
 				Key: key,
 				Body: body,
-				ContentType: file.mimetype,
+				ContentType: mimetype,
 				ACL: "public-read",
 				//CacheControl: "no-cache",
 			})
@@ -148,7 +151,7 @@ export class FilesService {
 		// TODO: remove cache from cdn
 
 		return {
-			url: FILES_S3_URL + "/" + key,
+			url: FILES_URL + "/" + key,
 			size: bodyLength,
 		};
 	}
@@ -166,7 +169,7 @@ export class FilesService {
 			.promise();
 
 		return {
-			url: FILES_S3_URL + "/" + key,
+			url: FILES_URL + "/" + key,
 		};
 	}
 

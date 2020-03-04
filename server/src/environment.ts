@@ -13,7 +13,7 @@ export const {
 	EMAIL_PASS = "",
 	EMAIL_NAME = "",
 
-	FILES_S3_URL = "https://files-dev.tivolicloud.com",
+	FILES_URL = "http://files.localhost:3000",
 	FILES_S3_BUCKET = "caitlyn-dev",
 	FILES_S3_ENDPOINT = "nyc3.digitaloceanspaces.com",
 	FILES_S3_KEY_ID = "QARG6TB2OUK3AI4COE4D",

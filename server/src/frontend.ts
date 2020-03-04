@@ -3,8 +3,9 @@ import { BaseExceptionFilter, HttpAdapterHost } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { Request, Response } from "express";
 import * as path from "path";
+import { URL } from "url";
 import "zone.js";
-import { DEV } from "./environment";
+import { DEV, FILES_URL } from "./environment";
 
 // this all needs to be fixed eventually
 // using https://github.com/nestjs/ng-universal
@@ -22,11 +23,13 @@ const frontend = {
 
 @Catch(NotFoundException)
 class FrontendRenderFilter extends BaseExceptionFilter {
+	private readonly filesHost = new URL(FILES_URL).hostname;
+
 	catch(exception: NotFoundException, host: ArgumentsHost) {
 		const ctx = host.switchToHttp();
-
 		const req: Request = ctx.getRequest();
-		if (req.originalUrl.startsWith("/api/"))
+
+		if (req.originalUrl.startsWith("/api/") || this.filesHost == req.host)
 			return super.catch(exception, host);
 
 		const res: Response = ctx.getResponse();
