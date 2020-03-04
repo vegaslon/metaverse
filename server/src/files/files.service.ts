@@ -37,7 +37,7 @@ export class FilesService {
 		});
 	}
 
-	getMaxUserSize(user: User) {
+	private getMaxUserSize(user: User) {
 		if (user.admin) {
 			return -1;
 		} else {
@@ -45,7 +45,7 @@ export class FilesService {
 		}
 	}
 
-	async getUserSize(user: User) {
+	private async getUserSize(user: User) {
 		const prefix = this.validatePath(user, "/");
 
 		const objects = await this.spaces
@@ -66,7 +66,7 @@ export class FilesService {
 		return size;
 	}
 
-	validatePath(user: User, pathStr: string, isFolder = false) {
+	private validatePath(user: User, pathStr: string, isFolder = false) {
 		// must start with /
 		if (!path.isAbsolute(pathStr))
 			throw new BadRequestException("Absolute paths only");
@@ -89,6 +89,17 @@ export class FilesService {
 		}
 	}
 
+	private getUrl(user: User, key: string) {
+		return (
+			FILES_URL +
+			"/" +
+			key.replace(
+				new RegExp("^" + user.id + "/"),
+				user.username.toLowerCase() + "/",
+			)
+		);
+	}
+
 	async getFiles(user: User, pathStr: string) {
 		const prefix = this.validatePath(user, pathStr);
 
@@ -103,7 +114,7 @@ export class FilesService {
 			key: object.Key.replace(user.id, ""),
 			lastModified: object.LastModified,
 			size: object.Size,
-			url: FILES_URL + "/" + object.Key,
+			url: this.getUrl(user, object.Key),
 		}));
 
 		return files;
@@ -151,7 +162,7 @@ export class FilesService {
 		// TODO: remove cache from cdn
 
 		return {
-			url: FILES_URL + "/" + key,
+			url: this.getUrl(user, key),
 			size: bodyLength,
 		};
 	}
@@ -169,7 +180,7 @@ export class FilesService {
 			.promise();
 
 		return {
-			url: FILES_URL + "/" + key,
+			url: this.getUrl(user, key),
 		};
 	}
 
