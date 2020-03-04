@@ -20,12 +20,15 @@ describe("FilesService", () => {
 		} as any;
 
 		expect(() =>
+			// @ts-ignore
 			filesService.validatePath(user, "../anotherId/folder/file.txt"),
 		).toThrow();
 		expect(() =>
+			// @ts-ignore
 			filesService.validatePath(user, "/../anotherId/folder/file.txt"),
 		).toThrow();
 		expect(() =>
+			// @ts-ignore
 			filesService.validatePath(user, "/../anotherId/folder", true),
 		).toThrow();
 	});
