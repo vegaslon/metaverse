@@ -1,5 +1,5 @@
 import { Domain } from "../../domain/domain.schema";
-import { HOSTNAME } from "../../environment";
+import { URL } from "../../environment";
 import {
 	UserStory,
 	UserStoryAction,
@@ -37,7 +37,7 @@ import {
 
 // export function createConcurrency(domain: Domain): UserStory {
 // 	const concurrency = domain.online ? domain.onlineUsers : 0;
-// 	const thumbnail_url = HOSTNAME + "/api/domain/" + domain._id + "/image";
+// 	const thumbnail_url = URL + "/api/domain/" + domain._id + "/image";
 
 // 	return {
 // 		id: domain._id,

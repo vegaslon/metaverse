@@ -8,7 +8,7 @@ import {
 	AUTH_GITHUB_SECRET,
 	AUTH_GOOGLE_ID,
 	AUTH_GOOGLE_SECRET,
-	HOSTNAME,
+	URL,
 	AUTH_DISCORD_ID,
 	AUTH_DISCORD_SECRET,
 } from "../environment";
@@ -44,7 +44,7 @@ export class GoogleStrategy extends PassportStrategy(StrategyGoogle, "google") {
 		super({
 			clientID: AUTH_GOOGLE_ID,
 			clientSecret: AUTH_GOOGLE_SECRET,
-			callbackURL: HOSTNAME + "/api/auth/google/callback",
+			callbackURL: URL + "/api/auth/google/callback",
 
 			passReqToCallback: true,
 			scope: ["profile", "email"],
@@ -83,7 +83,7 @@ export class DiscordStrategy extends PassportStrategy(
 		super({
 			clientID: AUTH_DISCORD_ID,
 			clientSecret: AUTH_DISCORD_SECRET,
-			callbackURL: HOSTNAME + "/api/auth/discord/callback",
+			callbackURL: URL + "/api/auth/discord/callback",
 
 			passReqToCallback: true,
 			scope: ["identify", "email"],
@@ -123,7 +123,7 @@ export class GitHubStrategy extends PassportStrategy(StrategyGitHub, "github") {
 		super({
 			clientID: AUTH_GITHUB_ID,
 			clientSecret: AUTH_GITHUB_SECRET,
-			callbackURL: HOSTNAME + "/api/auth/github/callback",
+			callbackURL: URL + "/api/auth/github/callback",
 
 			passReqToCallback: true,
 		});

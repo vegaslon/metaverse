@@ -11,7 +11,7 @@ import * as bcrypt from "bcrypt";
 import * as mailchecker from "mailchecker";
 import { generateRandomString } from "../common/utils";
 import { Domain } from "../domain/domain.schema";
-import { HOSTNAME } from "../environment";
+import { URL } from "../environment";
 import { User } from "../user/user.schema";
 import { UserService } from "../user/user.service";
 import { AuthExtSignUpDto, AuthSignUpDto, AuthTokenDto } from "./auth.dto";
@@ -186,10 +186,7 @@ export class AuthService {
 				username: user.username.toLowerCase(),
 				email: user.email,
 				avatar_url:
-					HOSTNAME +
-					"/api/user/" +
-					user.username.toLowerCase() +
-					"/image",
+					URL + "/api/user/" + user.username.toLowerCase() + "/image",
 			},
 			{
 				algorithm: "HS256",

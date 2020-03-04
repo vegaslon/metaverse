@@ -20,7 +20,7 @@ import { MetaverseAuthGuard } from "../auth/auth.guard";
 import { AuthService } from "../auth/auth.service";
 import { CurrentUser } from "../auth/user.decorator";
 import { MulterFile } from "../common/multer-file.model";
-import { HOSTNAME } from "../environment";
+import { URL } from "../environment";
 import { PuppeteerService } from "../puppeteer/puppeteer.service";
 import {
 	GetUserDomainsLikesDto,
@@ -172,7 +172,7 @@ export class UserController {
 		const token = this.authService.login(user).access_token;
 
 		res.redirect(
-			HOSTNAME + (justVerified ? "?emailVerified&token=" + token : ""),
+			URL + (justVerified ? "?emailVerified&token=" + token : ""),
 		);
 	}
 }

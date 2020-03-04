@@ -1,6 +1,6 @@
 import { MailerService } from "@nest-modules/mailer";
 import { Injectable } from "@nestjs/common";
-import { HOSTNAME } from "../environment";
+import { URL } from "../environment";
 import { User } from "../user/user.schema";
 
 @Injectable()
@@ -15,7 +15,7 @@ export class EmailService {
 			context: {
 				username: user.username,
 				email,
-				verifyUrl: HOSTNAME + "/api/user/verify/" + verifyString,
+				verifyUrl: URL + "/api/user/verify/" + verifyString,
 			},
 		});
 	}

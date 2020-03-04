@@ -6,7 +6,7 @@ import { CurrentUser } from "../../auth/user.decorator";
 import { pagination } from "../../common/utils";
 import { DomainRestriction } from "../../domain/domain.schema";
 import { DomainService } from "../../domain/domain.service";
-import { HOSTNAME } from "../../environment";
+import { URL } from "../../environment";
 import { User } from "../../user/user.schema";
 import { UserService } from "../../user/user.service";
 import {
@@ -74,8 +74,7 @@ export class UsersController {
 					connection = UsersConnectionType.self;
 			}
 
-			const userImageUrl =
-				HOSTNAME + "/api/user/" + user.username + "/image";
+			const userImageUrl = URL + "/api/user/" + user.username + "/image";
 
 			users.push({
 				username: user.username,
@@ -154,7 +153,7 @@ export class UsersController {
 	// 				},
 	// 			},
 	// 			images: {
-	// 				thumbnail: HOSTNAME + "/api/user/" + username + "/image",
+	// 				thumbnail: URL + "/api/user/" + username + "/image",
 	// 			},
 	// 		} as UsersConnection;
 	// 	});

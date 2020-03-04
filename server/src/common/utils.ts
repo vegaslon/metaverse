@@ -1,6 +1,6 @@
 import { DomainSession, UserSession } from "../session/session.schema";
 import { Domain } from "../domain/domain.schema";
-import { HOSTNAME } from "../environment";
+import { URL } from "../environment";
 import { User } from "../user/user.schema";
 
 export function snakeToCamelCase(snake: string) {
@@ -179,7 +179,7 @@ export function renderFriend(user: User, userSession: UserSession) {
 		username: user.username,
 		online: userSession != null,
 		trusted: false,
-		image: HOSTNAME + "/api/user/" + user.username + "/image",
+		image: URL + "/api/user/" + user.username + "/image",
 		domain: showDomain
 			? {
 					id: domain.id,

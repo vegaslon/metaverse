@@ -2,7 +2,7 @@ import { Controller, Get, HttpException, Param } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import { SessionService } from "../../session/session.service";
 import { DomainService } from "../../domain/domain.service";
-import { HOSTNAME } from "../../environment";
+import { URL } from "../../environment";
 import { UserService } from "../../user/user.service";
 import { Place } from "./places.dto";
 
@@ -29,7 +29,7 @@ export class PlacesController {
 				404,
 			);
 
-		const thumbnailUrl = HOSTNAME + "/api/domain/" + domain._id + "/image";
+		const thumbnailUrl = URL + "/api/domain/" + domain._id + "/image";
 
 		const session = await this.sessionService.findDomainById(domain.id);
 		const online = session != null;
