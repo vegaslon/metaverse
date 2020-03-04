@@ -12,11 +12,11 @@ export class FilesHostController {
 	constructor(private readonly filesHostService: FilesHostService) {}
 
 	@Get("*")
-	async getFile(
+	getFile(
 		@Res() res: Response,
 		@Param("0") location: string,
 		@Query() query: { [key: string]: string },
 	) {
-		this.filesHostService.getFile(res, location, query);
+		return this.filesHostService.getFile(res, location, query);
 	}
 }

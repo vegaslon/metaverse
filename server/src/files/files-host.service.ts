@@ -111,10 +111,12 @@ export class FilesHostService {
 		const fileUrl = this.s3Url + "/" + filePath.join("/");
 		const fileRes = await fetch(fileUrl);
 
-		if (query.download != null) this.forceDownload(res);
-
 		// try to find typescript and compile
-		if (/\.js$/i.test(location)) {
+		if (
+			!fileRes.ok &&
+			//query.compileFromTs != null &&
+			/\.js$/i.test(location)
+		) {
 			const tsFileRes = await fetch(fileUrl.replace(/\.js$/i, ".ts"));
 			if (!tsFileRes.ok) throw new NotFoundException("File not found");
 
@@ -127,6 +129,8 @@ export class FilesHostService {
 		}
 
 		if (!fileRes.ok) throw new NotFoundException("File not found");
+
+		if (query.download != null) this.forceDownload(res);
 
 		this.setHeaders(fileRes, res);
 		fileRes.body.pipe(res);
