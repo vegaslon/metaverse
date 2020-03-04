@@ -1,5 +1,5 @@
 import { Clipboard } from "@angular/cdk/clipboard";
-import { isPlatformBrowser } from "@angular/common";
+import { isPlatformBrowser, isPlatformServer } from "@angular/common";
 import {
 	Component,
 	EventEmitter,
@@ -140,11 +140,8 @@ export class FolderViewComponent {
 	}
 
 	onContextMenuDownload() {
-		this.utilsService.downloadFile(
-			this.contextMenu.file.url,
-			this.contextMenu.file.name,
-		);
-		this.contextMenu = null;
+		if (isPlatformServer(this.platformId)) return;
+		window.open(this.contextMenu.file.url + "?download", "_self");
 	}
 
 	onContextMenuDelete() {

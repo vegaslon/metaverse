@@ -147,14 +147,14 @@ export class UtilsService {
 		return b.toFixed(2) + " B";
 	}
 
-	downloadFile(url: string, name: string) {
-		const a = document.createElement("a");
-		a.href = url;
-		a.download = name;
-		document.body.appendChild(a);
-		a.click();
-		document.body.removeChild(a);
-	}
+	// downloadFile(url: string, name: string) {
+	// 	const a = document.createElement("a");
+	// 	a.href = url;
+	// 	a.download = name;
+	// 	document.body.appendChild(a);
+	// 	a.click();
+	// 	document.body.removeChild(a);
+	// }
 
 	// export function copyToClipboard(text: string) {
 	// 	const listener = (e: ClipboardEvent) => {
