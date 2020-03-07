@@ -12,6 +12,7 @@ import {
 	FILES_URL,
 } from "../environment";
 import { User } from "../user/user.schema";
+import { readFileSync } from "fs";
 
 export class UserFileUploadDto {
 	@ApiProperty({ type: "string", required: true })
@@ -73,7 +74,9 @@ export class FilesService {
 
 		this.storage = new Storage({
 			projectId: FILES_GCP_PROJECT_ID,
-			keyFile: FILES_GCP_JSON_PATH,
+			credentials: JSON.parse(
+				readFileSync(FILES_GCP_JSON_PATH, "utf8") || "{}",
+			),
 		});
 		this.bucket = this.storage.bucket(FILES_GCP_BUCKET);
 	}
