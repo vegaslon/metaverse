@@ -25,7 +25,7 @@ export class UserFileUploadDto {
 @Injectable()
 export class FilesService {
 	private readonly bucket: string;
-	private readonly spaces: AWS.S3;
+	private readonly s3: AWS.S3;
 
 	constructor() {
 		this.bucket = FILES_S3_BUCKET;
@@ -34,7 +34,7 @@ export class FilesService {
 			/s3-([^]+?-[^]+?-[0-9])+?\.amazonaws\.com/i,
 		);
 
-		this.spaces = new AWS.S3({
+		this.s3 = new AWS.S3({
 			endpoint: FILES_S3_ENDPOINT,
 			accessKeyId: FILES_S3_KEY_ID,
 			secretAccessKey: FILES_S3_SECRET_KEY,
@@ -60,7 +60,7 @@ export class FilesService {
 	private async getUserSize(user: User) {
 		const prefix = this.validatePath(user, "/");
 
-		const objects = await this.spaces
+		const objects = await this.s3
 			.listObjectsV2({
 				Bucket: this.bucket,
 				Prefix: prefix,
@@ -115,7 +115,7 @@ export class FilesService {
 	async getFiles(user: User, pathStr: string) {
 		const prefix = this.validatePath(user, pathStr);
 
-		const objects = await this.spaces
+		const objects = await this.s3
 			.listObjectsV2({
 				Bucket: this.bucket,
 				Prefix: prefix,
@@ -160,7 +160,7 @@ export class FilesService {
 		let mimetype = file.mimetype;
 		if (key.toLowerCase().endsWith(".ts")) mimetype = "text/typescript";
 
-		await this.spaces
+		await this.s3
 			.upload({
 				Bucket: this.bucket,
 				Key: key,
@@ -180,7 +180,7 @@ export class FilesService {
 	async createFolder(user: User, pathStr: string) {
 		let key = this.validatePath(user, pathStr, true);
 
-		await this.spaces
+		await this.s3
 			.upload({
 				Bucket: this.bucket,
 				Key: key,
@@ -197,7 +197,7 @@ export class FilesService {
 	async deleteFile(user: User, pathStr: string) {
 		const key = this.validatePath(user, pathStr);
 
-		await this.spaces
+		await this.s3
 			.deleteObject({
 				Bucket: this.bucket,
 				Key: key,
@@ -210,14 +210,14 @@ export class FilesService {
 	async deleteFolder(user: User, pathStr: string) {
 		const prefix = this.validatePath(user, pathStr, true);
 
-		const listObjects = await this.spaces
+		const listObjects = await this.s3
 			.listObjectsV2({
 				Bucket: this.bucket,
 				Prefix: prefix,
 			})
 			.promise();
 
-		const res = await this.spaces
+		const res = await this.s3
 			.deleteObjects({
 				Bucket: this.bucket,
 				Delete: {
@@ -237,7 +237,7 @@ export class FilesService {
 		let oldKey = this.validatePath(user, oldPathStr);
 		let newKey = this.validatePath(user, newPathStr);
 
-		await this.spaces
+		await this.s3
 			.copyObject({
 				CopySource: "/" + this.bucket + "/" + oldKey,
 				Bucket: this.bucket,
@@ -247,7 +247,7 @@ export class FilesService {
 			.promise();
 
 		if (oldKey != newKey)
-			await this.spaces
+			await this.s3
 				.deleteObject({
 					Bucket: this.bucket,
 					Key: oldKey,
@@ -271,7 +271,7 @@ export class FilesService {
 	}
 
 	getObjectUrl(pathStr: string) {
-		return this.spaces.getSignedUrl("getObject", {
+		return this.s3.getSignedUrl("getObject", {
 			Bucket: this.bucket,
 			Key: pathStr,
 			Expires: 60,
