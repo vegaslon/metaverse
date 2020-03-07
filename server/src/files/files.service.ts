@@ -39,7 +39,10 @@ export class FilesService {
 			accessKeyId: FILES_S3_KEY_ID,
 			secretAccessKey: FILES_S3_SECRET_KEY,
 
-			region: regionMatches.length > 0 ? regionMatches[1] : null,
+			region:
+				regionMatches && regionMatches.length > 0
+					? regionMatches[1]
+					: null,
 			signatureVersion: "v4",
 
 			// s3ForcePathStyle: true, // when using minio
