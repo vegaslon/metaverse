@@ -29,10 +29,19 @@ export class FilesService {
 
 	constructor() {
 		this.bucket = FILES_S3_BUCKET;
+
+		const regionMatches = FILES_S3_ENDPOINT.match(
+			/s3-([^]+?-[^]+?-[0-9])+?\.amazonaws\.com/i,
+		);
+
 		this.spaces = new AWS.S3({
 			endpoint: FILES_S3_ENDPOINT,
 			accessKeyId: FILES_S3_KEY_ID,
 			secretAccessKey: FILES_S3_SECRET_KEY,
+
+			region: regionMatches.length > 0 ? regionMatches[1] : null,
+			signatureVersion: "v4",
+
 			// s3ForcePathStyle: true, // when using minio
 		});
 	}
@@ -154,12 +163,10 @@ export class FilesService {
 				Key: key,
 				Body: body,
 				ContentType: mimetype,
-				ACL: "public-read",
+				//ACL: "public-read",
 				//CacheControl: "no-cache",
 			})
 			.promise();
-
-		// TODO: remove cache from cdn
 
 		return {
 			url: this.getUrl(user, key),
@@ -175,7 +182,7 @@ export class FilesService {
 				Bucket: this.bucket,
 				Key: key,
 				Body: "",
-				ACL: "public-read",
+				//ACL: "public-read",
 			})
 			.promise();
 
@@ -232,7 +239,7 @@ export class FilesService {
 				CopySource: "/" + this.bucket + "/" + oldKey,
 				Bucket: this.bucket,
 				Key: newKey,
-				ACL: "public-read",
+				//ACL: "public-read",
 			})
 			.promise();
 
@@ -264,7 +271,7 @@ export class FilesService {
 		return this.spaces.getSignedUrl("getObject", {
 			Bucket: this.bucket,
 			Key: pathStr,
-			Expires: 60 * 5,
+			Expires: 60,
 		});
 	}
 }
