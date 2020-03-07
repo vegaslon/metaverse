@@ -7,16 +7,16 @@ import {
 import { ObjectId } from "bson";
 import { Response as ExpressResponse } from "express";
 import fetch, { Response as FetchResponse } from "node-fetch";
-import { FILES_S3_BUCKET, FILES_S3_ENDPOINT } from "../environment";
 import { UserService } from "../user/user.service";
+import { FilesService } from "./files.service";
 import { functionBindPolyfill } from "./function-bind-polyfill";
 
 @Injectable()
 export class FilesHostService {
-	private readonly s3Url =
-		"https://" + FILES_S3_ENDPOINT + "/" + FILES_S3_BUCKET;
-
-	constructor(private readonly userService: UserService) {}
+	constructor(
+		private readonly userService: UserService,
+		private readonly filesService: FilesService,
+	) {}
 
 	private setHeaders(fromRes: FetchResponse, toRes: ExpressResponse) {
 		const headers = [
@@ -108,7 +108,7 @@ export class FilesHostService {
 		}
 
 		// fetch file response
-		const fileUrl = this.s3Url + "/" + filePath.join("/");
+		const fileUrl = this.filesService.getObjectUrl(filePath.join("/"));
 		const fileRes = await fetch(fileUrl);
 
 		// try to find typescript and compile

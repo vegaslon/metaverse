@@ -6,11 +6,11 @@ import { rxToStream, streamToRx } from "rxjs-stream";
 import { map } from "rxjs/operators";
 import { MulterStream } from "../common/multer-file.model";
 import {
-	FILES_URL,
 	FILES_S3_BUCKET,
 	FILES_S3_ENDPOINT,
 	FILES_S3_KEY_ID,
 	FILES_S3_SECRET_KEY,
+	FILES_URL,
 } from "../environment";
 import { User } from "../user/user.schema";
 
@@ -258,5 +258,13 @@ export class FilesService {
 			usedSize: size,
 			maxSize,
 		};
+	}
+
+	getObjectUrl(pathStr: string) {
+		return this.spaces.getSignedUrl("getObject", {
+			Bucket: this.bucket,
+			Key: pathStr,
+			Expires: 60 * 5,
+		});
 	}
 }
