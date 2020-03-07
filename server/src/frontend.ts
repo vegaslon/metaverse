@@ -29,7 +29,10 @@ class FrontendRenderFilter extends BaseExceptionFilter {
 		const ctx = host.switchToHttp();
 		const req: Request = ctx.getRequest();
 
-		if (req.originalUrl.startsWith("/api/") || this.filesHost == req.host)
+		if (
+			req.originalUrl.startsWith("/api/") ||
+			this.filesHost == req.hostname
+		)
 			return super.catch(exception, host);
 
 		const res: Response = ctx.getResponse();
