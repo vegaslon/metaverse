@@ -19,7 +19,7 @@ export const {
 	// FILES_S3_KEY_ID = "QARG6TB2OUK3AI4COE4D",
 	// FILES_S3_SECRET_KEY = "pPPTWU2jM7EFr1F8gVHJV85CgZrDXqmyNjf4TkG+kIQ",
 	FILES_GCP_PROJECT_ID = "tivolicloud",
-	FILES_GCP_BUCKET = "tivolicloud-user-files",
+	FILES_GCP_BUCKET = "tivolicloud-dev",
 	// https://console.cloud.google.com/apis/credentials/wizard?api=storage-api.googleapis.com
 	FILES_GCP_JSON_PATH = "/home/maki/Downloads/tivolicloud-864353b24743.json",
 
