@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { AdminService, AdminUser } from "./admin.service";
+import { AuthService } from "../auth/auth.service";
 
 @Component({
 	selector: "app-admin",
@@ -16,6 +17,7 @@ export class AdminComponent implements OnInit {
 		"minutes",
 		"onlineMinutes",
 		"onlineLocation",
+		"impersonate",
 	];
 	usersPage = 1;
 	//usersError = "";
@@ -107,7 +109,22 @@ export class AdminComponent implements OnInit {
 			);
 	}
 
-	constructor(private adminService: AdminService) {
+	impersonateUser(user: AdminUser) {
+		this.adminService.impersonateUser(user.id).subscribe(
+			token => {
+				this.authService.logout();
+				this.authService.handleAuthentication(token);
+			},
+			err => {
+				alert(err);
+			},
+		);
+	}
+
+	constructor(
+		private readonly adminService: AdminService,
+		private readonly authService: AuthService,
+	) {
 		this.fetchUsersReset();
 		this.fetchOnlineUsersReset();
 	}

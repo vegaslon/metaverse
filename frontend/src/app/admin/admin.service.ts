@@ -6,10 +6,12 @@ import {
 import { Injectable } from "@angular/core";
 import { Observable, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
+import { AuthToken } from "../auth/auth.service";
 
 export interface AdminUser {
 	online: boolean;
 	username: string;
+	id: string;
 	created: string;
 	email: string;
 	mintues: number;
@@ -48,5 +50,11 @@ export class AdminService {
 					.set("onlineSorted", onlineSorted + ""),
 			})
 			.pipe(catchError(this.handleError));
+	}
+
+	impersonateUser(userId: string) {
+		return this.http.post<AuthToken>("/api/admin/users/impersonate", {
+			userId,
+		});
 	}
 }

@@ -1,11 +1,28 @@
-import { Controller, Get, Query, UseGuards } from "@nestjs/common";
-import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import {
+	Body,
+	Controller,
+	Get,
+	NotFoundException,
+	Post,
+	Query,
+	UseGuards,
+} from "@nestjs/common";
+import { ApiBearerAuth, ApiProperty, ApiTags } from "@nestjs/swagger";
+import { IsNotEmpty, IsString } from "class-validator";
 import { AdminAuthGuard } from "../auth/admin.guard";
+import { AuthService } from "../auth/auth.service";
 import { DomainService } from "../domain/domain.service";
 import { SessionService } from "../session/session.service";
 import { UserService } from "../user/user.service";
 import { VideoStreamService } from "../video-stream/video-stream.service";
 import { GetUsersDto } from "./admin.dto";
+
+class AdminImpersonateDto {
+	@ApiProperty({ example: "" })
+	@IsNotEmpty({ message: "User ID is required" })
+	@IsString({ message: "User ID is not a string" })
+	userId: string;
+}
 
 @Controller("api/admin")
 @ApiTags("admin")
@@ -15,6 +32,7 @@ export class AdminController {
 		private domainService: DomainService,
 		private videoStreamService: VideoStreamService,
 		private sessionService: SessionService,
+		private authService: AuthService,
 	) {}
 
 	@Get("users")
@@ -44,6 +62,7 @@ export class AdminController {
 				return {
 					online,
 					username: user.username,
+					id: user.id,
 					email: user.email,
 					created: user.created,
 					minutes: user.minutes,
@@ -84,5 +103,17 @@ export class AdminController {
 				clients: host.clients.map(client => client.socket.client.id),
 			};
 		});
+	}
+
+	@Post("users/impersonate")
+	@ApiBearerAuth()
+	@UseGuards(AdminAuthGuard())
+	async impersonateUser(@Body() adminImpersonateDto: AdminImpersonateDto) {
+		const user = await this.userService.findById(
+			adminImpersonateDto.userId,
+		);
+		if (user == null) throw new NotFoundException("User not found");
+
+		return this.authService.login(user);
 	}
 }
