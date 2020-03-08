@@ -98,14 +98,10 @@ export class FilesHostService {
 	) {
 		const filePath = location.split("/");
 
-		// validate user id
-		try {
-			new ObjectId(filePath[0]);
-		} catch (error) {
-			const user = await this.userService.findByUsername(filePath[0]);
-			if (user == null) throw new NotFoundException("User not found");
-			filePath[0] = user.id;
-		}
+		// resolve user
+		const user = await this.userService.findByIdOrUsername(filePath[0]);
+		if (user == null) throw new NotFoundException("User not found");
+		filePath[0] = user.id;
 
 		// fetch file response
 		const fileUrl = await this.filesService.getObjectUrl(

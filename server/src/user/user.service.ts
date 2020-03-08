@@ -82,31 +82,12 @@ export class UserService implements OnModuleInit {
 	// current online users keyed with username. this can get big!
 	//sessions = new Map<string, UserSession & HeartbeatSession>();
 
-	findByUsername(username: string) {
+	private regexForFinding(query: string) {
 		// https://stackoverflow.com/a/45650164
-		let loginRegExp = new RegExp(
-			"^" + username.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&") + "$",
+		return new RegExp(
+			"^" + query.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&") + "$",
 			"i",
 		);
-		return this.userModel.findOne({ username: loginRegExp });
-	}
-
-	findByEmail(email: string) {
-		let loginRegExp = new RegExp(
-			"^" + email.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&") + "$",
-			"i",
-		);
-		return this.userModel.findOne({ email: loginRegExp });
-	}
-
-	findByUsernameOrEmail(username: string) {
-		let loginRegExp = new RegExp(
-			"^" + username.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&") + "$",
-			"i",
-		);
-		return this.userModel.findOne({
-			$or: [{ username: loginRegExp }, { email: loginRegExp }],
-		});
 	}
 
 	findById(idStr: string) {
@@ -118,11 +99,31 @@ export class UserService implements OnModuleInit {
 		}
 	}
 
-	// findByUsernameRegex(regexp: RegExp) {
-	// 	return this.userModel.findOne({
-	// 		username: regexp,
-	// 	});
-	// }
+	findByUsername(username: string) {
+		return this.userModel.findOne({
+			username: this.regexForFinding(username),
+		});
+	}
+
+	findByEmail(email: string) {
+		return this.userModel.findOne({
+			email: this.regexForFinding(email),
+		});
+	}
+
+	findByUsernameOrEmail(usernameEmail: string) {
+		const queryRegExp = this.regexForFinding(usernameEmail);
+		return this.userModel.findOne({
+			$or: [{ username: queryRegExp }, { email: queryRegExp }],
+		});
+	}
+
+	findByIdOrUsername(idUsername: string) {
+		const queryRegExp = this.regexForFinding(idUsername);
+		return this.userModel.findOne({
+			$or: [{ username: queryRegExp }, { id: queryRegExp }],
+		});
+	}
 
 	async createUser(
 		authSignUpDto: AuthSignUpDto,
