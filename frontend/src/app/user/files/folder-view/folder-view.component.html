@@ -24,7 +24,7 @@
 			<mat-icon class="icon">{{ file.icon }}</mat-icon>
 			<div
 				class="preview"
-				*ngIf="file.type == 'image'"
+				*ngIf="file.type == 'image' && file.size < 10000000"
 				[style.backgroundImage]="
 					'url(' + file.url + '?' + previewCache + ')'
 				"
