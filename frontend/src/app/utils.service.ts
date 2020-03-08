@@ -32,13 +32,15 @@ export class UtilsService {
 			"ico",
 			"tga",
 
+			"svg",
+		],
+		image_document: [
 			"afphoto",
 			"kra",
 			"psd",
 			"sai",
 			"xcf",
 
-			"svg",
 			"afdesign",
 			"ai",
 
@@ -177,6 +179,8 @@ export class UtilsService {
 		for (const type of Object.keys(this.fileTypes)) {
 			if (this.fileTypes[type].includes(ext)) {
 				if (type == "image") return { type, icon: "insert_photo" };
+				if (type == "image_document")
+					return { type, icon: "insert_photo" };
 				if (type == "code") return { type, icon: "code" };
 				if (type == "video") return { type, icon: "videocam" };
 				if (type == "audio") return { type, icon: "audiotrack" };
