@@ -110,16 +110,36 @@
 						</td>
 					</ng-container>
 
-					<ng-container matColumnDef="impersonate">
+					<ng-container matColumnDef="settings">
 						<th mat-header-cell *matHeaderCellDef></th>
 						<td mat-cell *matCellDef="let element">
 							<button
-								mat-flat-button
-								color="warn"
-								(click)="impersonateUser(element)"
+								mat-button
+								[matMenuTriggerFor]="userSettings"
 							>
-								Impersonate
+								<mat-icon style="color: rgba(0, 0, 0, 0.54)">
+									settings
+								</mat-icon>
 							</button>
+							<mat-menu #userSettings="matMenu">
+								<button
+									mat-menu-item
+									style="
+										pointer-events: none;
+										margin-top: -6px;
+										margin-bottom: -12px;
+										color: rgba(0, 0, 0, 0.54)
+									"
+								>
+									{{ element.username }}
+								</button>
+								<button
+									mat-menu-item
+									(click)="impersonateUser(element)"
+								>
+									<mat-icon>camera</mat-icon> Impersonate
+								</button>
+							</mat-menu>
 						</td>
 					</ng-container>
 
