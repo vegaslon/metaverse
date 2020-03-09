@@ -48,6 +48,13 @@ interface GoogleFileMetadata {
 	timeStorageClassUpdated: Date;
 }
 
+export interface UserFile {
+	key: string;
+	updated: Date;
+	size: number;
+	url: string;
+}
+
 @Injectable()
 export class FilesService {
 	// private readonly bucket: string;
@@ -161,7 +168,7 @@ export class FilesService {
 		);
 	}
 
-	async getFiles(user: User, pathStr: string) {
+	async getFiles(user: User, pathStr: string): Promise<UserFile[]> {
 		const prefix = this.validatePath(user, pathStr);
 
 		// const objects = await this.s3
