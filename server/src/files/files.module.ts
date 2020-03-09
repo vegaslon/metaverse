@@ -5,11 +5,10 @@ import { FilesHostController } from "./files-host.controller";
 import { FilesHostService } from "./files-host.service";
 import { FilesController } from "./files.controller";
 import { FilesService } from "./files.service";
-import { FtpService } from "./ftp.service";
 
 @Module({
 	imports: [AuthModule, UserModule],
-	providers: [FilesService, FilesHostService, FtpService],
+	providers: [FilesService, FilesHostService],
 	exports: [FilesService],
 	controllers: [FilesController, FilesHostController],
 })
