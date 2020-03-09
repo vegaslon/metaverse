@@ -236,7 +236,7 @@ export class FtpService implements OnModuleInit {
 
 	onModuleInit() {
 		this.server = new FtpSrv({
-			url: "ftp://0.0.0.0:2121",
+			url: "ftps://0.0.0.0:21",
 			greeting: "Welcome to Tivoli Cloud user files!",
 		});
 
