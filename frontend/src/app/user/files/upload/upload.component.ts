@@ -82,7 +82,7 @@ export class UploadComponent {
 			),
 		);
 
-		const concurrency = 4;
+		const concurrency = 8;
 
 		merge(...uploads, concurrency).subscribe(
 			(event: HttpEvent<any> & { upload: Upload }) => {
