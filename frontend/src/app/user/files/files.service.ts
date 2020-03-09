@@ -228,4 +228,17 @@ export class FilesService {
 			},
 		);
 	}
+
+	moveFolder(oldPath: string, newPath: string) {
+		return this.http.post(
+			"/api/user/files/folder/move",
+			{},
+			{
+				params: {
+					oldPath,
+					newPath,
+				},
+			},
+		);
+	}
 }

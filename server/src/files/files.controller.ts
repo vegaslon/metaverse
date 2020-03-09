@@ -112,6 +112,17 @@ export class FilesController {
 		return this.filesService.moveFile(user, oldPath, newPath);
 	}
 
+	@Post("folder/move")
+	@ApiBearerAuth()
+	@UseGuards(MetaverseAuthGuard())
+	moveFolder(
+		@CurrentUser() user: User,
+		@Query("oldPath") oldPath: string,
+		@Query("newPath") newPath: string,
+	) {
+		return this.filesService.moveFolder(user, oldPath, newPath);
+	}
+
 	// @Post("folder/move")
 	// @ApiBearerAuth()
 	// @UseGuards(MetaverseAuthGuard())

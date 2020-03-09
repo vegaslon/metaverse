@@ -1,7 +1,13 @@
 import { Bucket, Storage } from "@google-cloud/storage";
-import { BadRequestException, Injectable } from "@nestjs/common";
+import {
+	BadRequestException,
+	Injectable,
+	InternalServerErrorException,
+} from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
+import { existsSync, readFileSync } from "fs";
 import * as path from "path";
+import { from, merge } from "rxjs";
 import { rxToStream, streamToRx } from "rxjs-stream";
 import { map } from "rxjs/operators";
 import { MulterStream } from "../common/multer-file.model";
@@ -12,7 +18,6 @@ import {
 	FILES_URL,
 } from "../environment";
 import { User } from "../user/user.schema";
-import { readFileSync, existsSync } from "fs";
 
 export class UserFileUploadDto {
 	@ApiProperty({ type: "string", required: true })
@@ -314,8 +319,8 @@ export class FilesService {
 	}
 
 	async moveFile(user: User, oldPathStr: string, newPathStr: string) {
-		let oldKey = this.validatePath(user, oldPathStr);
-		let newKey = this.validatePath(user, newPathStr);
+		const oldKey = this.validatePath(user, oldPathStr);
+		const newKey = this.validatePath(user, newPathStr);
 
 		// await this.s3
 		// 	.copyObject({
@@ -340,6 +345,28 @@ export class FilesService {
 			old: oldKey.replace(user.id, ""),
 			new: newKey.replace(user.id, ""),
 		};
+	}
+
+	async moveFolder(user: User, oldPathStr: string, newPathStr: string) {
+		const oldKey = this.validatePath(user, oldPathStr, true);
+		const newKey = this.validatePath(user, newPathStr, true);
+
+		const [files] = await this.bucket.getFiles({
+			prefix: oldKey,
+		});
+
+		const concurrency = 16;
+
+		try {
+			await merge(
+				...files.map(file =>
+					from(file.move(file.name.replace(oldKey, newKey))),
+				),
+				concurrency,
+			).toPromise();
+		} catch (err) {
+			throw new InternalServerErrorException();
+		}
 	}
 
 	async getStatus(user: User) {

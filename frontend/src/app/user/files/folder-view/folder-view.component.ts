@@ -107,7 +107,7 @@ export class FolderViewComponent {
 		// this.contextMenu = null;
 	}
 
-	onContextMenuMoveFile() {
+	private onContextMenuMoveFile() {
 		const oldKey = this.contextMenu.file.key;
 
 		const currentPath = oldKey
@@ -147,7 +147,51 @@ export class FolderViewComponent {
 		);
 	}
 
-	onContextMenuRenameFile() {
+	private onContextMenuMoveFolder() {
+		const currentPath = this.getBreadcrumbs(this.contextMenu.folder)
+			.map(folder => folder.name)
+			.join("/");
+
+		const oldKey = "/" + currentPath;
+
+		const dialog = this.dialog.open(InputComponent, {
+			width: "600px",
+			data: {
+				inputPrefix: "/",
+				inputDefault: currentPath,
+
+				titleText: "Move a folder",
+				buttonText: "Move folder",
+				buttonIcon: "folder",
+
+				validators: [],
+			},
+		});
+
+		const submitSub = dialog.componentInstance.onSubmit.subscribe(
+			(value: string) => {
+				const newKey = "/" + value;
+
+				this.filesService.moveFolder(oldKey, newKey).subscribe(() => {
+					dialog.close();
+					this.onRefresh.emit();
+					this.contextMenu = null;
+
+					submitSub.unsubscribe();
+				});
+			},
+		);
+	}
+
+	onContextMenuMove() {
+		if (this.contextMenu.type == "file") {
+			return this.onContextMenuMoveFile();
+		} else if (this.contextMenu.type == "folder") {
+			return this.onContextMenuMoveFolder();
+		}
+	}
+
+	private onContextMenuRenameFile() {
 		const oldKey = this.contextMenu.file.key;
 
 		const currentPath =
@@ -185,6 +229,56 @@ export class FolderViewComponent {
 				});
 			},
 		);
+	}
+
+	private onContextMenuRenameFolder() {
+		let currentPath =
+			"/" +
+			this.getBreadcrumbs(this.contextMenu.folder)
+				.slice(0, -1)
+				.map(folder => folder.name)
+				.join("/");
+		if (!currentPath.endsWith("/")) currentPath += "/";
+
+		const oldKey = currentPath + this.contextMenu.folder.name;
+
+		const dialog = this.dialog.open(InputComponent, {
+			width: "600px",
+			data: {
+				inputPrefix: currentPath,
+				inputDefault: this.contextMenu.folder.name,
+
+				titleText: "Rename a folder",
+				buttonText: "Rename folder",
+				buttonIcon: "create",
+
+				validators: [
+					Validators.pattern(/^[^\/]*?$/), // no slashes
+				],
+			},
+		});
+
+		const submitSub = dialog.componentInstance.onSubmit.subscribe(
+			(value: string) => {
+				const newKey = currentPath + value;
+
+				this.filesService.moveFolder(oldKey, newKey).subscribe(() => {
+					dialog.close();
+					this.onRefresh.emit();
+					this.contextMenu = null;
+
+					submitSub.unsubscribe();
+				});
+			},
+		);
+	}
+
+	onContextMenuRename() {
+		if (this.contextMenu.type == "file") {
+			return this.onContextMenuRenameFile();
+		} else if (this.contextMenu.type == "folder") {
+			return this.onContextMenuRenameFolder();
+		}
 	}
 
 	onContextMenuDownload() {
