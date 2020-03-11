@@ -66,6 +66,8 @@ export class Folder {
 
 			currentFolder = currentFolder.findFolder(name);
 			if (currentFolder == null) return null;
+
+			currentPath.shift();
 		}
 
 		// last in path
@@ -95,7 +97,8 @@ export class KeyedFileSystem {
 	}
 
 	static pathArrToStr(pathArr: string[]) {
-		return "/" + pathArr.join("/") + (pathArr.length == 0 ? "" : "/");
+		//return "/" + pathArr.join("/") + (pathArr.length == 0 ? "" : "/");
+		return "/" + pathArr.join("/");
 	}
 
 	static pathStrIsFolder(pathStr: string) {
@@ -151,12 +154,19 @@ export class KeyedFileSystem {
 
 // (async () => {
 // 	const fs = new KeyedFileSystem();
-// 	fs.init([...exampleKeyedFiles, { key: "/yay.asd/" }]);
+// 	//fs.init([...exampleKeyedFiles, { key: "/yay.asd/" }]);
+// 	fs.init([
+// 		{
+// 			key: "/cute/yes.webm",
+// 		},
+// 	]);
 
-// 	console.log("test: abs", fs.root.absolutePath());
-// 	//console.log("test: folder", fs.root.traverseForFolder("/"));
-// 	console.log(
-// 		"test: abs folder",
-// 		fs.root.traverseForFolder("/yay.asd/").absolutePath(),
-// 	);
+// 	console.log(fs.root.traverseForFile("/cute/yes.webm"));
+
+// 	// console.log("test: abs", fs.root.absolutePath());
+// 	// //console.log("test: folder", fs.root.traverseForFolder("/"));
+// 	// console.log(
+// 	// 	"test: abs folder",
+// 	// 	fs.root.traverseForFolder("/yay.asd/").absolutePath(),
+// 	// );
 // })();

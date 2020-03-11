@@ -1,183 +1,16 @@
 import { Injectable, OnModuleInit } from "@nestjs/common";
-import { v2 as WebDav } from "webdav-server";
-import { AuthService } from "../auth/auth.service";
-import { FilesService } from "./files.service";
-import { AuthTokenGrantType, AuthTokenScope } from "../auth/auth.dto";
-import { User } from "../user/user.schema";
-import { KeyedFileSystem, Folder } from "../common/keyed-file-system";
-import { md5 } from "webdav-server/lib/user/CommonFunctions";
 import { JwtService } from "@nestjs/jwt";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from "mongoose";
+import fetch from "node-fetch";
+import { Readable } from "stream";
+import { v2 as WebDav } from "webdav-server";
+import { JwtPayload, JwtPayloadType } from "../auth/jwt.strategy";
+import { Folder, KeyedFileSystem } from "../common/keyed-file-system";
+import { User } from "../user/user.schema";
 import { UserService } from "../user/user.service";
-import { JwtPayloadType, JwtPayload } from "../auth/jwt.strategy";
-
-// class FileSystem extends WebDav.FileSystem {
-// 	private fs = new KeyedFileSystem();
-
-// 	private rootFolder: Folder;
-// 	//private currentFolder: Folder;
-
-// 	private user: User;
-
-// 	async refreshFiles() {
-// 		const files = await this.filesService.getFiles(this.user, "/");
-
-// 		this.rootFolder = this.fs.init(files);
-
-// 		// this.currentFolder =
-// 		// 	this.currentFolder == null
-// 		// 		? this.rootFolder
-// 		// 		: this.rootFolder.traverseForFolder(
-// 		// 				this.currentFolder.absolutePath(),
-// 		// 		  ) || this.rootFolder;
-// 	}
-
-// 	private async verifyUser(
-// 		ctx: WebDav.IContextInfo,
-// 		callback: WebDav.ReturnCallback<any>,
-// 	) {
-// 		const user: User = (ctx.context.user as any).user;
-
-// 		if (user == null) {
-// 			callback(new Error("User not logged in"));
-// 			return true;
-// 		} else {
-// 			if (this.user == null) {
-// 				this.user = user;
-// 				await this.refreshFiles();
-// 			}
-
-// 			return false;
-// 		}
-// 	}
-
-// 	private getFile(path: WebDav.Path) {
-// 		return this.rootFolder.traverseForFile(
-// 			KeyedFileSystem.pathArrToStr(path.paths),
-// 		);
-// 	}
-
-// 	private getFolder(path: WebDav.Path) {
-// 		return this.rootFolder.traverseForFolder(
-// 			KeyedFileSystem.pathArrToStr(path.paths),
-// 		);
-// 	}
-
-// 	constructor(private readonly filesService: FilesService) {
-// 		super(null);
-// 		this.doNotSerialize();
-// 	}
-
-// 	async _lockManager(
-// 		path: WebDav.Path,
-// 		ctx: WebDav.LockManagerInfo,
-// 		callback: WebDav.ReturnCallback<WebDav.ILockManager>,
-// 	) {
-// 		if (await this.verifyUser(ctx, callback)) return;
-// 		console.log("_lockManager");
-// 	}
-
-// 	private readonly __propertyManager = {
-// 		setProperty(
-// 			name: string,
-// 			value: WebDav.ResourcePropertyValue,
-// 			attributes: WebDav.PropertyAttributes,
-// 			callback: WebDav.SimpleCallback,
-// 		) {
-// 			callback(null);
-// 		},
-// 		getProperty(
-// 			name: string,
-// 			callback: WebDav.Return2Callback<
-// 				WebDav.ResourcePropertyValue,
-// 				WebDav.PropertyAttributes
-// 			>,
-// 		) {
-// 			callback(null, "", {});
-// 		},
-// 		removeProperty(name: string, callback: WebDav.SimpleCallback) {
-// 			callback(null);
-// 		},
-// 		getProperties(callback) {
-// 			callback(null, {});
-// 		},
-// 	};
-
-// 	async _propertyManager(
-// 		path: WebDav.Path,
-// 		ctx: WebDav.PropertyManagerInfo,
-// 		callback: WebDav.ReturnCallback<WebDav.IPropertyManager>,
-// 	) {
-// 		if (await this.verifyUser(ctx, callback)) return;
-// 		console.log("_propertyManager", path);
-
-// 		callback(null, this.__propertyManager);
-// 	}
-
-// 	async _readDir(
-// 		path: WebDav.Path,
-// 		ctx: WebDav.ReadDirInfo,
-// 		callback: WebDav.ReturnCallback<string[] | WebDav.Path[]>,
-// 	) {
-// 		if (await this.verifyUser(ctx, callback)) return;
-// 		console.log("_readDir", path);
-
-// 		const found = this.getFolder(path);
-// 		const output: string[] = [];
-
-// 		for (const folder of found.folders) {
-// 			output.push(folder.name);
-// 		}
-// 		for (const file of found.files) {
-// 			output.push(file.name);
-// 		}
-
-// 		callback(null, output);
-// 	}
-
-// 	async _type(
-// 		path: WebDav.Path,
-// 		ctx: WebDav.TypeInfo,
-// 		callback: WebDav.ReturnCallback<WebDav.ResourceType>,
-// 	) {
-// 		if (await this.verifyUser(ctx, callback)) return;
-// 		console.log("_type", path);
-
-// 		const folder = this.getFolder(path);
-// 		callback(null, new WebDav.ResourceType(folder == null, folder != null));
-// 	}
-// }
-
-// based on WebDav.HTTPDigestAuthentication
-// https://github.com/OpenMarshal/npm-WebDAV-Server/blob/master/src/user/v2/authentication/HTTPDigestAuthentication.ts
-// class TivoliAuthentication implements WebDav.HTTPAuthentication {
-// 	private readonly realm = "Tivoli Cloud VR";
-// 	private readonly nonceSize = 50;
-
-// 	constructor(private readonly authService: AuthService) {}
-
-// 	generateNonce(): string {
-// 		const buffer = Buffer.alloc(this.nonceSize);
-// 		for (let i = 0; i < buffer.length; ++i)
-// 			buffer[i] = Math.floor(Math.random() * 256);
-
-// 		return md5(buffer);
-// 	}
-
-// 	askForAuthentication(ctx: WebDav.HTTPRequestContext) {
-// 		return {
-// 			"WWW-Authenticate": `Digest realm="${
-// 				this.realm
-// 			}", qop="auth", nonce="${this.generateNonce()}", opaque="${this.generateNonce()}"`,
-// 		};
-// 	}
-
-// 	getUser(
-// 		ctx: WebDav.HTTPRequestContext,
-// 		callback: (error: Error, user: WebDav.IUser) => void,
-// 	) {
-// 		const o
-// 	}
-// }
+import { FilesService, UserFile } from "./files.service";
+import { UserFilesCache } from "./user-files-cache.schema";
 
 class TivoliUserManager implements WebDav.ITestableUserManager {
 	constructor(
@@ -186,7 +19,6 @@ class TivoliUserManager implements WebDav.ITestableUserManager {
 	) {}
 
 	getDefaultUser(callback: (user: WebDav.IUser) => void) {
-		console.log("getDefaultUser");
 		callback({
 			uid: "DefaultUser",
 			isAdministrator: false,
@@ -224,8 +56,6 @@ class TivoliUserManager implements WebDav.ITestableUserManager {
 		password: string,
 		callback: (error: Error, user?: WebDav.IUser) => void,
 	) {
-		console.log("getUserByNamePassword");
-
 		this.tokenToUser(password)
 			.then(user => {
 				callback(null, {
@@ -262,25 +92,322 @@ class TivoliPrivilegeManager extends WebDav.PrivilegeManager {
 	}
 }
 
+class TivoliFileSystem extends WebDav.FileSystem {
+	private asyncify<T = any>(
+		ctx: WebDav.IContextInfo,
+		callback: WebDav.ReturnCallback<T>,
+		func: (user: User) => Promise<T>,
+	) {
+		const user = (ctx.context.user as any).user as User;
+		if (user == null) return callback(new Error("User not logged in"));
+
+		func(user)
+			.then(data => {
+				callback(null, data);
+			})
+			.catch(error => {
+				callback(error);
+			});
+	}
+
+	private async getRootFolder(user: User, clearCache = false) {
+		let files: UserFile[];
+
+		const cache = clearCache
+			? null
+			: await this.userFilesCacheModel.findById(user.id);
+
+		if (clearCache)
+			await this.userFilesCacheModel.deleteOne({ _id: user._id });
+
+		if (cache != null) {
+			files = cache.files;
+		} else {
+			files = await this.filesService.getFiles(user, "/");
+
+			const cache = new this.userFilesCacheModel({
+				_id: user._id,
+				files,
+				expireAt: Date.now() + 1000 * 60,
+			});
+			await cache.save();
+		}
+
+		const fs = new KeyedFileSystem();
+		return fs.init(files);
+	}
+
+	private getFile(rootFolder: Folder, path: WebDav.Path) {
+		return rootFolder.traverseForFile(
+			KeyedFileSystem.pathArrToStr(path.paths),
+		);
+	}
+
+	private getFolder(rootFolder: Folder, path: WebDav.Path) {
+		return rootFolder.traverseForFolder(
+			KeyedFileSystem.pathArrToStr(path.paths),
+		);
+	}
+
+	constructor(
+		private readonly filesService: FilesService,
+		private readonly userFilesCacheModel: Model<UserFilesCache>,
+	) {
+		super(null);
+		this.doNotSerialize();
+	}
+
+	// https://github.com/OpenMarshal/npm-WebDAV-Server/wiki/Custom-File-System-%5Bv2%5D
+
+	// slows things down and is unneccesary
+	// _fastExistCheck(
+	// 	context: WebDav.RequestContext,
+	// 	path: WebDav.Path,
+	// 	callback: (exists: boolean) => void,
+	// ) {
+	// 	this.asyncify<boolean>(
+	// 		{ context },
+	// 		(error, data) => callback(error ? false : data),
+	// 		async user => {
+	// 			const rootFolder = await this.getRootFolder(user);
+
+	// 			return (
+	// 				this.getFolder(rootFolder, path) != null ||
+	// 				this.getFile(rootFolder, path) != null
+	// 			);
+	// 		},
+	// 	);
+	// }
+
+	_create(
+		path: WebDav.Path,
+		ctx: WebDav.CreateInfo,
+		callback: WebDav.SimpleCallback,
+	) {
+		this.asyncify<any>(
+			ctx,
+			(error, data) => callback(error),
+			async user => {
+				// console.log("_create", path);
+
+				if (ctx.type.isDirectory)
+					await this.filesService.createFolder(
+						user,
+						KeyedFileSystem.pathArrToStr(path.paths),
+					);
+			},
+		);
+	}
+
+	_delete(
+		path: WebDav.Path,
+		ctx: WebDav.DeleteInfo,
+		callback: WebDav.SimpleCallback,
+	) {
+		this.asyncify<any>(
+			ctx,
+			(error, data) => callback(error),
+			async user => {
+				// console.log("_delete", path);
+
+				const rootFolder = await this.getRootFolder(user);
+				const pathStr = KeyedFileSystem.pathArrToStr(path.paths);
+
+				if (rootFolder.traverseForFile(pathStr) != null)
+					return await this.filesService.deleteFile(user, pathStr);
+
+				if (rootFolder.traverseForFolder(pathStr) != null)
+					return await this.filesService.deleteFolder(user, pathStr);
+			},
+		);
+	}
+
+	_openReadStream(
+		path: WebDav.Path,
+		ctx: WebDav.OpenReadStreamInfo,
+		callback: WebDav.ReturnCallback<Readable>,
+	) {
+		this.asyncify<any>(ctx, callback, async user => {
+			// console.log("_openReadStream", path);
+
+			const rootFolder = await this.getRootFolder(user);
+			const pathStr = KeyedFileSystem.pathArrToStr(path.paths);
+
+			const file = rootFolder.traverseForFile(pathStr);
+			if (file == null) throw new Error("File not found");
+
+			const res = await fetch(file.metadata.url);
+			return res.body;
+
+			// const stream = new Readable();
+			// const mimetype =
+			// 	mime.lookup(path.paths.pop()) || "application/octet-stream";
+
+			// this.filesService.uploadFile(user, pathStr, {
+			// 	stream,
+			// 	mimetype,
+
+			// 	encoding: "",
+			// 	fieldname: "",
+			// 	originalname: "",
+			// });
+
+			// return stream;
+		});
+	}
+
+	_size(
+		path: WebDav.Path,
+		ctx: WebDav.SizeInfo,
+		callback: WebDav.ReturnCallback<number>,
+	) {
+		this.asyncify<any>(ctx, callback, async user => {
+			// console.log("_size", path);
+
+			const rootFolder = await this.getRootFolder(user);
+			const pathStr = KeyedFileSystem.pathArrToStr(path.paths);
+
+			const file = rootFolder.traverseForFile(pathStr);
+			if (file != null) return file.metadata.size;
+
+			return 0;
+		});
+	}
+
+	_lockManager(
+		path: WebDav.Path,
+		ctx: WebDav.LockManagerInfo,
+		callback: WebDav.ReturnCallback<WebDav.ILockManager>,
+	) {
+		this.asyncify<WebDav.ILockManager>(ctx, callback, async user => {
+			// console.log("_lockManager");
+
+			return {
+				getLocks(callback: WebDav.ReturnCallback<WebDav.Lock[]>) {
+					callback(null, []);
+				},
+				setLock(lock: WebDav.Lock, callback: WebDav.SimpleCallback) {
+					callback(null);
+				},
+				removeLock(
+					uuid: string,
+					callback: WebDav.ReturnCallback<boolean>,
+				) {
+					callback(null, true);
+				},
+				getLock(
+					uuid: string,
+					callback: WebDav.ReturnCallback<WebDav.Lock>,
+				) {
+					callback(null, null);
+				},
+				refresh(
+					uuid: string,
+					timeoutSeconds: number,
+					callback: WebDav.ReturnCallback<WebDav.Lock>,
+				) {
+					callback(null, null);
+				},
+			};
+		});
+	}
+
+	_propertyManager(
+		path: WebDav.Path,
+		ctx: WebDav.PropertyManagerInfo,
+		callback: WebDav.ReturnCallback<WebDav.IPropertyManager>,
+	) {
+		this.asyncify<WebDav.IPropertyManager>(ctx, callback, async user => {
+			return {
+				setProperty(
+					name: string,
+					value: WebDav.ResourcePropertyValue,
+					attributes: WebDav.PropertyAttributes,
+					callback: WebDav.SimpleCallback,
+				) {
+					// console.log("_propertyManager setProperty", path);
+					callback(null);
+				},
+				getProperty(
+					name: string,
+					callback: WebDav.Return2Callback<
+						WebDav.ResourcePropertyValue,
+						WebDav.PropertyAttributes
+					>,
+				) {
+					// console.log("_propertyManager getProperty", path);
+					callback(null, "", {});
+				},
+				removeProperty(name: string, callback: WebDav.SimpleCallback) {
+					// console.log("_propertyManager removeProperty", path);
+					callback(null);
+				},
+				getProperties(
+					callback: WebDav.ReturnCallback<WebDav.PropertyBag>,
+				) {
+					// console.log("_propertyManager getProperties", path);
+					callback(null, {});
+				},
+			};
+		});
+	}
+
+	_readDir(
+		path: WebDav.Path,
+		ctx: WebDav.ReadDirInfo,
+		callback: WebDav.ReturnCallback<string[] | WebDav.Path[]>,
+	) {
+		this.asyncify<string[]>(ctx, callback, async user => {
+			// console.log("_readDir", path);
+
+			const rootFolder = await this.getRootFolder(user, true);
+
+			const foundFolder = this.getFolder(rootFolder, path);
+			if (foundFolder == null) throw new Error("Directory not found");
+
+			const output: string[] = [];
+
+			for (const folder of foundFolder.folders) {
+				output.push(folder.name + "/");
+			}
+			for (const file of foundFolder.files) {
+				output.push(file.name);
+			}
+
+			return output;
+		});
+	}
+
+	_type(
+		path: WebDav.Path,
+		ctx: WebDav.TypeInfo,
+		callback: WebDav.ReturnCallback<WebDav.ResourceType>,
+	) {
+		this.asyncify<WebDav.ResourceType>(ctx, callback, async user => {
+			const rootFolder = await this.getRootFolder(user);
+
+			const folder = this.getFolder(rootFolder, path);
+
+			return new WebDav.ResourceType(folder == null, folder != null);
+		});
+	}
+}
+
 @Injectable()
 export class WebDavService implements OnModuleInit {
 	private readonly port = 4000;
 	private server: WebDav.WebDAVServer;
 
 	constructor(
-		//private readonly authService: AuthService,
 		private readonly filesService: FilesService,
 		private readonly userService: UserService,
 		private readonly jwtService: JwtService,
+		@InjectModel("users.files.cache")
+		private readonly userFilesCacheModel: Model<UserFilesCache>,
 	) {}
 
 	onModuleInit() {
-		//const userManager = new WebDav.SimpleUserManager();
-		//const user = userManager.addUser("username", "password", false);
-
-		// Privilege manager (tells which users can access which files/folders)
-		//const privilegeManager = new WebDav.SimplePathPrivilegeManager();
-		//privilegeManager.setRights(user, "/", ["all"]);
+		//const rootFileSystem = new WebDav.PhysicalFileSystem("/home/maki");
 
 		this.server = new WebDav.WebDAVServer({
 			port: this.port,
@@ -292,12 +419,15 @@ export class WebDavService implements OnModuleInit {
 			privilegeManager: new TivoliPrivilegeManager(),
 			requireAuthentification: true,
 
-			//rootFileSystem: new FileSystem(this.filesService),
-			rootFileSystem: new WebDav.PhysicalFileSystem("/root"),
+			rootFileSystem: new TivoliFileSystem(
+				this.filesService,
+				this.userFilesCacheModel,
+			),
+			//rootFileSystem,
 		});
 
-		this.server.start(() =>
-			console.log("WebDav server running on *:" + this.port),
-		);
+		this.server.start(() => {
+			// console.log("WebDav server running on *:" + this.port),
+		});
 	}
 }
