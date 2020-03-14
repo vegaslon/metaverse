@@ -13,7 +13,7 @@ import { map } from "rxjs/operators";
 import { MulterStream } from "../common/multer-file.model";
 import {
 	FILES_GCP_BUCKET,
-	FILES_GCP_JSON_PATH,
+	FILES_GCP_AUTH_JSON_PATH,
 	FILES_GCP_PROJECT_ID,
 	FILES_URL,
 } from "../environment";
@@ -87,8 +87,8 @@ export class FilesService {
 		this.storage = new Storage({
 			projectId: FILES_GCP_PROJECT_ID,
 			credentials: JSON.parse(
-				existsSync(FILES_GCP_JSON_PATH)
-					? readFileSync(FILES_GCP_JSON_PATH, "utf8")
+				existsSync(FILES_GCP_AUTH_JSON_PATH)
+					? readFileSync(FILES_GCP_AUTH_JSON_PATH, "utf8")
 					: "{}",
 			),
 		});
