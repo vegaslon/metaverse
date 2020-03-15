@@ -17,7 +17,7 @@ export const {
 	FILES_GCP_PROJECT_ID = "tivolicloud",
 	FILES_GCP_BUCKET = "tivolicloud-dev",
 	// https://console.cloud.google.com/apis/credentials/wizard?api=storage-api.googleapis.com
-	FILES_GCP_AUTH_JSON_PATH = "/home/maki/Downloads/tivolicloud-864353b24743.json",
+	FILES_GCP_AUTH_JSON = "{}",
 
 	JWT_SECRET = "thisIsSoVerySecretyou literally have no idealol1610239012",
 

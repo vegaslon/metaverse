@@ -5,15 +5,14 @@ import {
 	InternalServerErrorException,
 } from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
-import { existsSync, readFileSync } from "fs";
 import * as path from "path";
 import { from, merge } from "rxjs";
 import { rxToStream, streamToRx } from "rxjs-stream";
 import { map } from "rxjs/operators";
 import { MulterStream } from "../common/multer-file.model";
 import {
+	FILES_GCP_AUTH_JSON,
 	FILES_GCP_BUCKET,
-	FILES_GCP_AUTH_JSON_PATH,
 	FILES_GCP_PROJECT_ID,
 	FILES_URL,
 } from "../environment";
@@ -86,11 +85,7 @@ export class FilesService {
 
 		this.storage = new Storage({
 			projectId: FILES_GCP_PROJECT_ID,
-			credentials: JSON.parse(
-				existsSync(FILES_GCP_AUTH_JSON_PATH)
-					? readFileSync(FILES_GCP_AUTH_JSON_PATH, "utf8")
-					: "{}",
-			),
+			credentials: JSON.parse(FILES_GCP_AUTH_JSON),
 		});
 		this.bucket = this.storage.bucket(FILES_GCP_BUCKET);
 	}
