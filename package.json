@@ -1,5 +1,5 @@
 {
-	"name": "tivoli-cloud",
+	"name": "metaverse",
 	"scripts": {
 		"format": "prettier --write **/*.ts **/*.json **/*.html **/*.scss"
 	}
