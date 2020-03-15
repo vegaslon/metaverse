@@ -149,4 +149,4 @@ deploy app engine:
         - echo $GCP_ENV_VARIABLES | base64 -d >> app.yaml
 
         - gcloud auth activate-service-account --key-file /tmp/gcp-auth.json
-        - gcloud --quiet --project $GCP_PROJECT_ID --version $CI_PIPELINE_ID app deploy
+        - gcloud --quiet --project $GCP_PROJECT_ID app deploy --version $CI_PIPELINE_ID
