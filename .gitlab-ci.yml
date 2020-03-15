@@ -1,47 +1,13 @@
 stages:
-    - dependencies
     - test
     - build
     - deploy
-
-server deps:
-    stage: dependencies
-    image: node:lts
-
-    cache:
-        paths:
-            - server/node_modules/
-
-    script:
-        - cd server
-        - yarn install
-
-    only:
-        changes:
-            - server/yarn.lock
-
-frontend deps:
-    stage: dependencies
-    image: node:lts
-
-    cache:
-        paths:
-            - frontend/node_modules/
-
-    script:
-        - cd frontend
-        - yarn install
-
-    only:
-        changes:
-            - frontend/yarn.lock
 
 server tests:
     stage: test
     image: node:lts
 
     cache:
-        policy: pull
         paths:
             - server/node_modules/
 
@@ -67,7 +33,6 @@ build server:
         - server tests
 
     cache:
-        policy: pull
         paths:
             - server/node_modules/
 
@@ -93,7 +58,6 @@ build frontend:
     image: node:lts
 
     cache:
-        policy: pull
         paths:
             - frontend/node_modules/
 
