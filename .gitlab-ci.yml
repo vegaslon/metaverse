@@ -137,7 +137,7 @@ deploy app engine:
     image: google/cloud-sdk:alpine
 
     when: manual
-    allow_failure: true
+    allow_failure: false
 
     dependencies:
         - build server
