@@ -111,33 +111,38 @@ build frontend:
         paths:
             - app/frontend
 
-deploy docker image:
-    stage: deploy
-    image: docker:latest
+# deploy docker image:
+#     stage: deploy
+#     image: docker:latest
 
-    # when: manual
+#     # when: manual
+
+#     dependencies:
+#         - build server
+#         - build frontend
+
+#     variables:
+#         DOCKER_TLS_CERTDIR: ""
+
+#     services:
+#         - docker:dind
+
+#     script:
+#         - docker build -t $CI_REGISTRY/tivolicloud-private/metaverse:latest .
+#         - docker login $CI_REGISTRY -u gitlab-ci-token -p $CI_JOB_TOKEN
+#         - docker push $CI_REGISTRY/tivolicloud-private/metaverse:latest
+
+deploy app engine:
+    stage: deploy
+    image: google/cloud-sdk:alpine
 
     dependencies:
         - build server
         - build frontend
 
-    variables:
-        DOCKER_TLS_CERTDIR: ""
-
-    services:
-        - docker:dind
-
     script:
-        - docker build -t $CI_REGISTRY/tivolicloud-private/metaverse:latest .
-        - docker login $CI_REGISTRY -u gitlab-ci-token -p $CI_JOB_TOKEN
-        - docker push $CI_REGISTRY/tivolicloud-private/metaverse:latest
-#pages:
-#    stage: deploy
-#    dependencies:
-#        - server tests
-#    script:
-#        - mv server/coverage/lcov-report public/
-#    artifacts:
-#        expire_in: 7 days
-#        paths:
-#            - public
+        - echo $GCP_AUTH_JSON | base64 -d > /tmp/gcp-auth.json
+        - echo $GCP_ENV_VARIABLES | base64 -d > app.yaml
+
+        - gcloud auth activate-service-account --key-file /tmp/gcp-auth.json
+        - gcloud --quiet --project $GCP_PROJECT_ID app deploy app.yaml
