@@ -136,6 +136,9 @@ deploy app engine:
     stage: deploy
     image: google/cloud-sdk:alpine
 
+    when: manual
+    allow_failure: true
+
     dependencies:
         - build server
         - build frontend
