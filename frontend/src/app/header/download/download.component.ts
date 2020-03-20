@@ -13,6 +13,8 @@ export class DownloadComponent implements OnInit {
 	//os = null;
 
 	found = false;
+	correctPassword = false;
+
 	version: string;
 	fileName: string;
 	fileSize: string;
@@ -24,11 +26,11 @@ export class DownloadComponent implements OnInit {
 		return Math.floor(bytes / 1000 / 1000);
 	}
 
-	ngOnInit() {
+	getLatest() {
 		//if (navigator.platform.indexOf("Win") != -1) this.os = "win";
 		//if (navigator.platform.indexOf("Mac") != -1) this.os = "mac";
 
-		const sub = this.http
+		this.http
 			.get<{
 				version: string;
 				files: { url: string; sha512: string }[];
@@ -45,23 +47,29 @@ export class DownloadComponent implements OnInit {
 				};
 				releaseDate: string;
 			}>("/api/releases/latest")
-			.subscribe(
-				release => {
-					this.version = release.version;
+			.subscribe(release => {
+				this.version = release.version;
 
-					this.fileName = release.path;
+				this.fileName = release.path;
 
-					this.fileSize =
-						this.bytesToMB(release.packages.x64.size) + " MB";
+				this.fileSize =
+					this.bytesToMB(release.packages.x64.size) + " MB";
 
-					this.releaseDate = new Date(release.releaseDate);
+				this.releaseDate = new Date(release.releaseDate);
 
-					this.found = true;
-					sub.unsubscribe();
-				},
-				err => {
-					sub.unsubscribe();
-				},
-			);
+				this.found = true;
+			});
 	}
+
+	onPasswordKeyUp(input: HTMLInputElement) {
+		if (
+			input.value.replace(/ /g, "").toLowerCase() ==
+			atob("aGFwcHlzcXVpcnJlbHM")
+		) {
+			this.getLatest();
+			this.correctPassword = true;
+		}
+	}
+
+	ngOnInit() {}
 }
