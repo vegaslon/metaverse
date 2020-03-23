@@ -94,7 +94,7 @@ export class FilesService {
 		if (user.admin) {
 			return -1;
 		} else {
-			return 1024 * 1024 * 100;
+			return 1024 * 1024 * 1024; // 1 GB
 		}
 	}
 
