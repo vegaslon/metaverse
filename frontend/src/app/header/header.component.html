@@ -80,7 +80,7 @@
 					<mat-icon>account_circle</mat-icon> Sign in
 				</a>
 
-				<button *ngIf="user" mat-button [matMenuTriggerFor]="appMenu">
+				<button *ngIf="user" mat-button [matMenuTriggerFor]="appsMenu">
 					<div
 						style="display: inline-block; text-align: right; margin-right: 8px;"
 					>
@@ -97,30 +97,75 @@
 					/>
 				</button>
 
-				<ng-container *ngIf="user">
-					<button
-						class="admin-button"
-						*ngIf="user.admin"
-						mat-button
-						routerLink="/admin"
-					>
-						<mat-icon>build</mat-icon><br />Admin
-					</button>
-				</ng-container>
+				<button
+					*ngIf="user"
+					mat-button
+					[matMenuTriggerFor]="appsMenu"
+					class="apps-button"
+				>
+					<mat-icon>apps</mat-icon>
+					<br />
+					Apps
+				</button>
 
-				<mat-menu #appMenu="matMenu">
-					<button mat-menu-item routerLink="user/files">
-						<mat-icon>folder</mat-icon> My files
-					</button>
-					<button mat-menu-item routerLink="user/worlds">
-						<mat-icon>public</mat-icon> My worlds
-					</button>
-					<button mat-menu-item routerLink="user/settings">
-						<mat-icon>settings</mat-icon> User settings
-					</button>
-					<button mat-menu-item (click)="onSignOut()">
-						<mat-icon>arrow_back</mat-icon> Sign out
-					</button>
+				<mat-menu #appsMenu="matMenu">
+					<div class="apps-menu" *ngIf="user">
+						<button
+							mat-button
+							class="app-button"
+							routerLink="/user/files"
+						>
+							<mat-icon>folder</mat-icon> My Files
+						</button>
+						<button
+							mat-button
+							class="app-button"
+							routerLink="/user/worlds"
+						>
+							<mat-icon>public</mat-icon> My Worlds
+						</button>
+						<button
+							mat-button
+							class="app-button"
+							routerLink="/admin"
+							*ngIf="user.admin"
+						>
+							<mat-icon>build</mat-icon> Admin
+						</button>
+						<hr />
+						<a routerLink="/user/settings">
+							<img
+								class="user-image"
+								style="border-radius: 999px;"
+								src="/api/user/{{
+									user.profile.username
+								}}/image"
+								[alt]="'User image of ' + user.profile.username"
+							/>
+							<h2>{{ user.profile.username }}</h2>
+							<p style="opacity: 0.7; font-size: 0.9em;">
+								{{ user.profile.email }}
+							</p>
+						</a>
+						<div class="user-menu">
+							<button
+								mat-stroked-button
+								class="user-button"
+								routerLink="/user/settings"
+							>
+								<mat-icon>settings</mat-icon>
+								Manage
+							</button>
+							<button
+								mat-stroked-button
+								class="user-button"
+								(click)="onSignOut()"
+							>
+								<mat-icon>arrow_back</mat-icon>
+								Sign out
+							</button>
+						</div>
+					</div>
 				</mat-menu>
 			</div>
 		</div>
