@@ -180,7 +180,7 @@ export class UserService implements OnModuleInit {
 	async changeUserImage(user: User, file: MulterFile) {
 		return new Promise(async (resolve, reject) => {
 			await new Promise(resolve => {
-				this.images.delete(user.id, err => {
+				this.images.delete(user._id, err => {
 					resolve();
 				});
 			});
