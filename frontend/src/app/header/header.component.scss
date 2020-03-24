@@ -20,7 +20,6 @@ $mobileMaxWidth: 1160px;
 			display: flex;
 			align-items: center;
 			overflow: hidden;
-			transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
 
 			@media (max-width: $mobileMaxWidth) {
 				flex-direction: column;
@@ -37,6 +36,13 @@ $mobileMaxWidth: 1160px;
 
 				background: darken(#e91e63, 10%);
 				z-index: 10;
+
+				transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+
+				&.collapsed {
+					max-height: 0;
+					padding: 0;
+				}
 
 				.menu-item {
 					margin: 4px 0;

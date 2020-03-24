@@ -31,15 +31,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
 		private readonly router: Router,
 	) {}
 
-	onToggleMobileMenu(forceClose = false) {
-		if (
-			this.mobileMenuRef.nativeElement.style.length > 0 &&
-			forceClose == false
-		) {
-			this.mobileMenuRef.nativeElement.removeAttribute("style");
+	onToggleMobileMenu(forceCollapse = false) {
+		const isCollapsed = this.mobileMenuRef.nativeElement.classList.contains(
+			"collapsed",
+		);
+
+		if (isCollapsed && forceCollapse) return;
+
+		if (isCollapsed && forceCollapse == false) {
+			this.mobileMenuRef.nativeElement.classList.remove("collapsed");
 		} else {
-			this.mobileMenuRef.nativeElement.style.maxHeight = "0";
-			this.mobileMenuRef.nativeElement.style.padding = "0";
+			this.mobileMenuRef.nativeElement.classList.add("collapsed");
 		}
 	}
 
