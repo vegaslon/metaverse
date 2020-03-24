@@ -1,173 +1,169 @@
-<mat-toolbar color="primary">
+<mat-toolbar class="toolbar" color="primary">
 	<mat-toolbar-row>
-		<div class="container-fluid" style="max-width: 1600px">
-			<div class="row align-items-center">
-				<a mat-button routerLink="/">
-					<img
-						src="/assets/logo-light-nopink.png"
-						alt="Tivoli Cloud VR logo"
-						style="height: 32px;"
-					/>
-				</a>
+		<a mat-button routerLink="/" style="padding: 0;">
+			<img
+				src="/assets/logo-light-nopink.png"
+				alt="Tivoli Cloud VR logo"
+				style="height: 32px;"
+			/>
+		</a>
 
-				<button class="menu-item" mat-button (click)="openDownload()">
-					<mat-icon>get_app</mat-icon> Download
-				</button>
+		<div class="mobile-menu" style="max-height: 0; padding: 0;" #mobileMenu>
+			<button class="menu-item" mat-button (click)="openDownload()">
+				<mat-icon>get_app</mat-icon> Download
+			</button>
 
-				<a
-					class="menu-item"
-					href="https://blog.tivolicloud.com"
-					target="_blank"
-					mat-button
+			<a
+				class="menu-item"
+				href="https://blog.tivolicloud.com"
+				target="_blank"
+				mat-button
+			>
+				<img
+					src="/assets/icons/ghost-white.svg"
+					alt="Ghost"
+					style="height: 20px"
+				/>
+				Blog
+			</a>
+
+			<a
+				class="menu-item"
+				href="https://docs.tivolicloud.com"
+				target="_blank"
+				mat-button
+			>
+				<mat-icon>bookmarks</mat-icon> Docs
+			</a>
+
+			<button class="menu-item" mat-button routerLink="/about-us">
+				<mat-icon>people_alt</mat-icon> About us
+			</button>
+
+			<a
+				class="menu-item white"
+				href="/discord"
+				target="_blank"
+				mat-button
+			>
+				<img
+					src="/assets/icons/discord.svg"
+					alt="Discord"
+					style="height: 24px"
+				/>
+				Discord
+			</a>
+
+			<button
+				class="menu-item white"
+				mat-button
+				routerLink="/auth/sso/gitlab"
+			>
+				<img
+					class="material-icons"
+					src="/assets/icons/gitlab.svg"
+					alt="GitLab"
+					style="height: 22px"
+				/>
+				GitLab
+			</button>
+		</div>
+
+		<span style="flex-grow: 1"></span>
+
+		<a *ngIf="!user" mat-flat-button (click)="onSignIn()">
+			<mat-icon>account_circle</mat-icon> Sign in
+		</a>
+
+		<div style="display: flex;">
+			<button *ngIf="user" mat-button [matMenuTriggerFor]="appsMenu">
+				<div
+					style="display: inline-block; text-align: right; margin-right: 8px;"
 				>
-					<img
-						src="/assets/icons/ghost-white.svg"
-						alt="Ghost"
-						style="height: 20px"
-					/>
-					Blog
-				</a>
-
-				<a
-					class="menu-item"
-					href="https://docs.tivolicloud.com"
-					target="_blank"
-					mat-button
-				>
-					<mat-icon>bookmarks</mat-icon> Docs
-				</a>
-
-				<button class="menu-item" mat-button routerLink="/about-us">
-					<mat-icon>people_alt</mat-icon> About us
-				</button>
-
-				<!-- <button class="menu-item" mat-button routerLink="/explore">
-					<mat-icon>public</mat-icon> Explore
-				</button> -->
-
-				<span style="flex-grow: 1"></span>
-
-				<a
-					class="menu-item white"
-					href="/discord"
-					target="_blank"
-					mat-button
-				>
-					<img
-						src="/assets/icons/discord.svg"
-						alt="Discord"
-						style="height: 24px"
-					/>
-					Discord
-				</a>
-
-				<button
-					class="menu-item white"
-					mat-button
-					routerLink="/auth/sso/gitlab"
-				>
-					<img
-						src="/assets/icons/gitlab.svg"
-						alt="GitLab"
-						style="height: 22px"
-					/>
-					GitLab
-				</button>
-
-				<span style="flex-grow: 1"></span>
-
-				<a *ngIf="!user" mat-flat-button (click)="onSignIn()">
-					<mat-icon>account_circle</mat-icon> Sign in
-				</a>
-
-				<button *ngIf="user" mat-button [matMenuTriggerFor]="appsMenu">
-					<div
-						style="display: inline-block; text-align: right; margin-right: 8px;"
-					>
-						Signed in as <b>{{ user.profile.username }}</b>
-						<br />
-						<div style="opacity: 0.5; margin-top: -16px;">
-							{{ user.profile.email }}
-						</div>
+					Signed in as <b>{{ user.profile.username }}</b>
+					<br />
+					<div style="opacity: 0.5; margin-top: -16px;">
+						{{ user.profile.email }}
 					</div>
+				</div>
+				<img
+					class="user-image"
+					src="/api/user/{{ user.profile.username }}/image"
+					[alt]="'User image of ' + user.profile.username"
+				/>
+			</button>
+
+			<button
+				*ngIf="user"
+				mat-button
+				[matMenuTriggerFor]="appsMenu"
+				class="apps-button"
+			>
+				<mat-icon>apps</mat-icon>
+				<br />
+				Apps
+			</button>
+
+			<button
+				mat-button
+				class="apps-button mobile-only"
+				style="margin-left: 16px;"
+				(click)="onToggleMobileMenu()"
+			>
+				<mat-icon>menu</mat-icon>
+				<br />
+				More
+			</button>
+		</div>
+
+		<mat-menu #appsMenu="matMenu">
+			<div class="apps-menu" *ngIf="user">
+				<button mat-button class="app-button" routerLink="/user/files">
+					<mat-icon>folder</mat-icon> My Files
+				</button>
+				<button mat-button class="app-button" routerLink="/user/worlds">
+					<mat-icon>public</mat-icon> My Worlds
+				</button>
+				<button
+					mat-button
+					class="app-button"
+					routerLink="/admin"
+					*ngIf="user.admin"
+				>
+					<mat-icon>build</mat-icon> Admin
+				</button>
+				<hr />
+				<a routerLink="/user/settings">
 					<img
 						class="user-image"
+						style="border-radius: 999px;"
 						src="/api/user/{{ user.profile.username }}/image"
 						[alt]="'User image of ' + user.profile.username"
 					/>
-				</button>
-
-				<button
-					*ngIf="user"
-					mat-button
-					[matMenuTriggerFor]="appsMenu"
-					class="apps-button"
-				>
-					<mat-icon>apps</mat-icon>
-					<br />
-					Apps
-				</button>
-
-				<mat-menu #appsMenu="matMenu">
-					<div class="apps-menu" *ngIf="user">
-						<button
-							mat-button
-							class="app-button"
-							routerLink="/user/files"
-						>
-							<mat-icon>folder</mat-icon> My Files
-						</button>
-						<button
-							mat-button
-							class="app-button"
-							routerLink="/user/worlds"
-						>
-							<mat-icon>public</mat-icon> My Worlds
-						</button>
-						<button
-							mat-button
-							class="app-button"
-							routerLink="/admin"
-							*ngIf="user.admin"
-						>
-							<mat-icon>build</mat-icon> Admin
-						</button>
-						<hr />
-						<a routerLink="/user/settings">
-							<img
-								class="user-image"
-								style="border-radius: 999px;"
-								src="/api/user/{{
-									user.profile.username
-								}}/image"
-								[alt]="'User image of ' + user.profile.username"
-							/>
-							<h2>{{ user.profile.username }}</h2>
-							<p style="opacity: 0.7; font-size: 0.9em;">
-								{{ user.profile.email }}
-							</p>
-						</a>
-						<div class="user-menu">
-							<button
-								mat-stroked-button
-								class="user-button"
-								routerLink="/user/settings"
-							>
-								<mat-icon>settings</mat-icon>
-								Manage
-							</button>
-							<button
-								mat-stroked-button
-								class="user-button"
-								(click)="onSignOut()"
-							>
-								<mat-icon>arrow_back</mat-icon>
-								Sign out
-							</button>
-						</div>
-					</div>
-				</mat-menu>
+					<h2>{{ user.profile.username }}</h2>
+					<p style="opacity: 0.7; font-size: 0.9em;">
+						{{ user.profile.email }}
+					</p>
+				</a>
+				<div class="user-menu">
+					<button
+						mat-stroked-button
+						class="user-button"
+						routerLink="/user/settings"
+					>
+						<mat-icon>settings</mat-icon>
+						Manage
+					</button>
+					<button
+						mat-stroked-button
+						class="user-button"
+						(click)="onSignOut()"
+					>
+						<mat-icon>arrow_back</mat-icon>
+						Sign out
+					</button>
+				</div>
 			</div>
-		</div>
+		</mat-menu>
 	</mat-toolbar-row>
 </mat-toolbar>
