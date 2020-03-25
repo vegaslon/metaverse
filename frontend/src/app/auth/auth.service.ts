@@ -10,6 +10,8 @@ import { BehaviorSubject, Observable, throwError } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
 import { VerifyEmailComponent } from "./verify-email/verify-email.component";
+import { CookieService } from "ngx-cookie-service";
+import { environment } from "../../environments/environment";
 
 export interface AuthToken {
 	access_token: string;
@@ -50,6 +52,7 @@ export class AuthService {
 		private http: HttpClient,
 		private router: Router,
 		private dialog: MatDialog,
+		private cookies: CookieService,
 	) {}
 
 	private handleError = (err: HttpErrorResponse): Observable<never> => {
@@ -96,11 +99,43 @@ export class AuthService {
 		});
 	};
 
+	saveToken(token: AuthToken) {
+		this.cookies.set(
+			"auth",
+			JSON.stringify(token),
+			365 * 100, // expires
+			"/", // path
+			null, // domain
+			environment.production, // secure,
+			"Lax",
+		);
+	}
+
+	forgetToken() {
+		this.cookies.delete("auth");
+	}
+
+	getToken(): AuthToken {
+		// migrate localStorage to cookies
+		// TODO: remove me after 2020
+		const oldToken = localStorage.getItem("auth");
+		if (oldToken) {
+			const token = JSON.parse(oldToken);
+			this.saveToken(token);
+			localStorage.removeItem("auth");
+			return token;
+		}
+
+		const token = this.cookies.get("auth");
+		if (!token) return null;
+		return JSON.parse(token);
+	}
+
 	handleAuthentication = (token: AuthToken) => {
 		const jwt = token.access_token;
 
 		if (this.jwtHelper.isTokenExpired(jwt)) {
-			localStorage.removeItem("auth");
+			this.forgetToken();
 			this.loggingIn$.next(false);
 			return throwError("Token expired");
 		}
@@ -120,13 +155,13 @@ export class AuthService {
 
 				this.autoLogout(msTillExpire);
 				this.user$.next(user);
-				localStorage.setItem("auth", JSON.stringify(token));
+				this.saveToken(token);
 
 				this.loggingIn$.next(false);
 				sub.unsubscribe();
 			},
 			() => {
-				localStorage.removeItem("auth");
+				this.forgetToken();
 
 				this.loggingIn$.next(false);
 				sub.unsubscribe();
@@ -158,20 +193,17 @@ export class AuthService {
 	}
 
 	autoLogin() {
-		const tokenStr = localStorage.getItem("auth");
-		if (!tokenStr) return;
+		const token = this.getToken();
+		if (token == null) return;
 
-		try {
-			const token = JSON.parse(tokenStr);
-			this.loggingIn$.next(true);
-			this.handleAuthentication(token);
-		} catch (err) {}
+		this.loggingIn$.next(true);
+		this.handleAuthentication(token);
 	}
 
 	logout() {
 		this.user$.next(null);
 		this.router.navigate(["/"]);
-		localStorage.removeItem("auth");
+		this.forgetToken();
 		if (this.tokenExpirationTimer) {
 			clearTimeout(this.tokenExpirationTimer);
 		}
