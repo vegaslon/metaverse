@@ -49,9 +49,7 @@ class FrontendRenderFilter extends BaseExceptionFilter {
 }
 
 export function initFrontend(app: NestExpressApplication) {
-	if (DEV) {
-		app.useStaticAssets(frontend.browser);
-	} else {
+	if (!DEV) {
 		const {
 			ngExpressEngine,
 			AppServerModule,
@@ -66,11 +64,11 @@ export function initFrontend(app: NestExpressApplication) {
 
 		app.setViewEngine("html");
 		app.set("views", frontend.browser);
-
-		app.useStaticAssets(frontend.browser, {
-			index: null,
-		});
 	}
+
+	app.useStaticAssets(frontend.browser, {
+		index: null,
+	});
 
 	const { httpAdapter } = app.get(HttpAdapterHost);
 	app.useGlobalFilters(new FrontendRenderFilter(httpAdapter));

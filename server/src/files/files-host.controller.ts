@@ -1,7 +1,7 @@
 import { Controller, Get, Param, Query, Res } from "@nestjs/common";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiExcludeEndpoint, ApiTags } from "@nestjs/swagger";
 import { Response } from "express";
-import { FILES_URL } from "../environment";
+import { FILES_URL, URL as METAVERSE_URL } from "../environment";
 import { FilesHostService } from "./files-host.service";
 
 @Controller({
@@ -11,7 +11,14 @@ import { FilesHostService } from "./files-host.service";
 export class FilesHostController {
 	constructor(private readonly filesHostService: FilesHostService) {}
 
+	@Get("")
+	@ApiExcludeEndpoint()
+	redirectToUserFile(@Res() res: Response) {
+		res.redirect(METAVERSE_URL + "/user/files");
+	}
+
 	@Get("*")
+	@ApiExcludeEndpoint()
 	getFile(
 		@Res() res: Response,
 		@Param("0") location: string,
