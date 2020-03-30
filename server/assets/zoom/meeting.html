@@ -1,0 +1,97 @@
+<html>
+	<head>
+		<link
+			type="text/css"
+			rel="stylesheet"
+			href="https://source.zoom.us/1.7.2/css/bootstrap.css"
+		/>
+
+		<link
+			type="text/css"
+			rel="stylesheet"
+			href="https://source.zoom.us/1.7.2/css/react-select.css"
+		/>
+	</head>
+	<body>
+		<script src="https://source.zoom.us/1.7.2/lib/vendor/react.min.js"></script>
+		<script src="https://source.zoom.us/1.7.2/lib/vendor/react-dom.min.js"></script>
+		<script src="https://source.zoom.us/1.7.2/lib/vendor/redux.min.js"></script>
+		<script src="https://source.zoom.us/1.7.2/lib/vendor/redux-thunk.min.js"></script>
+		<script src="https://source.zoom.us/1.7.2/lib/vendor/lodash.min.js"></script>
+		<script src="https://source.zoom.us/1.7.2/lib/vendor/jquery.min.js"></script>
+		<script src="https://source.zoom.us/zoom-meeting-1.7.2.min.js"></script>
+		<script>
+			ZoomMtg.setZoomJSLib("https://source.zoom.us/1.7.2/lib", "/av");
+			ZoomMtg.preLoadWasm();
+			ZoomMtg.prepareJssdk();
+
+			const getSignature = async meetingNumber => {
+				const res = await fetch("/api/zoom/signature/" + meetingNumber);
+				return res.json();
+			};
+
+			const initZoom = async userName => {
+				// /:meetingNumber/:passWord
+				const params = window.location.pathname.split("/");
+				const passWord = params.pop();
+				const meetingNumber = params.pop();
+
+				const { apiKey, signature } = await getSignature(meetingNumber);
+
+				// ZoomMtg.showJoinAudioFunction({ show: false });
+				// ZoomMtg.showMeetingHeader({ show: false });
+
+				ZoomMtg.init({
+					leaveUrl: window.location.href,
+					isSupportAV: true,
+					error: error => console.error(error),
+					success: () => {
+						ZoomMtg.join({
+							signature,
+							apiKey,
+							meetingNumber,
+							userName,
+							passWord,
+							error: error => console.error(error),
+							success: () => {
+								console.log("Joined");
+							},
+						});
+					},
+				});
+			};
+
+			const eventBridgeUuid = "com.tivolicloud.zoom";
+			let zoomInitialized = false;
+
+			if (window.qt)
+				setTimeout(() => {
+					EventBridge.scriptEventReceived.connect(jsonStr => {
+						let data;
+						try {
+							data = JSON.parse(jsonStr);
+						} catch (err) {
+							return;
+						}
+
+						if (data.uuid != eventBridgeUuid) return;
+
+						if (
+							data.key == "username" &&
+							zoomInitialized == false
+						) {
+							zoomInitialized = true;
+							initZoom(data.value + " (Tivoli)");
+						}
+					});
+
+					EventBridge.emitWebEvent(
+						JSON.stringify({
+							key: "username",
+							uuid: eventBridgeUuid,
+						}),
+					);
+				}, 1000);
+		</script>
+	</body>
+</html>

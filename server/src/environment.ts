@@ -19,6 +19,9 @@ export const {
 	// https://console.cloud.google.com/apis/credentials/wizard?api=storage-api.googleapis.com
 	FILES_GCP_AUTH_JSON = "{}",
 
+	ZOOM_API_KEY = "0nB3LiC_RiedIJgIU9QRAw",
+	ZOOM_API_SECRET = "J6wg3LD6FA32BtP3pnKdBeYsCBeUgu44I7rh",
+
 	JWT_SECRET = "thisIsSoVerySecretyou literally have no idealol1610239012",
 
 	// https://console.cloud.google.com/apis/credentials

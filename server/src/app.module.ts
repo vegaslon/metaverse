@@ -18,6 +18,7 @@ import { PuppeteerModule } from "./puppeteer/puppeteer.module";
 import { UserModule } from "./user/user.module";
 import { VideoStreamModule } from "./video-stream/video-stream.module";
 import { FilesModule } from "./files/files.module";
+import { ZoomModule } from "./zoom/zoom.module";
 
 @Module({
 	imports: [
@@ -65,6 +66,7 @@ import { FilesModule } from "./files/files.module";
 
 		// extras
 		VideoStreamModule,
+		ZoomModule,
 	],
 	providers: [],
 	controllers: [AppController],
