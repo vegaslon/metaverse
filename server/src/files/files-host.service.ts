@@ -32,7 +32,7 @@ export class FilesHostService {
 
 			if (headers.includes(key)) {
 				if (key == "etag") {
-					const hash = value.match(/^"([^])+?"$/);
+					const hash = value.match(/^"([^]+?)"$/);
 					if (hash != null) {
 						toRes.header(key, `W/"${hash[1]}"`);
 					} else {
