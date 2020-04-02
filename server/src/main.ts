@@ -59,12 +59,6 @@ async function bootstrap() {
 		}),
 	);
 
-	// add hostname header for traefik testing
-	app.use((req: Request, res: Response, next: () => any) => {
-		res.setHeader("Hostname", os.hostname());
-		next();
-	});
-
 	if (DEV) initDebugLogs(app);
 
 	initSwagger(app);
