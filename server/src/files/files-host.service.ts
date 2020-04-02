@@ -27,8 +27,15 @@ export class FilesHostService {
 		];
 
 		for (const header of fromRes.headers) {
-			if (headers.includes(header[0].toLowerCase())) {
-				toRes.header(header[0], header[1]);
+			const key = header[0].toLowerCase();
+			const value = header[1];
+
+			if (headers.includes(key)) {
+				if (key == "etag") {
+					toRes.header(key, "W/" + value);
+				} else {
+					toRes.header(key, value);
+				}
 			}
 		}
 	}
