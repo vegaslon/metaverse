@@ -34,7 +34,7 @@ export class FilesHostService {
 				if (key == "etag") {
 					const hash = value.match(/^"([^])+?"$/);
 					if (hash != null) {
-						toRes.header(key, `W/"${hash}"`);
+						toRes.header(key, `W/"${hash[1]}"`);
 					} else {
 						toRes.header(key, value);
 					}
