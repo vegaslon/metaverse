@@ -237,7 +237,6 @@ export class FilesService {
 
 		const blob = this.bucket.file(key, {});
 		const stream = blob.createWriteStream({
-			gzip: true,
 			private: true,
 			contentType: mimetype,
 		});
