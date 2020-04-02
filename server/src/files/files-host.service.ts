@@ -31,11 +31,7 @@ export class FilesHostService {
 			const value = header[1];
 
 			if (headers.includes(key)) {
-				if (key == "etag") {
-					toRes.header(key, "W/" + value);
-				} else {
-					toRes.header(key, value);
-				}
+				toRes.header(key, value);
 			}
 		}
 	}
