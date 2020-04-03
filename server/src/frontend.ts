@@ -31,7 +31,7 @@ class FrontendRenderFilter extends BaseExceptionFilter {
 
 		if (
 			req.originalUrl.startsWith("/api/") ||
-			this.filesHost == req.hostname
+			this.filesHost === req.hostname
 		)
 			return super.catch(exception, host);
 
@@ -42,7 +42,7 @@ class FrontendRenderFilter extends BaseExceptionFilter {
 		} else {
 			res.render("index", {
 				req,
-				//providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }],
+				// providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }],
 			});
 		}
 	}

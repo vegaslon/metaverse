@@ -1,0 +1,19 @@
+{
+	"extends": ["tslint:latest", "tslint-config-prettier"],
+	"rules": {
+		"no-any": false,
+		"file-name-casing": [true, "kebab-case"],
+		"ban": {
+			"options": [
+				{
+					"name": "parseInt",
+					"message": "use #type-coercion -> Number(val)"
+				},
+				{
+					"name": "parseFloat",
+					"message": "use #type-coercion -> Number(val)"
+				}
+			]
+		}
+	}
+}

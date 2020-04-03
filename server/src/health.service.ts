@@ -34,7 +34,7 @@ export class HealthService implements TerminusOptionsFactory {
 					this.mongoose.pingCheck("mongoose", {
 						connection: this.mongooseConnection,
 					}),
-				//async () => this.memory.checkRSS("memory", 150 * 1024 * 1024),
+				// async () => this.memory.checkRSS("memory", 150 * 1024 * 1024),
 				// async () => this.disk.checkStorage("disk", {}),
 			],
 		};

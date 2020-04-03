@@ -30,9 +30,9 @@ function initDebugLogs(app: NestExpressApplication) {
 	app.use((req: Request, res: Response, next: () => void) => {
 		bodyParser.json()(req, res, () => {
 			bodyParser.urlencoded()(req, res, () => {
-				console.log(req.method + " " + req.originalUrl);
-				console.log("auth: " + req.headers.authorization);
-				console.log("body: \n" + JSON.stringify(req.body, null, 4));
+				console.log(req.method + " " + req.originalUrl); // tslint:disable-line
+				console.log("auth: " + req.headers.authorization); // tslint:disable-line
+				console.log("body: \n" + JSON.stringify(req.body, null, 4)); // tslint:disable-line
 				next();
 			});
 		});
@@ -47,13 +47,13 @@ async function bootstrap() {
 
 	app.use(
 		helmet(),
-		//compression()
+		// compression()
 	);
 
 	app.useGlobalPipes(
 		new ValidationPipe({
-			//disableErrorMessages: true,
-			//dismissDefaultMessages: true,
+			// disableErrorMessages: true,
+			// dismissDefaultMessages: true,
 			validationError: { target: false, value: false },
 			transform: true,
 		}),

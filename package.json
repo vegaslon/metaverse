@@ -1,6 +1,13 @@
 {
 	"name": "metaverse",
 	"scripts": {
-		"format": "prettier --write --ignore-path .gitignore '**/*.{ts,html,scss,css,json}'"
+		"format": "prettier --write --ignore-path .gitignore '**/*.{ts,html,scss,css,json}'",
+		"lint": "tslint server/**/*.ts frontend/**/*.ts"
+	},
+	"devDependencies": {
+		"prettier": "^2.0.2",
+		"tslint": "^6.1.1",
+		"tslint-config-prettier": "^1.18.0",
+		"typescript": "^3.8.3"
 	}
 }

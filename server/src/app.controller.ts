@@ -19,7 +19,7 @@ export class AppController {
 		).text();
 
 		const yaml = YAML.parse(yamlStr);
-		if (typeof yaml != "object")
+		if (typeof yaml !== "object")
 			throw new InternalServerErrorException("Invalid yaml");
 
 		return yaml;
