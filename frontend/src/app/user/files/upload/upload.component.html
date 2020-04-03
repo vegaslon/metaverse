@@ -1,4 +1,10 @@
-<input hidden (change)="onFilesChanged()" #filesInput type="file" multiple />
+<input
+	hidden
+	(change)="onFilesChanged(filesInput.files)"
+	#filesInput
+	type="file"
+	multiple
+/>
 
 <h2 *ngIf="uploads.length != 0" style="margin-top: 0;">
 	<b>{{ utilsService.displayPlural(uploads.length, "file") }}</b>
@@ -10,8 +16,10 @@
 	*ngIf="error"
 	class="bg-warn"
 	style="
-		margin-bottom: 16px; color: #fff;
-		display: flex; vertical-align: middle;
+		margin-bottom: 16px;
+		color: #fff;
+		display: flex;
+		vertical-align: middle;
 	"
 >
 	<mat-icon style="margin-top: -3px; margin-right: 8px;">
@@ -24,6 +32,7 @@
 		class="drag-over"
 		*ngIf="uploads.length == 0"
 		(click)="filesInput.click()"
+		[class.active]="dragOvers > 0"
 	>
 		<h2 style="margin: 0;">
 			Drag and drop files here

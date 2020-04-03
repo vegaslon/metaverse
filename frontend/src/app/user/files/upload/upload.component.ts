@@ -1,9 +1,9 @@
-import { Component, ElementRef, Inject, ViewChild } from "@angular/core";
+import { HttpEvent, HttpEventType } from "@angular/common/http";
+import { Component, HostListener, Inject } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { concat, merge, Observable } from "rxjs";
+import { merge, Observable } from "rxjs";
 import { UtilsService } from "../../../utils.service";
 import { FilesService } from "../files.service";
-import { HttpEvent, HttpEventType } from "@angular/common/http";
 
 export interface Upload {
 	state: "ready" | "uploading" | "uploaded";
@@ -17,7 +17,6 @@ export interface Upload {
 	styleUrls: ["./upload.component.scss"],
 })
 export class UploadComponent {
-	@ViewChild("filesInput") filesInput: ElementRef<HTMLInputElement>;
 	uploads: Upload[] = [];
 
 	uploading = false;
@@ -40,20 +39,41 @@ export class UploadComponent {
 			0,
 		);
 
-	//getUnuploadedFiles = () =>
-	//	this.uploads.filter(upload => upload.state != "uploaded");
-
 	getProgressValue = () =>
 		(this.getUploadedSize() / this.getTotalSize()) * 100;
 
-	onFilesChanged() {
-		this.uploads = [...(this.filesInput.nativeElement.files as any)].map(
-			file => ({
-				state: "ready",
-				progress: 0,
-				file,
-			}),
-		);
+	dragOvers = 0;
+
+	@HostListener("dragover", ["$event"])
+	onDragOver(event: DragEvent) {
+		event.preventDefault();
+	}
+	@HostListener("dragenter", ["$event"])
+	onDragEnter(event: DragEvent) {
+		event.preventDefault();
+		this.dragOvers++;
+	}
+	@HostListener("dragleave", ["$event"])
+	onDragLeave(event: DragEvent) {
+		event.preventDefault();
+		this.dragOvers--;
+	}
+
+	@HostListener("drop", ["$event"])
+	onDrop(event: DragEvent) {
+		event.preventDefault();
+		if (event.dataTransfer.files.length === 0) return;
+
+		this.onFilesChanged(event.dataTransfer.files);
+		this.dragOvers = 0;
+	}
+
+	onFilesChanged(files: FileList) {
+		this.uploads = [...(files as any)].map(file => ({
+			state: "ready",
+			progress: 0,
+			file,
+		}));
 	}
 
 	onReset() {
