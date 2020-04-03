@@ -18,7 +18,7 @@ import { GridFSBucket } from "mongodb";
 import { Connection, Model } from "mongoose";
 import fetch from "node-fetch";
 import * as path from "path";
-import * as sharp from "sharp";
+import sharp from "sharp";
 import { Readable } from "stream";
 import { GetUsersDto } from "../admin/admin.dto";
 import { AuthSignUpDto } from "../auth/auth.dto";

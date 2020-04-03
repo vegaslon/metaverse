@@ -17,8 +17,7 @@ import { User } from "../user/user.schema";
 import { UserService } from "../user/user.service";
 import { CreateDomainDto, GetDomainsDto, UpdateDomainDto } from "./domain.dto";
 import { Domain } from "./domain.schema";
-import uuid = require("uuid");
-import sharp = require("sharp");
+import sharp from "sharp";
 import escapeString = require("escape-string-regexp");
 import { DomainSession } from "../session/session.schema";
 

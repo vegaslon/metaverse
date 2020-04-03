@@ -3,12 +3,12 @@ import { NestFactory } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { Request, Response } from "express";
-import * as helmet from "helmet";
+import helmet from "helmet";
 import * as os from "os";
 import { AppModule } from "./app.module";
 import { DEV, WWW_PATH } from "./environment";
 import { initFrontend } from "./frontend";
-import bodyParser = require("body-parser");
+import bodyParser from "body-parser";
 
 function initSwagger(app: NestExpressApplication) {
 	const options = new DocumentBuilder()

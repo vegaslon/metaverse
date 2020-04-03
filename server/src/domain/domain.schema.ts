@@ -1,6 +1,6 @@
 import { Document, Schema } from "mongoose";
 import { User } from "../user/user.schema";
-import uuid = require("uuid");
+import uuid from "uuid";
 
 export enum DomainAutomaticNetworking {
 	full = "full",

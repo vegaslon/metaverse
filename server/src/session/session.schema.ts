@@ -1,7 +1,7 @@
 import { Document, Schema, Model, Query } from "mongoose";
 import { Domain } from "../domain/domain.schema";
 import { User } from "../user/user.schema";
-import uuid = require("uuid");
+import uuid from "uuid";
 
 export const UserSessionSchema = new Schema({
 	user: { type: Schema.Types.ObjectId, ref: "users", required: true },

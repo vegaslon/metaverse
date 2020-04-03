@@ -2,7 +2,7 @@ import { Injectable, OnModuleInit } from "@nestjs/common";
 import * as fs from "fs";
 import * as Handlebars from "handlebars";
 import * as path from "path";
-import * as Puppeteer from "puppeteer";
+import Puppeteer from "puppeteer";
 
 @Injectable()
 export class PuppeteerService implements OnModuleInit {
