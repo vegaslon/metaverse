@@ -88,6 +88,10 @@
 					background-position: center;
 					background-repeat: no-repeat;
 
+					&.contain {
+						background-size: contain;
+					}
+
 					width: 100%;
 					height: 100%;
 				}

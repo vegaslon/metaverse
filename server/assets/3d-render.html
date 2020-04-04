@@ -1,0 +1,119 @@
+<html>
+	<head>
+		<style>
+			* {
+				margin: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<script type="module">
+			import * as THREE from "https://cdn.jsdelivr.net/gh/mrdoob/three.js/build/three.module.js";
+
+			try {
+				const width = 858;
+				const height = 480;
+
+				const camera = new THREE.PerspectiveCamera(
+					22.5,
+					width / height,
+					0.01,
+					1000,
+				);
+
+				const scene = new THREE.Scene();
+				// scene.background = new THREE.Color(0xffffff);
+
+				const sun = new THREE.DirectionalLight(0xffffff, 1);
+				sun.castShadow = true;
+				scene.add(sun);
+
+				const light = new THREE.AmbientLight(0xffffff);
+				scene.add(light);
+
+				const renderer = new THREE.WebGLRenderer({ antialias: true });
+				renderer.setSize(width, height);
+				renderer.setPixelRatio(width / height);
+				// renderer.toneMapping = THREE.ACESFilmicToneMapping;
+				// renderer.toneMappingExposure = 0.8;
+				renderer.outputEncoding = THREE.sRGBEncoding;
+				document.body.appendChild(renderer.domElement);
+
+				const render = model => {
+					// model.traverse(child => {
+					// 	if (child.isMesh) {
+					// 		child.castShadow = true;
+					// 		child.receiveShadow = true;
+					// 	}
+					// });
+
+					const originalBox = new THREE.Box3().setFromObject(model);
+					const height = Math.abs(
+						originalBox.min.y - originalBox.max.y,
+					);
+					model.scale.x = model.scale.y = model.scale.z = 1 / height;
+
+					const scaledBox = new THREE.Box3().setFromObject(model);
+					const center = new THREE.Vector3();
+					scaledBox.getCenter(center);
+					model.position.sub(center);
+
+					camera.position.set(0, 0, scaledBox.max.z + 2.5);
+
+					scene.add(model);
+
+					renderer.render(scene, camera);
+
+					setTimeout(() => {
+						console.log("TIVOLI FINISHED");
+					}, 100);
+				};
+
+				const query = window.location.search
+					.split("?")
+					.pop()
+					.split("&")
+					.reduce((query, pairStr) => {
+						const pair = pairStr.split("=");
+						query[pair[0]] = pair[1];
+						return query;
+					}, {});
+
+				const url = new URL(query.url);
+				const ext = url.pathname
+					.toLowerCase()
+					.split(".")
+					.pop();
+
+				const loaderUrl =
+					"https://cdn.jsdelivr.net/gh/mrdoob/three.js/examples/jsm/loaders/";
+
+				(async () => {
+					switch (ext) {
+						case "gltf":
+						case "glb":
+							const { GLTFLoader } = await import(
+								loaderUrl + "GLTFLoader.js"
+							);
+							new GLTFLoader().load(url.href, gltf => {
+								render(gltf.scene);
+							});
+							break;
+
+						case "fbx":
+							const { FBXLoader } = await import(
+								loaderUrl + "FBXLoader.js"
+							);
+							new FBXLoader().load(url.href, render);
+							break;
+
+						default:
+							break;
+					}
+				})();
+			} catch (err) {
+				console.log("TIVOLI FINISHED");
+			}
+		</script>
+	</body>
+</html>

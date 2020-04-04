@@ -29,6 +29,13 @@
 					'url(' + file.url + '?' + previewCache + ')'
 				"
 			></div>
+			<div
+				class="preview contain"
+				*ngIf="file.type == 'model'"
+				[style.backgroundImage]="
+					'url(/api/render?url=' + file.url + ')'
+				"
+			></div>
 			<video
 				class="preview"
 				*ngIf="file.type == 'video'"

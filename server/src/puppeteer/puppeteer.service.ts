@@ -3,6 +3,7 @@ import * as fs from "fs";
 import * as Handlebars from "handlebars";
 import * as path from "path";
 import Puppeteer from "puppeteer";
+import { rejects } from "assert";
 
 @Injectable()
 export class PuppeteerService implements OnModuleInit {
@@ -17,7 +18,9 @@ export class PuppeteerService implements OnModuleInit {
 			executablePath: process.env.CHROME_BIN || null,
 			// only for root (in docker container)
 			args:
-				process.getuid && process.getuid() == 0 ? ["--no-sandbox"] : [],
+				process.getuid && process.getuid() === 0
+					? ["--no-sandbox"]
+					: [],
 		});
 	}
 
@@ -61,5 +64,37 @@ export class PuppeteerService implements OnModuleInit {
 		});
 
 		return this.renderHTML(html, 1024, 128);
+	}
+
+	renderModel(modelUrl: string) {
+		const url =
+			"file://" + path.resolve(__dirname, "../../assets/3d-render.html");
+
+		return new Promise(async (resolve, reject) => {
+			const page = await this.browser.newPage();
+			page.setViewport({
+				width: 858,
+				height: 480,
+				deviceScaleFactor: 1,
+			});
+
+			await page.goto(url + "?url=" + modelUrl);
+
+			page.on("error", error => {
+				reject(error);
+			});
+
+			page.on("console", async log => {
+				if (log.text() !== "TIVOLI FINISHED") return;
+
+				const buffer = await page.screenshot({
+					type: "jpeg",
+				});
+
+				resolve(buffer);
+
+				page.close();
+			});
+		});
 	}
 }
