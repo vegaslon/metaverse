@@ -32,6 +32,7 @@ app/server/yarn.lock \
 
 WORKDIR /app/server
 RUN \
+yarn global add node-gyp && \
 yarn install --production && \
 apk del builds-deps
 

@@ -59,7 +59,7 @@ server tests:
         reports:
             junit: server/junit.xml
 
-build server:
+build all:
     stage: build
     image: node:lts
 
@@ -70,48 +70,15 @@ build server:
         policy: pull
         paths:
             - server/node_modules/
-
-    script:
-        - mkdir -p app app/server
-
-        - cd server
-        - yarn install
-        - yarn run build
-
-        - cp -R dist ../app/server
-        - cp -R assets ../app/server
-        - cp -R templates ../app/server
-
-        - cp package.json ../app/server
-        - cp yarn.lock ../app/server
-
-    artifacts:
-        expire_in: 7 days
-        paths:
-            - app/server
-
-build frontend:
-    stage: build
-    image: node:lts
-
-    cache:
-        policy: pull
-        paths:
             - frontend/node_modules/
 
     script:
-        - mkdir -p app app/frontend
-
-        - cd frontend
-        - yarn install
-        - yarn run build:ssr
-
-        - cp -R dist ../app/frontend
+        - ./build.sh
 
     artifacts:
         expire_in: 7 days
         paths:
-            - app/frontend
+            - app
 
 # deploy docker image:
 #     stage: deploy
@@ -120,8 +87,7 @@ build frontend:
 #     # when: manual
 
 #     dependencies:
-#         - build server
-#         - build frontend
+#         - build all
 
 #     variables:
 #         DOCKER_TLS_CERTDIR: ""
@@ -142,8 +108,7 @@ deploy app engine:
     allow_failure: false
 
     dependencies:
-        - build server
-        - build frontend
+        - build all
 
     # https://medium.com/google-cloud/automatically-deploy-to-google-app-engine-with-gitlab-ci-d1c7237cbe11
     script:
