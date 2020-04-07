@@ -3,7 +3,7 @@ mkdir -p app/server app/frontend
 
 cd server
 yarn install
-yarn run build
+yarn build
 cp -R dist ../app/server
 cp -R assets ../app/server
 cp -R templates ../app/server
@@ -13,6 +13,6 @@ cd ..
 
 cd frontend
 yarn install
-yarn run build
+yarn build:ssr
 cp -R dist ../app/frontend
 cd ..
