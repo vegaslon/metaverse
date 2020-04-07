@@ -1,14 +1,13 @@
-import { ValidationPipe } from "@nestjs/common";
+import { Logger, ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import bodyParser from "body-parser";
 import { Request, Response } from "express";
 import helmet from "helmet";
-import * as os from "os";
 import { AppModule } from "./app.module";
 import { DEV, WWW_PATH } from "./environment";
 import { initFrontend } from "./frontend";
-import bodyParser from "body-parser";
 
 function initSwagger(app: NestExpressApplication) {
 	const options = new DocumentBuilder()
@@ -26,13 +25,14 @@ function initSwagger(app: NestExpressApplication) {
 	SwaggerModule.setup("api", app, document);
 }
 
-function initDebugLogs(app: NestExpressApplication) {
+function initDebugLogs(app: NestExpressApplication, logger: Logger) {
 	app.use((req: Request, res: Response, next: () => void) => {
 		bodyParser.json()(req, res, () => {
 			bodyParser.urlencoded()(req, res, () => {
-				console.log(req.method + " " + req.originalUrl); // tslint:disable-line
-				console.log("auth: " + req.headers.authorization); // tslint:disable-line
-				console.log("body: \n" + JSON.stringify(req.body, null, 4)); // tslint:disable-line
+				logger.verbose(req.method + " " + req.originalUrl); // tslint:disable-line
+				logger.verbose("auth: " + req.headers.authorization); // tslint:disable-line
+				logger.verbose("body: " + JSON.stringify(req.body, null, 4)); // tslint:disable-line
+				logger.verbose("");
 				next();
 			});
 		});
@@ -41,6 +41,8 @@ function initDebugLogs(app: NestExpressApplication) {
 
 async function bootstrap() {
 	const app = await NestFactory.create<NestExpressApplication>(AppModule);
+	const logger = new Logger("Main");
+
 	app.enableCors({
 		origin: /^((null)|(file:\/\/))$/i, // null from chrome file://
 	});
@@ -59,7 +61,7 @@ async function bootstrap() {
 		}),
 	);
 
-	if (DEV) initDebugLogs(app);
+	if (DEV) initDebugLogs(app, logger);
 
 	initSwagger(app);
 	initFrontend(app);
