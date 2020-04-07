@@ -78,10 +78,12 @@ build server:
         - yarn install
         - yarn run build
 
-        - cp -r dist ../app/server
-        - cp -r assets ../app/server
-        - cp -r templates ../app/server
-        - cp -r package.json ../app/server
+        - cp -R dist ../app/server
+        - cp -R assets ../app/server
+        - cp -R templates ../app/server
+
+        - cp package.json ../app/server
+        - cp yarn.lock ../app/server
 
     artifacts:
         expire_in: 7 days
@@ -104,7 +106,7 @@ build frontend:
         - yarn install
         - yarn run build:ssr
 
-        - cp -r dist ../app/frontend
+        - cp -R dist ../app/frontend
 
     artifacts:
         expire_in: 7 days

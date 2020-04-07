@@ -1,18 +1,17 @@
-FROM alpine:latest
+FROM alpine:edge
 
 ENV \
-CHROME_BIN="/usr/bin/chromium-browser" \
-PUPPETEER_SKIP_CHROMIUM_DOWNLOAD="true"
+NODE_ENV=production \
+CHROME_BIN=/usr/bin/chromium-browser \
+PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 
 RUN \
-echo "http://dl-cdn.alpinelinux.org/alpine/edge/main" > /etc/apk/repositories && \
-echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories && \
 echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
 # compiling: bcrypt 
 apk add --no-cache --virtual builds-deps build-base python3 && \
 apk add --no-cache \
 # node
-nodejs npm \
+nodejs yarn \
 # for: sharp
 vips \
 # for: puppeteer
@@ -26,11 +25,14 @@ mkdir -p /usr/share/fonts/TTF && \
 wget -P /usr/share/fonts/TTF https://github.com/mozilla/twemoji-colr/releases/download/v0.5.0/TwemojiMozilla.ttf && \
 fc-cache -fv
 
+COPY \
+app/server/package.json \
+app/server/yarn.lock \
+/app/server/
 
-COPY app/server/package.json /app/server/package.json
 WORKDIR /app/server
 RUN \
-npm i --only=prod && \
+yarn install --production && \
 apk del builds-deps
 
 COPY app /app
