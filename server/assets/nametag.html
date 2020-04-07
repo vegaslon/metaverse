@@ -84,7 +84,7 @@
 				rgba(29, 31, 33, 0.3),
 				rgba(29, 31, 33, 0.3)
 			),
-			url("{{avatarUrl}}");
+			url("{{{ userImage }}}");
 		background-size: cover;
 		background-position: center;
 		filter: blur(5px);
@@ -125,9 +125,9 @@
 		<table>
 			<tr>
 				<td>
-					<img class="avatar" src="{{ avatarUrl }}" />
+					<img class="avatar" src="{{ userImage }}" />
 				</td>
-				<td class="username">{{ displayName }}</td>
+				<td class="username">{{ username }}</td>
 			</tr>
 		</table>
 	</div>

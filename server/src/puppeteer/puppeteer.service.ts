@@ -3,62 +3,78 @@ import * as fs from "fs";
 import * as Handlebars from "handlebars";
 import * as path from "path";
 import Puppeteer from "puppeteer";
-import { rejects } from "assert";
+import { ReplaySubject } from "rxjs";
+import { streamToRx } from "rxjs-stream";
+import { take } from "rxjs/operators";
+import { UserService } from "../user/user.service";
+import fetch from "node-fetch";
 
 @Injectable()
 export class PuppeteerService implements OnModuleInit {
-	browser: Puppeteer.Browser;
+	browser$: ReplaySubject<Puppeteer.Browser> = new ReplaySubject();
 
-	constructor() {}
+	constructor(private readonly userService: UserService) {}
 
 	async onModuleInit() {
 		// https://github.com/puppeteer/puppeteer/issues/1793
-
-		this.browser = await Puppeteer.launch({
-			executablePath: process.env.CHROME_BIN || null,
-			// only for root (in docker container)
-			args:
-				process.getuid && process.getuid() === 0
-					? ["--no-sandbox"]
-					: [],
-		});
+		this.browser$.next(
+			await Puppeteer.launch({
+				executablePath: process.env.CHROME_BIN || null,
+				ignoreHTTPSErrors: true,
+				args: [
+					"--no-sandbox",
+					"--disable-setuid-sandbox",
+					"--ignore-certificate-errors",
+					"--proxy-server='direct://'",
+					"--proxy-bypass-list=*",
+				],
+				// headless: false,
+			}),
+		);
 	}
 
-	renderHTML(html: string, width?: number, height?: number): Promise<Buffer> {
-		return new Promise(async resolve => {
-			const page = await this.browser.newPage();
-			page.setViewport({
-				width: width != null ? width : 1920,
-				height: height != null ? height : 1920,
-				deviceScaleFactor: 1,
-			});
+	async renderHTML(
+		html: string,
+		width?: number,
+		height?: number,
+		waitUntil = false,
+	): Promise<Buffer> {
+		const browser = await this.browser$.pipe(take(1)).toPromise();
 
-			await page.setContent(html, { waitUntil: "networkidle0" });
-			const buffer = await page.screenshot({
-				type: "png",
-				omitBackground: true,
-			});
-
-			resolve(buffer);
-
-			page.close();
+		const page = await browser.newPage();
+		page.setViewport({
+			width: width != null ? width : 1920,
+			height: height != null ? height : 1920,
+			deviceScaleFactor: 1,
 		});
+
+		await page.setContent(
+			html,
+			waitUntil ? { waitUntil: "networkidle0" } : {},
+		);
+		const buffer = await page.screenshot({
+			type: "png",
+			omitBackground: true,
+		});
+		page.close();
+
+		return buffer;
 	}
 
-	renderNametag(
-		username: string,
-		displayName: string = null,
-		admin = false,
-		friend = false,
-	) {
+	async renderNametag(username: string, admin = false, friend = false) {
+		const { stream } = await this.userService.getUserImage(username);
+		const buffer = await streamToRx(stream).toPromise();
+
+		const userImage = "data:image/png;base64," + buffer.toString("base64");
+
 		const html = Handlebars.compile(
 			fs.readFileSync(
 				path.resolve(__dirname, "../../assets/nametag.html"),
 				"utf8",
 			),
 		)({
-			displayName: displayName || username,
-			avatarUrl: "http://127.0.0.1:3000/api/user/" + username + "/image",
+			username,
+			userImage,
 			admin,
 			friend,
 		});
@@ -66,20 +82,22 @@ export class PuppeteerService implements OnModuleInit {
 		return this.renderHTML(html, 1024, 128);
 	}
 
-	renderModel(modelUrl: string) {
+	async renderModel(modelUrl: string) {
+		const browser = await this.browser$.pipe(take(1)).toPromise();
+
 		const url =
 			"file://" + path.resolve(__dirname, "../../assets/3d-render.html");
 
+		const page = await browser.newPage();
+		page.setViewport({
+			width: 858,
+			height: 480,
+			deviceScaleFactor: 1,
+		});
+
+		await page.goto(url + "?url=" + modelUrl);
+
 		return new Promise(async (resolve, reject) => {
-			const page = await this.browser.newPage();
-			page.setViewport({
-				width: 858,
-				height: 480,
-				deviceScaleFactor: 1,
-			});
-
-			await page.goto(url + "?url=" + modelUrl);
-
 			page.on("error", error => {
 				reject(error);
 			});
@@ -90,10 +108,9 @@ export class PuppeteerService implements OnModuleInit {
 				const buffer = await page.screenshot({
 					type: "jpeg",
 				});
+				page.close();
 
 				resolve(buffer);
-
-				page.close();
 			});
 		});
 	}

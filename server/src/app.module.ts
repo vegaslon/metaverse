@@ -49,14 +49,14 @@ import { ZoomModule } from "./zoom/zoom.module";
 			useClass: HealthService,
 		}),
 
-		EmailModule,
-		PuppeteerModule,
-		FilesModule,
-
 		AuthModule,
 		UserModule,
 		AdminModule,
 		DomainModule,
+
+		EmailModule,
+		PuppeteerModule,
+		FilesModule,
 
 		ApiUserModule,
 		ApiUsersModule,

@@ -97,16 +97,18 @@ export class UserController {
 	@Get(":username/nametag")
 	async getUserNametag(
 		@Param("username") username: string,
-		@Query("displayName") displayName: string,
 		@Query("admin") admin: string,
 		@Query("friend") friend: string,
 		@Res() res: Response,
 	) {
+		const user = await this.userService.findByUsername(username);
+
 		const buffer = await this.puppeteerService.renderNametag(
-			username,
-			displayName,
-			admin == "true",
-			friend == "true",
+			user != null
+				? user.username
+				: String().padStart(4, String.fromCharCode(0x2800)),
+			admin != null,
+			friend != null,
 		);
 
 		res.set("Content-Type", "image/png");
