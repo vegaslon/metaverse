@@ -38,7 +38,7 @@
 		display: inline-block;
 		//text-shadow: 2px 2px 0px rgba(#000, 0.5);
 
-		@for $i from 1 to 100 {
+		@for $i from 1 to 20 {
 			$negativeDelay: -$delay * $i;
 
 			&:nth-child(#{$i}) {
