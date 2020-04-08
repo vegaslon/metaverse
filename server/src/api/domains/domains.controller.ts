@@ -142,7 +142,7 @@ export class DomainsController {
 		}
 	}
 
-	// TODO: is this necessary anymore?
+	// TODO: still necessary for domain server
 	@Get(":id")
 	@ApiOperation({ deprecated: true })
 	async getDomain(@Param("id") id: string) {
