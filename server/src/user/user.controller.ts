@@ -97,16 +97,24 @@ export class UserController {
 	@Get(":username/nametag")
 	async getUserNametag(
 		@Param("username") username: string,
+		@Query("displayName") displayName: string,
 		@Query("admin") admin: string,
 		@Query("friend") friend: string,
 		@Res() res: Response,
 	) {
-		const user = await this.userService.findByUsername(username);
+		let user = await this.userService.findByUsername(username);
+
+		if (user == null) {
+			user = {
+				username: String().padStart(4, String.fromCharCode(0x2800)),
+			} as any;
+			admin = null;
+			friend = null;
+		}
 
 		const buffer = await this.puppeteerService.renderNametag(
-			user != null
-				? user.username
-				: String().padStart(4, String.fromCharCode(0x2800)),
+			user,
+			displayName,
 			admin != null,
 			friend != null,
 		);

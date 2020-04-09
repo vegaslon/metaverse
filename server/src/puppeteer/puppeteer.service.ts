@@ -8,6 +8,7 @@ import { streamToRx } from "rxjs-stream";
 import { take } from "rxjs/operators";
 import { UserService } from "../user/user.service";
 import fetch from "node-fetch";
+import { User } from "../user/user.schema";
 
 @Injectable()
 export class PuppeteerService implements OnModuleInit {
@@ -61,10 +62,17 @@ export class PuppeteerService implements OnModuleInit {
 		return buffer;
 	}
 
-	async renderNametag(username: string, admin = false, friend = false) {
+	async renderNametag(
+		user: User,
+		displayName: string = null,
+		admin = false,
+		friend = false,
+	) {
+		const username = user.username;
+		const staff = user.admin;
+
 		const { stream } = await this.userService.getUserImage(username);
 		const buffer = await streamToRx(stream).toPromise();
-
 		const userImage = "data:image/png;base64," + buffer.toString("base64");
 
 		const html = Handlebars.compile(
@@ -74,9 +82,11 @@ export class PuppeteerService implements OnModuleInit {
 			),
 		)({
 			username,
+			displayName,
 			userImage,
 			admin,
 			friend,
+			staff,
 		});
 
 		return this.renderHTML(html, 1024, 128);

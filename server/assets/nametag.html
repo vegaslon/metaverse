@@ -11,7 +11,7 @@
 		padding: 0;
 	}
 
-	#nametag {
+	.nametag {
 		display: inline-block;
 		height: 64px;
 		font-family: "Roboto Condensed", "Noto Sans", "Twemoji Mozilla",
@@ -22,25 +22,25 @@
 		transform: translate(-50%) translateX(50vw) scale(2);
 	}
 
-	#nametag .main {
+	.nametag .main {
 		height: 48px;
 		border-radius: 16px;
 		overflow: hidden;
 		max-width: 512px;
 	}
 
-	#nametag table {
+	.nametag table {
 		table-layout: fixed;
 		border-collapse: collapse;
 	}
 
-	#nametag .avatar {
+	.nametag .avatar {
 		display: inline-block;
 		width: 48px;
 		height: 48px;
 	}
 
-	#nametag .username {
+	.nametag .username {
 		font-size: 2em;
 		padding: 0px 15px;
 		padding-right: 20px;
@@ -60,8 +60,8 @@
 		padding-top: 3px;*/
 	}
 
-	#nametag .username:before,
-	#nametag .username:after {
+	.nametag .username:before,
+	.nametag .username:after {
 		content: "";
 		position: absolute;
 		top: 0;
@@ -73,12 +73,12 @@
 		height: 100%;
 	}
 
-	#nametag .username:before {
+	.nametag .username:before {
 		z-index: -2;
 		background: #1d1f21;
 	}
 
-	#nametag .username:after {
+	.nametag .username:after {
 		z-index: -1;
 		background-image: linear-gradient(
 				rgba(29, 31, 33, 0.3),
@@ -90,14 +90,14 @@
 		filter: blur(5px);
 	}
 
-	#nametag .info {
+	.nametag .info {
 		position: absolute;
 		display: flex;
 		top: 48px;
 		left: 48px;
 	}
 
-	#nametag .info > div {
+	.nametag .info > div {
 		font-size: 12px;
 		padding: 0 4px;
 		height: 16px;
@@ -112,27 +112,54 @@
 		margin-right: 4px;
 	}
 
-	#nametag .info svg {
+	.nametag .info svg {
 		display: inline-block;
 		fill: #fff;
 		width: 16px;
 		height: 16px;
 		margin-top: -1px;
 	}
+
+	/* .actual-username {
+		background: transparent !important;
+		text-shadow: -1px -1px 0 #1d1f21, 0px -1px 0 #1d1f21, 1px -1px 0 #1d1f21,
+			1px 0 0 #1d1f21, 1px 1px 0 #1d1f21, 0px 1px 0 #1d1f21,
+			-1px 1px 0 #1d1f21, -1px 0px 0 #1d1f21;
+	} */
 </style>
-<div id="nametag">
+<div class="nametag">
 	<div class="main">
 		<table>
 			<tr>
 				<td>
 					<img class="avatar" src="{{ userImage }}" />
 				</td>
+				{{#if displayName}}
+				<td class="username">
+					{{ displayName }}
+				</td>
+				{{/if}} {{#unless displayName}}
 				<td class="username">{{ username }}</td>
+				{{/unless}}
 			</tr>
 		</table>
 	</div>
 	<div class="info">
-		{{#if connected}}
+		{{#if staff}}
+		<div style="background: #e91e63;">
+			<svg class="icon" viewBox="0 0 128 128">
+				<circle fill="#e91e63" r="64" cx="64" cy="64" />
+				<path
+					fill="#fff"
+					d="M59.981 25.063c3.044-4.522 8.143-7.759 14.23-7.951.27-.006.54-.008.81-.007 10.838.145 20.624 10.816 16.878 22.734v71.045H64.836c-12.085 0-22.537.673-29.029-8.074-3.34-4.501-4.677-10.322-4.806-15.823V68.403h-7.715V38.052h7.715V25.063h28.98z"
+				/>
+				<path
+					fill="#000"
+					d="M55.112 48.051h9.034v10.352h-9.034V84.77c0 1.953.375 3.353 1.123 4.199.749.847 2.181 1.27 4.297 1.27 1.563 0 2.946-.114 4.151-.342v10.693a29.033 29.033 0 01-8.545 1.27c-9.896 0-14.942-4.997-15.137-14.99V58.403h-7.715V48.051h7.715V35.063h14.111v12.988zM81.9 100.883H67.739V48.051H81.9v52.832zM66.909 34.38c0-2.116.708-3.858 2.124-5.225 1.416-1.367 3.345-2.051 5.786-2.051 2.409 0 4.33.684 5.762 2.051 1.432 1.367 2.149 3.109 2.149 5.225 0 2.148-.725 3.906-2.173 5.273-1.449 1.367-3.361 2.051-5.738 2.051-2.376 0-4.288-.684-5.737-2.051-1.448-1.367-2.173-3.125-2.173-5.273z"
+				/>
+			</svg>
+		</div>
+		{{/if}} {{#if connected}}
 		<div style="background: #9c27b0;">
 			<svg class="icon" viewBox="0 0 640 512">
 				<path
@@ -150,6 +177,13 @@
 		</div>
 		{{/if}} {{#if admin}}
 		<div style="background: #f44336;">admin</div>
+		{{/if}} {{#if displayName}}
+		<div
+			class="actual-username"
+			style="background: #1d1f21; font-weight: 700;"
+		>
+			{{ username }}
+		</div>
 		{{/if}}
 	</div>
 </div>
