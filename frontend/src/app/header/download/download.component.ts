@@ -1,24 +1,37 @@
 import { Component, OnInit } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
+import { map } from "rxjs/operators";
+
+type Platform = "windows" | "macos";
+interface Release {
+	version: string;
+	releaseDate: Date;
+	platforms: Record<
+		Platform,
+		{
+			url: string;
+			filename: string;
+			size: string;
+			sha512: string;
+		}
+	>;
+}
 
 @Component({
 	selector: "app-download",
 	templateUrl: "./download.component.html",
 	styleUrls: ["./download.component.scss"],
 })
-export class DownloadComponent implements OnInit {
+export class DownloadComponent {
 	readonly releasesPath =
 		"https://nyc3.digitaloceanspaces.com/tivolicloud/releases";
 
-	//os = null;
+	// os: Platform = "windows";
 
-	found = false;
+	loaded = false;
 	correctPassword = false;
 
-	version: string;
-	fileName: string;
-	fileSize: string;
-	releaseDate: Date;
+	release: Release = null;
 
 	constructor(private http: HttpClient) {}
 
@@ -27,49 +40,35 @@ export class DownloadComponent implements OnInit {
 	}
 
 	getLatest() {
-		//if (navigator.platform.indexOf("Win") != -1) this.os = "win";
-		//if (navigator.platform.indexOf("Mac") != -1) this.os = "mac";
+		// if (navigator.platform.indexOf("Win") !== -1) this.os = "windows";
+		// if (navigator.platform.indexOf("Mac") !== -1) this.os = "macos";
 
 		this.http
-			.get<{
-				version: string;
-				files: { url: string; sha512: string }[];
-				path: string;
-				sha512: string;
-				packages: {
-					x64: {
-						size: number;
-						sha512: string;
-						blockMapSize: number;
-						path: string;
-						file: string;
-					};
-				};
-				releaseDate: string;
-			}>("/api/releases/latest")
+			.get<Release>("/api/releases/latest")
+			.pipe(
+				map(release => {
+					release.releaseDate = new Date(release.releaseDate);
+					for (const platform of Object.keys(release.platforms)) {
+						release.platforms[platform].size =
+							this.bytesToMB(release.platforms[platform].size) +
+							" MB";
+					}
+					return release;
+				}),
+			)
 			.subscribe(release => {
-				this.version = release.version;
-
-				this.fileName = release.path;
-
-				this.fileSize =
-					this.bytesToMB(release.packages.x64.size) + " MB";
-
-				this.releaseDate = new Date(release.releaseDate);
-
-				this.found = true;
+				this.release = release;
+				this.loaded = true;
 			});
 	}
 
 	onPasswordKeyUp(input: HTMLInputElement) {
 		if (
-			input.value.replace(/ /g, "").toLowerCase() ==
+			input.value.replace(/ /g, "").toLowerCase() ===
 			atob("aGFwcHlzcXVpcnJlbHM")
 		) {
 			this.getLatest();
 			this.correctPassword = true;
 		}
 	}
-
-	ngOnInit() {}
 }
