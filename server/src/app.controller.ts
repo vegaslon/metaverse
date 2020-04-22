@@ -57,11 +57,11 @@ export class AppController {
 		};
 	}
 
-	@Get("render")
-	async renderModel(@Query("url") modelUrl: string, @Res() res: Response) {
-		const buffer = await this.puppeteerService.renderModel(modelUrl);
+	// @Get("render")
+	// async renderModel(@Query("url") modelUrl: string, @Res() res: Response) {
+	// 	const buffer = await this.puppeteerService.renderModel(modelUrl);
 
-		res.set("Content-Type", "image/jpg");
-		res.send(buffer);
-	}
+	// 	res.set("Content-Type", "image/jpg");
+	// 	res.send(buffer);
+	// }
 }

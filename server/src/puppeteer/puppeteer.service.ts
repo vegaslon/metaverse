@@ -92,36 +92,36 @@ export class PuppeteerService implements OnModuleInit {
 		return this.renderHTML(html, 1024, 128);
 	}
 
-	async renderModel(modelUrl: string) {
-		const browser = await this.browser$.pipe(take(1)).toPromise();
+	// async renderModel(modelUrl: string) {
+	// 	const browser = await this.browser$.pipe(take(1)).toPromise();
 
-		const url =
-			"file://" + path.resolve(__dirname, "../../assets/3d-render.html");
+	// 	const url =
+	// 		"file://" + path.resolve(__dirname, "../../assets/3d-render.html");
 
-		const page = await browser.newPage();
-		page.setViewport({
-			width: 858,
-			height: 480,
-			deviceScaleFactor: 1,
-		});
+	// 	const page = await browser.newPage();
+	// 	page.setViewport({
+	// 		width: 858,
+	// 		height: 480,
+	// 		deviceScaleFactor: 1,
+	// 	});
 
-		await page.goto(url + "?url=" + modelUrl);
+	// 	await page.goto(url + "?url=" + modelUrl);
 
-		return new Promise(async (resolve, reject) => {
-			page.on("error", error => {
-				reject(error);
-			});
+	// 	return new Promise(async (resolve, reject) => {
+	// 		page.on("error", error => {
+	// 			reject(error);
+	// 		});
 
-			page.on("console", async log => {
-				if (log.text() !== "TIVOLI FINISHED") return;
+	// 		page.on("console", async log => {
+	// 			if (log.text() !== "TIVOLI FINISHED") return;
 
-				const buffer = await page.screenshot({
-					type: "jpeg",
-				});
-				page.close();
+	// 			const buffer = await page.screenshot({
+	// 				type: "jpeg",
+	// 			});
+	// 			page.close();
 
-				resolve(buffer);
-			});
-		});
-	}
+	// 			resolve(buffer);
+	// 		});
+	// 	});
+	// }
 }
