@@ -3,7 +3,6 @@ import {
 	Controller,
 	Get,
 	Param,
-	Patch,
 	Post,
 	Put,
 	Query,
@@ -20,16 +19,16 @@ import { MetaverseAuthGuard } from "../auth/auth.guard";
 import { AuthService } from "../auth/auth.service";
 import { CurrentUser } from "../auth/user.decorator";
 import { MulterFile } from "../common/multer-file.model";
+import { GetDomainsDto } from "../domain/domain.dto";
 import { URL } from "../environment";
 import { PuppeteerService } from "../puppeteer/puppeteer.service";
 import {
-	GetUserDomainsLikesDto,
-	UserUpdatePasswordDto,
+	UserUpdateEmailDto,
 	UserUpdateImageDto,
+	UserUpdatePasswordDto,
 } from "./user.dto";
 import { User } from "./user.schema";
 import { UserService } from "./user.service";
-import { UserUpdateEmailDto } from "./user.dto";
 
 @Controller("api/user")
 @ApiTags("user")
@@ -146,14 +145,24 @@ export class UserController {
 	// 	return this.userService.changeUserSettings(user, userSettingsDto);
 	// }
 
-	@Get("domain-likes")
+	@Get("domains/liked")
 	@ApiBearerAuth()
 	@UseGuards(MetaverseAuthGuard())
-	getDomainLikes(
+	getLikedDomains(
 		@CurrentUser() user: User,
-		@Query() getUserDomainsLikesDto: GetUserDomainsLikesDto,
+		@Query() getDomainsDto: GetDomainsDto,
 	) {
-		return this.userService.getDomainLikes(user, getUserDomainsLikesDto);
+		return this.userService.getLikedDomains(user, getDomainsDto);
+	}
+
+	@Get("domains/private")
+	@ApiBearerAuth()
+	@UseGuards(MetaverseAuthGuard())
+	getPrivateDomains(
+		@CurrentUser() user: User,
+		@Query() getDomainsDto: GetDomainsDto,
+	) {
+		return this.userService.getPrivateDomains(user, getDomainsDto);
 	}
 
 	@Get("friends")

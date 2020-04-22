@@ -9,17 +9,17 @@ import {
 import { InjectConnection, InjectModel } from "@nestjs/mongoose";
 import { GridFSBucket } from "mongodb";
 import { Connection, Model } from "mongoose";
+import sharp from "sharp";
 import { derPublicKeyHeader } from "../common/der-public-key-header";
 import { MulterFile } from "../common/multer-file.model";
 import { patchDoc, snakeToCamelCaseObject } from "../common/utils";
+import { DomainSession } from "../session/session.schema";
 import { SessionService } from "../session/session.service";
 import { User } from "../user/user.schema";
 import { UserService } from "../user/user.service";
 import { CreateDomainDto, GetDomainsDto, UpdateDomainDto } from "./domain.dto";
 import { Domain } from "./domain.schema";
-import sharp from "sharp";
 import escapeString = require("escape-string-regexp");
-import { DomainSession } from "../session/session.schema";
 
 // export interface DomainSession {
 // 	users: { [id: string]: UserSession };
@@ -83,15 +83,31 @@ export class DomainService implements OnModuleInit {
 		updateDomainDto: UpdateDomainDto,
 		allowCrucialOverwrite = false,
 	) {
-		if (updateDomainDto.domain == null) {
-			return domain;
-		}
+		if (updateDomainDto.domain == null) return domain;
 
 		if (!allowCrucialOverwrite) {
 			// dont want the domain to update crucial info
 			delete updateDomainDto.domain.label;
 			delete updateDomainDto.domain.description;
-			//delete updateDomainDto.domain.path;
+			// delete updateDomainDto.domain.path;
+		}
+
+		if (
+			updateDomainDto.domain.whitelist &&
+			updateDomainDto.domain.whitelist.length > 0
+		) {
+			const whitelist: User[] = [];
+
+			for (const username of updateDomainDto.domain.whitelist) {
+				const user = await this.userService.findByUsername(
+					username as any,
+				);
+				if (user == null) continue;
+				whitelist.push(user);
+			}
+
+			domain.whitelist = whitelist;
+			delete updateDomainDto.domain.whitelist; // dont use in patchDoc
 		}
 
 		const dto = snakeToCamelCaseObject(updateDomainDto.domain);
@@ -103,7 +119,7 @@ export class DomainService implements OnModuleInit {
 			const heartbeatDto = updateDomainDto.domain.heartbeat;
 
 			if (heartbeatDto.num_users != null)
-				if (heartbeatDto.num_users != session.onlineUsers) {
+				if (heartbeatDto.num_users !== session.onlineUsers) {
 					// move this to sessions?
 					domain.lastUpdated = new Date();
 
@@ -112,7 +128,7 @@ export class DomainService implements OnModuleInit {
 				}
 		}
 
-		return await domain.save();
+		return domain.save();
 	}
 
 	async setPublicKey(domain: Domain, buffer: Buffer) {
@@ -123,7 +139,7 @@ export class DomainService implements OnModuleInit {
 				.join(" ") + " ";
 
 		domain.publicKey = publicKey;
-		return await domain.save();
+		return domain.save();
 	}
 
 	async getUserDomains(user: User) {
@@ -193,11 +209,11 @@ export class DomainService implements OnModuleInit {
 
 				// match and paginate
 				.match(matchArgs)
-				//.match({ $text: { $search: search } })
+				// .match({ $text: { $search: search } })
 				.sort({
 					onlineUsers: -1,
 					"domain.lastUpdated": -1,
-					//score: { $meta: "textScore" },
+					// score: { $meta: "textScore" },
 				})
 				.skip(page * amount)
 				.limit(amount)
@@ -213,11 +229,38 @@ export class DomainService implements OnModuleInit {
 		);
 	}
 
+	findPrivateDomains(user: User, getDomainsDto: GetDomainsDto) {
+		let { page, amount, search } = getDomainsDto;
+
+		if (page <= 0) page = 1;
+		page -= 1;
+
+		if (amount > 50) amount = 50;
+
+		return (
+			this.domainModel
+				.aggregate<Domain>()
+				.match({
+					whitelist: { $in: [user._id] },
+				})
+				.skip(page * amount)
+				.limit(amount)
+				// populate author
+				.lookup({
+					from: "users",
+					localField: "author",
+					foreignField: "_id",
+					as: "author",
+				})
+				.unwind("$author")
+		);
+	}
+
 	async deleteDomain(domainId: string) {
 		const domain = await this.findById(domainId);
 		if (domain == null) throw new NotFoundException();
 
-		return await domain.remove();
+		return domain.remove();
 	}
 
 	async changeDomainImage(domain: Domain, file: MulterFile) {

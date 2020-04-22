@@ -61,7 +61,7 @@ export class DomainsController {
 		@Param("id") id: string,
 		@Body() updateDomainDto: UpdateDomainDto,
 	) {
-		if (domain._id != id) throw new ForbiddenException();
+		if (domain._id !== id) throw new ForbiddenException();
 
 		const updatedDomain = await this.domainService.updateDomain(
 			domain,
@@ -86,7 +86,7 @@ export class DomainsController {
 		@Param("id") id: string,
 		@Body() updateDomainDto: UpdateDomainDto,
 	) {
-		if (domain._id != id) throw new ForbiddenException();
+		if (domain._id !== id) throw new ForbiddenException();
 
 		const updatedDomain = await this.domainService.updateDomain(
 			domain,
@@ -112,7 +112,7 @@ export class DomainsController {
 		@Param("id") id: string,
 		@UploadedFile() file: MulterFile,
 	) {
-		if (domain._id != id) throw new ForbiddenException();
+		if (domain._id !== id) throw new ForbiddenException();
 
 		await this.domainService.setPublicKey(domain, file.buffer);
 

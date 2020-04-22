@@ -6,9 +6,9 @@ import {
 	IsEnum,
 	IsNumber,
 	IsOptional,
+	IsString,
 	MaxLength,
 	ValidateNested,
-	IsString,
 } from "class-validator";
 import { DomainAutomaticNetworking, DomainRestriction } from "./domain.schema";
 
@@ -80,6 +80,9 @@ class UpdateDomain {
 	@IsEnum(DomainRestriction)
 	@IsOptional()
 	restriction?: DomainRestriction;
+
+	@IsOptional()
+	whitelist?: string[];
 
 	// one or the other... not using this
 	@IsBoolean()

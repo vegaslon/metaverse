@@ -42,7 +42,7 @@ export function patchObject(object: Object, patches: Object, keys?: string[]) {
 	return object;
 }
 
-export function patchDoc(doc: Object, patches: Object) {
+export function patchDoc(doc: object, patches: object) {
 	patchObject(doc, patches, Object.keys((doc as any)._doc));
 	return doc;
 }

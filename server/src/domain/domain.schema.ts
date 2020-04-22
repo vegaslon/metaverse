@@ -14,46 +14,55 @@ export enum DomainRestriction {
 	open = "open", // whitelist, logged in, anonymous
 }
 
-export const DomainSchema = new Schema({
-	_id: { type: String, default: () => uuid() },
-	lastUpdated: { type: Date, default: new Date() },
+export const DomainSchema = new Schema(
+	{
+		_id: { type: String, default: () => uuid() },
+		lastUpdated: { type: Date, default: new Date() },
 
-	author: { type: Schema.Types.ObjectId, ref: "users", required: true },
-	secret: { type: String, default: "" }, // require for jwt auth
+		author: { type: Schema.Types.ObjectId, ref: "users", required: true },
+		secret: { type: String, default: "" }, // require for jwt auth
 
-	iceServerAddress: { type: String, default: "" },
-	//cloudDomain: { type: Boolean, default: false },
-	automaticNetworking: {
-		type: String,
-		enum: Object.values(DomainAutomaticNetworking),
-		default: DomainAutomaticNetworking.disabled,
+		iceServerAddress: { type: String, default: "" },
+		//cloudDomain: { type: Boolean, default: false },
+		automaticNetworking: {
+			type: String,
+			enum: Object.values(DomainAutomaticNetworking),
+			default: DomainAutomaticNetworking.disabled,
+		},
+
+		networkAddress: { type: String, default: "" },
+		networkPort: { type: Number, default: 40102 },
+
+		description: { type: String, default: "" },
+		capacity: { type: Number, default: 0 },
+		restriction: {
+			type: String,
+			enum: Object.values(DomainRestriction),
+			default: DomainRestriction.acl,
+		},
+		whitelist: [{ type: Schema.Types.ObjectId, ref: "users" }],
+		maturity: { type: String, default: "unrated" },
+		hosts: { type: [String], default: [] },
+		tags: { type: [String], default: [] },
+
+		version: { type: String, default: "" },
+		protocol: { type: String, default: "" },
+
+		publicKey: { type: String, default: "" },
+
+		// not from hifi
+		label: { type: String, default: "" },
+		path: { type: String, default: "" }, // if empty, domain server will handle path
+		ownerPlaces: { type: [String], default: [] }, // not really sure  [{id, name, path}]
+		userLikes: [{ type: Schema.Types.ObjectId, ref: "users" }],
 	},
-
-	networkAddress: { type: String, default: "" },
-	networkPort: { type: Number, default: 40102 },
-
-	description: { type: String, default: "" },
-	capacity: { type: Number, default: 0 },
-	restriction: {
-		type: String,
-		enum: Object.values(DomainRestriction),
-		default: DomainRestriction.acl,
+	{
+		skipVersioning: {
+			whitelist: true,
+			userLikes: true,
+		},
 	},
-	maturity: { type: String, default: "unrated" },
-	hosts: { type: [String], default: [] },
-	tags: { type: [String], default: [] },
-
-	version: { type: String, default: "" },
-	protocol: { type: String, default: "" },
-
-	publicKey: { type: String, default: "" },
-
-	// not from hifi
-	label: { type: String, default: "" },
-	path: { type: String, default: "" }, // if empty, domain server will handle path
-	ownerPlaces: { type: [String], default: [] }, // not really sure  [{id, name, path}]
-	userLikes: [{ type: Schema.Types.ObjectId, ref: "users" }],
-});
+);
 
 export interface Domain extends Document {
 	lastUpdated: Date;
@@ -71,6 +80,7 @@ export interface Domain extends Document {
 	description: string;
 	capacity: number;
 	restriction: DomainRestriction;
+	whitelist: User[];
 	maturity: string;
 	hosts: string;
 	tags: string[];

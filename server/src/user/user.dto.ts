@@ -102,18 +102,18 @@ export class UserSettingsDto {
 	avatarBookmarks: string;
 }
 
-export class GetUserDomainsLikesDto {
-	@IsNumber()
-	@IsOptional()
-	@Transform(n => Number(n))
-	page?: number = 1;
+// export class GetUserDomainsDto {
+// 	@IsNumber()
+// 	@IsOptional()
+// 	@Transform(n => Number(n))
+// 	page?: number = 1;
 
-	@IsNumber()
-	@IsOptional()
-	@Transform(n => Number(n))
-	amount?: number = 50;
+// 	@IsNumber()
+// 	@IsOptional()
+// 	@Transform(n => Number(n))
+// 	amount?: number = 50;
 
-	@IsString()
-	@IsOptional()
-	search?: string = "";
-}
+// 	@IsString()
+// 	@IsOptional()
+// 	search?: string = "";
+// }

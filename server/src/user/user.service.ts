@@ -31,6 +31,7 @@ import {
 	renderDomain,
 	renderFriend,
 } from "../common/utils";
+import { GetDomainsDto } from "../domain/domain.dto";
 import { Domain } from "../domain/domain.schema";
 import { DomainService } from "../domain/domain.service";
 import { EmailService } from "../email/email.service";
@@ -38,7 +39,6 @@ import { DEV } from "../environment";
 import { SessionService } from "../session/session.service";
 import { UserSettings } from "./user-settings.schema";
 import {
-	GetUserDomainsLikesDto,
 	UserUpdateEmailDto,
 	UserUpdateLocationDto,
 	UserUpdatePasswordDto,
@@ -338,21 +338,36 @@ export class UserService implements OnModuleInit {
 	// 	}
 	// }
 
-	async getDomainLikes(
-		user: User,
-		getUserDomainsLikesDto: GetUserDomainsLikesDto,
-	) {
-		const { page, amount, search } = getUserDomainsLikesDto;
+	async getLikedDomains(user: User, getDomainsDto: GetDomainsDto) {
+		const { page, amount, search } = getDomainsDto;
 
 		await user
 			.populate({ path: "domainLikes", populate: { path: "author" } })
 			.execPopulate();
 
+		// TODO: user aggregate
 		const domainLikes = pagination<Domain>(page, amount, user.domainLikes)
 			.data;
 
 		return Promise.all(
 			domainLikes.map(async domain => {
+				const session = await this.sessionService.findDomainById(
+					domain._id,
+				);
+
+				return renderDomain(domain, session, user);
+			}),
+		);
+	}
+
+	async getPrivateDomains(user: User, getDomainsDto: GetDomainsDto) {
+		const domains = await this.domainService.findPrivateDomains(
+			user,
+			getDomainsDto,
+		);
+
+		return Promise.all(
+			domains.map(async domain => {
 				const session = await this.sessionService.findDomainById(
 					domain._id,
 				);
