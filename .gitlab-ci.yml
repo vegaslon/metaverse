@@ -45,6 +45,9 @@ server tests:
         paths:
             - server/node_modules/
 
+    variables:
+        PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
+
     script:
         - cd server
         - yarn install
