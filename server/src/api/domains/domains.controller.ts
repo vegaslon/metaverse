@@ -15,11 +15,44 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { CurrentDomain } from "../../auth/domain.decorator";
 import { DomainAuthGuard } from "../../auth/domain.guard";
 import { MulterFile } from "../../common/multer-file.model";
-import { renderDomainForHifi } from "../../common/utils";
 import { UpdateDomainDto } from "../../domain/domain.dto";
 import { Domain } from "../../domain/domain.schema";
 import { DomainService } from "../../domain/domain.service";
+import { DomainSession } from "../../session/session.schema";
 import { SessionService } from "../../session/session.service";
+
+function renderDomainForHifi(d: Domain, session: DomainSession) {
+	const online = session != null;
+
+	return {
+		id: d._id,
+
+		ice_server_address: d.iceServerAddress,
+		cloud_domain: false,
+
+		network_address: d.networkAddress,
+		network_port: d.networkPort,
+		online,
+
+		default_place_name: null,
+		owner_places: d.ownerPlaces,
+		label: d.label, // tivoli
+		author: d.author.username, // tivoli
+
+		description: d.description,
+		capacity: d.capacity,
+		restriction: d.restriction,
+		maturity: d.maturity,
+		hosts: d.hosts,
+		tags: d.tags,
+
+		version: d.version,
+		protocol: d.protocol,
+
+		online_users: online ? session.onlineUsers : 0,
+		online_anonymous_users: null,
+	};
+}
 
 @ApiTags("from hifi")
 @Controller("api/v1/domains")
@@ -42,6 +75,8 @@ export class DomainsController {
 		// for (let doc of docs) {
 		// 	domains.push(renderDomainForHifi(doc));
 		// }
+
+		await domain.populate("author").execPopulate();
 
 		const session = await this.sessionService.findDomainById(domain.id);
 
@@ -67,6 +102,7 @@ export class DomainsController {
 			domain,
 			updateDomainDto,
 		);
+		await updatedDomain.populate("author").execPopulate();
 
 		const session = await this.sessionService.findDomainById(
 			updatedDomain.id,
@@ -92,6 +128,7 @@ export class DomainsController {
 			domain,
 			updateDomainDto,
 		);
+		await updatedDomain.populate("author").execPopulate();
 
 		const session = await this.sessionService.findDomainById(
 			updatedDomain.id,
@@ -150,6 +187,7 @@ export class DomainsController {
 		if (domain == null) {
 			throw new NotFoundException();
 		}
+		await domain.populate("author").execPopulate();
 
 		const session = await this.sessionService.findDomainById(domain.id);
 

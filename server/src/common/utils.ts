@@ -102,38 +102,6 @@ export function generateRandomString(
 	return out;
 }
 
-export function renderDomainForHifi(d: Domain, session: DomainSession) {
-	const online = session != null;
-
-	return {
-		id: d._id,
-
-		ice_server_address: d.iceServerAddress,
-		cloud_domain: false,
-
-		network_address: d.networkAddress,
-		network_port: d.networkPort,
-		online,
-
-		default_place_name: null,
-		owner_places: d.ownerPlaces,
-		label: d.label, // probobaly shouldnt
-
-		description: d.description,
-		capacity: d.capacity,
-		restriction: d.restriction,
-		maturity: d.maturity,
-		hosts: d.hosts,
-		tags: d.tags,
-
-		version: d.version,
-		protocol: d.protocol,
-
-		online_users: online ? session.onlineUsers : 0,
-		online_anonymous_users: null,
-	};
-}
-
 export function renderDomain(
 	domain: Domain,
 	session: DomainSession,
@@ -155,7 +123,8 @@ export function renderDomain(
 	return {
 		id: domain._id,
 		label: domain.label,
-		username: domain.author.username,
+		username: domain.author.username, // TODO deprecated, use author
+		author: domain.author.username,
 		description: domain.description,
 		restriction: domain.restriction,
 
