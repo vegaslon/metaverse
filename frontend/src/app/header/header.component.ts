@@ -20,8 +20,9 @@ import { Router, NavigationEnd } from "@angular/router";
 export class HeaderComponent implements OnInit, OnDestroy {
 	user: User = {} as User;
 
-	private userSub: Subscription;
-	private routerEventsSub: Subscription;
+	ontop = false;
+
+	private subs: Subscription[] = [];
 
 	@ViewChild("mobileMenu") mobileMenuRef: ElementRef<HTMLDivElement>;
 
@@ -46,22 +47,23 @@ export class HeaderComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit() {
-		this.userSub = this.authService.user$.subscribe(user => {
-			this.user = user;
-		});
-
-		this.routerEventsSub = this.router.events.subscribe(val => {
-			if (val instanceof NavigationEnd) this.onToggleMobileMenu(true);
-		});
+		this.subs.push(
+			this.authService.user$.subscribe(user => {
+				this.user = user;
+			}),
+			this.router.events.subscribe(val => {
+				if (val instanceof NavigationEnd) {
+					this.onToggleMobileMenu(true);
+					this.ontop = val.url === "/" || val.url === "/download";
+				}
+			}),
+		);
 	}
 
 	ngOnDestroy() {
-		this.userSub.unsubscribe();
-		this.routerEventsSub.unsubscribe();
-	}
-
-	openDownload() {
-		this.dialog.open(DownloadComponent);
+		for (const sub of this.subs) {
+			sub.unsubscribe();
+		}
 	}
 
 	onSignIn() {

@@ -44,6 +44,10 @@ export class SentryErrorHandler implements ErrorHandler {
 const routes: Routes = [
 	{ path: "", component: HomeComponent },
 	{
+		path: "download",
+		component: HomeComponent,
+	},
+	{
 		path: "about-us",
 		loadChildren: () =>
 			import("./about-us/about-us.module").then(m => m.AboutUsModule),

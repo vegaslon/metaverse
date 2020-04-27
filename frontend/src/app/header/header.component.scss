@@ -3,6 +3,20 @@ $mobileMaxWidth: 1160px;
 .toolbar {
 	min-height: 64px;
 
+	&.ontop {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		z-index: 99999999;
+		background: linear-gradient(
+			180deg,
+			rgba(#000, 0.5),
+			rgba(#000, 0.5),
+			transparent
+		);
+	}
+
 	.mobile-only {
 		display: none;
 		@media (max-width: $mobileMaxWidth) {

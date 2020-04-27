@@ -1,6 +1,16 @@
-<mat-toolbar class="toolbar" color="primary">
+<mat-toolbar class="toolbar" color="primary" [class.ontop]="ontop">
 	<mat-toolbar-row>
 		<a mat-button routerLink="/" style="padding: 0;">
+			<!-- <img
+				[src]="
+					ontop
+						? '/assets/logo-light.svg'
+						: '/assets/logo-light-nopink.png'
+				"
+				alt="Tivoli Cloud VR logo"
+				[style.height]="ontop ? '64px' : '32px'"
+				[style.marginTop]="ontop ? '16px' : 'initial'"
+			/> -->
 			<img
 				src="/assets/logo-light-nopink.png"
 				alt="Tivoli Cloud VR logo"
@@ -9,7 +19,7 @@
 		</a>
 
 		<div class="mobile-menu collapsed" #mobileMenu>
-			<button class="menu-item" mat-button (click)="openDownload()">
+			<button class="menu-item" mat-button routerLink="/download">
 				<mat-icon>get_app</mat-icon> Download
 			</button>
 
@@ -22,7 +32,7 @@
 				<img
 					src="/assets/icons/ghost-white.svg"
 					alt="Ghost"
-					style="height: 20px"
+					style="height: 20px;"
 				/>
 				Blog
 			</a>
@@ -49,7 +59,7 @@
 				<img
 					src="/assets/icons/discord.svg"
 					alt="Discord"
-					style="height: 24px"
+					style="height: 24px;"
 				/>
 				Discord
 			</a>
@@ -63,13 +73,13 @@
 					class="material-icons"
 					src="/assets/icons/gitlab.svg"
 					alt="GitLab"
-					style="height: 22px"
+					style="height: 22px;"
 				/>
 				GitLab
 			</button>
 		</div>
 
-		<span style="flex-grow: 1"></span>
+		<span style="flex-grow: 1;"></span>
 
 		<a *ngIf="!user" mat-flat-button (click)="onSignIn()">
 			<mat-icon>account_circle</mat-icon> Sign in
@@ -78,7 +88,11 @@
 		<div style="display: flex;">
 			<button *ngIf="user" mat-button [matMenuTriggerFor]="appsMenu">
 				<div
-					style="display: inline-block; text-align: right; margin-right: 8px;"
+					style="
+						display: inline-block;
+						text-align: right;
+						margin-right: 8px;
+					"
 				>
 					Signed in as <b>{{ user.profile.username }}</b>
 					<br />
