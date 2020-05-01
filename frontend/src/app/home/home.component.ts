@@ -22,6 +22,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 	videoSub: Subscription;
 
+	year = new Date().getFullYear();
+
 	constructor(
 		public dialog: MatDialog,
 		private readonly route: ActivatedRoute,

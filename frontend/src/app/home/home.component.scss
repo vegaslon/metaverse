@@ -1,7 +1,7 @@
 $bgDim: 0.2;
 
 .header {
-	width: 100vw;
+	width: 100%;
 	text-align: center;
 	color: #fff;
 	position: relative;
@@ -78,5 +78,49 @@ h2 {
 		font-size: 1.2em;
 		vertical-align: top;
 		margin-right: 12px;
+	}
+}
+
+.info {
+	&:nth-child(odd) {
+		background: mix(#000, #fff, 4%);
+	}
+
+	img {
+		width: 100%;
+		border-radius: 8px;
+	}
+
+	h1,
+	h2 {
+		font-weight: 400;
+	}
+
+	.row {
+		padding: 64px 0;
+	}
+
+	.icon-title {
+		display: flex;
+		align-items: center;
+
+		.material-icons {
+			margin-right: 8px;
+			font-size: 1em;
+			width: 1em;
+			height: 1em;
+		}
+	}
+}
+
+.footer {
+	background-color: #1d1f21;
+	color: #fff;
+	text-align: center;
+	padding: 12px 0;
+	vertical-align: middle;
+
+	p {
+		margin: 0;
 	}
 }
