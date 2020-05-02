@@ -83,15 +83,33 @@
 				</p> -->
 				<p><b>macOS 11</b> or higher</p>
 			</mat-card>
-			<mat-card class="mat-elevation-z2 disabled">
+			<mat-card class="mat-elevation-z2">
 				<img src="/assets/logos/linux.svg" />
 				<h2>Linux</h2>
-				<button mat-flat-button color="primary">
-					Coming soon
+				<button
+					mat-flat-button
+					color="primary"
+					[matMenuTriggerFor]="linuxMenu"
+				>
+					Download for Linux
 				</button>
-				<!-- <p>Tivoli Cloud VR.AppImage (800~ MB)</p> -->
-				<p><b>2018 (Glibc 2.24)</b> or higher</p>
+				<p>
+					<b>2018<!--(Glibc 2.24)--></b> or higher
+				</p>
 			</mat-card>
+			<mat-menu #linuxMenu="matMenu">
+				<button mat-menu-item>
+					.AppImage
+				</button>
+				<button mat-menu-item>
+					.deb
+					<span style="opacity: 0.5;">&ndash; dpkg -i</span>
+				</button>
+				<button mat-menu-item>
+					.pacman
+					<span style="opacity: 0.5;">&ndash; pacman -U</span>
+				</button>
+			</mat-menu>
 		</div>
 		<div class="current-info">
 			<h3>
