@@ -19,6 +19,7 @@ import { UserModule } from "./user/user.module";
 import { VideoStreamModule } from "./video-stream/video-stream.module";
 import { FilesModule } from "./files/files.module";
 import { ZoomModule } from "./zoom/zoom.module";
+import { LyndenController } from "./lynden/lynden.controller";
 
 @Module({
 	imports: [
@@ -69,6 +70,6 @@ import { ZoomModule } from "./zoom/zoom.module";
 		ZoomModule,
 	],
 	providers: [],
-	controllers: [AppController],
+	controllers: [AppController, LyndenController],
 })
 export class AppModule {}
