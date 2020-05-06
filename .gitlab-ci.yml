@@ -4,6 +4,9 @@ stages:
     - build
     - deploy
 
+before_script:
+    - export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+
 server deps:
     stage: dependencies
     image: node:lts
@@ -44,9 +47,6 @@ server tests:
         policy: pull
         paths:
             - server/node_modules/
-
-    variables:
-        PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
 
     script:
         - cd server
