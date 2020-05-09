@@ -22,7 +22,16 @@ async function getRelease(channel: string) {
 		throw new InternalServerErrorException("Invalid yaml");
 
 	const { version, releaseDate } = yaml;
-	const { url, size, sha512 } = yaml.files.pop();
+	const { url, size, sha512 } = yaml.files
+		.filter(file =>
+			["exe", "dmg", "appimage"].includes(
+				file.url
+					.split(".")
+					.pop()
+					.toLowerCase(),
+			),
+		)
+		.pop();
 
 	return {
 		version,
@@ -48,6 +57,7 @@ export class AppController {
 		const platforms = {
 			windows: release.file,
 			macos: (await getRelease("latest-mac")).file,
+			linux: (await getRelease("latest-linux")).file,
 		};
 
 		return {
