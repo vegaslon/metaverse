@@ -12,8 +12,7 @@ import * as YAML from "yaml";
 import { PuppeteerService } from "./puppeteer/puppeteer.service";
 
 async function getRelease(channel: string) {
-	const releasesUrl =
-		"https://nyc3.digitaloceanspaces.com/tivolicloud/releases/";
+	const releasesUrl = "https://cdn.tivolicloud.com/releases/";
 
 	const yamlStr = await (await fetch(releasesUrl + channel + ".yml")).text();
 

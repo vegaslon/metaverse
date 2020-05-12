@@ -23,9 +23,6 @@ interface Release {
 	styleUrls: ["./download.component.scss"],
 })
 export class DownloadComponent {
-	readonly releasesPath =
-		"https://nyc3.digitaloceanspaces.com/tivolicloud/releases";
-
 	// os: Platform = "windows";
 
 	loaded = false;
