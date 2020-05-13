@@ -1,24 +1,31 @@
-<h2 *ngIf="mode == 'signIn'" style="margin-top: 0;">Sign in</h2>
-<h2 *ngIf="mode == 'signUp'" style="margin-top: 0;">Create a new account</h2>
-<h2 *ngIf="mode == 'extSignUp'" style="margin-top: 0;">
-	Choose an account username
-</h2>
+<div class="login">
+	<div class="sidebar"></div>
+	<div>
+		<h2 *ngIf="mode == 'signIn'" style="margin-top: 0;">Sign in</h2>
+		<h2 *ngIf="mode == 'signUp'" style="margin-top: 0;">
+			Create a new account
+		</h2>
+		<h2 *ngIf="mode == 'extSignUp'" style="margin-top: 0;">
+			Choose an account username
+		</h2>
 
-<mat-card
-	*ngIf="errorMessage"
-	class="bg-warn"
-	style="
-		margin-bottom: 16px; color: #fff;
-		display: flex; vertical-align: middle;
-	"
->
-	<mat-icon style="margin-top: -3px; margin-right: 8px;">
-		error_outline
-	</mat-icon>
-	{{ errorMessage }}
-</mat-card>
+		<mat-card
+			*ngIf="errorMessage"
+			class="bg-warn"
+			style="
+				margin-bottom: 16px;
+				color: #fff;
+				display: flex;
+				vertical-align: middle;
+			"
+		>
+			<mat-icon style="margin-top: -3px; margin-right: 8px;">
+				error_outline
+			</mat-icon>
+			{{ errorMessage }}
+		</mat-card>
 
-<!-- <div #captchaDiv style="display: none;">
+		<!-- <div #captchaDiv style="display: none;">
 	<re-captcha
 		#captchaRef="reCaptcha"
 		[siteKey]="siteKey"
@@ -27,220 +34,245 @@
 	></re-captcha>
 </div> -->
 
-<form *ngIf="mode == 'signIn'" [formGroup]="signInForm" (ngSubmit)="onSubmit()">
-	<mat-form-field style="width: 100%;">
-		<input
-			matInput
-			placeholder="Email or username"
-			required
-			formControlName="username"
-		/>
-		<mat-error *ngIf="signInForm.hasError('required', 'username')">
-			Email or username is required
-		</mat-error>
-		<mat-error *ngIf="signInForm.hasError('minlength', 'username')">
-			Email or username is too short
-		</mat-error>
-		<mat-error *ngIf="signInForm.hasError('maxlength', 'username')">
-			Email or username is too long
-		</mat-error>
-	</mat-form-field>
-
-	<mat-form-field style="width: 100%;">
-		<input
-			matInput
-			type="password"
-			placeholder="Password"
-			required
-			formControlName="password"
-		/>
-		<mat-error *ngIf="signInForm.hasError('required', 'password')">
-			Password is required
-		</mat-error>
-		<mat-error *ngIf="signInForm.hasError('minlength', 'username')">
-			Password is too short
-		</mat-error>
-		<mat-error *ngIf="signInForm.hasError('maxlength', 'username')">
-			Password is too long
-		</mat-error>
-	</mat-form-field>
-
-	<div style="margin: 16px 0;"></div>
-
-	<button
-		type="submit"
-		mat-flat-button
-		color="primary"
-		[disabled]="signInForm.invalid || isLoading"
-	>
-		Sign in
-	</button>
-	<span style="margin: 0 4px;"></span>
-	<button
-		type="button"
-		mat-button
-		(click)="onToggleSignUp()"
-		[disabled]="isLoading"
-	>
-		Create a new account
-	</button>
-
-	<div style="margin: 8px 0;"></div>
-
-	<span *ngFor="let service of extServices" style="margin-right: 8px;">
-		<button
-			type="button"
-			mat-stroked-button
-			(click)="onSignInExt(service.toLowerCase())"
-			[disabled]="isLoading"
-			style="margin-bottom: 8px;"
+		<form
+			*ngIf="mode == 'signIn'"
+			[formGroup]="signInForm"
+			(ngSubmit)="onSubmit()"
 		>
-			<img
-				style="width: 24px; height: 24px; margin-right: 4px;"
-				[src]="'/assets/icons/' + service.toLowerCase() + '.svg'"
-			/>
-			{{ service }}
-		</button>
-	</span>
-</form>
-
-<form *ngIf="mode == 'signUp'" [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
-	<mat-form-field style="width: 100%;">
-		<input
-			matInput
-			type="email"
-			placeholder="Email"
-			required
-			formControlName="email"
-		/>
-		<mat-error *ngIf="signUpForm.hasError('required', 'email')">
-			Email is required
-		</mat-error>
-		<mat-error *ngIf="signUpForm.hasError('email', 'email')">
-			Email is invalid
-		</mat-error>
-		<mat-error *ngIf="signUpForm.hasError('maxlength', 'email')">
-			Email is too long
-		</mat-error>
-	</mat-form-field>
-
-	<mat-form-field style="width: 100%;">
-		<input
-			matInput
-			placeholder="Username"
-			required
-			formControlName="username"
-		/>
-		<mat-error *ngIf="signUpForm.hasError('required', 'username')">
-			Username is required
-		</mat-error>
-		<mat-error *ngIf="signUpForm.hasError('minlength', 'username')">
-			Username is too short
-		</mat-error>
-		<mat-error *ngIf="signUpForm.hasError('maxlength', 'username')">
-			Username is too long
-		</mat-error>
-		<mat-error *ngIf="signUpForm.hasError('badCharacters', 'username')">
-			Letters, numbers and underscores only
-		</mat-error>
-	</mat-form-field>
-
-	<mat-form-field style="width: 100%;">
-		<input
-			matInput
-			type="password"
-			placeholder="Password"
-			required
-			formControlName="password"
-		/>
-		<mat-error *ngIf="signUpForm.hasError('required', 'password')">
-			Password is required
-		</mat-error>
-		<mat-error *ngIf="signUpForm.hasError('minlength', 'password')">
-			Password is too short
-		</mat-error>
-		<mat-error *ngIf="signUpForm.hasError('maxlength', 'password')">
-			Password is too long
-		</mat-error>
-	</mat-form-field>
-
-	<div style="margin: 16px 0;"></div>
-
-	<button
-		type="submit"
-		mat-flat-button
-		color="primary"
-		[disabled]="signUpForm.invalid || isLoading"
-	>
-		Create a new account
-	</button>
-	<span style="margin: 0 4px;"></span>
-	<button
-		type="button"
-		mat-button
-		(click)="onToggleSignUp()"
-		[disabled]="isLoading"
-	>
-		Sign in instead
-	</button>
-</form>
-
-<form
-	*ngIf="mode == 'extSignUp'"
-	[formGroup]="extSignUpForm"
-	(ngSubmit)="onSubmit()"
->
-	<table style="margin-bottom: 16px;">
-		<tr>
-			<td>
-				<img
-					style="margin-right: 8px"
-					class="user-image"
-					[src]="extImageUrl"
+			<mat-form-field style="width: 100%;">
+				<input
+					matInput
+					placeholder="Email or username"
+					required
+					formControlName="username"
 				/>
-			</td>
-			<td>
-				<p>
-					Using <b>{{ extEmail }}</b>
-				</p>
-			</td>
-		</tr>
-	</table>
+				<mat-error *ngIf="signInForm.hasError('required', 'username')">
+					Email or username is required
+				</mat-error>
+				<mat-error *ngIf="signInForm.hasError('minlength', 'username')">
+					Email or username is too short
+				</mat-error>
+				<mat-error *ngIf="signInForm.hasError('maxlength', 'username')">
+					Email or username is too long
+				</mat-error>
+			</mat-form-field>
 
-	<mat-form-field style="width: 100%;">
-		<input
-			matInput
-			placeholder="Username"
-			required
-			formControlName="username"
-		/>
-		<mat-error *ngIf="extSignUpForm.hasError('required', 'username')">
-			Username is required
-		</mat-error>
-		<mat-error *ngIf="extSignUpForm.hasError('minlength', 'username')">
-			Username is too short
-		</mat-error>
-		<mat-error *ngIf="extSignUpForm.hasError('maxlength', 'username')">
-			Username is too long
-		</mat-error>
-		<mat-error *ngIf="extSignUpForm.hasError('badCharacters', 'username')">
-			Letters, numbers and underscores only
-		</mat-error>
-	</mat-form-field>
+			<mat-form-field style="width: 100%;">
+				<input
+					matInput
+					type="password"
+					placeholder="Password"
+					required
+					formControlName="password"
+				/>
+				<mat-error *ngIf="signInForm.hasError('required', 'password')">
+					Password is required
+				</mat-error>
+				<mat-error *ngIf="signInForm.hasError('minlength', 'username')">
+					Password is too short
+				</mat-error>
+				<mat-error *ngIf="signInForm.hasError('maxlength', 'username')">
+					Password is too long
+				</mat-error>
+			</mat-form-field>
 
-	<div style="margin: 16px 0;"></div>
+			<div style="margin: 16px 0;"></div>
 
-	<button
-		type="submit"
-		mat-flat-button
-		color="primary"
-		[disabled]="extSignUpForm.invalid || isLoading"
-	>
-		Create a new account
-	</button>
-</form>
+			<button
+				type="submit"
+				mat-flat-button
+				color="primary"
+				[disabled]="signInForm.invalid || isLoading"
+			>
+				Sign in
+			</button>
+			<span style="margin: 0 4px;"></span>
+			<button
+				type="button"
+				mat-button
+				(click)="onToggleSignUp()"
+				[disabled]="isLoading"
+			>
+				Create a new account
+			</button>
 
-<div *ngIf="isLoading">
-	<br />
-	<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+			<div style="margin: 8px 0;"></div>
+
+			<span
+				*ngFor="let service of extServices"
+				style="margin-right: 8px;"
+			>
+				<button
+					type="button"
+					mat-stroked-button
+					(click)="onSignInExt(service.toLowerCase())"
+					[disabled]="isLoading"
+					style="margin-bottom: 8px;"
+				>
+					<img
+						style="width: 24px; height: 24px; margin-right: 4px;"
+						[src]="
+							'/assets/icons/' + service.toLowerCase() + '.svg'
+						"
+					/>
+					{{ service }}
+				</button>
+			</span>
+		</form>
+
+		<form
+			*ngIf="mode == 'signUp'"
+			[formGroup]="signUpForm"
+			(ngSubmit)="onSubmit()"
+		>
+			<mat-form-field style="width: 100%;">
+				<input
+					matInput
+					type="email"
+					placeholder="Email"
+					required
+					formControlName="email"
+				/>
+				<mat-error *ngIf="signUpForm.hasError('required', 'email')">
+					Email is required
+				</mat-error>
+				<mat-error *ngIf="signUpForm.hasError('email', 'email')">
+					Email is invalid
+				</mat-error>
+				<mat-error *ngIf="signUpForm.hasError('maxlength', 'email')">
+					Email is too long
+				</mat-error>
+			</mat-form-field>
+
+			<mat-form-field style="width: 100%;">
+				<input
+					matInput
+					placeholder="Username"
+					required
+					formControlName="username"
+				/>
+				<mat-error *ngIf="signUpForm.hasError('required', 'username')">
+					Username is required
+				</mat-error>
+				<mat-error *ngIf="signUpForm.hasError('minlength', 'username')">
+					Username is too short
+				</mat-error>
+				<mat-error *ngIf="signUpForm.hasError('maxlength', 'username')">
+					Username is too long
+				</mat-error>
+				<mat-error
+					*ngIf="signUpForm.hasError('badCharacters', 'username')"
+				>
+					Letters, numbers and underscores only
+				</mat-error>
+			</mat-form-field>
+
+			<mat-form-field style="width: 100%;">
+				<input
+					matInput
+					type="password"
+					placeholder="Password"
+					required
+					formControlName="password"
+				/>
+				<mat-error *ngIf="signUpForm.hasError('required', 'password')">
+					Password is required
+				</mat-error>
+				<mat-error *ngIf="signUpForm.hasError('minlength', 'password')">
+					Password is too short
+				</mat-error>
+				<mat-error *ngIf="signUpForm.hasError('maxlength', 'password')">
+					Password is too long
+				</mat-error>
+			</mat-form-field>
+
+			<div style="margin: 16px 0;"></div>
+
+			<button
+				type="submit"
+				mat-flat-button
+				color="primary"
+				[disabled]="signUpForm.invalid || isLoading"
+			>
+				Create a new account
+			</button>
+			<span style="margin: 0 4px;"></span>
+			<button
+				type="button"
+				mat-button
+				(click)="onToggleSignUp()"
+				[disabled]="isLoading"
+			>
+				Sign in instead
+			</button>
+		</form>
+
+		<form
+			*ngIf="mode == 'extSignUp'"
+			[formGroup]="extSignUpForm"
+			(ngSubmit)="onSubmit()"
+		>
+			<table style="margin-bottom: 16px;">
+				<tr>
+					<td>
+						<img
+							style="margin-right: 8px;"
+							class="user-image"
+							[src]="extImageUrl"
+						/>
+					</td>
+					<td>
+						<p>
+							Using <b>{{ extEmail }}</b>
+						</p>
+					</td>
+				</tr>
+			</table>
+
+			<mat-form-field style="width: 100%;">
+				<input
+					matInput
+					placeholder="Username"
+					required
+					formControlName="username"
+				/>
+				<mat-error
+					*ngIf="extSignUpForm.hasError('required', 'username')"
+				>
+					Username is required
+				</mat-error>
+				<mat-error
+					*ngIf="extSignUpForm.hasError('minlength', 'username')"
+				>
+					Username is too short
+				</mat-error>
+				<mat-error
+					*ngIf="extSignUpForm.hasError('maxlength', 'username')"
+				>
+					Username is too long
+				</mat-error>
+				<mat-error
+					*ngIf="extSignUpForm.hasError('badCharacters', 'username')"
+				>
+					Letters, numbers and underscores only
+				</mat-error>
+			</mat-form-field>
+
+			<div style="margin: 16px 0;"></div>
+
+			<button
+				type="submit"
+				mat-flat-button
+				color="primary"
+				[disabled]="extSignUpForm.invalid || isLoading"
+			>
+				Create a new account
+			</button>
+		</form>
+
+		<div *ngIf="isLoading">
+			<br />
+			<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+		</div>
+	</div>
 </div>

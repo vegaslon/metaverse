@@ -42,6 +42,7 @@ export class User {
 	providedIn: "root",
 })
 export class AuthService {
+	// TODO: change to ReplaySubject
 	user$ = new BehaviorSubject<User>(null);
 	loggingIn$ = new BehaviorSubject<boolean>(false);
 

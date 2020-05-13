@@ -44,9 +44,7 @@ export class AdminGuard implements CanActivate {
 						return new Observable(sub => sub.next(true));
 
 					// if not, login popup
-					const dialog = this.dialog.open(SignInComponent, {
-						width: "400px",
-					});
+					const dialog = this.dialog.open(SignInComponent);
 
 					return dialog.afterClosed().pipe(
 						map(() => {

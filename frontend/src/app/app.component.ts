@@ -60,7 +60,6 @@ export class AppComponent implements OnInit {
 
 		if (query.has("signUp")) {
 			this.dialog.open(SignInComponent, {
-				width: "400px",
 				data: {
 					mode: "signUp",
 				},

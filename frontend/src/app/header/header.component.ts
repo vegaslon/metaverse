@@ -67,9 +67,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 	}
 
 	onSignIn() {
-		this.dialog.open(SignInComponent, {
-			width: "400px",
-		});
+		this.dialog.open(SignInComponent);
 	}
 
 	onSignOut() {

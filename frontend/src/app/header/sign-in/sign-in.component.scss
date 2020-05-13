@@ -1,3 +1,38 @@
+.login {
+	display: flex;
+	flex-direction: row;
+	align-items: stretch;
+
+	$mobileWidth: 564px + 140px;
+
+	// @media only screen and (max-width: $mobileWidth) {
+	// 	flex-direction: column;
+	// }
+
+	.sidebar {
+		width: 170px;
+		margin-left: -24px;
+		margin-top: -24px;
+		margin-bottom: -24px;
+		margin-right: 24px;
+		background-color: #e91e63;
+		background-image: url(/assets/login-sidebar.jpg);
+		background-size: auto 100%;
+		background-position: 100%;
+		background-repeat: no-repeat;
+
+		@media only screen and (max-width: $mobileWidth) {
+			// margin-left: -24px;
+			// margin-top: -24px;
+			// margin-bottom: 24px;
+			// margin-right: -24px;
+			// height: 100px;
+			// width: 100%;
+			display: none;
+		}
+	}
+}
+
 .user-image {
 	width: 36px;
 	height: 36px;
