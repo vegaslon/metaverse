@@ -2,84 +2,19 @@
 	<div class="row">
 		<div class="col-12">
 			<h1>About us</h1>
-			<!-- <h3>
-				Tivoli Cloud VR was started by two passionate people who met
-				each other through VR.
-			</h3> -->
-			<ng-container *ngIf="gitContributors && gitCommits">
-				<h2>
-					<a
-						href="https://git.tivolicloud.com/tivolicloud/interface"
-						target="_blank"
-					>
-						Interface
-					</a>
-					code contributors
-					<span
-						style="
-							display: block;
-							font-size: 20px;
-							margin-top: 8px;
-						"
-					>
-						Over {{ prettyNumber(gitCommits) }}+ code commits
-						<span style="font-size: 12px;">
-							including
-							<a href="http://highfidelity.com" target="_blank">
-								High Fidelity
-							</a>
-						</span>
-					</span>
-				</h2>
-				<div
-					class="git-contributor"
-					*ngFor="let c of gitContributors"
-					[title]="c.email + ' (' + c.commits + ' commits)'"
-				>
-					<div class="initials">{{ initials(c.email) }}</div>
-					<div
-						class="image"
-						[style.backgroundImage]="'url(' + c.avatarUrl + ')'"
-					></div>
-				</div>
-				<hr />
-			</ng-container>
-			<ng-container *ngIf="contributors">
-				<h2>
-					Honorable contributors
-					<span style="font-size: 12px;">
-						to
-						<a href="http://highfidelity.com" target="_blank">
-							High Fidelity
-						</a>
-						or Tivoli
-					</span>
-					<span
-						style="
-							display: block;
-							font-size: 20px;
-							margin-top: 8px;
-						"
-					>
-						This wouldn't be possible without them
-					</span>
-				</h2>
-				<p class="contributors">{{ contributors }}</p>
-				<p style="opacity: 0.6;">
-					If your name is not on the list, misspelled or want removed,
-					please contact
-					<a href="mailto:maki@tivolicloud.com"
-						>maki@tivolicloud.com</a
-					>
-				</p>
-				<hr />
-			</ng-container>
 			<h2>
 				The Tivoli team
-				<span style="display: block; font-size: 20px; margin-top: 8px;">
-					We work all day every day
-				</span>
 			</h2>
+			<p>
+				Tivoli Cloud VR, inc is a woman-operated Delaware C-corporation
+				based out of San Francisco, CA.
+				<br />
+				We're pleased to be a member of the third
+				<a href="https://www.wxrfund.com" target="_blank"
+					>WXR accelerator</a
+				>
+				cohort.
+			</p>
 			<div class="row employees">
 				<div class="col-md-6">
 					<mat-card class="mat-elevation-z2">
@@ -148,6 +83,74 @@
 					</mat-card>
 				</div>
 			</div>
+			<hr />
+			<ng-container *ngIf="gitContributors && gitCommits">
+				<h2>
+					<a
+						href="https://git.tivolicloud.com/tivolicloud/interface"
+						target="_blank"
+					>
+						Interface
+					</a>
+					code contributors
+					<span
+						style="
+							display: block;
+							font-size: 20px;
+							margin-top: 8px;
+						"
+					>
+						Over {{ prettyNumber(gitCommits) }}+ code commits
+						<span style="font-size: 12px;">
+							including
+							<a href="http://highfidelity.com" target="_blank">
+								High Fidelity
+							</a>
+						</span>
+					</span>
+				</h2>
+				<div
+					class="git-contributor"
+					*ngFor="let c of gitContributors"
+					[title]="c.email + ' (' + c.commits + ' commits)'"
+				>
+					<div class="initials">{{ initials(c.email) }}</div>
+					<div
+						class="image"
+						[style.backgroundImage]="'url(' + c.avatarUrl + ')'"
+					></div>
+				</div>
+				<hr />
+			</ng-container>
+			<ng-container *ngIf="contributors">
+				<h2>
+					Honorable contributors
+					<span style="font-size: 12px;">
+						to
+						<a href="http://highfidelity.com" target="_blank">
+							High Fidelity
+						</a>
+						or Tivoli
+					</span>
+					<span
+						style="
+							display: block;
+							font-size: 20px;
+							margin-top: 8px;
+						"
+					>
+						This wouldn't be possible without them
+					</span>
+				</h2>
+				<p class="contributors">{{ contributors }}</p>
+				<p style="opacity: 0.6;">
+					If your name is not on the list, misspelled or want removed,
+					please contact
+					<a href="mailto:maki@tivolicloud.com"
+						>maki@tivolicloud.com</a
+					>
+				</p>
+			</ng-container>
 			<br /><br />
 			<br /><br />
 		</div>
