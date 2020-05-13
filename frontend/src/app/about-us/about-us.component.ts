@@ -68,7 +68,7 @@ export class AboutUsComponent implements OnInit {
 					const avatarUrl =
 						"https://www.gravatar.com/avatar/" +
 						emailHash +
-						"?s=32&d=none";
+						"?s=32&d=404";
 
 					const commits = contributor[1];
 					this.gitCommits += commits;
