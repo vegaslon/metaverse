@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
 import { MongooseModule } from "@nestjs/mongoose";
+import { AuthModule } from "../auth/auth.module";
 import { JWT_SECRET } from "../environment";
 import { UserModule } from "../user/user.module";
 import { FilesHostController } from "./files-host.controller";
@@ -8,8 +9,6 @@ import { FilesHostService } from "./files-host.service";
 import { FilesController } from "./files.controller";
 import { FilesService } from "./files.service";
 import { UserFilesCacheSchema } from "./user-files-cache.schema";
-import { WebDavService } from "./webdav.service";
-import { AuthModule } from "../auth/auth.module";
 
 @Module({
 	imports: [
@@ -29,7 +28,7 @@ import { AuthModule } from "../auth/auth.module";
 			},
 		]),
 	],
-	providers: [FilesService, FilesHostService, WebDavService],
+	providers: [FilesService, FilesHostService],
 	exports: [FilesService],
 	controllers: [FilesController, FilesHostController],
 })
