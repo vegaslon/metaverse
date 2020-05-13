@@ -1,11 +1,10 @@
-import { Component, OnInit, PLATFORM_ID, Inject } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
-import { SsoRedirectingComponent } from "./sso-redirecting/sso-redirecting.component";
+import { isPlatformServer } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
-import { Router, ActivatedRoute, ParamMap } from "@angular/router";
-import { switchMap, map } from "rxjs/operators";
-import { isPlatformBrowser, isPlatformServer } from "@angular/common";
+import { Component, Inject, OnInit, PLATFORM_ID } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
+import { ActivatedRoute, Router } from "@angular/router";
 import { AuthService } from "../auth.service";
+import { SsoRedirectingComponent } from "./sso-redirecting/sso-redirecting.component";
 
 @Component({
 	selector: "app-sso",
@@ -21,7 +20,14 @@ export class SsoComponent implements OnInit {
 		@Inject(PLATFORM_ID) private platformId: Object,
 	) {}
 
-	private readonly services = ["gitlab", "fider"];
+	private readonly services = {
+		gitlab: {
+			name: "GitLab",
+		},
+		fider: {
+			name: "Roadmap",
+		},
+	};
 
 	ngOnInit() {
 		if (isPlatformServer(this.platformId)) return;
@@ -29,7 +35,7 @@ export class SsoComponent implements OnInit {
 		this.route.paramMap.subscribe(params => {
 			const service = params.get("service").toLowerCase();
 
-			if (!this.services.includes(service))
+			if (!Object.keys(this.services).includes(service))
 				return this.router.navigateByUrl("/");
 
 			// better than a white background which doesn't seem to work anymore
@@ -37,6 +43,7 @@ export class SsoComponent implements OnInit {
 
 			const dialog = this.dialog.open(SsoRedirectingComponent, {
 				disableClose: true,
+				data: this.services[service],
 			});
 
 			if (service === "gitlab") {
@@ -51,7 +58,6 @@ export class SsoComponent implements OnInit {
 								token;
 						},
 						err => {
-							console.log(err);
 							dialog.close();
 						},
 					);
