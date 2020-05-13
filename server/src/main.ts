@@ -3,6 +3,7 @@ import { NestFactory } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
 import { Request, Response } from "express";
 import helmet from "helmet";
 import { AppModule } from "./app.module";
@@ -49,7 +50,8 @@ async function bootstrap() {
 
 	app.use(
 		helmet(),
-		// compression()
+		// compression(),
+		cookieParser(),
 	);
 
 	app.useGlobalPipes(

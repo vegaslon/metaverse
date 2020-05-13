@@ -21,6 +21,6 @@ export class OauthController {
 				401,
 			);
 
-		return await this.authService.login(user);
+		return this.authService.login(user);
 	}
 }
