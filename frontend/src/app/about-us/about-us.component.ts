@@ -10,8 +10,31 @@ import { Md5 } from "ts-md5/dist/md5";
 export class AboutUsComponent implements OnInit {
 	constructor(private http: HttpClient) {}
 
-	contributors: { email: string; avatarUrl: string; commits: number }[] = [];
-	commits = 0;
+	gitContributors: {
+		email: string;
+		avatarUrl: string;
+		commits: number;
+	}[] = [];
+	gitCommits = 0;
+
+	// this is in no particular order
+	contributors: string = "";
+
+	employees: {
+		name: string;
+		role: string;
+		email: string;
+		image: string;
+		imageStyle?: string;
+	}[] = [
+		{
+			name: "Christina Kinne",
+			role: "CMO and events manager",
+			email: "xaosprincess@tivolicloud.com",
+			image: "cristina.jpg",
+			imageStyle: "background-position: 0 center;",
+		},
+	];
 
 	prettyNumber = (n: number) =>
 		Array.from(n.toString())
@@ -25,11 +48,18 @@ export class AboutUsComponent implements OnInit {
 			.map((c, i) => (i == 0 ? c.toUpperCase() : c.toLowerCase()))
 			.join("");
 
-	ngOnInit() {
-		const size = 32;
+	shuffleArray = (array: any[]) => {
+		for (let i = array.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[array[i], array[j]] = [array[j], array[i]];
+		}
+		return array;
+	};
 
-		const sub = this.http.get("/api/interface-contributors.json").subscribe(
-			(contributors: [string, number][]) => {
+	ngOnInit() {
+		this.http
+			.get("/assets/contributors/interface-contributors.json")
+			.subscribe((contributors: [string, number][]) => {
 				for (const contributor of contributors) {
 					const email = contributor[0];
 
@@ -41,20 +71,20 @@ export class AboutUsComponent implements OnInit {
 						"?s=32&d=none";
 
 					const commits = contributor[1];
-					this.commits += commits;
+					this.gitCommits += commits;
 
-					this.contributors.push({
+					this.gitContributors.push({
 						email,
 						avatarUrl,
 						commits,
 					});
 				}
+			});
 
-				sub.unsubscribe();
-			},
-			err => {
-				sub.unsubscribe();
-			},
-		);
+		this.http
+			.get("/assets/contributors/contributors.json")
+			.subscribe((contributors: string[]) => {
+				this.contributors = this.shuffleArray(contributors).join(", ");
+			});
 	}
 }

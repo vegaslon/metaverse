@@ -2,46 +2,154 @@
 	<div class="row">
 		<div class="col-12">
 			<h1>About us</h1>
-
-			<h2 *ngIf="commits">
-				<a
-					href="https://git.tivolicloud.com/tivolicloud/interface"
-					target="_blank"
+			<!-- <h3>
+				Tivoli Cloud VR was started by two passionate people who met
+				each other through VR.
+			</h3> -->
+			<ng-container *ngIf="gitContributors && gitCommits">
+				<h2>
+					<a
+						href="https://git.tivolicloud.com/tivolicloud/interface"
+						target="_blank"
+					>
+						Interface
+					</a>
+					code contributors
+					<span
+						style="
+							display: block;
+							font-size: 20px;
+							margin-top: 8px;
+						"
+					>
+						Over {{ prettyNumber(gitCommits) }}+ code commits
+						<span style="font-size: 12px;">
+							including
+							<a href="http://highfidelity.com" target="_blank">
+								High Fidelity
+							</a>
+						</span>
+					</span>
+				</h2>
+				<div
+					class="git-contributor"
+					*ngFor="let c of gitContributors"
+					[title]="c.email + ' (' + c.commits + ' commits)'"
 				>
-					Interface
-				</a>
-				contributors
-				<span
-					style="display: block; font-size: 0.8em; margin-top: 8px;"
-				>
-					Over {{ prettyNumber(commits) }}+ code commits
-					<span style="font-size: 0.7em;">
-						including
+					<div class="initials">{{ initials(c.email) }}</div>
+					<div
+						class="image"
+						[style.backgroundImage]="'url(' + c.avatarUrl + ')'"
+					></div>
+				</div>
+				<hr />
+			</ng-container>
+			<ng-container *ngIf="contributors">
+				<h2>
+					Honorable contributors
+					<span style="font-size: 12px;">
+						to
 						<a href="http://highfidelity.com" target="_blank">
 							High Fidelity
 						</a>
+						or Tivoli
 					</span>
+					<span
+						style="
+							display: block;
+							font-size: 20px;
+							margin-top: 8px;
+						"
+					>
+						This wouldn't be possible without them
+					</span>
+				</h2>
+				<p class="contributors">{{ contributors }}</p>
+				<p style="opacity: 0.6;">
+					If your name is not on the list, misspelled or want removed,
+					please contact
+					<a href="mailto:maki@tivolicloud.com"
+						>maki@tivolicloud.com</a
+					>
+				</p>
+				<hr />
+			</ng-container>
+			<h2>
+				The Tivoli team
+				<span style="display: block; font-size: 20px; margin-top: 8px;">
+					We work all day every day
 				</span>
 			</h2>
-
-			<!-- <div class="contributor" *ngFor="let c of contributors">
-				<img
-					[src]="c.avatarUrl"
-					[
-				/>
-			</div> -->
-
-			<div
-				class="contributor"
-				*ngFor="let c of contributors"
-				[title]="c.email + ' (' + c.commits + ' commits)'"
-			>
-				<div class="initials">{{ initials(c.email) }}</div>
-				<div
-					class="image"
-					[style.backgroundImage]="'url(' + c.avatarUrl + ')'"
-				></div>
+			<div class="row employees">
+				<div class="col-md-6">
+					<mat-card class="mat-elevation-z2">
+						<div
+							style="
+								display: flex;
+								width: 100%;
+								justify-content: space-between;
+							"
+						>
+							<h2 style="margin: 0;">Caitlyn Meeks</h2>
+							<h2 style="margin: 0;">Maki Deprez</h2>
+						</div>
+						<div
+							style="
+								display: flex;
+								width: 100%;
+								justify-content: space-between;
+							"
+						>
+							<h3>CEO and co-founder</h3>
+							<h3>CTO and co-founder</h3>
+						</div>
+						<div
+							style="
+								display: flex;
+								width: 100%;
+								justify-content: space-between;
+							"
+						>
+							<p>
+								<a href="mailto:caitlyn@tivolicloud.com">
+									caitlyn@tivolicloud.com
+								</a>
+							</p>
+							<p>
+								<a href="mailto:maki@tivolicloud.com">
+									maki@tivolicloud.com
+								</a>
+							</p>
+						</div>
+						<div
+							class="image"
+							style="
+								background-image: url(/assets/about-us/caitlyn-maki.jpg);
+							"
+						></div>
+					</mat-card>
+				</div>
+				<div class="col-md-3" *ngFor="let employee of employees">
+					<mat-card class="mat-elevation-z2">
+						<h2>{{ employee.name }}</h2>
+						<h3>{{ employee.role }}</h3>
+						<p>
+							<a [href]="'mailto:' + employee.email">
+								{{ employee.email }}
+							</a>
+						</p>
+						<div
+							class="image"
+							[style]="employee.imageStyle"
+							[style.backgroundImage]="
+								'url(/assets/about-us/' + employee.image + ')'
+							"
+						></div>
+					</mat-card>
+				</div>
 			</div>
+			<br /><br />
+			<br /><br />
 		</div>
 	</div>
 </div>
