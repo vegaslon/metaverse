@@ -1,19 +1,12 @@
 import { isPlatformBrowser } from "@angular/common";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
-import {
-	ErrorHandler,
-	Inject,
-	Injectable,
-	NgModule,
-	PLATFORM_ID,
-} from "@angular/core";
+import { Inject, NgModule, PLATFORM_ID } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouterModule, Routes } from "@angular/router";
-import * as Sentry from "@sentry/browser";
+// import * as Sentry from "@sentry/browser";
 import { RecaptchaFormsModule, RecaptchaModule } from "ng-recaptcha";
-import { environment } from "../environments/environment";
 import { AppComponent } from "./app.component";
 import { AdminGuard } from "./auth/admin.guard";
 import { AuthInterceptorService } from "./auth/auth-interceptor.service";
@@ -27,20 +20,20 @@ import { SignInComponent } from "./header/sign-in/sign-in.component";
 import { HomeComponent } from "./home/home.component";
 import { MaterialModule } from "./material.module";
 
-Sentry.init({
-	dsn: "https://35ced4ee7098404393553430f8d78e79@sentry.tivolicloud.com/3",
-	environment: "production",
-	enabled: environment.production,
-});
+// Sentry.init({
+// 	dsn: "https://35ced4ee7098404393553430f8d78e79@sentry.tivolicloud.com/3",
+// 	environment: "production",
+// 	enabled: environment.production,
+// });
 
-@Injectable()
-export class SentryErrorHandler implements ErrorHandler {
-	constructor() {}
-	handleError(error) {
-		Sentry.captureException(error.originalError || error);
-		throw error;
-	}
-}
+// @Injectable()
+// export class SentryErrorHandler implements ErrorHandler {
+// 	constructor() {}
+// 	handleError(error) {
+// 		Sentry.captureException(error.originalError || error);
+// 		throw error;
+// 	}
+// }
 
 const routes: Routes = [
 	{ path: "", component: HomeComponent },
@@ -117,10 +110,10 @@ const routes: Routes = [
 		RecaptchaFormsModule,
 	],
 	providers: [
-		{
-			provide: ErrorHandler,
-			useClass: SentryErrorHandler,
-		},
+		// {
+		// 	provide: ErrorHandler,
+		// 	useClass: SentryErrorHandler,
+		// },
 		{
 			provide: HTTP_INTERCEPTORS,
 			useClass: AuthInterceptorService,

@@ -1,8 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import { User } from "@sentry/browser";
 import { forkJoin } from "rxjs";
-import { AuthService } from "src/app/auth/auth.service";
+import { AuthService, User } from "src/app/auth/auth.service";
 import { FilesService, Folder, Status } from "./files.service";
 import { UploadComponent } from "./upload/upload.component";
 import { Router, ActivatedRoute } from "@angular/router";
