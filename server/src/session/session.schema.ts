@@ -1,7 +1,7 @@
-import { Document, Schema, Model, Query } from "mongoose";
+import { Document, Model, Query, Schema, Aggregate } from "mongoose";
+import { v4 as uuid } from "uuid";
 import { Domain } from "../domain/domain.schema";
 import { User } from "../user/user.schema";
-import { v4 as uuid } from "uuid";
 
 export const UserSessionSchema = new Schema({
 	user: { type: Schema.Types.ObjectId, ref: "users", required: true },
@@ -30,7 +30,7 @@ export interface UserSession extends Document {
 	domain: Domain;
 	nodeId: string;
 
-	expireAt: Date;
+	expireAt: Date | number;
 }
 
 export const DomainSessionSchema = new Schema({
@@ -49,22 +49,22 @@ export interface DomainSession extends Document {
 	onlineUsers: number;
 	userSessions: UserSession[];
 
-	expireAt: Date;
+	expireAt: Date | number;
 }
 
-// before find, delete all expired (countDocuments included)
+// enable expire which reaps every 60 seconds by default
+// and before find, filter out already expired
+// /^find/ includes .countDocuments
 [UserSessionSchema, DomainSessionSchema].forEach(schema => {
-	schema.pre(/^find/, async function (next) {
-		try {
-			const model = (this as any).model as Model<any, {}>;
-
-			// TODO: just delete one? like below
-			await model.deleteMany({
-				expireAt: { $lt: Date.now() },
-			});
-		} catch (err) {}
-
-		next();
+	schema.index({ expireAt: 1 }, { expireAfterSeconds: 0 });
+	schema.pre(/^find/, function () {
+		if (this instanceof Query)
+			this.where({ expireAt: { $gt: Date.now() } });
+	});
+	schema.pre("aggregate", function () {
+		this.pipeline().unshift({
+			$match: { expireAt: { $gt: new Date(Date.now()) } },
+		});
 	});
 });
 
@@ -91,7 +91,15 @@ DomainSessionSchema.pre(/^find/, async function (next) {
 							input: "$userSessions",
 							as: "session",
 							cond: {
-								$eq: ["$$session.domain", _id],
+								$and: [
+									{
+										$gt: [
+											"$$session.expireAt",
+											new Date(Date.now()),
+										],
+									},
+									{ $eq: ["$$session.domain", _id] },
+								],
 							},
 						},
 					},
@@ -99,7 +107,7 @@ DomainSessionSchema.pre(/^find/, async function (next) {
 			},
 		]);
 
-		if (docs.length == 1) await model.updateOne({ _id }, docs[0]);
+		if (docs.length === 1) await model.updateOne({ _id }, docs[0]);
 
 		// this only happens to one domain at a time
 	} catch (err) {}

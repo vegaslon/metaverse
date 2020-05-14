@@ -44,6 +44,7 @@ import { LyndenController } from "./lynden/lynden.controller";
 			dbName: DB_NAME,
 			useNewUrlParser: true,
 			useUnifiedTopology: true,
+			useCreateIndex: true,
 		}),
 
 		TerminusModule,

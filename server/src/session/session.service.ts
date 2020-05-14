@@ -47,7 +47,7 @@ export class SessionService {
 			await session.save();
 		} else {
 			// reset expire
-			session.expireAt = this.getExpireTime() as any;
+			session.expireAt = this.getExpireTime();
 			await session.save();
 
 			// minutes since online
@@ -129,7 +129,7 @@ export class SessionService {
 
 			await session.save();
 		} else {
-			session.expireAt = this.getExpireTime() as any;
+			session.expireAt = this.getExpireTime();
 
 			await session.save();
 		}
