@@ -82,6 +82,13 @@ const routes: Routes = [
 		loadChildren: () =>
 			import("./auth/auth.module").then(m => m.AuthModule),
 	},
+	{
+		path: "privacy-policy",
+		loadChildren: () =>
+			import("./privacy-policy/privacy-policy.module").then(
+				m => m.PrivacyPolicyModule,
+			),
+	},
 	{ path: "**", redirectTo: "/" },
 ];
 
@@ -102,6 +109,7 @@ const routes: Routes = [
 		ReactiveFormsModule,
 		RouterModule.forRoot(routes, {
 			initialNavigation: "enabled",
+			scrollPositionRestoration: "enabled",
 		}),
 		RecaptchaModule,
 		RecaptchaFormsModule,
