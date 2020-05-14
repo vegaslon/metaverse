@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Inject, PLATFORM_ID } from "@angular/core";
 import { Md5 } from "ts-md5/dist/md5";
+import { isPlatformServer } from "@angular/common";
 
 @Component({
 	selector: "app-about-us",
@@ -8,7 +9,10 @@ import { Md5 } from "ts-md5/dist/md5";
 	styleUrls: ["./about-us.component.scss"],
 })
 export class AboutUsComponent implements OnInit {
-	constructor(private http: HttpClient) {}
+	constructor(
+		private readonly http: HttpClient,
+		@Inject(PLATFORM_ID) private readonly platformId: object,
+	) {}
 
 	gitContributors: {
 		email: string;
@@ -57,6 +61,8 @@ export class AboutUsComponent implements OnInit {
 	};
 
 	ngOnInit() {
+		if (isPlatformServer(this.platformId)) return;
+
 		this.http
 			.get("/assets/contributors/interface-contributors.json")
 			.subscribe((contributors: [string, number][]) => {
