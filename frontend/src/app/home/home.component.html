@@ -113,10 +113,12 @@
 					<a
 						href="https://www.highfidelity.com/blog/latest-load-test-hits-423-so-whats-next-8b7fd85c234c"
 						target="_blank"
-						>Up to 400+ concurrently moving and talking people</a
 					>
-					can interact together in the same space. Powered by highly
-					customizable and scalable software for any occasion.
+						Up to 400+ concurrently
+					</a>
+					moving and talking people can interact together in the same
+					space. Powered by highly customizable and scalable software
+					for any occasion.
 				</h2>
 			</div>
 			<div class="col-md-5">
@@ -137,9 +139,9 @@
 					interaction
 				</h1>
 				<h2>
-					Be together with your friends and family and truly feel
-					their presence. It's incomparable to video calling as you
-					can naturally express yourself more than you'd believe.
+					Experience unprecedented presence and intimacy in a virtual
+					space. Subtle verbal and body communication are faithfully
+					reproduced in the virtual world.
 				</h2>
 			</div>
 			<div class="col-md-5">
@@ -176,9 +178,12 @@
 					developers
 				</h1>
 				<h2>
-					Use JavaScript (TypeScript soon) to make almost anything you
-					can imagine. Script entire experiences, tablet apps and
-					playable games.
+					Use JavaScript to make almost anything you can imagine.
+					Script entire experiences, tablet apps and playable games.
+					Find the
+					<a href="https://apidocs.tivolicloud.com">
+						API reference here</a
+					>.
 				</h2>
 			</div>
 			<div class="col-md-5">
@@ -223,6 +228,44 @@
 					src="/assets/screenshots/gitlab.jpg"
 					alt="Tivoli's git repo"
 				/>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="info">
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-md-6">
+				<h1 class="icon-title"><mat-icon>people</mat-icon> Social</h1>
+				<h2 *ngFor="let data of social" style="margin: 4px;">
+					{{ data[0] }} &ndash;
+					<a [href]="data[1]" target="_blank">{{
+						data[1].replace("https://", "")
+					}}</a>
+				</h2>
+				<br />
+			</div>
+			<div class="col-md-6">
+				<h1 class="icon-title"><mat-icon>list</mat-icon> Resources</h1>
+				<h2 *ngFor="let data of resources" style="margin: 4px;">
+					{{ data[0] }} &ndash;
+					<a [href]="data[1]" target="_blank">{{
+						data[1].replace("https://", "")
+					}}</a>
+				</h2>
+				<br />
+			</div>
+			<div class="col-md-6">
+				<h1 class="icon-title">
+					<mat-icon>thumbs_up_down</mat-icon> Contribute
+				</h1>
+				<h2 *ngFor="let data of contribute" style="margin: 4px;">
+					{{ data[0] }} &ndash;
+					<a [href]="data[1]" target="_blank">{{
+						data[1].replace("https://", "")
+					}}</a>
+				</h2>
+				<br />
 			</div>
 		</div>
 	</div>

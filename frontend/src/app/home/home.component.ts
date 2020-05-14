@@ -24,6 +24,19 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 	year = new Date().getFullYear();
 
+	social = [
+		["Discord", "https://alpha.tivolicloud.com/discord"],
+		["Blog", "https://blog.tivolicloud.com"],
+	];
+	resources = [
+		["Documentation", "https://docs.tivolicloud.com"],
+		["JavaScript API", "https://apidocs.tivolicloud.com"],
+	];
+	contribute = [
+		["GitLab", "https://git.tivolicloud.com"],
+		["Roadmap", "https://roadmap.tivolicloud.com"],
+	];
+
 	constructor(
 		public dialog: MatDialog,
 		private readonly route: ActivatedRoute,
