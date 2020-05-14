@@ -39,7 +39,7 @@ export class UserDomainController {
 
 	@Post("domain")
 	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard())
+	@UseGuards(MetaverseAuthGuard)
 	async createDomain(
 		@CurrentUser() user: User,
 		@Body() createDomainDto: CreateDomainDto,
@@ -54,7 +54,7 @@ export class UserDomainController {
 
 	@Post("domain/:id/token")
 	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard())
+	@UseGuards(MetaverseAuthGuard)
 	async newToken(@CurrentUser() user: User, @Param("id") id: string) {
 		if (!(user.domains as any[]).includes(id))
 			throw new NotFoundException();
@@ -68,7 +68,7 @@ export class UserDomainController {
 
 	@Get("domains")
 	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard())
+	@UseGuards(MetaverseAuthGuard)
 	async getAllUserDomains(@CurrentUser() user: User) {
 		await user.populate("domains").execPopulate();
 
@@ -87,7 +87,7 @@ export class UserDomainController {
 
 	@Patch("domain/:id")
 	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard())
+	@UseGuards(MetaverseAuthGuard)
 	async updateDomain(
 		@CurrentUser() user: User,
 		@Param("id") id: string,
@@ -112,7 +112,7 @@ export class UserDomainController {
 
 	@Delete("domain/:id")
 	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard())
+	@UseGuards(MetaverseAuthGuard)
 	async deleteDomain(@CurrentUser() user: User, @Param("id") id: string) {
 		if (!(user.domains as any[]).includes(id))
 			throw new NotFoundException();
@@ -127,7 +127,7 @@ export class UserDomainController {
 		description: "Update domain thumbnail",
 		type: UpdateDomainImageDto,
 	})
-	@UseGuards(MetaverseAuthGuard())
+	@UseGuards(MetaverseAuthGuard)
 	@UseInterceptors(
 		FileInterceptor("image", {
 			limits: {

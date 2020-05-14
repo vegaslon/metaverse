@@ -41,7 +41,7 @@ export class UserController {
 
 	@Put("email")
 	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard())
+	@UseGuards(MetaverseAuthGuard)
 	async updateUserEmail(
 		@CurrentUser() user,
 		@Body() userUpdateEmailDto: UserUpdateEmailDto,
@@ -51,7 +51,7 @@ export class UserController {
 
 	@Put("password")
 	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard())
+	@UseGuards(MetaverseAuthGuard)
 	async updateUserPassword(
 		@CurrentUser() user,
 		@Body() userUpdatePasswordDto: UserUpdatePasswordDto,
@@ -66,7 +66,7 @@ export class UserController {
 		description: "Update user profile picture",
 		type: UserUpdateImageDto,
 	})
-	@UseGuards(MetaverseAuthGuard())
+	@UseGuards(MetaverseAuthGuard)
 	@UseInterceptors(
 		FileInterceptor("image", {
 			limits: {
@@ -124,7 +124,7 @@ export class UserController {
 
 	// @Get("settings")
 	// @ApiBearerAuth()
-	// @UseGuards(MetaverseAuthGuard())
+	// @UseGuards(MetaverseAuthGuard)
 	// async getUserSettings(@CurrentUser() user) {
 	// 	const userSettings = await this.userService.getUserSettings(user);
 	// 	if (userSettings == null) throw new NotFoundException();
@@ -137,7 +137,7 @@ export class UserController {
 
 	// @Put("settings")
 	// @ApiBearerAuth()
-	// @UseGuards(MetaverseAuthGuard())
+	// @UseGuards(MetaverseAuthGuard)
 	// putUserSettings(
 	// 	@CurrentUser() user,
 	// 	@Body() userSettingsDto: UserSettingsDto,
@@ -147,7 +147,7 @@ export class UserController {
 
 	@Get("domains/liked")
 	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard())
+	@UseGuards(MetaverseAuthGuard)
 	getLikedDomains(
 		@CurrentUser() user: User,
 		@Query() getDomainsDto: GetDomainsDto,
@@ -157,7 +157,7 @@ export class UserController {
 
 	@Get("domains/private")
 	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard())
+	@UseGuards(MetaverseAuthGuard)
 	getPrivateDomains(
 		@CurrentUser() user: User,
 		@Query() getDomainsDto: GetDomainsDto,
@@ -167,14 +167,14 @@ export class UserController {
 
 	@Get("friends")
 	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard())
+	@UseGuards(MetaverseAuthGuard)
 	getFriends(@CurrentUser() user: User) {
 		return this.userService.getFriends(user);
 	}
 
 	@Post("verify")
 	@ApiBearerAuth()
-	@UseGuards(MetaverseUnverifiedAuthGuard())
+	@UseGuards(MetaverseUnverifiedAuthGuard)
 	sendVerify(@CurrentUser() user: User, @Body("email") email: string) {
 		return this.userService.sendVerify(user, email);
 	}

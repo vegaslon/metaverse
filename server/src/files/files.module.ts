@@ -8,7 +8,7 @@ import { FilesHostController } from "./files-host.controller";
 import { FilesHostService } from "./files-host.service";
 import { FilesController } from "./files.controller";
 import { FilesService } from "./files.service";
-import { UserFilesCacheSchema } from "./user-files-cache.schema";
+// import { UserFilesCacheSchema } from "./user-files-cache.schema";
 
 @Module({
 	imports: [
@@ -20,13 +20,13 @@ import { UserFilesCacheSchema } from "./user-files-cache.schema";
 				noTimestamp: true,
 			},
 		}),
-		MongooseModule.forFeature([
-			{
-				name: "users.files.cache",
-				schema: UserFilesCacheSchema,
-				collection: "users.files.cache",
-			},
-		]),
+		// MongooseModule.forFeature([
+		// 	{
+		// 		name: "users.files.cache",
+		// 		schema: UserFilesCacheSchema,
+		// 		collection: "users.files.cache",
+		// 	},
+		// ]),
 	],
 	providers: [FilesService, FilesHostService],
 	exports: [FilesService],

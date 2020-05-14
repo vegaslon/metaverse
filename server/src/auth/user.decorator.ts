@@ -1,8 +1,11 @@
-import { createParamDecorator } from "@nestjs/common";
-import { Request } from "express";
+import { createParamDecorator, ExecutionContext } from "@nestjs/common";
 
-export const CurrentUser = createParamDecorator((data, req: Request) => {
-	if (req.user == null) return null;
-	if ((req.user as any).username == null) return null; // req.user can be a domain
-	return req.user;
-});
+export const CurrentUser = createParamDecorator(
+	(data: unknown, ctx: ExecutionContext) => {
+		const user = ctx.switchToHttp().getRequest().user;
+
+		if (user == null) return null;
+		if (user.username == null) return null; // user can be a domain
+		return user;
+	},
+);

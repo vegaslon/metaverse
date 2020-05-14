@@ -98,7 +98,7 @@ export class AuthController {
 	// gitlab sso
 	// TODO: replace with oauth
 	@Post("sso/gitlab")
-	@UseGuards(MetaverseAuthGuard())
+	@UseGuards(MetaverseAuthGuard)
 	@ApiBearerAuth()
 	ssoGitlab(@CurrentUser() user: User) {
 		return this.authService.ssoGitlabToken(user);

@@ -116,9 +116,9 @@ export class FilesHostService {
 		filePath[0] = user.id;
 
 		// fetch file response
-		const fileUrl = await this.filesService.getObjectUrl(
-			filePath.join("/"),
-		);
+		const fileUrl = (
+			await this.filesService.getObjectUrl(filePath.join("/"))
+		)[0];
 		const fileRes = await fetch(fileUrl);
 
 		// try to find typescript and compile

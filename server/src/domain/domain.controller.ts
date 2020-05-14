@@ -36,7 +36,7 @@ export class DomainController {
 
 	@Get("domain/:id")
 	@ApiBearerAuth()
-	@UseGuards(OptionalAuthGuard())
+	@UseGuards(OptionalAuthGuard)
 	async getDomain(@CurrentUser() currentUser: User, @Param("id") id: string) {
 		const domain = await this.domainService.findById(id).populate("author");
 		if (domain == null) throw new NotFoundException();
@@ -80,7 +80,7 @@ export class DomainController {
 
 	@Get("domains")
 	@ApiBearerAuth()
-	@UseGuards(OptionalAuthGuard())
+	@UseGuards(OptionalAuthGuard)
 	async findOnlineDomains(
 		@CurrentUser() currentUser: User,
 		@Query() getDomainsDto: GetDomainsDto,
@@ -102,7 +102,7 @@ export class DomainController {
 
 	@Post("domains/:id/like")
 	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard())
+	@UseGuards(MetaverseAuthGuard)
 	async likeDomain(@CurrentUser() user: User, @Param("id") id: string) {
 		const domain = await this.domainService.findById(id);
 		if (domain == null) throw new NotFoundException();
@@ -112,7 +112,7 @@ export class DomainController {
 
 	@Post("domains/:id/unlike")
 	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard())
+	@UseGuards(MetaverseAuthGuard)
 	async unlikeDomain(@CurrentUser() user: User, @Param("id") id: string) {
 		const domain = await this.domainService.findById(id);
 		if (domain == null) throw new NotFoundException();

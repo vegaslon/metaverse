@@ -36,7 +36,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 	async validate(payload: JwtPayload) {
 		const now = +new Date() / 1000;
 
-		if (payload.t == JwtPayloadType.USER) {
+		if (payload.t === JwtPayloadType.USER) {
 			if (now > payload.exp) return;
 
 			const user = await this.userService.findById(payload.id);
@@ -45,9 +45,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 			return user;
 		}
 
-		if (payload.t == JwtPayloadType.DOMAIN) {
+		if (payload.t === JwtPayloadType.DOMAIN) {
 			const domain = await this.domainService.findById(payload.id);
-			if (domain.secret != payload.s) return;
+			if (domain.secret !== payload.s) return;
 
 			return { domain };
 		}

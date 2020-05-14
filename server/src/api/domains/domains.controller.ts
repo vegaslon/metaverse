@@ -67,7 +67,7 @@ export class DomainsController {
 		summary: "Retrieves the domain from the domain token",
 	})
 	@ApiBearerAuth()
-	@UseGuards(DomainAuthGuard())
+	@UseGuards(DomainAuthGuard)
 	async getDomains(@CurrentDomain() domain: Domain) {
 		// const docs = await this.domainService.getUserDomains(user);
 		// let domains = [];
@@ -90,7 +90,7 @@ export class DomainsController {
 
 	@Put(":id")
 	@ApiBearerAuth()
-	@UseGuards(DomainAuthGuard())
+	@UseGuards(DomainAuthGuard)
 	async updateDomain(
 		@CurrentDomain() domain: Domain,
 		@Param("id") id: string,
@@ -116,7 +116,7 @@ export class DomainsController {
 
 	@Put(":id/ice_server_address")
 	@ApiBearerAuth()
-	@UseGuards(DomainAuthGuard())
+	@UseGuards(DomainAuthGuard)
 	async updateDomainIceServer(
 		@CurrentDomain() domain: Domain,
 		@Param("id") id: string,
@@ -142,7 +142,7 @@ export class DomainsController {
 
 	@Put(":id/public_key")
 	@ApiBearerAuth()
-	@UseGuards(DomainAuthGuard())
+	@UseGuards(DomainAuthGuard)
 	@UseInterceptors(FileInterceptor("public_key"))
 	async putDomainPublicKey(
 		@CurrentDomain() domain: Domain,

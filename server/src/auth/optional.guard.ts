@@ -1,4 +1,4 @@
-import { mixin, UnauthorizedException } from "@nestjs/common";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { User } from "../user/user.schema";
 
@@ -12,15 +12,12 @@ import { User } from "../user/user.schema";
 // 	);
 // }
 
-export function OptionalAuthGuard() {
-	return mixin(
-		class JwtAuthGuard extends AuthGuard() {
-			handleRequest(err, user, info, context) {
-				if (err) throw new UnauthorizedException();
-				if (user == false) return null;
-				if ((user as User).emailVerified == false) return null;
-				return user;
-			}
-		},
-	);
+@Injectable()
+export class OptionalAuthGuard extends AuthGuard() {
+	handleRequest(err, user, info, context) {
+		if (err) throw new UnauthorizedException();
+		if (user == false) return null;
+		if ((user as User).emailVerified == false) return null;
+		return user;
+	}
 }

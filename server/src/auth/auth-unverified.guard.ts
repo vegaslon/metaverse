@@ -1,4 +1,4 @@
-import { mixin, UnauthorizedException } from "@nestjs/common";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 
 // function notAuthorized() {
@@ -11,17 +11,14 @@ import { AuthGuard } from "@nestjs/passport";
 // 	);
 // }
 
-export function MetaverseUnverifiedAuthGuard() {
-	return mixin(
-		class JwtAuthGuard extends AuthGuard() {
-			handleRequest(err, user, info, context) {
-				if (err) throw new UnauthorizedException();
-				if (user._id == null) throw new UnauthorizedException();
-				// if ((user as User).emailVerified == false)
-				// 	throw new UnauthorizedException(null, "Unverified");
+@Injectable()
+export class MetaverseUnverifiedAuthGuard extends AuthGuard() {
+	handleRequest(err, user, info, context) {
+		if (err) throw new UnauthorizedException();
+		if (user._id == null) throw new UnauthorizedException();
+		// if ((user as User).emailVerified == false)
+		// 	throw new UnauthorizedException(null, "Unverified");
 
-				return user;
-			}
-		},
-	);
+		return user;
+	}
 }

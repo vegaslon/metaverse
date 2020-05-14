@@ -28,7 +28,7 @@ export class UserController {
 	) {}
 
 	@Get("profile")
-	@UseGuards(MetaverseUnverifiedAuthGuard())
+	@UseGuards(MetaverseUnverifiedAuthGuard)
 	getProfile(@CurrentUser() user: User) {
 		let roles = [];
 		if (user.admin) roles.push("admin");
@@ -53,7 +53,7 @@ export class UserController {
 	@ApiOperation({
 		summary: "Doesn't do anything and I don't know what it's purpose is",
 	})
-	@UseGuards(MetaverseAuthGuard())
+	@UseGuards(MetaverseAuthGuard)
 	getLocker(@CurrentUser() user: User) {
 		return {
 			status: "success",
@@ -62,7 +62,7 @@ export class UserController {
 	}
 
 	@Put("heartbeat")
-	@UseGuards(MetaverseAuthGuard())
+	@UseGuards(MetaverseAuthGuard)
 	async heartbeart(@CurrentUser() user: User) {
 		const {
 			sessionId: session_id,
@@ -81,7 +81,7 @@ export class UserController {
 		summary:
 			"Required for the domain server I think. Currently not implmented ",
 	})
-	@UseGuards(MetaverseAuthGuard())
+	@UseGuards(MetaverseAuthGuard)
 	getFriends(@CurrentUser() user) {
 		return {
 			status: "success",
@@ -93,7 +93,7 @@ export class UserController {
 	}
 
 	@Put("public_key")
-	@UseGuards(MetaverseAuthGuard())
+	@UseGuards(MetaverseAuthGuard)
 	@UseInterceptors(FileInterceptor("public_key"))
 	putPublicKey(@CurrentUser() user: User, @UploadedFile() file: MulterFile) {
 		if (file == null) return;
@@ -101,7 +101,7 @@ export class UserController {
 	}
 
 	@Put("location")
-	@UseGuards(MetaverseAuthGuard())
+	@UseGuards(MetaverseAuthGuard)
 	async putLocation(
 		@CurrentUser() user: User,
 		@Body() userUpdateLocationDto: UserUpdateLocationDto,

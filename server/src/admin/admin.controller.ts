@@ -37,7 +37,7 @@ export class AdminController {
 
 	@Get("users")
 	@ApiBearerAuth()
-	@UseGuards(AdminAuthGuard())
+	@UseGuards(AdminAuthGuard)
 	async getUsers(@Query() getUsersDto: GetUsersDto) {
 		const users = await this.userService.findUsers(getUsersDto);
 
@@ -79,7 +79,7 @@ export class AdminController {
 
 	// @Get("users/online")
 	// @ApiBearerAuth()
-	// @UseGuards(AdminAuthGuard())
+	// @UseGuards(AdminAuthGuard)
 	// getOnlineUsers() {
 	// 	return [...this.userService.sessions.keys()].map(username => {
 	// 		const { minutes, location } = this.userService.get(username);
@@ -94,7 +94,7 @@ export class AdminController {
 
 	@Get("streams")
 	@ApiBearerAuth()
-	@UseGuards(AdminAuthGuard())
+	@UseGuards(AdminAuthGuard)
 	getVideoStreams() {
 		return this.videoStreamService.hosts.map(host => {
 			// console.log(host.socket.request.connection);
@@ -107,7 +107,7 @@ export class AdminController {
 
 	@Post("users/impersonate")
 	@ApiBearerAuth()
-	@UseGuards(AdminAuthGuard())
+	@UseGuards(AdminAuthGuard)
 	async impersonateUser(@Body() adminImpersonateDto: AdminImpersonateDto) {
 		const user = await this.userService.findById(
 			adminImpersonateDto.userId,

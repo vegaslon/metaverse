@@ -30,7 +30,7 @@ export class FilesController {
 
 	@Get("")
 	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard())
+	@UseGuards(MetaverseAuthGuard)
 	getFiles(
 		@CurrentUser() user: User,
 		//@Query("path") path: string
@@ -40,7 +40,7 @@ export class FilesController {
 
 	@Get("status")
 	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard())
+	@UseGuards(MetaverseAuthGuard)
 	getStatus(@CurrentUser() user: User) {
 		return this.filesService.getStatus(user);
 	}
@@ -52,13 +52,13 @@ export class FilesController {
 		description: "File to upload",
 		type: UserFileUploadDto,
 	})
-	@UseGuards(MetaverseAuthGuard())
+	@UseGuards(MetaverseAuthGuard)
 	@UseInterceptors(
 		FileInterceptor("file", {
 			limits: {
 				fileSize: 1000 * 1000 * 100, // 100 MB
 			},
-			storage: new (function() {
+			storage: new (function () {
 				this._handleFile = (req, file, cb) => {
 					_filesService
 						.uploadFile(req.user, req.body.path, file)
@@ -82,28 +82,28 @@ export class FilesController {
 
 	@Put("folder")
 	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard())
+	@UseGuards(MetaverseAuthGuard)
 	createFolder(@CurrentUser() user: User, @Query("path") path: string) {
 		return this.filesService.createFolder(user, path);
 	}
 
 	@Delete("")
 	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard())
+	@UseGuards(MetaverseAuthGuard)
 	deleteFile(@CurrentUser() user: User, @Query("path") path: string) {
 		return this.filesService.deleteFile(user, path);
 	}
 
 	@Delete("folder")
 	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard())
+	@UseGuards(MetaverseAuthGuard)
 	deleteFolder(@CurrentUser() user: User, @Query("path") path: string) {
 		return this.filesService.deleteFolder(user, path);
 	}
 
 	@Post("move")
 	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard())
+	@UseGuards(MetaverseAuthGuard)
 	moveFile(
 		@CurrentUser() user: User,
 		@Query("oldPath") oldPath: string,
@@ -114,7 +114,7 @@ export class FilesController {
 
 	@Post("folder/move")
 	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard())
+	@UseGuards(MetaverseAuthGuard)
 	moveFolder(
 		@CurrentUser() user: User,
 		@Query("oldPath") oldPath: string,
@@ -125,7 +125,7 @@ export class FilesController {
 
 	// @Post("folder/move")
 	// @ApiBearerAuth()
-	// @UseGuards(MetaverseAuthGuard())
+	// @UseGuards(MetaverseAuthGuard)
 	// moveFolder(
 	// 	@CurrentUser() user: User,
 	// 	@Query("oldPath") oldPath: string,

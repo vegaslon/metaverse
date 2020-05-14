@@ -13,7 +13,7 @@ import { AuthModule } from "./auth/auth.module";
 import { DomainModule } from "./domain/domain.module";
 import { EmailModule } from "./email/email.module";
 import { DB_HOST, DB_NAME, DB_PASS, DB_USER, DEV } from "./environment";
-import { HealthService } from "./health.service";
+import { HealthController } from "./health.controller";
 import { PuppeteerModule } from "./puppeteer/puppeteer.module";
 import { UserModule } from "./user/user.module";
 import { VideoStreamModule } from "./video-stream/video-stream.module";
@@ -23,19 +23,19 @@ import { LyndenController } from "./lynden/lynden.controller";
 
 @Module({
 	imports: [
-		...(!DEV
-			? [
-					// in production
-					SentryModule.forRoot({
-						dsn:
-							"https://35ced4ee7098404393553430f8d78e79@sentry.tivolicloud.com/3",
-						environment: "production",
-						debug: false,
-					}),
-			  ]
-			: [
-					// in development
-			  ]),
+		// ...(!DEV
+		// 	? [
+		// 			// in production
+		// 			SentryModule.forRoot({
+		// 				dsn:
+		// 					"https://35ced4ee7098404393553430f8d78e79@sentry.tivolicloud.com/3",
+		// 				environment: "production",
+		// 				debug: false,
+		// 			}),
+		// 	  ]
+		// 	: [
+		// 			// in development
+		// 	  ]),
 
 		// https://mongoosejs.com/docs/connections.html#options
 		MongooseModule.forRoot("mongodb://" + DB_HOST, {
@@ -46,9 +46,7 @@ import { LyndenController } from "./lynden/lynden.controller";
 			useUnifiedTopology: true,
 		}),
 
-		TerminusModule.forRootAsync({
-			useClass: HealthService,
-		}),
+		TerminusModule,
 
 		AuthModule,
 		UserModule,
@@ -70,6 +68,6 @@ import { LyndenController } from "./lynden/lynden.controller";
 		ZoomModule,
 	],
 	providers: [],
-	controllers: [AppController, LyndenController],
+	controllers: [AppController, HealthController, LyndenController],
 })
 export class AppModule {}

@@ -1,6 +1,6 @@
 import { Document, Schema } from "mongoose";
 import { User } from "../user/user.schema";
-import uuid from "uuid";
+import { v4 as uuid } from "uuid";
 
 export enum DomainAutomaticNetworking {
 	full = "full",
@@ -97,7 +97,7 @@ export interface Domain extends Document {
 	userLikes: User[];
 }
 
-DomainSchema.pre("remove", async function(next) {
+DomainSchema.pre("remove", async function (next) {
 	try {
 		const domain = await (this as Domain)
 			.populate("author")

@@ -1,7 +1,7 @@
 import { Document, Schema, Model, Query } from "mongoose";
 import { Domain } from "../domain/domain.schema";
 import { User } from "../user/user.schema";
-import uuid from "uuid";
+import { v4 as uuid } from "uuid";
 
 export const UserSessionSchema = new Schema({
 	user: { type: Schema.Types.ObjectId, ref: "users", required: true },
@@ -54,7 +54,7 @@ export interface DomainSession extends Document {
 
 // before find, delete all expired (countDocuments included)
 [UserSessionSchema, DomainSessionSchema].forEach(schema => {
-	schema.pre(/^find/, async function(next) {
+	schema.pre(/^find/, async function (next) {
 		try {
 			const model = (this as any).model as Model<any, {}>;
 
@@ -69,7 +69,7 @@ export interface DomainSession extends Document {
 });
 
 // before domain find, clean up userSessions
-DomainSessionSchema.pre(/^find/, async function(next) {
+DomainSessionSchema.pre(/^find/, async function (next) {
 	try {
 		const model = (this as any).model as Model<DomainSession, {}>;
 		const _id = (this as any)._conditions._id;

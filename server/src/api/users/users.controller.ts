@@ -101,7 +101,7 @@ export class UsersController {
 		summary: "Gets all users in an online domain",
 	})
 	@ApiBearerAuth()
-	@UseGuards(OptionalAuthGuard())
+	@UseGuards(OptionalAuthGuard)
 	async getUsers(
 		@CurrentUser() currentUser: User,
 		@Query() usersDto: UsersDto,
@@ -133,7 +133,7 @@ export class UsersController {
 	// @Get("connections")
 	// @ApiOperation({ deprecated: true })
 	// @ApiBearerAuth()
-	// @UseGuards(MetaverseAuthGuard())
+	// @UseGuards(MetaverseAuthGuard)
 	// async getConnections(@Query() connectionsDto: UsersConnectionsDto) {
 	// 	const { per_page, page, sort } = connectionsDto;
 
