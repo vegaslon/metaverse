@@ -20,6 +20,7 @@ import { AuthInterceptorService } from "./auth/auth-interceptor.service";
 import { AuthGuard } from "./auth/auth.guard";
 import { AuthService } from "./auth/auth.service";
 import { VerifyEmailComponent } from "./auth/verify-email/verify-email.component";
+import { CookieConsentComponent } from "./cookie-consent/cookie-consent.component";
 import { DownloadComponent } from "./header/download/download.component";
 import { HeaderComponent } from "./header/header.component";
 import { SignInComponent } from "./header/sign-in/sign-in.component";
@@ -100,6 +101,7 @@ const routes: Routes = [
 		HomeComponent,
 		DownloadComponent,
 		VerifyEmailComponent,
+		CookieConsentComponent,
 	],
 	imports: [
 		BrowserModule.withServerTransition({ appId: "serverApp" }),

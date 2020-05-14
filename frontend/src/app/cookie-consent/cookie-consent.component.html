@@ -1,0 +1,10 @@
+<div *ngIf="visible" [@close] class="cookie-consent">
+	<p>
+		This website uses cookies to ensure you get the best experience on our
+		website.
+		<a href="https://www.cookiesandyou.com" target="_blank">Learn more</a>
+	</p>
+	<button mat-flat-button color="primary" (click)="onConsent()">
+		Got it!
+	</button>
+</div>
