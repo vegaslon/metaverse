@@ -1,5 +1,6 @@
 import { animate, style, transition, trigger } from "@angular/animations";
-import { Component, OnInit } from "@angular/core";
+import { isPlatformServer } from "@angular/common";
+import { Component, Inject, OnInit, PLATFORM_ID } from "@angular/core";
 import { CookieService } from "ngx-cookie-service";
 import { environment } from "../../environments/environment";
 
@@ -23,9 +24,13 @@ export class CookieConsentComponent implements OnInit {
 	private readonly key = "cookieConsent";
 	visible = false;
 
-	constructor(private cookies: CookieService) {}
+	constructor(
+		private readonly cookies: CookieService,
+		@Inject(PLATFORM_ID) private readonly platformId: object,
+	) {}
 
 	ngOnInit() {
+		if (isPlatformServer(this.platformId)) return;
 		if (this.cookies.get(this.key) === "") this.visible = true;
 	}
 
