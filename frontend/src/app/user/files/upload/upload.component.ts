@@ -68,6 +68,11 @@ export class UploadComponent {
 		this.dragOvers = 0;
 	}
 
+	openFilesInput(e: MouseEvent, filesInput: HTMLInputElement) {
+		e.stopPropagation();
+		filesInput.click();
+	}
+
 	onFilesChanged(files: FileList) {
 		this.uploads = [...(files as any)].map(file => ({
 			state: "ready",

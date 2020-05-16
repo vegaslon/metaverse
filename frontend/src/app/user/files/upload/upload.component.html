@@ -31,14 +31,18 @@
 	<div
 		class="drag-over"
 		*ngIf="uploads.length == 0"
-		(click)="filesInput.click()"
+		(click)="openFilesInput($event, filesInput)"
 		[class.active]="dragOvers > 0"
 	>
 		<h2 style="margin: 0;">
 			Drag and drop files here
 		</h2>
 		<h2 style="margin: 16px 0;">or</h2>
-		<button mat-button color="primary" (click)="filesInput.click()">
+		<button
+			mat-button
+			color="primary"
+			(click)="openFilesInput($event, filesInput)"
+		>
 			<mat-icon>insert_drive_file</mat-icon> Choose files
 		</button>
 	</div>
