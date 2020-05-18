@@ -13,6 +13,7 @@ export interface Domain {
 	online: boolean;
 	numUsers: number;
 
+	iceServerAddress: string;
 	networkAddress: string;
 	networkPort: string;
 }

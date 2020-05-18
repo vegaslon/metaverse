@@ -119,6 +119,7 @@ export function renderDomain(
 			  });
 
 	const online = session != null;
+	const usingIce = domain.automaticNetworking === "full";
 
 	return {
 		id: domain._id,
@@ -134,8 +135,10 @@ export function renderDomain(
 		likes: domain.userLikes.length,
 		liked,
 
-		networkAddress: domain.networkAddress,
-		networkPort: domain.networkPort,
+		iceServerAddress: usingIce ? domain.iceServerAddress : "",
+		networkAddress: usingIce ? "" : domain.networkAddress,
+		networkPort: usingIce ? "" : domain.networkPort,
+
 		path: domain.path,
 	};
 }

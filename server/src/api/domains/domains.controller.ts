@@ -27,11 +27,16 @@ function renderDomainForHifi(d: Domain, session: DomainSession) {
 	return {
 		id: d._id,
 
-		ice_server_address: d.iceServerAddress,
-		cloud_domain: false,
+		...(d.automaticNetworking === "full"
+			? {
+					ice_server_address: d.iceServerAddress,
+			  }
+			: {
+					network_address: d.networkAddress,
+					network_port: d.networkPort,
+			  }),
 
-		network_address: d.networkAddress,
-		network_port: d.networkPort,
+		cloud_domain: false,
 		online,
 
 		default_place_name: null,

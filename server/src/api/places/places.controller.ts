@@ -45,8 +45,14 @@ export class PlacesController {
 					address: domain._id, // hifi://address/path
 					domain: {
 						id: domain._id,
-						network_address: domain.networkAddress,
-						network_port: domain.networkPort,
+						...(domain.automaticNetworking === "full"
+							? {
+									ice_server_address: domain.iceServerAddress,
+							  }
+							: {
+									network_address: domain.networkAddress,
+									network_port: domain.networkPort,
+							  }),
 						online,
 						default_place_name: domain._id,
 					},

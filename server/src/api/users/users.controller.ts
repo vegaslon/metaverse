@@ -215,6 +215,7 @@ export class UsersController {
 		if (session == null) throw NoLocation();
 
 		const domain = session.domain;
+		if (domain == null) throw NoLocation();
 
 		// TODO: check whether they're friends or not
 
@@ -229,8 +230,15 @@ export class UsersController {
 						name: domain.label,
 						domain: {
 							id: domain._id,
-							network_address: domain.networkAddress,
-							network_port: domain.networkPort,
+							...(domain.automaticNetworking === "full"
+								? {
+										ice_server_address:
+											domain.iceServerAddress,
+								  }
+								: {
+										network_address: domain.networkAddress,
+										network_port: domain.networkPort,
+								  }),
 							online: true,
 							default_place_name: domain._id,
 						},

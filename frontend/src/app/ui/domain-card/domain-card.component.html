@@ -25,13 +25,22 @@
 		<button mat-button *ngIf="inInterface" (click)="onJoinDomain()">
 			<mat-icon>launch</mat-icon> Join
 			<span style="opacity: 0.5; font-size: 0.8em; padding-left: 8px;">
-				{{ domain.networkAddress + ":" + domain.networkPort }}
+				{{
+					domain.iceServerAddress
+						? ""
+						: domain.networkAddress + ":" + domain.networkPort
+				}}
 			</span>
 		</button>
 		<button mat-button *ngIf="editMode" (click)="onEditDomain()">
 			<mat-icon>edit</mat-icon> Edit details
 		</button>
-		<a mat-button *ngIf="editMode" [href]="domainSettings" target="_blank">
+		<a
+			mat-button
+			*ngIf="editMode && !domain.iceServerAddress"
+			[href]="domainSettings"
+			target="_blank"
+		>
 			<mat-icon>settings</mat-icon> Open settings
 			<span style="opacity: 0.5; font-size: 0.8em; padding-left: 8px;">
 				{{ domain.networkAddress + ":" + domain.networkPort }}
