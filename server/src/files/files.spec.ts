@@ -1,6 +1,7 @@
 import { Test } from "@nestjs/testing";
-import { FilesService } from "./files.service";
+import { MetricsService } from "../metrics/metrics.service";
 import { User } from "../user/user.schema";
+import { FilesService } from "./files.service";
 
 describe("FilesService", () => {
 	let filesService: FilesService;
@@ -8,7 +9,13 @@ describe("FilesService", () => {
 	beforeAll(async () => {
 		const module = await Test.createTestingModule({
 			imports: [],
-			providers: [FilesService],
+			providers: [
+				FilesService,
+				{
+					provide: MetricsService,
+					useValue: {},
+				},
+			],
 		}).compile();
 
 		filesService = module.get<FilesService>(FilesService);
