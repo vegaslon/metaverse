@@ -16,6 +16,7 @@ import { User } from "../user/user.schema";
 import { UserService } from "../user/user.service";
 import { AuthExtSignUpDto, AuthSignUpDto, AuthTokenDto } from "./auth.dto";
 import { JwtPayload, JwtPayloadType } from "./jwt.strategy";
+import { MetricsService } from "../metrics/metrics.service";
 
 // aaah... cant camel case here
 export interface InterfaceAuthToken {
@@ -44,6 +45,8 @@ export class AuthService {
 
 		@Inject(forwardRef(() => UserService))
 		private readonly userService: UserService,
+
+		private readonly metricsService: MetricsService,
 	) {}
 
 	async hashPassword(password: string): Promise<string> {
@@ -83,6 +86,8 @@ export class AuthService {
 		};
 
 		const iat = Math.floor(+new Date() / 1000);
+
+		this.metricsService.metrics.loginsPerMinute++;
 
 		return {
 			access_token: jwt,

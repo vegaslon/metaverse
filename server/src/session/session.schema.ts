@@ -55,6 +55,7 @@ export interface DomainSession extends Document {
 // enable expire which reaps every 60 seconds by default
 // and before find, filter out already expired
 // /^find/ includes .countDocuments
+// TODO: check if .countDocuments is respecting down below
 [UserSessionSchema, DomainSessionSchema].forEach(schema => {
 	schema.index({ expireAt: 1 }, { expireAfterSeconds: 0 });
 	schema.pre(/^find/, function () {

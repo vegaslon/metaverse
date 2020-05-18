@@ -20,6 +20,7 @@ import { VideoStreamModule } from "./video-stream/video-stream.module";
 import { FilesModule } from "./files/files.module";
 import { ZoomModule } from "./zoom/zoom.module";
 import { LyndenController } from "./lynden/lynden.controller";
+import { MetricsModule } from "./metrics/metrics.module";
 
 @Module({
 	imports: [
@@ -46,8 +47,8 @@ import { LyndenController } from "./lynden/lynden.controller";
 			useUnifiedTopology: true,
 			useCreateIndex: true,
 		}),
-
 		TerminusModule,
+		MetricsModule,
 
 		AuthModule,
 		UserModule,

@@ -13,6 +13,7 @@ import {
 import { JwtStrategy } from "./jwt.strategy";
 import { OauthController } from "./oauth.controller";
 import { DomainModule } from "../domain/domain.module";
+import { MetricsModule } from "../metrics/metrics.module";
 
 const strategies = [GoogleStrategy, DiscordStrategy, GitHubStrategy];
 
@@ -29,6 +30,7 @@ const strategies = [GoogleStrategy, DiscordStrategy, GitHubStrategy];
 		}),
 		forwardRef(() => UserModule),
 		forwardRef(() => DomainModule),
+		MetricsModule,
 	],
 	controllers: [OauthController, AuthController],
 	providers: [AuthService, JwtStrategy, ...strategies],

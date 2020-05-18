@@ -24,6 +24,8 @@ export const {
 
 	JWT_SECRET = "thisIsSoVerySecretyou literally have no idealol1610239012",
 
+	METRICS_SECRET = "",
+
 	// https://console.cloud.google.com/apis/credentials
 	AUTH_GOOGLE_ID = " ",
 	AUTH_GOOGLE_SECRET = " ",
