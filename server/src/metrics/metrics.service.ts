@@ -126,7 +126,10 @@ export class MetricsService implements OnModuleInit, OnModuleDestroy {
 				const data =
 					value.data == null
 						? allMetrics.reduce(
-								(current, doc) => current + doc[value.dataKey],
+								(current, doc) =>
+									doc[value.dataKey] == null
+										? current
+										: current + doc[value.dataKey],
 								0,
 						  )
 						: value.data;
