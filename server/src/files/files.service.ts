@@ -17,6 +17,7 @@ import {
 	FILES_URL,
 } from "../environment";
 import { User } from "../user/user.schema";
+import { MetricsService } from "../metrics/metrics.service";
 
 export class UserFileUploadDto {
 	@ApiProperty({ type: "string", required: true })
@@ -62,7 +63,7 @@ export class FilesService {
 	private readonly storage: Storage;
 	private readonly bucket: Bucket;
 
-	constructor() {
+	constructor(private readonly metricsService: MetricsService) {
 		// this.bucket = FILES_S3_BUCKET;
 
 		// const regionMatches = FILES_S3_ENDPOINT.match(
@@ -243,6 +244,8 @@ export class FilesService {
 
 		body.pipe(stream);
 		await new Promise(resolve => stream.on("finish", resolve));
+
+		this.metricsService.metrics.fileWritesPerMinute++;
 
 		return {
 			url: this.getUrl(user, key),

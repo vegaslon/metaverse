@@ -8,6 +8,7 @@ import { FilesHostController } from "./files-host.controller";
 import { FilesHostService } from "./files-host.service";
 import { FilesController } from "./files.controller";
 import { FilesService } from "./files.service";
+import { MetricsModule } from "../metrics/metrics.module";
 // import { UserFilesCacheSchema } from "./user-files-cache.schema";
 
 @Module({
@@ -27,6 +28,7 @@ import { FilesService } from "./files.service";
 		// 		collection: "users.files.cache",
 		// 	},
 		// ]),
+		MetricsModule,
 	],
 	providers: [FilesService, FilesHostService],
 	exports: [FilesService],

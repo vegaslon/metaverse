@@ -12,6 +12,9 @@ export const MetricsSchema = new Schema({
 
 	loginsPerMinute: { type: Number, default: 0 },
 
+	fileReadsPerMinute: { type: Number, default: 0 },
+	fileWritesPerMinute: { type: Number, default: 0 },
+
 	expireAt: { type: Date, required: true },
 });
 
@@ -21,6 +24,9 @@ export interface Metrics extends Document {
 	req5xxPerMinute: number;
 
 	loginsPerMinute: number;
+
+	fileReadsPerMinute: number;
+	fileWritesPerMinute: number;
 
 	expireAt: Date | number;
 }

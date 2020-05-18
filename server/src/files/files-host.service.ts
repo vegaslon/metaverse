@@ -4,9 +4,9 @@ import {
 	Injectable,
 	NotFoundException,
 } from "@nestjs/common";
-import { ObjectId } from "bson";
 import { Response as ExpressResponse } from "express";
 import fetch, { Response as FetchResponse } from "node-fetch";
+import { MetricsService } from "../metrics/metrics.service";
 import { UserService } from "../user/user.service";
 import { FilesService } from "./files.service";
 import { functionBindPolyfill } from "./function-bind-polyfill";
@@ -16,6 +16,7 @@ export class FilesHostService {
 	constructor(
 		private readonly userService: UserService,
 		private readonly filesService: FilesService,
+		private readonly metricsService: MetricsService,
 	) {}
 
 	private setHeaders(fromRes: FetchResponse, toRes: ExpressResponse) {
@@ -142,6 +143,7 @@ export class FilesHostService {
 
 		if (query.download != null) this.forceDownload(res);
 
+		this.metricsService.metrics.fileReadsPerMinute++;
 		this.setHeaders(fileRes, res);
 		fileRes.body.pipe(res);
 	}

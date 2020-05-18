@@ -27,6 +27,9 @@ export class MetricsService implements OnModuleInit, OnModuleDestroy {
 			this.metrics.req5xxPerMinute = 0;
 
 			this.metrics.loginsPerMinute = 0;
+
+			this.metrics.fileReadsPerMinute = 0;
+			this.metrics.fileWritesPerMinute = 0;
 		}
 	}
 
@@ -47,6 +50,7 @@ export class MetricsService implements OnModuleInit, OnModuleDestroy {
 				type: "counter",
 				values: [
 					{
+						labels: { code: "all" },
 						dataKey: "totalReqPerMinute",
 					},
 					{
@@ -66,6 +70,21 @@ export class MetricsService implements OnModuleInit, OnModuleDestroy {
 				values: [
 					{
 						dataKey: "loginsPerMinute",
+					},
+				],
+			},
+			{
+				key: "files",
+				help: "Total files being read or written",
+				type: "counter",
+				values: [
+					{
+						labels: { type: "read" },
+						dataKey: "fileReadsPerMinute",
+					},
+					{
+						labels: { type: "write" },
+						dataKey: "fileWritesPerMinute",
 					},
 				],
 			},
