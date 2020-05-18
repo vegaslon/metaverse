@@ -115,8 +115,6 @@ deploy app engine:
 
     # https://medium.com/google-cloud/automatically-deploy-to-google-app-engine-with-gitlab-ci-d1c7237cbe11
     script:
-        - echo $GCP_AUTH_JSON | base64 -d > /tmp/gcp-auth.json
-        - echo $GCP_ENV_VARIABLES | base64 -d >> app.yaml
-
-        - gcloud auth activate-service-account --key-file /tmp/gcp-auth.json
+        - cat $GCP_ENV_VARIABLES >> app.yaml
+        - gcloud auth activate-service-account --key-file $GCP_AUTH_JSON
         - gcloud --quiet --project tivolicloud app deploy --version $CI_PIPELINE_ID
