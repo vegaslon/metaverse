@@ -69,6 +69,20 @@ $bgDim: 0.2;
 
 		.buttons {
 			margin-top: 36px;
+
+			a,
+			button {
+				font-size: 1em;
+				padding: 4px 24px;
+				position: relative;
+
+				.arrow {
+					position: absolute;
+					height: 100px;
+					left: 180px;
+					bottom: -5px;
+				}
+			}
 		}
 	}
 }
