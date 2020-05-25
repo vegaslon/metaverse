@@ -3,11 +3,11 @@
 	<br />
 	<div class="storage" style="display: flex; align-items: top;">
 		<mat-icon style="margin-right: 8px;">storage</mat-icon>
-		<p style="margin: 0; width: 100%">
+		<p style="margin: 0; width: 100%;">
 			Storage of {{ total }} files
 			<mat-progress-bar
 				[value]="(status.usedSize / status.maxSize) * 100"
-				style="margin: 8px 0"
+				style="margin: 8px 0;"
 			></mat-progress-bar>
 			{{ utilsService.formatBytes(status.usedSize) }} of
 			{{
@@ -38,7 +38,7 @@
 <div class="files" *ngIf="user">
 	<div class="breadcrumbs">
 		<button mat-button (click)="changeCurrentFolder(rootFolder)">
-			{{ user.profile.username }}'s Files
+			{{ utilsService.displayPluralName(user.profile.username) }} Files
 		</button>
 		<ng-container *ngFor="let folder of getBreadcrumbs()">
 			<mat-icon class="icon">keyboard_arrow_right</mat-icon>

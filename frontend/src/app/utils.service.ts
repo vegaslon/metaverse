@@ -171,10 +171,7 @@ export class UtilsService {
 	// }
 
 	formatExt(fileName: string): { type: string; icon: string } {
-		const ext = fileName
-			.split(".")
-			.pop()
-			.toLowerCase();
+		const ext = fileName.split(".").pop().toLowerCase();
 
 		for (const type of Object.keys(this.fileTypes)) {
 			if (this.fileTypes[type].includes(ext)) {
@@ -198,4 +195,7 @@ export class UtilsService {
 		n +
 		" " +
 		(n == 1 ? singular : plural != null ? plural : singular + "s");
+
+	displayPluralName = (name: string) =>
+		name.toLowerCase().endsWith("s") ? name + "'" : name + "'s";
 }
