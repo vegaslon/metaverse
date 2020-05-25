@@ -9,6 +9,8 @@ export interface Upload {
 	state: "ready" | "uploading" | "uploaded";
 	progress: number;
 	file: File;
+	// error: string;
+	error: boolean;
 }
 
 @Component({
@@ -21,6 +23,10 @@ export class UploadComponent {
 
 	uploading = false;
 	error = "";
+	disabled = false;
+
+	private readonly maxSize = "32 MB";
+	private readonly maxSizeBytes = 32000000;
 
 	constructor(
 		public readonly utilsService: UtilsService,
@@ -74,11 +80,22 @@ export class UploadComponent {
 	}
 
 	onFilesChanged(files: FileList) {
-		this.uploads = [...(files as any)].map(file => ({
-			state: "ready",
-			progress: 0,
-			file,
-		}));
+		let hasMaxSize = false;
+
+		this.uploads = [...(files as any)].map(file => {
+			const isMaxSize = file.size > this.maxSizeBytes;
+			if (isMaxSize) hasMaxSize = true;
+
+			return {
+				state: "ready",
+				progress: 0,
+				file,
+				error: isMaxSize,
+			};
+		});
+
+		this.error = hasMaxSize ? "Maximum file size is " + this.maxSize : "";
+		this.disabled = hasMaxSize;
 	}
 
 	onReset() {
@@ -88,6 +105,8 @@ export class UploadComponent {
 	}
 
 	onUpload() {
+		if (this.disabled) return;
+
 		this.dialogRef.disableClose = true;
 		this.uploading = true;
 
@@ -128,6 +147,7 @@ export class UploadComponent {
 				}
 			},
 			error => {
+				this.dialogRef.disableClose = false;
 				this.uploading = false;
 				this.error = error;
 			},

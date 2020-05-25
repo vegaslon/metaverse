@@ -46,7 +46,12 @@
 			<mat-icon>insert_drive_file</mat-icon> Choose files
 		</button>
 	</div>
-	<div class="file" *ngFor="let upload of uploads">
+	<div
+		class="file"
+		*ngFor="let upload of uploads"
+		[style.backgroundColor]="upload.error ? '#f44336' : ''"
+		[style.color]="upload.error ? '#fff' : ''"
+	>
 		<mat-progress-spinner
 			*ngIf="uploading && upload.state == 'uploading'"
 			class="icon"
@@ -60,9 +65,9 @@
 		>
 			done
 		</mat-icon>
-		<mat-icon class="icon">{{
-			utilsService.formatExt(upload.file.name).icon
-		}}</mat-icon>
+		<mat-icon class="icon">
+			{{ utilsService.formatExt(upload.file.name).icon }}
+		</mat-icon>
 		<div>
 			{{ upload.file.name }}
 			<br />
@@ -81,6 +86,7 @@
 		color="primary"
 		(click)="onUpload()"
 		style="flex-grow: 1;"
+		[disabled]="disabled"
 	>
 		<mat-icon>cloud_upload</mat-icon> Upload
 	</button>
