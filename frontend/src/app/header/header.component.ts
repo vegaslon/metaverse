@@ -1,16 +1,15 @@
 import {
 	Component,
+	ElementRef,
 	OnDestroy,
 	OnInit,
 	ViewChild,
-	ElementRef,
 } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
+import { NavigationEnd, Router } from "@angular/router";
 import { Subscription } from "rxjs";
 import { AuthService, User } from "../auth/auth.service";
 import { SignInComponent } from "./sign-in/sign-in.component";
-import { DownloadComponent } from "./download/download.component";
-import { Router, NavigationEnd } from "@angular/router";
 
 @Component({
 	selector: "app-header",
@@ -21,6 +20,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 	user: User = {} as User;
 
 	ontop = false;
+
+	loggingIn = false;
 
 	private subs: Subscription[] = [];
 
@@ -56,6 +57,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 					this.onToggleMobileMenu(true);
 					this.ontop = val.url === "/" || val.url === "/download";
 				}
+			}),
+			this.authService.loggingIn$.subscribe(loggingIn => {
+				this.loggingIn = loggingIn;
 			}),
 		);
 	}

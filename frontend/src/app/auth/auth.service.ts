@@ -135,6 +135,8 @@ export class AuthService {
 	handleAuthentication = (token: AuthToken) => {
 		const jwt = token.access_token;
 
+		this.loggingIn$.next(true);
+
 		if (this.jwtHelper.isTokenExpired(jwt)) {
 			this.forgetToken();
 			this.loggingIn$.next(false);
@@ -196,8 +198,6 @@ export class AuthService {
 	autoLogin() {
 		const token = this.getToken();
 		if (token == null) return;
-
-		this.loggingIn$.next(true);
 		this.handleAuthentication(token);
 	}
 

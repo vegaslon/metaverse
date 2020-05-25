@@ -90,9 +90,31 @@
 
 		<span style="flex-grow: 1;"></span>
 
-		<a *ngIf="!user" mat-flat-button (click)="onSignIn()">
-			<mat-icon>account_circle</mat-icon> Sign in
-		</a>
+		<button
+			*ngIf="!user"
+			mat-flat-button
+			(click)="onSignIn()"
+			[disabled]="loggingIn"
+			style="background-color: #fff;"
+		>
+			<ng-container *ngIf="!loggingIn">
+				<mat-icon>account_circle</mat-icon>
+				Sign in
+			</ng-container>
+			<ng-container *ngIf="loggingIn">
+				<mat-progress-spinner
+					mode="indeterminate"
+					diameter="20"
+					class="black-spinner"
+					style="
+						display: inline-block;
+						margin-right: 4px;
+						opacity: 0.26;
+					"
+				></mat-progress-spinner>
+				Logging in...
+			</ng-container>
+		</button>
 
 		<div style="display: flex;">
 			<button *ngIf="user" mat-button [matMenuTriggerFor]="appsMenu">

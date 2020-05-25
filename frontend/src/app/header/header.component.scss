@@ -157,3 +157,9 @@ $mobileMaxWidth: 1160px;
 		}
 	}
 }
+
+.black-spinner {
+	::ng-deep circle {
+		stroke: #000000;
+	}
+}
