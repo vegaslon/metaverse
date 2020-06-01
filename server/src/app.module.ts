@@ -21,6 +21,8 @@ import { FilesModule } from "./files/files.module";
 import { ZoomModule } from "./zoom/zoom.module";
 import { LyndenController } from "./lynden/lynden.controller";
 import { MetricsModule } from "./metrics/metrics.module";
+import { WorldController } from "./world.controller";
+import { SessionModule } from "./session/session.module";
 
 @Module({
 	imports: [
@@ -51,9 +53,10 @@ import { MetricsModule } from "./metrics/metrics.module";
 		MetricsModule,
 
 		AuthModule,
+		SessionModule,
 		UserModule,
-		AdminModule,
 		DomainModule,
+		AdminModule,
 
 		EmailModule,
 		PuppeteerModule,
@@ -70,6 +73,11 @@ import { MetricsModule } from "./metrics/metrics.module";
 		ZoomModule,
 	],
 	providers: [],
-	controllers: [AppController, HealthController, LyndenController],
+	controllers: [
+		AppController,
+		HealthController,
+		LyndenController,
+		WorldController,
+	],
 })
 export class AppModule {}

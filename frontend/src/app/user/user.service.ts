@@ -16,6 +16,8 @@ export interface Domain {
 	iceServerAddress: string;
 	networkAddress: string;
 	networkPort: string;
+
+	url: string;
 }
 
 @Injectable({

@@ -49,5 +49,8 @@
 		<button mat-button *ngIf="editMode" (click)="onGenerateToken()">
 			<mat-icon>vpn_key</mat-icon> Generate new access token
 		</button>
+		<a mat-button *ngIf="editMode" [href]="domain.url" target="_blank">
+			<mat-icon>link</mat-icon> World link
+		</a>
 	</mat-card-actions>
 </mat-card>

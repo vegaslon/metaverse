@@ -194,7 +194,7 @@ export class UtilsService {
 	displayPlural = (n: number, singular: string, plural?: string) =>
 		n +
 		" " +
-		(n == 1 ? singular : plural != null ? plural : singular + "s");
+		(n === 1 ? singular : plural != null ? plural : singular + "s");
 
 	displayPluralName = (name: string) =>
 		name.toLowerCase().endsWith("s") ? name + "'" : name + "'s";

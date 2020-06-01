@@ -1,6 +1,6 @@
 import { DomainSession, UserSession } from "../session/session.schema";
 import { Domain } from "../domain/domain.schema";
-import { URL } from "../environment";
+import { URL, WORLDS_URL } from "../environment";
 import { User } from "../user/user.schema";
 
 export function snakeToCamelCase(snake: string) {
@@ -140,6 +140,7 @@ export function renderDomain(
 		networkPort: usingIce ? "" : domain.networkPort,
 
 		path: domain.path,
+		url: WORLDS_URL + "/" + domain._id,
 	};
 }
 
@@ -160,3 +161,9 @@ export function renderFriend(user: User, userSession: UserSession) {
 			: null,
 	};
 }
+
+export const displayPlural = (n: number, singular: string, plural?: string) =>
+	n + " " + (n === 1 ? singular : plural != null ? plural : singular + "s");
+
+export const displayPluralName = (name: string) =>
+	name.toLowerCase().endsWith("s") ? name + "'" : name + "'s";
