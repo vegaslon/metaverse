@@ -41,7 +41,9 @@ export class WorldController {
 			data = {
 				notFound: false,
 				id: domain.id,
-				name: domain.label,
+				// TODO: are these already trimmed? make sure they're trimmed when posting
+				name: domain.label.trim(),
+				description: domain.description.trim(),
 				online: session != null,
 				users:
 					session != null

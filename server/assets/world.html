@@ -99,6 +99,11 @@
 			.button:focus {
 				outline: none;
 			}
+
+			.description {
+				width: 512px;
+				text-align: center;
+			}
 		</style>
 	</head>
 	<body>
@@ -113,7 +118,7 @@
 			<p style="font-size: 2em;">
 				Perhaps the link was mistyped
 			</p>
-			<div style="margin: 25px 0;"></div>
+			<div style="margin: 30px 0;"></div>
 			<a class="button lighter" href="{{ url }}">
 				Return to Tivoli
 			</a>
@@ -128,11 +133,15 @@
 				/>
 				<b>{{ username }}</b>
 			</p>
-			<div style="margin: 25px 0;"></div>
+			{{#if description}}
+			<div style="margin: 15px 0;"></div>
+			<p class="description">{{ description }}</p>
+			{{/if}}
+			<div style="margin: 30px 0;"></div>
 			<p style="font-size: 3em;">
 				{{ users }}
 			</p>
-			<div style="margin: 25px 0;"></div>
+			<div style="margin: 30px 0;"></div>
 			<a class="button" href="tivoli://{{ id }}">
 				Launch Tivoli to world
 			</a>
