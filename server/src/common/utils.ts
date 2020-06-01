@@ -1,6 +1,6 @@
 import { DomainSession, UserSession } from "../session/session.schema";
 import { Domain } from "../domain/domain.schema";
-import { URL, WORLDS_URL } from "../environment";
+import { URL, WORLD_URL } from "../environment";
 import { User } from "../user/user.schema";
 
 export function snakeToCamelCase(snake: string) {
@@ -140,7 +140,7 @@ export function renderDomain(
 		networkPort: usingIce ? "" : domain.networkPort,
 
 		path: domain.path,
-		url: WORLDS_URL + "/" + domain._id,
+		url: WORLD_URL + "/" + domain._id,
 	};
 }
 
