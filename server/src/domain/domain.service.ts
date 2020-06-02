@@ -12,7 +12,12 @@ import { Connection, Model } from "mongoose";
 import sharp from "sharp";
 import { derPublicKeyHeader } from "../common/der-public-key-header";
 import { MulterFile } from "../common/multer-file.model";
-import { patchDoc, snakeToCamelCaseObject } from "../common/utils";
+import {
+	patchDoc,
+	snakeToCamelCaseObject,
+	validUuid,
+	decompressUuid,
+} from "../common/utils";
 import { DomainSession } from "../session/session.schema";
 import { SessionService } from "../session/session.service";
 import { User } from "../user/user.schema";
@@ -52,7 +57,9 @@ export class DomainService implements OnModuleInit {
 
 	findById(id: string) {
 		try {
-			return this.domainModel.findById(id);
+			return this.domainModel.findById(
+				validUuid(id) ? id : decompressUuid(id),
+			);
 		} catch (err) {
 			throw new BadRequestException();
 		}

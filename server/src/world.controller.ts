@@ -1,6 +1,5 @@
-import { Controller, Get, Param, Res } from "@nestjs/common";
+import { Controller, Get, Param } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { Response } from "express";
 import fs from "fs";
 import Handlebars from "handlebars";
 import path from "path";

@@ -140,7 +140,7 @@ export function renderDomain(
 		networkPort: usingIce ? "" : domain.networkPort,
 
 		path: domain.path,
-		url: WORLD_URL + "/" + domain._id,
+		url: WORLD_URL + "/" + compressUuid(domain._id),
 	};
 }
 
@@ -167,3 +167,21 @@ export const displayPlural = (n: number, singular: string, plural?: string) =>
 
 export const displayPluralName = (name: string) =>
 	name.toLowerCase().endsWith("s") ? name + "'" : name + "'s";
+
+export const compressUuid = (uuid: string) =>
+	Buffer.from(uuid.toLowerCase().replace(/[^0-9a-f]/g, ""), "hex")
+		.toString("base64")
+		.replace(/=/g, "");
+
+export const decompressUuid = (uuid: string) => {
+	const hex = Buffer.from(uuid, "base64").toString("hex").split("");
+	for (let i = 8; i < 8 + 5 * 4; i += 5) {
+		hex.splice(i, 0, "-");
+	}
+	return hex.join("");
+};
+
+export const validUuid = (uuid: string) =>
+	/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+		uuid,
+	);
