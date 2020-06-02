@@ -126,6 +126,35 @@
 				width: 512px;
 				text-align: center;
 			}
+
+			.status {
+				font-size: 3em;
+				display: flex;
+				align-items: center;
+				border-radius: 4px;
+				padding: 5px 20px;
+			}
+
+			.status.online {
+				background-color: #4caf50;
+			}
+
+			.status.offline {
+				background-color: #f44336;
+			}
+
+			/* .status .circle {
+				width: 36px;
+				height: 36px;
+				margin-right: 16px;
+				border-radius: 999px;
+				background-color: #f44336;
+				display: none;
+			}
+
+			.status .circle.online {
+				background-color: #4caf50;
+			} */
 		</style>
 	</head>
 	<body>
@@ -145,7 +174,25 @@
 				Return to Tivoli
 			</a>
 			{{else}}
-			<p style="font-size: 4em; font-weight: 500;">{{ name }}</p>
+			<p style="font-size: 4em; font-weight: 500;">
+				{{#if private}}
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 24 24"
+					style="
+						fill: #fff;
+						width: 1em;
+						height: 1em;
+						display: inline-block;
+						margin-bottom: -0.1em;
+					"
+				>
+					<path
+						d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"
+					/>
+				</svg>
+				{{/if}} {{ name }}
+			</p>
 			<p style="font-size: 2em;" class="author">
 				Created by
 				<img
@@ -160,12 +207,22 @@
 			<p class="description">{{ description }}</p>
 			{{/if}}
 			<div style="margin: 30px 0;"></div>
-			<p style="font-size: 3em;">
-				{{ users }}
-			</p>
+			{{#if online}}
+			<div class="status online">{{ users }}</div>
+			{{else}}
+			<div class="status offline">{{ users }}</div>
+			{{/if}}
 			<div style="margin: 30px 0;"></div>
 			<a class="button" href="tivoli://{{ id }}">
 				Launch Tivoli to world
+			</a>
+			<a
+				class="button"
+				style="background: none; font-size: 1em; opacity: 0.5;"
+				href="https://docs.tivolicloud.com"
+				target="_blank"
+			>
+				If you don't have Tivoli, get started here
 			</a>
 			{{/if}}
 		</div>

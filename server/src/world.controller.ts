@@ -43,6 +43,7 @@ export class WorldController {
 				id: domain.id,
 				name: domain.label,
 				description: domain.description,
+				private: domain.restriction === "acl",
 				online: session != null,
 				users:
 					session != null
