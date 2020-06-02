@@ -39,10 +39,10 @@ export class WorldController {
 
 			data = {
 				notFound: false,
+				url: METAVERSE_URL,
 				id: domain.id,
-				// TODO: are these already trimmed? make sure they're trimmed when posting
-				name: domain.label.trim(),
-				description: domain.description.trim(),
+				name: domain.label,
+				description: domain.description,
 				online: session != null,
 				users:
 					session != null

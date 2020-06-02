@@ -1,5 +1,27 @@
 <html>
 	<head>
+		{{#if notFound}}
+		<title>World not found</title>
+		<meta name="title" content="World not found" />
+		<meta name="description" content="Perhaps the link was mistyped" />
+		<meta property="og:title" content="World not found" />
+		<meta
+			property="og:description"
+			content="Perhaps the link was mistyped"
+		/>
+		{{else}}
+		<title>{{ name }} - {{ username }}</title>
+		<meta name="title" content="{{ name }}" />
+		<meta name="description" content="{{ description }}" />
+		<meta name="author" content="{{ username }}" />
+		<meta property="og:title" content="{{ name }}" />
+		<meta property="og:description" content="{{ description }}" />
+		<meta property="og:image" content="{{ worldImage }}" />
+		<meta property="profile:username" content="{{ username }}" />
+		{{/if}}
+		<link rel="icon" type="image/x-icon" href="{{ url }}/favicon.png" />
+		<meta charset="utf-8" />
+		<meta name="robots" content="noindex, nofollow" />
 		<link
 			href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap"
 			rel="stylesheet"
