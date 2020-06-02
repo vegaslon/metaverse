@@ -2,6 +2,11 @@ import { DomainSession, UserSession } from "../session/session.schema";
 import { Domain } from "../domain/domain.schema";
 import { URL, WORLD_URL } from "../environment";
 import { User } from "../user/user.schema";
+import baseX from "base-x";
+
+const base62 = baseX(
+	"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+);
 
 export function snakeToCamelCase(snake: string) {
 	const split = snake.split("_");
@@ -169,12 +174,12 @@ export const displayPluralName = (name: string) =>
 	name.toLowerCase().endsWith("s") ? name + "'" : name + "'s";
 
 export const compressUuid = (uuid: string) =>
-	Buffer.from(uuid.toLowerCase().replace(/[^0-9a-f]/g, ""), "hex")
-		.toString("base64")
-		.replace(/=/g, "");
+	base62.encode(
+		Buffer.from(uuid.toLowerCase().replace(/[^0-9a-f]/g, ""), "hex"),
+	);
 
 export const decompressUuid = (uuid: string) => {
-	const hex = Buffer.from(uuid, "base64").toString("hex").split("");
+	const hex = base62.decode(uuid).toString("hex").split("");
 	for (let i = 8; i < 8 + 5 * 4; i += 5) {
 		hex.splice(i, 0, "-");
 	}
