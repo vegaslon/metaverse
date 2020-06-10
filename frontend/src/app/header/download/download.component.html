@@ -101,33 +101,36 @@
 					Download for Linux
 				</button>
 				<p><b>Glibc 2.28</b> or higher</p>
+				<mat-menu #linuxMenu="matMenu">
+					<a mat-menu-item [href]="release.platforms.linux.url">
+						.AppImage ({{ release.platforms.linux.size }})
+					</a>
+					<a
+						mat-menu-item
+						[href]="
+							release.platforms.linux.url.replace(
+								'.AppImage',
+								'.deb'
+							)
+						"
+					>
+						.deb (~630 MB)
+						<span style="opacity: 0.5;">&ndash; dpkg -i</span>
+					</a>
+					<a
+						mat-menu-item
+						[href]="
+							release.platforms.linux.url.replace(
+								'.AppImage',
+								'.pacman'
+							)
+						"
+					>
+						.pacman (~630 MB)
+						<span style="opacity: 0.5;">&ndash; pacman -U</span>
+					</a>
+				</mat-menu>
 			</mat-card>
-			<mat-menu #linuxMenu="matMenu">
-				<a mat-menu-item [href]="release.platforms.linux.url">
-					.AppImage ({{ release.platforms.linux.size }})
-				</a>
-				<a
-					mat-menu-item
-					[href]="
-						release.platforms.linux.url.replace('.AppImage', '.deb')
-					"
-				>
-					.deb (~630 MB)
-					<span style="opacity: 0.5;">&ndash; dpkg -i</span>
-				</a>
-				<a
-					mat-menu-item
-					[href]="
-						release.platforms.linux.url.replace(
-							'.AppImage',
-							'.pacman'
-						)
-					"
-				>
-					.pacman (~630 MB)
-					<span style="opacity: 0.5;">&ndash; pacman -U</span>
-				</a>
-			</mat-menu>
 		</div>
 		<div class="current-info">
 			<h3>
