@@ -198,4 +198,6 @@ export class UtilsService {
 
 	displayPluralName = (name: string) =>
 		name.toLowerCase().endsWith("s") ? name + "'" : name + "'s";
+
+	getEmailDomain = (email: string) => email.split("@").pop();
 }

@@ -38,6 +38,7 @@ export class UserService {
 	}
 
 	updateUserPassword(data: {
+		token?: string;
 		currentPassword?: string;
 		newPassword?: string;
 	}) {

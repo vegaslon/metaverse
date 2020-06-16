@@ -46,6 +46,13 @@ export class AppComponent implements OnInit {
 			removeQuery = true;
 		}
 
+		if (query.has("resetPassword")) {
+			this.authService.openResetPasswordDialog(
+				query.get("resetPassword"),
+			);
+			removeQuery = true;
+		}
+
 		if (query.has("token")) {
 			this.authService.handleAuthentication({
 				access_token: query.get("token"),

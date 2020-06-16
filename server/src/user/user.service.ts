@@ -164,12 +164,29 @@ export class UserService implements OnModuleInit {
 		user: User,
 		userUpdatePasswordDto: UserUpdatePasswordDto,
 	) {
-		const { currentPassword, newPassword } = userUpdatePasswordDto;
+		const { token, currentPassword, newPassword } = userUpdatePasswordDto;
 
-		const hash = (await this.findById(user.id).select("hash")).hash;
+		if (!token && !currentPassword)
+			throw new BadRequestException(
+				"Need current password or token from email",
+			);
 
-		if (await bcrypt.compare(hash, currentPassword))
-			throw new ConflictException("Current password is incorrect");
+		if (token) {
+			const { id, secret } = this.jwtService.verify(token); // will throw if invalid
+
+			if (user.id !== id || user.resetPasswordSecret !== secret)
+				throw new BadRequestException("Invalid token");
+
+			user.resetPasswordSecret = "";
+		} else {
+			const hash = (await this.findById(user.id).select("hash")).hash;
+			const correctCurrentPassword = await bcrypt.compare(
+				currentPassword,
+				hash,
+			);
+			if (correctCurrentPassword === false)
+				throw new ConflictException("Current password is incorrect");
+		}
 
 		user.hash = await this.authService.hashPassword(newPassword);
 		await user.save();
@@ -400,7 +417,7 @@ export class UserService implements OnModuleInit {
 		user.emailVerifySecret = secret;
 		await user.save();
 
-		const verifyString = this.jwtService.sign(
+		const token = this.jwtService.sign(
 			{
 				id: user.id,
 				email,
@@ -412,32 +429,77 @@ export class UserService implements OnModuleInit {
 		);
 
 		try {
-			this.emailService.sendVerify(user, email, verifyString);
+			this.emailService.sendVerify(user, email, token);
 		} catch (err) {
 			throw new InternalServerErrorException();
 		}
 	}
 
-	async verifyUser(verifyString: string) {
-		const { id, email, secret } = this.jwtService.verify(verifyString); // will throw if invalid
+	async sendResetPassword(email: string) {
+		if (email == null) throw new BadRequestException();
 
+		const user = await this.findByEmail(email);
+		if (user == null) throw new NotFoundException("Email not found");
+		// if (user.emailVerified === false)
+		// 	throw new BadRequestException("Email not verified");
+
+		const secret = generateRandomString(32);
+		user.resetPasswordSecret = secret;
+		await user.save();
+
+		const token = this.jwtService.sign(
+			{
+				id: user.id,
+				secret,
+			},
+			{
+				expiresIn: "1d",
+			},
+		);
+
+		try {
+			this.emailService.sendResetPassword(user, token);
+		} catch (err) {
+			throw new InternalServerErrorException();
+		}
+	}
+
+	async verifyUser(token: string) {
+		const { id, email, secret } = this.jwtService.verify(token); // will throw if invalid
 		if (id == null) throw new BadRequestException();
 
 		const user = await this.findById(id);
 		if (user == null) throw new NotFoundException();
 
-		if (user.email != email && (await this.findByEmail(email)) != null)
+		if (user.email !== email && (await this.findByEmail(email)) != null)
 			throw new ConflictException("Email already exists");
 
-		if (user.emailVerifySecret == secret) {
+		if (user.emailVerifySecret === secret) {
 			user.email = email;
 			user.emailVerified = true;
 			user.emailVerifySecret = "";
+			await user.save();
 		}
 
+		return { user, justVerified: true };
+	}
+
+	async resetPasswordTokenToUser(token: string) {
+		const { id, secret } = this.jwtService.verify(token); // will throw if invalid
+		if (id == null) throw new BadRequestException();
+
+		const user = await this.findById(id);
+		if (user == null) throw new NotFoundException();
+
+		if (user.resetPasswordSecret !== secret)
+			throw new BadRequestException("Invalid token");
+
+		// because this token was received through email
+		user.emailVerified = true;
+		user.emailVerifySecret = "";
 		await user.save();
 
-		return { user, justVerified: true };
+		return { user };
 	}
 
 	async findUsers(getUsersDto: GetUsersDto) {

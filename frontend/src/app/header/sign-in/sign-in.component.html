@@ -8,6 +8,18 @@
 		<h2 *ngIf="mode == 'extSignUp'" style="margin-top: 0;">
 			Choose an account username
 		</h2>
+		<h2
+			*ngIf="mode == 'resetPassword' && !resetPasswordSent"
+			style="margin-top: 0;"
+		>
+			Forgot my password
+		</h2>
+		<h2
+			*ngIf="mode == 'resetPassword' && resetPasswordSent"
+			style="margin-top: 0;"
+		>
+			Your email has been sent!
+		</h2>
 
 		<mat-card
 			*ngIf="errorMessage"
@@ -94,6 +106,15 @@
 				[disabled]="isLoading"
 			>
 				Create a new account
+			</button>
+			<span style="margin: 0 4px;"></span>
+			<button
+				type="button"
+				mat-button
+				(click)="onToggleResetPassword()"
+				[disabled]="isLoading"
+			>
+				Forgot password
 			</button>
 
 			<div style="margin: 8px 0;"></div>
@@ -269,6 +290,74 @@
 				Create a new account
 			</button>
 		</form>
+
+		<form
+			*ngIf="mode == 'resetPassword' && !resetPasswordSent"
+			[formGroup]="resetPasswordForm"
+			(ngSubmit)="onSubmit()"
+		>
+			<mat-form-field style="width: 100%;">
+				<input
+					matInput
+					type="email"
+					placeholder="Email"
+					required
+					formControlName="email"
+				/>
+				<mat-error
+					*ngIf="resetPasswordForm.hasError('required', 'email')"
+				>
+					Email is required
+				</mat-error>
+				<mat-error *ngIf="resetPasswordForm.hasError('email', 'email')">
+					Email is invalid
+				</mat-error>
+				<mat-error
+					*ngIf="resetPasswordForm.hasError('maxlength', 'email')"
+				>
+					Email is too long
+				</mat-error>
+			</mat-form-field>
+
+			<div style="margin: 16px 0;"></div>
+
+			<button
+				type="submit"
+				mat-flat-button
+				color="primary"
+				[disabled]="resetPasswordForm.invalid || isLoading"
+			>
+				Send reset password email
+			</button>
+			<span style="margin: 0 4px;"></span>
+			<button
+				type="button"
+				mat-button
+				(click)="onToggleResetPassword()"
+				[disabled]="isLoading"
+			>
+				Sign in instead
+			</button>
+		</form>
+
+		<div *ngIf="mode == 'resetPassword' && resetPasswordSent">
+			<p>
+				Please check <b>{{ resetPasswordForm.value.email }}</b> for a
+				reset password email. Make sure you check spam if you can't find
+				it.
+			</p>
+			<a
+				mat-flat-button
+				color="primary"
+				[href]="
+					'http://' +
+					utilsService.getEmailDomain(resetPasswordForm.value.email)
+				"
+			>
+				<mat-icon>email</mat-icon> Visit
+				{{ utilsService.getEmailDomain(resetPasswordForm.value.email) }}
+			</a>
+		</div>
 
 		<div *ngIf="isLoading">
 			<br />

@@ -12,7 +12,6 @@ import { AdminGuard } from "./auth/admin.guard";
 import { AuthInterceptorService } from "./auth/auth-interceptor.service";
 import { AuthGuard } from "./auth/auth.guard";
 import { AuthService } from "./auth/auth.service";
-import { VerifyEmailComponent } from "./auth/verify-email/verify-email.component";
 import { CookieConsentComponent } from "./cookie-consent/cookie-consent.component";
 import { DownloadComponent } from "./header/download/download.component";
 import { HeaderComponent } from "./header/header.component";
@@ -93,7 +92,6 @@ const routes: Routes = [
 		SignInComponent,
 		HomeComponent,
 		DownloadComponent,
-		VerifyEmailComponent,
 		CookieConsentComponent,
 	],
 	imports: [
@@ -121,7 +119,7 @@ const routes: Routes = [
 		},
 	],
 	bootstrap: [AppComponent],
-	entryComponents: [SignInComponent, DownloadComponent, VerifyEmailComponent],
+	entryComponents: [SignInComponent, DownloadComponent],
 })
 export class AppModule {
 	constructor(

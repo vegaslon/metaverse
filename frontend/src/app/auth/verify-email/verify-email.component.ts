@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from "@angular/core";
 import { AuthService, User } from "../auth.service";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { UtilsService } from "../../utils.service";
 
 @Component({
 	selector: "app-verify-email",
@@ -18,9 +19,10 @@ export class VerifyEmailComponent implements OnInit {
 	emailForm: FormGroup;
 
 	constructor(
-		private authService: AuthService,
-		private dialogRef: MatDialogRef<VerifyEmailComponent>,
-		@Inject(MAT_DIALOG_DATA) public isVerified: boolean,
+		private readonly authService: AuthService,
+		private readonly dialogRef: MatDialogRef<VerifyEmailComponent>,
+		@Inject(MAT_DIALOG_DATA) public readonly isVerified: boolean,
+		public readonly utilsService: UtilsService,
 	) {}
 
 	ngOnInit() {
@@ -35,10 +37,6 @@ export class VerifyEmailComponent implements OnInit {
 				Validators.maxLength(64),
 			]),
 		});
-	}
-
-	getEmailDomain() {
-		return this.emailForm.value.email.split("@").pop();
 	}
 
 	onLogout() {

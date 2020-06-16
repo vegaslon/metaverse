@@ -9,9 +9,11 @@
 			*ngIf="error"
 			class="bg-warn"
 			style="
-			margin-bottom: 16px; color: #fff;
-			display: flex; vertical-align: middle;
-		"
+				margin-bottom: 16px;
+				color: #fff;
+				display: flex;
+				vertical-align: middle;
+			"
 		>
 			<mat-icon style="margin-top: -3px; margin-right: 8px;">
 				error_outline
@@ -48,7 +50,7 @@
 		</div>
 	</ng-container>
 	<ng-container *ngIf="isSent">
-		<h2 style="margin-top:0;">Your email has been sent!</h2>
+		<h2 style="margin-top: 0;">Your email has been sent!</h2>
 		<p>
 			Please check <b>{{ emailForm.value.email }}</b> for a verification
 			email. Make sure you check spam if you can't find it.
@@ -57,9 +59,13 @@
 			<a
 				mat-flat-button
 				color="primary"
-				[href]="'http://' + getEmailDomain()"
+				[href]="
+					'http://' +
+					utilsService.getEmailDomain(emailForm.value.email)
+				"
 			>
-				<mat-icon>email</mat-icon> Visit {{ getEmailDomain() }}
+				<mat-icon>email</mat-icon> Visit
+				{{ utilsService.getEmailDomain(emailForm.value.email) }}
 			</a>
 		</div>
 	</ng-container>
@@ -74,7 +80,7 @@
 	<p>You may now use Tivoli! Feel free to download our launcher.</p>
 	<div class="buttons">
 		<button mat-flat-button color="primary" (click)="onClose()">
-			Dismiss
+			Okay
 		</button>
 	</div>
 </ng-container>

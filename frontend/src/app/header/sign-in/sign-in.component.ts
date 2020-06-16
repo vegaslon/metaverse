@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { Subject } from "rxjs";
 import { AuthService, AuthToken } from "../../auth/auth.service";
+import { UtilsService } from "../../utils.service";
 
 @Component({
 	selector: "app-sign-in",
@@ -12,27 +12,31 @@ import { AuthService, AuthToken } from "../../auth/auth.service";
 export class SignInComponent implements OnInit {
 	errorMessage = "";
 
-	mode: "signIn" | "signUp" | "extSignUp" = "signIn";
+	mode: "signIn" | "signUp" | "extSignUp" | "resetPassword" = "signIn";
 	isLoading = false;
 
 	signInForm: FormGroup = null as any;
 	signUpForm: FormGroup = null as any;
 	extSignUpForm: FormGroup = null as any;
+	resetPasswordForm: FormGroup = null as any;
 
 	extServices = ["Google", "Discord", "GitHub"];
 	extEmail = "";
 	extImageUrl = "";
 
+	resetPasswordSent = false;
+
 	//@ViewChild("captchaDiv", { static: true }) captchaDiv: ElementRef;
 	//readonly siteKey = environment.reCaptchaSiteKey;
 
 	constructor(
-		public dialogRef: MatDialogRef<SignInComponent>,
-		private authService: AuthService,
+		public readonly dialogRef: MatDialogRef<SignInComponent>,
+		private readonly authService: AuthService,
 		@Inject(MAT_DIALOG_DATA)
-		private data: {
+		private readonly data: {
 			mode: "signIn" | "signUp" | "extSignUp";
 		},
+		public readonly utilsService: UtilsService,
 	) {
 		if (data != null) {
 			if (data.mode != null) this.mode = data.mode;
@@ -94,23 +98,34 @@ export class SignInComponent implements OnInit {
 			token: new FormControl(null),
 			imageUrl: new FormControl(null),
 		});
+
+		this.resetPasswordForm = new FormGroup({
+			email: new FormControl(null, [
+				Validators.required,
+				Validators.email,
+				Validators.maxLength(64),
+			]),
+		});
 	}
 
 	onSubmit(captcha?: string, captchaRef?: any) {
 		let form = null;
-		if (this.mode == "signIn") form = this.signInForm;
-		if (this.mode == "signUp") form = this.signUpForm;
-		if (this.mode == "extSignUp") form = this.extSignUpForm;
+		if (this.mode === "signIn") form = this.signInForm;
+		if (this.mode === "signUp") form = this.signUpForm;
+		if (this.mode === "extSignUp") form = this.extSignUpForm;
+		if (this.mode === "resetPassword") form = this.resetPasswordForm;
 		if (form == null) return;
 		if (form.invalid) return;
 
 		let service = null;
-		if (this.mode == "signIn")
+		if (this.mode === "signIn")
 			service = this.authService.signIn({ ...form.value });
-		if (this.mode == "signUp")
+		if (this.mode === "signUp")
 			service = this.authService.signUp({ ...form.value });
-		if (this.mode == "extSignUp")
+		if (this.mode === "extSignUp")
 			service = this.authService.extSignUp({ ...form.value });
+		if (this.mode === "resetPassword")
+			service = this.authService.sendResetPassword({ ...form.value });
 		if (service == null) return;
 
 		this.isLoading = true;
@@ -118,7 +133,14 @@ export class SignInComponent implements OnInit {
 
 		const sub = service.subscribe(
 			data => {
-				this.dialogRef.close();
+				this.errorMessage = "";
+				this.isLoading = false;
+
+				if (this.mode === "resetPassword") {
+					this.resetPasswordSent = true;
+				} else {
+					this.dialogRef.close();
+				}
 
 				sub.unsubscribe();
 			},
@@ -201,5 +223,15 @@ export class SignInComponent implements OnInit {
 	onToggleSignUp() {
 		this.errorMessage = "";
 		this.mode = this.mode == "signIn" ? "signUp" : "signIn";
+	}
+
+	onToggleResetPassword() {
+		this.errorMessage = "";
+		this.mode = this.mode == "signIn" ? "resetPassword" : "signIn";
+	}
+
+	// TODO: put this in utils because its shated
+	getEmailDomain(email: string) {
+		return email.split("@").pop();
 	}
 }

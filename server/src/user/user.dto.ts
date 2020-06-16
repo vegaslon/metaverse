@@ -21,17 +21,23 @@ export class UserUpdateEmailDto {
 }
 
 export class UserUpdatePasswordDto {
+	@ApiPropertyOptional({ example: "" })
+	@IsOptional()
+	@IsString({ message: "Token is not a string" })
+	token: string = "";
+
 	@ApiPropertyOptional({ example: "MyS3cretPa55w0rd" })
+	@IsOptional()
 	@IsString({ message: "Current password is not a string" })
-	@MinLength(6, {
-		message: "Current password cannot be less than 6 characters",
-	})
+	// @MinLength(6, {
+	// 	message: "Current password cannot be less than 6 characters",
+	// })
 	@MaxLength(64, {
 		message: "Current password cannot be longer than 64 characters",
 	})
 	currentPassword: string = "";
 
-	@ApiPropertyOptional({ example: "MyS3cretPa55w0rd" })
+	@ApiProperty({ example: "MyS3cretPa55w0rd" })
 	@IsString({ message: "New password is not a string" })
 	@MinLength(6, { message: "New password cannot be less than 6 characters" })
 	@MaxLength(64, {

@@ -12,6 +12,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { VerifyEmailComponent } from "./verify-email/verify-email.component";
 import { CookieService } from "ngx-cookie-service";
 import { environment } from "../../environments/environment";
+import { ResetPasswordComponent } from "./reset-password/reset-password.component";
 
 export interface AuthToken {
 	access_token: string;
@@ -65,9 +66,17 @@ export class AuthService {
 
 	openEmailVerifyDialog(verified = false) {
 		this.dialog.open(VerifyEmailComponent, {
-			width: "400px",
+			width: "500px",
 			disableClose: !verified,
 			data: verified,
+		});
+	}
+
+	openResetPasswordDialog(passwordToken: string) {
+		this.dialog.open(ResetPasswordComponent, {
+			width: "500px",
+			disableClose: true,
+			data: passwordToken,
 		});
 	}
 
@@ -193,6 +202,12 @@ export class AuthService {
 		return this.http
 			.post<AuthToken>("/api/auth/signup-external", extSignUpDto)
 			.pipe(catchError(this.handleError), tap(this.handleAuthentication));
+	}
+
+	sendResetPassword(sendResetPasswordDto: { email: string }) {
+		return this.http
+			.post("/api/user/reset-password", sendResetPasswordDto)
+			.pipe(catchError(this.handleError));
 	}
 
 	autoLogin() {

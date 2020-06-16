@@ -118,11 +118,13 @@ export class SettingsComponent implements OnInit, OnDestroy {
 			.subscribe(
 				res => {
 					this.passwordForm.enable();
+					this.passwordFormError = "";
 					this.passwordFormSuccess = res.message;
 				},
 				err => {
 					this.passwordForm.enable();
 					this.passwordFormError = err;
+					this.passwordFormSuccess = "";
 				},
 				() => {
 					sub.unsubscribe();

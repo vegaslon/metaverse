@@ -14,7 +14,6 @@ import { EmailService } from "./email.service";
 					pass: EMAIL_PASS,
 				},
 			},
-
 			defaults: {
 				from: '"' + EMAIL_NAME + '" <' + EMAIL_USER + ">",
 			},

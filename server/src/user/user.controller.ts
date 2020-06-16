@@ -82,6 +82,19 @@ export class UserController {
 		return { success: true };
 	}
 
+	@Post("reset-password")
+	sendResetPassword(@Body("email") email: string) {
+		return this.userService.sendResetPassword(email);
+	}
+
+	@Get("reset-password/:token")
+	async resetPassword(@Param("token") token: string, @Res() res: Response) {
+		const { user } = await this.userService.resetPasswordTokenToUser(token);
+		const userToken = this.authService.login(user).access_token;
+
+		res.redirect(URL + "?resetPassword=" + token + "&token=" + userToken);
+	}
+
 	@Get(":username/image")
 	async getUserImage(
 		@Param("username") username: string,
@@ -179,19 +192,14 @@ export class UserController {
 		return this.userService.sendVerify(user, email);
 	}
 
-	@Get("verify/:verifyString")
-	async verifyUser(
-		@Param("verifyString") verifyString: string,
-		@Res() res: Response,
-	) {
-		const { user, justVerified } = await this.userService.verifyUser(
-			verifyString,
-		);
+	@Get("verify/:token")
+	async verifyUser(@Param("token") token: string, @Res() res: Response) {
+		const { user, justVerified } = await this.userService.verifyUser(token);
 
-		const token = this.authService.login(user).access_token;
+		const userToken = this.authService.login(user).access_token;
 
 		res.redirect(
-			URL + (justVerified ? "?emailVerified&token=" + token : ""),
+			URL + (justVerified ? "?emailVerified&token=" + userToken : ""),
 		);
 	}
 }

@@ -6,7 +6,9 @@ export const UserSchema = new Schema({
 
 	email: { type: String, required: true },
 	emailVerified: { type: Boolean, default: false },
+
 	emailVerifySecret: { type: String, default: "" },
+	resetPasswordSecret: { type: String, default: "" },
 
 	domains: {
 		type: [{ type: String, ref: "domains" }],
@@ -31,7 +33,9 @@ export interface User extends Document {
 
 	email: string;
 	emailVerified: boolean;
+
 	emailVerifySecret: string;
+	resetPasswordSecret: string;
 
 	domains: Domain[];
 
