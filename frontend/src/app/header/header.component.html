@@ -159,6 +159,18 @@
 				<br />
 				More
 			</button>
+
+			<button
+				mat-button
+				class="apps-button impersonating"
+				style="margin-left: 16px;"
+				*ngIf="impersonating"
+				(click)="onStopImpersonating()"
+			>
+				<mat-icon>undo</mat-icon>
+				<br />
+				Return
+			</button>
 		</div>
 
 		<mat-menu #appsMenu="matMenu">

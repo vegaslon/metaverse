@@ -110,22 +110,7 @@ export class AdminComponent implements OnInit {
 	}
 
 	impersonateUser(user: AdminUser) {
-		if (
-			confirm(
-				"Are you sure you want to impersonate " + user.username + "?",
-			) == false
-		)
-			return;
-
-		this.adminService.impersonateUser(user.id).subscribe(
-			token => {
-				this.authService.logout();
-				this.authService.handleAuthentication(token);
-			},
-			err => {
-				alert(err);
-			},
-		);
+		this.authService.impersonateUser(user);
 	}
 
 	constructor(

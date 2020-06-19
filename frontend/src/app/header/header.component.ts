@@ -18,6 +18,7 @@ import { SignInComponent } from "./sign-in/sign-in.component";
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 	user: User = {} as User;
+	impersonating = false;
 
 	ontop = false;
 
@@ -47,10 +48,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
 		}
 	}
 
+	onStopImpersonating() {
+		this.authService.stopImpersonating();
+	}
+
 	ngOnInit() {
 		this.subs.push(
 			this.authService.user$.subscribe(user => {
 				this.user = user;
+			}),
+			this.authService.impersonating$.subscribe(impersonating => {
+				this.impersonating = impersonating;
 			}),
 			this.router.events.subscribe(val => {
 				if (val instanceof NavigationEnd) {

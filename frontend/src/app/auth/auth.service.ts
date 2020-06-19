@@ -2,17 +2,19 @@ import {
 	HttpClient,
 	HttpErrorResponse,
 	HttpHeaders,
+	HttpXhrBackend,
 } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
 import { Router } from "@angular/router";
 import { JwtHelperService } from "@auth0/angular-jwt";
-import { BehaviorSubject, Observable, throwError } from "rxjs";
-import { catchError, tap } from "rxjs/operators";
-import { MatDialog } from "@angular/material/dialog";
-import { VerifyEmailComponent } from "./verify-email/verify-email.component";
 import { CookieService } from "ngx-cookie-service";
+import { BehaviorSubject, Observable, throwError } from "rxjs";
+import { catchError, take, tap } from "rxjs/operators";
 import { environment } from "../../environments/environment";
+import { AdminService, AdminUser } from "../admin/admin.service";
 import { ResetPasswordComponent } from "./reset-password/reset-password.component";
+import { VerifyEmailComponent } from "./verify-email/verify-email.component";
 
 export interface AuthToken {
 	access_token: string;
@@ -47,14 +49,18 @@ export class AuthService {
 	user$ = new BehaviorSubject<User>(null);
 	loggingIn$ = new BehaviorSubject<boolean>(false);
 
+	impersonating$ = new BehaviorSubject<boolean>(false);
+	private preImpersonatingUser: User = null;
+
 	private tokenExpirationTimer: any;
 	private jwtHelper = new JwtHelperService();
 
 	constructor(
-		private http: HttpClient,
-		private router: Router,
-		private dialog: MatDialog,
-		private cookies: CookieService,
+		private readonly http: HttpClient,
+		private readonly router: Router,
+		private readonly dialog: MatDialog,
+		private readonly cookies: CookieService,
+		private readonly adminService: AdminService,
 	) {}
 
 	private handleError = (err: HttpErrorResponse): Observable<never> => {
@@ -93,7 +99,13 @@ export class AuthService {
 	}
 
 	getUserProfile = (jwt: string) => {
-		return this.http.get<{
+		const http = new HttpClient(
+			new HttpXhrBackend({
+				build: () => new XMLHttpRequest(),
+			}),
+		);
+
+		return http.get<{
 			status: boolean;
 			statusCode?: 401; // unauthorized
 			data: {
@@ -103,7 +115,6 @@ export class AuthService {
 			};
 		}>("/api/v1/user/profile", {
 			headers: new HttpHeaders({
-				// user isnt available yet in the auth interceptor
 				Authorization: "Bearer " + jwt,
 			}),
 		});
@@ -141,13 +152,13 @@ export class AuthService {
 		return JSON.parse(token);
 	}
 
-	handleAuthentication = (token: AuthToken) => {
+	handleAuthentication = (token: AuthToken, impersonating = false) => {
 		const jwt = token.access_token;
 
 		this.loggingIn$.next(true);
 
 		if (this.jwtHelper.isTokenExpired(jwt)) {
-			this.forgetToken();
+			if (!impersonating) this.forgetToken();
 			this.loggingIn$.next(false);
 			return throwError("Token expired");
 		}
@@ -158,7 +169,7 @@ export class AuthService {
 				const admin = profile.roles.includes("admin");
 
 				const user = new User(token, profile, admin);
-				if (profile.emailVerified == false)
+				if (profile.emailVerified === false)
 					this.openEmailVerifyDialog();
 
 				const payload = this.jwtHelper.decodeToken(jwt);
@@ -166,8 +177,12 @@ export class AuthService {
 					+new Date(payload.exp * 1000) - +new Date();
 
 				this.autoLogout(msTillExpire);
+
 				this.user$.next(user);
-				this.saveToken(token);
+				if (!impersonating) this.saveToken(token);
+
+				this.impersonating$.next(impersonating);
+				if (impersonating) this.router.navigate(["/"]);
 
 				this.loggingIn$.next(false);
 				sub.unsubscribe();
@@ -228,8 +243,37 @@ export class AuthService {
 	autoLogout(msTillExpire: number) {
 		if (msTillExpire > 0x7fffffff) return;
 
+		if (this.tokenExpirationTimer) {
+			clearTimeout(this.tokenExpirationTimer);
+		}
 		this.tokenExpirationTimer = setTimeout(() => {
 			this.logout();
 		}, msTillExpire);
+	}
+
+	impersonateUser(user: AdminUser) {
+		if (this.user$.value && this.preImpersonatingUser == null)
+			this.preImpersonatingUser = this.user$.value;
+
+		this.adminService.impersonateUser(user.id).subscribe(
+			token => {
+				this.handleAuthentication(token, true);
+			},
+			err => {
+				alert(err);
+			},
+		);
+	}
+
+	stopImpersonating() {
+		if (this.preImpersonatingUser) {
+			this.handleAuthentication(this.preImpersonatingUser.token);
+			this.preImpersonatingUser = null;
+			this.loggingIn$.pipe(take(1)).subscribe(() => {
+				this.router.navigate(["/admin"]);
+			});
+		} else {
+			this.logout();
+		}
 	}
 }

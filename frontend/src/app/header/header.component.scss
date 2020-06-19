@@ -96,6 +96,11 @@ $mobileMaxWidth: 1160px;
 				width: $size;
 				height: $size;
 			}
+
+			&.impersonating {
+				background-color: #ff5722;
+				padding: 0 8px;
+			}
 		}
 	}
 }
