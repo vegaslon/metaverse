@@ -1,6 +1,7 @@
 import { Component, Inject } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Domain, UserService } from "../../../user/user.service";
+import { Clipboard } from "@angular/cdk/clipboard";
 
 @Component({
 	selector: "app-domain-token",
@@ -10,16 +11,14 @@ import { Domain, UserService } from "../../../user/user.service";
 export class DomainTokenComponent {
 	loading = false;
 	token = "";
+	copied = false;
 
 	constructor(
-		private userService: UserService,
-		private dialogRef: MatDialogRef<DomainTokenComponent>,
-		@Inject(MAT_DIALOG_DATA) public domain: Domain,
+		private readonly userService: UserService,
+		private readonly dialogRef: MatDialogRef<DomainTokenComponent>,
+		private readonly clipboard: Clipboard,
+		@Inject(MAT_DIALOG_DATA) public readonly domain: Domain,
 	) {}
-
-	onClose() {
-		this.dialogRef.close();
-	}
 
 	onGenerateToken() {
 		this.loading = true;
@@ -36,5 +35,14 @@ export class DomainTokenComponent {
 					sub.unsubscribe();
 				},
 			);
+	}
+
+	onCopyToClipboard() {
+		this.clipboard.copy(this.token);
+		this.copied = true;
+	}
+
+	onClose() {
+		this.dialogRef.close();
 	}
 }

@@ -29,15 +29,19 @@
 </ng-container>
 <ng-container *ngIf="token">
 	<h2 style="margin-top: 0;">
-		Your shiny new access token for <b>{{ domain.label }}</b
-		>!
+		Your shiny new access token for {{ domain.label }}!
 	</h2>
 	<mat-form-field style="width: 100%;">
-		<input matInput placeholder="Access token" [value]="token" />
+		<input matInput placeholder="Access token" disabled [value]="token" />
 	</mat-form-field>
 	<div style="text-align: right;">
-		<button mat-button style="text-align: right;" (click)="onClose()">
-			Continue
+		<button mat-button (click)="onClose()">
+			Close
+		</button>
+		<span style="padding: 0 4px;"></span>
+		<button mat-flat-button color="primary" (click)="onCopyToClipboard()">
+			<ng-container *ngIf="!copied">Copy to clipboard</ng-container>
+			<ng-container *ngIf="copied">Copied!</ng-container>
 		</button>
 	</div>
 </ng-container>
