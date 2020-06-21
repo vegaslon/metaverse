@@ -1,28 +1,20 @@
 import {
-	Body,
 	Controller,
 	Get,
 	NotFoundException,
+	Param,
 	Post,
 	Query,
 	UseGuards,
 } from "@nestjs/common";
-import { ApiBearerAuth, ApiProperty, ApiTags } from "@nestjs/swagger";
-import { IsNotEmpty, IsString } from "class-validator";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { AdminAuthGuard } from "../auth/admin.guard";
 import { AuthService } from "../auth/auth.service";
 import { DomainService } from "../domain/domain.service";
 import { SessionService } from "../session/session.service";
+import { User } from "../user/user.schema";
 import { UserService } from "../user/user.service";
 import { VideoStreamService } from "../video-stream/video-stream.service";
-import { GetUsersDto } from "./admin.dto";
-
-class AdminImpersonateDto {
-	@ApiProperty({ example: "" })
-	@IsNotEmpty({ message: "User ID is required" })
-	@IsString({ message: "User ID is not a string" })
-	userId: string;
-}
 
 @Controller("api/admin")
 @ApiTags("admin")
@@ -35,62 +27,79 @@ export class AdminController {
 		private authService: AuthService,
 	) {}
 
+	private async renderUser(user: User, fast = false) {
+		const session = await this.sessionService
+			.findUserById(user._id)
+			.populate("domain");
+
+		const online = session != null;
+
+		let location = null;
+		if (online) {
+			if (session.domain != null) {
+				const domain = await this.domainService.findById(
+					session.domain._id,
+				);
+				if (domain != null) location = domain.label;
+			}
+		}
+
+		let domains: any[] = user.domains;
+		if (!fast) {
+			await user.populate("domains").execPopulate();
+			domains = user.domains.map(domain => ({
+				name: domain.label,
+				id: domain.id,
+			}));
+		}
+
+		return {
+			id: user.id,
+			username: user.username,
+			email: user.email,
+			emailVerified: user.emailVerified,
+			domains,
+			admin: user.admin,
+			created: user.created,
+			minutes: user.minutes,
+			session: online
+				? {
+						minutes: session.minutes,
+						location,
+				  }
+				: null,
+		};
+	}
+
 	@Get("users")
 	@ApiBearerAuth()
 	@UseGuards(AdminAuthGuard)
-	async getUsers(@Query() getUsersDto: GetUsersDto) {
-		const users = await this.userService.findUsers(getUsersDto);
-
+	async getUsers(
+		@Query("offset") offset: number,
+		@Query("search") search: string,
+	) {
+		const users = await this.userService.findUsers(Number(offset), search);
 		return Promise.all(
-			users.map(async user => {
-				const session = await this.sessionService
-					.findUserById(user._id)
-					.populate("domain");
-
-				const online = session != null;
-
-				let location = null;
-				if (online) {
-					if (session.domain != null) {
-						const domain = await this.domainService.findById(
-							session.domain._id,
-						);
-						if (domain != null) location = domain.label;
-					}
-				}
-
-				return {
-					online,
-					username: user.username,
-					id: user.id,
-					email: user.email,
-					created: user.created,
-					minutes: user.minutes,
-					session: online
-						? {
-								minutes: session.minutes,
-								location,
-						  }
-						: null,
-				};
-			}),
+			users.map(async user => this.renderUser(user, true)),
 		);
 	}
 
-	// @Get("users/online")
-	// @ApiBearerAuth()
-	// @UseGuards(AdminAuthGuard)
-	// getOnlineUsers() {
-	// 	return [...this.userService.sessions.keys()].map(username => {
-	// 		const { minutes, location } = this.userService.get(username);
-
-	// 		return {
-	// 			username,
-	// 			minutes,
-	// 			location,
-	// 		};
-	// 	});
-	// }
+	@Get("users/online")
+	@ApiBearerAuth()
+	@UseGuards(AdminAuthGuard)
+	async getOnlineUsers(
+		@Query("offset") offset: number,
+		@Query("search") search: string,
+	) {
+		const users = await this.userService.findUsers(
+			Number(offset),
+			search,
+			true,
+		);
+		return Promise.all(
+			users.map(async user => this.renderUser(user, true)),
+		);
+	}
 
 	@Get("streams")
 	@ApiBearerAuth()
@@ -105,15 +114,50 @@ export class AdminController {
 		});
 	}
 
-	@Post("users/impersonate")
+	@Post("user/:id/impersonate")
 	@ApiBearerAuth()
 	@UseGuards(AdminAuthGuard)
-	async impersonateUser(@Body() adminImpersonateDto: AdminImpersonateDto) {
-		const user = await this.userService.findById(
-			adminImpersonateDto.userId,
-		);
+	async impersonateUser(@Param("id") id: string) {
+		const user = await this.userService.findById(id);
 		if (user == null) throw new NotFoundException("User not found");
 
 		return this.authService.login(user);
+	}
+
+	@Get("user/:username")
+	@ApiBearerAuth()
+	@UseGuards(AdminAuthGuard)
+	async getUser(@Param("username") username: string) {
+		const user = await this.userService.findByIdOrUsername(username);
+		if (user == null) throw new NotFoundException("User not found");
+
+		return this.renderUser(user);
+	}
+
+	@Post("user/:id/verify")
+	@ApiBearerAuth()
+	@UseGuards(AdminAuthGuard)
+	async toggleVerify(@Param("id") id: string) {
+		const user = await this.userService.findById(id);
+		if (user == null) throw new NotFoundException("User not found");
+
+		user.emailVerified = !user.emailVerified;
+		user.emailVerifySecret = "";
+		await user.save();
+
+		return user.emailVerified;
+	}
+
+	@Post("user/:id/admin")
+	@ApiBearerAuth()
+	@UseGuards(AdminAuthGuard)
+	async toggleAdmin(@Param("id") id: string) {
+		const user = await this.userService.findById(id);
+		if (user == null) throw new NotFoundException("User not found");
+
+		user.admin = !user.admin;
+		await user.save();
+
+		return user.admin;
 	}
 }

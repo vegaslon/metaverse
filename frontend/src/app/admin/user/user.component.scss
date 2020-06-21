@@ -1,0 +1,20 @@
+.avatar {
+	border-radius: 999999px;
+	width: 64px;
+	height: 64px;
+}
+
+.verified {
+	background-color: #4caf50;
+	color: #fff;
+	padding: 4px 8px;
+	border-radius: 4px;
+	margin-left: 4px;
+	&.not {
+		background-color: #f44336;
+	}
+}
+
+mdc-data-table {
+	width: 100%;
+}

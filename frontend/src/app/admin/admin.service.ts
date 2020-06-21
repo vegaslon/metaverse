@@ -1,20 +1,18 @@
-import {
-	HttpClient,
-	HttpErrorResponse,
-	HttpParams,
-} from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { AuthToken } from "../auth/auth.service";
 
 export interface AdminUser {
-	online: boolean;
-	username: string;
 	id: string;
-	created: string;
+	username: string;
 	email: string;
-	mintues: number;
+	emailVerified: boolean;
+	domains: { name: string; id: string }[];
+	admin: boolean;
+	created: string;
+	minutes: number;
 	session: {
 		minutes: number;
 		location: {
@@ -41,20 +39,46 @@ export class AdminService {
 		if (err.error.message) return throwError(err.error.message);
 	};
 
-	getUsers(page = 1, amount = 50, onlineSorted = false) {
+	getUsers(offset = 0, search = "") {
 		return this.http
-			.get<AdminUser[]>("/api/admin/users", {
-				params: new HttpParams()
-					.set("page", page + "")
-					.set("amount", amount + "")
-					.set("onlineSorted", onlineSorted + ""),
-			})
+			.get<AdminUser[]>(
+				"/api/admin/users?offset=" + offset + "&search=" + search,
+			)
+			.pipe(catchError(this.handleError));
+	}
+
+	getOnlineUsers(offset = 0, search = "") {
+		return this.http
+			.get<AdminUser[]>(
+				"/api/admin/users/online?offset=" +
+					offset +
+					"&search=" +
+					search,
+			)
 			.pipe(catchError(this.handleError));
 	}
 
 	impersonateUser(userId: string) {
-		return this.http.post<AuthToken>("/api/admin/users/impersonate", {
-			userId,
-		});
+		return this.http
+			.post<AuthToken>("/api/admin/user/" + userId + "/impersonate", {})
+			.pipe(catchError(this.handleError));
+	}
+
+	getUser(username: string) {
+		return this.http
+			.get<AdminUser>("/api/admin/user/" + username)
+			.pipe(catchError(this.handleError));
+	}
+
+	toggleVerifyUser(userId: string) {
+		return this.http
+			.post<AdminUser>("/api/admin/user/" + userId + "/verify", {})
+			.pipe(catchError(this.handleError));
+	}
+
+	toggleAdminUser(userId: string) {
+		return this.http
+			.post<AdminUser>("/api/admin/user/" + userId + "/admin", {})
+			.pipe(catchError(this.handleError));
 	}
 }

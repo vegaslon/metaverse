@@ -5,8 +5,6 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouterModule, Routes } from "@angular/router";
-// import * as Sentry from "@sentry/browser";
-import { RecaptchaFormsModule, RecaptchaModule } from "ng-recaptcha";
 import { AppComponent } from "./app.component";
 import { AdminGuard } from "./auth/admin.guard";
 import { AuthInterceptorService } from "./auth/auth-interceptor.service";
@@ -104,8 +102,8 @@ const routes: Routes = [
 			initialNavigation: "enabled",
 			scrollPositionRestoration: "enabled",
 		}),
-		RecaptchaModule,
-		RecaptchaFormsModule,
+		// RecaptchaModule,
+		// RecaptchaFormsModule,
 	],
 	providers: [
 		// {

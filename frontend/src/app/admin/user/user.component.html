@@ -1,0 +1,146 @@
+<div class="container" *ngIf="!user">
+	<h1>Loading user...</h1>
+	<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>
+<div class="container" *ngIf="user">
+	<br />
+	<div style="display: flex; align-items: center;">
+		<app-user-image
+			size="64"
+			[username]="user.username"
+			[online]="user.session"
+		></app-user-image>
+		<div style="margin: 0 8px;"></div>
+		<h1>
+			{{ user.username }}
+			<span *ngIf="user.admin" style="color: #f44336;">(admin)</span>
+		</h1>
+	</div>
+
+	<div class="row">
+		<div class="col-md-6">
+			<h2>Details</h2>
+			<mdc-data-table>
+				<table mdcDataTableTable>
+					<tbody mdcDataTableContent>
+						<tr mdcDataTableRow>
+							<th mdcDataTableHeaderCell>Username</th>
+							<td mdcDataTableCell>
+								{{ user.username }}
+							</td>
+						</tr>
+						<tr mdcDataTableRow>
+							<th mdcDataTableHeaderCell>Email</th>
+							<td mdcDataTableCell>
+								{{ user.email }}
+								<span
+									*ngIf="user.emailVerified"
+									class="verified"
+								>
+									verified
+								</span>
+								<span
+									*ngIf="!user.emailVerified"
+									class="not verified"
+								>
+									not verified
+								</span>
+							</td>
+						</tr>
+						<tr mdcDataTableRow>
+							<th mdcDataTableHeaderCell>Created</th>
+							<td mdcDataTableCell>
+								{{ user.created | date: "MMM d, y, HH:mm" }}
+							</td>
+						</tr>
+						<tr mdcDataTableRow>
+							<th mdcDataTableHeaderCell>Admin</th>
+							<td mdcDataTableCell>
+								<mdc-form-field>
+									<mdc-checkbox
+										disabled
+										[checked]="user.admin"
+										style="margin-left: -8px;"
+									></mdc-checkbox>
+									<label>
+										{{ user.admin ? "Yes" : "No" }}
+									</label>
+								</mdc-form-field>
+							</td>
+						</tr>
+						<tr mdcDataTableRow>
+							<th mdcDataTableHeaderCell>Total minutes</th>
+							<td mdcDataTableCell>{{ user.minutes }} minutes</td>
+						</tr>
+						<tr mdcDataTableRow>
+							<th mdcDataTableHeaderCell>ID</th>
+							<td mdcDataTableCell>{{ user.id }}</td>
+						</tr>
+						<tr mdcDataTableRow>
+							<th mdcDataTableHeaderCell>Worlds</th>
+							<td mdcDataTableCell>
+								<div
+									*ngFor="let domain of user.domains"
+									style="display: flex; align-items: center;"
+								>
+									<img
+										style="
+											height: 32px;
+											border-radius: 4px;
+										"
+										[src]="
+											'/api/domain/' +
+											domain.id +
+											'/image'
+										"
+									/>
+									<p style="margin-left: 8px;">
+										{{ domain.name }}
+									</p>
+								</div>
+								<p *ngIf="user.domains.length == 0">
+									No worlds
+								</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</mdc-data-table>
+
+			<h2>Actions</h2>
+			<button mat-flat-button color="primary" (click)="onImpersonate()">
+				<mat-icon>camera</mat-icon> Impersonate
+			</button>
+			<div style="margin: 8px 0; display: block;"></div>
+			<button mat-flat-button color="primary" (click)="onToggleVerify()">
+				<mat-icon>email</mat-icon> Toggle verified
+			</button>
+			<span style="margin: 0 4px;"></span>
+			<button mat-flat-button color="primary" (click)="onToggleAdmin()">
+				<mat-icon>build</mat-icon> Toggle admin
+			</button>
+		</div>
+
+		<div class="col-md-6" *ngIf="user.session">
+			<h2>Current world</h2>
+			<mdc-data-table>
+				<table mdcDataTableTable>
+					<tbody mdcDataTableContent>
+						<tr mdcDataTableRow>
+							<th mdcDataTableHeaderCell>Location</th>
+							<td mdcDataTableCell>
+								{{ user.session.location }}
+							</td>
+						</tr>
+						<tr mdcDataTableRow>
+							<th mdcDataTableHeaderCell>Minutes</th>
+							<td mdcDataTableCell>
+								{{ user.session.minutes }}
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</mdc-data-table>
+		</div>
+	</div>
+</div>

@@ -82,10 +82,12 @@ export class UserService implements OnModuleInit {
 	// current online users keyed with username. this can get big!
 	//sessions = new Map<string, UserSession & HeartbeatSession>();
 
-	private regexForFinding(query: string) {
+	private regexForFinding(query: string, startToFinish = true) {
 		// https://stackoverflow.com/a/45650164
 		return new RegExp(
-			"^" + query.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&") + "$",
+			(startToFinish ? "^" : "") +
+				query.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&") +
+				(startToFinish ? "$" : ""),
 			"i",
 		);
 	}
@@ -502,32 +504,31 @@ export class UserService implements OnModuleInit {
 		return { user };
 	}
 
-	async findUsers(getUsersDto: GetUsersDto) {
-		let { page, amount, onlineSorted } = getUsersDto;
+	async findUsers(offset = 0, search = "", onlineSorted = false) {
+		if (offset < 0) offset = 0;
+		const amount = 50;
 
-		if (page <= 0) page = 1;
-		page -= 1;
-
-		if (amount > 50) amount = 50;
+		let find = {};
+		if (search) {
+			const queryRegExp = this.regexForFinding(search, false);
+			find = {
+				$or: [{ username: queryRegExp }, { email: queryRegExp }],
+			};
+		}
 
 		if (onlineSorted) {
 			const sessions = await this.sessionService.userSessionModel
-				.find()
-				.sort({
-					minutes: -1,
-				})
-				.populate("user")
-				.skip(page * amount)
-				.limit(amount);
-
+				.find(find)
+				.sort({ minutes: -1 })
+				.skip(offset)
+				.limit(amount)
+				.populate("user");
 			return sessions.map(session => session.user);
 		} else {
-			return await this.userModel
-				.find()
-				.sort({
-					created: -1,
-				})
-				.skip(page * amount)
+			return this.userModel
+				.find(find)
+				.sort({ created: -1 })
+				.skip(offset)
 				.limit(amount);
 		}
 	}

@@ -1,0 +1,80 @@
+<div style="display: flex; align-items: center; margin-bottom: 16px;">
+	<mdc-form-field>
+		<mdc-text-field
+			label="Search for user"
+			(keyup)="onSearch($event)"
+		></mdc-text-field>
+	</mdc-form-field>
+	<div style="margin: 0 8px;"></div>
+	<button mat-button (click)="onRefresh()">
+		<mat-icon>refresh</mat-icon>
+		Refresh
+	</button>
+</div>
+<cdk-virtual-scroll-viewport
+	itemSize="50"
+	style="height: calc(100vh - 200px);"
+	(scrolledIndexChange)="scrolledIndexChanged($event)"
+>
+	<mdc-data-table>
+		<table mdcDataTableTable>
+			<thead>
+				<tr mdcDataTableHeaderRow>
+					<th mdcDataTableHeaderCell></th>
+					<th mdcDataTableHeaderCell>Username</th>
+					<th mdcDataTableHeaderCell>Email</th>
+					<th mdcDataTableHeaderCell>Created</th>
+					<th mdcDataTableHeaderCell>Total minutes</th>
+					<th mdcDataTableHeaderCell>Online minutes</th>
+					<th mdcDataTableHeaderCell>Current location</th>
+				</tr>
+			</thead>
+			<tbody mdcDataTableContent>
+				<tr
+					mdcDataTableRow
+					*cdkVirtualFor="let user of users"
+					style="cursor: pointer;"
+					[routerLink]="'/admin/user/' + user.username.toLowerCase()"
+				>
+					<td mdcDataTableCell>
+						<app-user-image
+							[size]="32"
+							[username]="user.username"
+							[online]="user.session"
+						></app-user-image>
+					</td>
+					<td mdcDataTableCell>{{ user.username }}</td>
+					<td mdcDataTableCell>
+						{{ user.email }}
+						<span *ngIf="user.emailVerified" class="verified">
+							verified
+						</span>
+						<span *ngIf="!user.emailVerified" class="not verified">
+							not verified
+						</span>
+					</td>
+					<td mdcDataTableCell>
+						{{ user.created | date: "MMM d, y, HH:mm" }}
+					</td>
+					<td mdcDataTableCell>{{ user.minutes }} mins</td>
+					<td mdcDataTableCell>
+						<span *ngIf="user.session">
+							{{ user.session.minutes }}
+						</span>
+						<span *ngIf="!user.session" style="opacity: 0.5;">
+							Offline
+						</span>
+					</td>
+					<td mdcDataTableCell>
+						<span *ngIf="user.session">
+							{{ user.session.location }}
+						</span>
+						<span *ngIf="!user.session" style="opacity: 0.5;">
+							Offline
+						</span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</mdc-data-table>
+</cdk-virtual-scroll-viewport>

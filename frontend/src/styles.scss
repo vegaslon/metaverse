@@ -6,7 +6,10 @@
 
 @use "@angular-mdc/theme/material";
 
-@use '@material/data-table/mdc-data-table';
+@use "@material/checkbox/mdc-checkbox";
+@use "@material/data-table/mdc-data-table";
+@use "@material/form-field/mdc-form-field";
+@use "@material/textfield/mdc-text-field";
 
 // to be replaced by above
 @import "~@angular/material/theming";
