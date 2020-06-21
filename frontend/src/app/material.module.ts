@@ -13,6 +13,7 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatTableModule } from "@angular/material/table";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatToolbarModule } from "@angular/material/toolbar";
+import { MDCDataTableModule } from "@angular-mdc/web/data-table";
 
 const modules = [
 	MatButtonModule,
@@ -29,6 +30,8 @@ const modules = [
 	MatTableModule,
 	MatTabsModule,
 	MatToolbarModule,
+
+	MDCDataTableModule,
 ];
 
 @NgModule({
