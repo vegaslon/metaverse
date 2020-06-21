@@ -1,8 +1,8 @@
 <svg
 	xmlns="http://www.w3.org/2000/svg"
 	viewBox="0 0 32 32"
-	[attr.width]="width"
-	[attr.height]="height"
+	[attr.width]="size"
+	[attr.height]="size"
 >
 	<mask
 		id="user-image-mask"
@@ -23,7 +23,7 @@
 	</mask>
 	<image
 		mask="url(#user-image-mask)"
-		[attr.href]="url"
+		[attr.href]="'/api/user/' + username + '/image'"
 		height="32"
 		width="32"
 		preserveAspectRatio="xMaxYMin slice"

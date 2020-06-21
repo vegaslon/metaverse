@@ -6,9 +6,8 @@ import { Component, Input } from "@angular/core";
 	styleUrls: ["./user-image.component.scss"],
 })
 export class UserImageComponent {
-	@Input() width = 32;
-	@Input() height = 32;
-	@Input() url = "https://alpha.tivolicloud.com/api/user/_/image";
+	@Input() size = 32;
+	@Input() username = "_";
 	@Input() online = false;
 
 	constructor() {}

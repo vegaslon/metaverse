@@ -32,10 +32,8 @@
 						<th mat-header-cell *matHeaderCellDef></th>
 						<td mat-cell *matCellDef="let element">
 							<app-user-image
+								[username]="element.username"
 								[online]="element.online"
-								[url]="
-									'/api/user/' + element.username + '/image'
-								"
 							></app-user-image>
 						</td>
 					</ng-container>
@@ -178,10 +176,8 @@
 						<th mat-header-cell *matHeaderCellDef></th>
 						<td mat-cell *matCellDef="let element">
 							<app-user-image
+								[username]="element.username"
 								[online]="element.online"
-								[url]="
-									'/api/user/' + element.username + '/image'
-								"
 							></app-user-image>
 						</td>
 					</ng-container>
