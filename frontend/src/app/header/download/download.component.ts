@@ -30,7 +30,10 @@ export class DownloadComponent {
 
 	release: Release = null;
 
-	constructor(private http: HttpClient) {}
+	constructor(private http: HttpClient) {
+		this.getLatest();
+		this.correctPassword = true;
+	}
 
 	private bytesToMB(bytes: number) {
 		return Math.floor(bytes / 1000 / 1000);
