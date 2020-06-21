@@ -169,7 +169,7 @@ export class AuthService {
 				const admin = profile.roles.includes("admin");
 
 				const user = new User(token, profile, admin);
-				if (profile.emailVerified === false)
+				if (profile.emailVerified === false && admin === false)
 					this.openEmailVerifyDialog();
 
 				const payload = this.jwtHelper.decodeToken(jwt);
