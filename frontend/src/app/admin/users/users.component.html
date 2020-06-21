@@ -1,11 +1,13 @@
 <div style="display: flex; align-items: center; margin-bottom: 16px;">
-	<mdc-form-field>
-		<mdc-text-field
-			label="Search for user"
-			(keyup)="onSearch($event)"
-		></mdc-text-field>
-	</mdc-form-field>
-	<div style="margin: 0 8px;"></div>
+	<ng-container *ngIf="!onlineUsers">
+		<mdc-form-field>
+			<mdc-text-field
+				label="Search for user"
+				(keyup)="onSearch($event)"
+			></mdc-text-field>
+		</mdc-form-field>
+		<div style="margin: 0 8px;"></div>
+	</ng-container>
 	<button mat-button (click)="onRefresh()">
 		<mat-icon>refresh</mat-icon>
 		Refresh
@@ -59,7 +61,7 @@
 					<td mdcDataTableCell>{{ user.minutes }} mins</td>
 					<td mdcDataTableCell>
 						<span *ngIf="user.session">
-							{{ user.session.minutes }}
+							{{ user.session.minutes }} mins
 						</span>
 						<span *ngIf="!user.session" style="opacity: 0.5;">
 							Offline

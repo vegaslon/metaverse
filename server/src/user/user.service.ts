@@ -518,7 +518,7 @@ export class UserService implements OnModuleInit {
 
 		if (onlineSorted) {
 			const sessions = await this.sessionService.userSessionModel
-				.find(find)
+				.find()
 				.sort({ minutes: -1 })
 				.skip(offset)
 				.limit(amount)
