@@ -10,6 +10,7 @@ import {
 	UploadedFile,
 	UseGuards,
 	UseInterceptors,
+	Delete,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from "@nestjs/swagger";
@@ -79,6 +80,14 @@ export class UserController {
 		@UploadedFile() file: MulterFile,
 	) {
 		await this.userService.changeUserImage(user, file);
+		return { success: true };
+	}
+
+	@Delete("image")
+	@ApiBearerAuth()
+	@UseGuards(MetaverseAuthGuard)
+	async deleteUserImage(@CurrentUser() user: User) {
+		await this.userService.deleteUserImage(user);
 		return { success: true };
 	}
 

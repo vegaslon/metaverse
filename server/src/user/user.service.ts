@@ -20,7 +20,6 @@ import fetch from "node-fetch";
 import * as path from "path";
 import sharp from "sharp";
 import { Readable } from "stream";
-import { GetUsersDto } from "../admin/admin.dto";
 import { AuthSignUpDto } from "../auth/auth.dto";
 import { AuthService } from "../auth/auth.service";
 import { derPublicKeyHeader } from "../common/der-public-key-header";
@@ -44,6 +43,7 @@ import {
 	UserUpdatePasswordDto,
 } from "./user.dto";
 import { User } from "./user.schema";
+import crypto from "crypto";
 
 const defaultUserImage = fs.readFileSync(
 	path.resolve(__dirname, "../../assets/user-image.jpg"),
@@ -196,13 +196,17 @@ export class UserService implements OnModuleInit {
 		return { message: "Password has been changed" };
 	}
 
+	async deleteUserImage(user: User) {
+		await new Promise(resolve => {
+			this.images.delete(user._id, err => {
+				resolve();
+			});
+		});
+	}
+
 	async changeUserImage(user: User, file: MulterFile) {
 		return new Promise(async (resolve, reject) => {
-			await new Promise(resolve => {
-				this.images.delete(user._id, err => {
-					resolve();
-				});
-			});
+			await this.deleteUserImage(user);
 
 			const imageStream = sharp(file.buffer)
 				.resize(128, 128, {
@@ -250,33 +254,52 @@ export class UserService implements OnModuleInit {
 		}
 	}
 
+	async getDefaultUserImage() {
+		let read = false;
+		const stream = new Readable({
+			read() {
+				if (read) {
+					this.push(null);
+				} else {
+					read = true;
+					this.push(defaultUserImage);
+				}
+				return;
+			},
+		});
+		return { stream, contentType: "image/jpg" };
+	}
+
+	async getGravatarUserImage(email: string) {
+		const hash = crypto
+			.createHash("md5")
+			.update(email.trim().toLowerCase())
+			.digest("hex");
+
+		const res = await fetch(
+			"https://www.gravatar.com/avatar/" + hash + "?s=128&d=404",
+		);
+		if (res.ok === false) return null;
+
+		return { stream: res.body, contentType: "image/jpg" };
+	}
+
 	async getUserImage(username: string) {
-		const contentType = "image/jpg";
+		const user = await this.findByIdOrUsername(username);
 
-		const returnDefault = () => {
-			let read = false;
-			const stream = new Readable({
-				read() {
-					if (read) {
-						this.push(null);
-					} else {
-						read = true;
-						this.push(defaultUserImage);
-					}
-					return;
-				},
-			});
-			return { stream, contentType };
-		};
+		// no user, default
+		if (user == null) return this.getDefaultUserImage();
 
-		let user = await this.findByUsername(username);
-		if (user == null) user = await this.findById(username);
-		if (user == null) return returnDefault();
-		if ((await this.images.find({ _id: user._id }).count()) < 1)
-			return returnDefault();
+		// no profile picture, try gravatar
+		if ((await this.images.find({ _id: user._id }).count()) < 1) {
+			const gravatar = this.getGravatarUserImage(user.email);
+			if (gravatar !== null) return gravatar;
+			return this.getDefaultUserImage(); // no gravatar, default
+		}
 
+		// yay they uploaded a profile picture
 		const stream = this.images.openDownloadStream(user._id);
-		return { stream, contentType };
+		return { stream, contentType: "image/jpg" };
 	}
 
 	async setPublicKey(user: User, buffer: Buffer) {

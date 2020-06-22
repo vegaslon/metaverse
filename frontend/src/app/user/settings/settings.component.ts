@@ -162,10 +162,30 @@ export class SettingsComponent implements OnInit, OnDestroy {
 					this.imageForm.enable();
 					this.imageFormError = err;
 				},
-				() => {
-					sub.unsubscribe();
-				},
 			);
+	}
+
+	onRemoveImage() {
+		if (confirm("Are you sure you want to delete your image?") === false)
+			return;
+
+		this.imageForm.disable();
+
+		this.userService.removeUserImage().subscribe(
+			() => {
+				this.imageForm.enable();
+				this.imageForm.reset();
+				this.updateUserImage();
+
+				this.snackBar.open("User image has been deleted", "Dismiss", {
+					duration: 2000,
+				});
+			},
+			err => {
+				this.imageForm.enable();
+				this.imageFormError = err;
+			},
+		);
 	}
 
 	ngOnInit() {}

@@ -9,8 +9,10 @@
 					*ngIf="emailFormError"
 					class="bg-warn"
 					style="
-						margin-bottom: 16px; color: #fff;
-						display: flex; vertical-align: middle;
+						margin-bottom: 16px;
+						color: #fff;
+						display: flex;
+						vertical-align: middle;
 					"
 				>
 					<mat-icon style="margin-top: -3px; margin-right: 8px;">
@@ -58,8 +60,10 @@
 					*ngIf="emailFormSuccess"
 					class="bg-success"
 					style="
-						margin-bottom: 16px; color: #fff;
-						display: flex; vertical-align: middle;
+						margin-bottom: 16px;
+						color: #fff;
+						display: flex;
+						vertical-align: middle;
 					"
 				>
 					<mat-icon style="margin-top: -3px; margin-right: 8px;">
@@ -80,8 +84,10 @@
 					*ngIf="passwordFormError"
 					class="bg-warn"
 					style="
-						margin-bottom: 16px; color: #fff;
-						display: flex; vertical-align: middle;
+						margin-bottom: 16px;
+						color: #fff;
+						display: flex;
+						vertical-align: middle;
 					"
 				>
 					<mat-icon style="margin-top: -3px; margin-right: 8px;">
@@ -185,8 +191,10 @@
 					*ngIf="passwordFormSuccess"
 					class="bg-success"
 					style="
-						margin-bottom: 16px; color: #fff;
-						display: flex; vertical-align: middle;
+						margin-bottom: 16px;
+						color: #fff;
+						display: flex;
+						vertical-align: middle;
 					"
 				>
 					<mat-icon style="margin-top: -3px; margin-right: 8px;">
@@ -203,10 +211,18 @@
 		</div>
 		<div class="col-md-6">
 			<mat-card>
-				<table style="width: 100%">
+				<table style="width: 100%;">
 					<tr style="vertical-align: top;">
 						<td>
-							<h2 style="margin: 0">Update image</h2>
+							<h2 style="margin: 0;">Update image</h2>
+							<p>
+								Your profile picture may be provided by
+								<a
+									href="https://en.gravatar.com"
+									target="_blank"
+									>Gravatar</a
+								>
+							</p>
 						</td>
 						<td style="text-align: right;">
 							<img class="user-image" [src]="userImageSrc" />
@@ -218,8 +234,10 @@
 					*ngIf="imageFormError"
 					class="bg-warn"
 					style="
-						margin-bottom: 16px; color: #fff;
-						display: flex; vertical-align: middle;
+						margin-bottom: 16px;
+						color: #fff;
+						display: flex;
+						vertical-align: middle;
 					"
 				>
 					<mat-icon style="margin-top: -3px; margin-right: 8px;">
@@ -241,6 +259,10 @@
 						[disabled]="imageForm.invalid || imageForm.disabled"
 					>
 						<mat-icon>save</mat-icon> Save changes
+					</button>
+					<span style="margin: 0 4px;"></span>
+					<button type="button" mat-button (click)="onRemoveImage()">
+						<mat-icon>delete</mat-icon> Remove image
 					</button>
 				</form>
 

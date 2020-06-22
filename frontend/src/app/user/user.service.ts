@@ -56,6 +56,12 @@ export class UserService {
 			.pipe(catchError(this.handleError));
 	}
 
+	removeUserImage() {
+		return this.http
+			.delete("/api/user/image")
+			.pipe(catchError(this.handleError));
+	}
+
 	getUserDomains() {
 		return this.http
 			.get<Domain[]>("/api/user/domains")
