@@ -287,19 +287,22 @@ export class UserService implements OnModuleInit {
 	async getUserImage(username: string) {
 		const user = await this.findByIdOrUsername(username);
 
-		// no user, default
 		if (user == null) return this.getDefaultUserImage();
 
-		// no profile picture, try gravatar
-		if ((await this.images.find({ _id: user._id }).count()) < 1) {
-			const gravatar = this.getGravatarUserImage(user.email);
-			if (gravatar !== null) return gravatar;
-			return this.getDefaultUserImage(); // no gravatar, default
+		if ((await this.images.find({ _id: user._id }).count()) > 0) {
+			const stream = this.images.openDownloadStream(user._id);
+			return { stream, contentType: "image/jpg" };
 		}
 
-		// yay they uploaded a profile picture
-		const stream = this.images.openDownloadStream(user._id);
-		return { stream, contentType: "image/jpg" };
+		try {
+			const gravatar = await this.getGravatarUserImage(user.email);
+			if (gravatar !== null) return gravatar;
+		} catch (err) {
+			// gravatar may be down
+			return this.getDefaultUserImage();
+		}
+
+		return this.getDefaultUserImage();
 	}
 
 	async setPublicKey(user: User, buffer: Buffer) {
