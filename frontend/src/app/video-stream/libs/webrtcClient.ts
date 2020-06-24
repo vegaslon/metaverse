@@ -71,7 +71,7 @@ export class WebRTCClient {
 
 		this.conn.addEventListener("track", this.onTrack);
 
-		this.socket = io("https://alpha.tivolicloud.com/webrtc");
+		this.socket = io("https://tivolicloud.com/webrtc");
 
 		this.socket.once("connect", () => {
 			this.socket.on("iceCandidate", dto => {

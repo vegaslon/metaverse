@@ -25,7 +25,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 	year = new Date().getFullYear();
 
 	social = [
-		["Discord", "https://alpha.tivolicloud.com/discord"],
+		["Discord", "https://tivolicloud.com/discord"],
 		["Blog", "https://blog.tivolicloud.com"],
 	];
 	resources = [
