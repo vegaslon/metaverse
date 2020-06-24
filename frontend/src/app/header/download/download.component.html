@@ -28,19 +28,7 @@
 		reported here
 	</a>
 </p>
-<ng-container *ngIf="!correctPassword">
-	<mat-form-field style="width: 100%;" appearance="outline">
-		<mat-label>Super secret password</mat-label>
-		<input
-			matInput
-			required
-			autocomplete="off"
-			#password
-			(keyup)="onPasswordKeyUp(password)"
-		/>
-	</mat-form-field>
-</ng-container>
-<ng-container *ngIf="correctPassword">
+<ng-container>
 	<mat-progress-bar
 		*ngIf="!loaded"
 		mode="indeterminate"

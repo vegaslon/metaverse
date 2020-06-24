@@ -26,13 +26,11 @@ export class DownloadComponent {
 	// os: Platform = "windows";
 
 	loaded = false;
-	correctPassword = false;
 
 	release: Release = null;
 
 	constructor(private http: HttpClient) {
 		this.getLatest();
-		this.correctPassword = true;
 	}
 
 	private bytesToMB(bytes: number) {
@@ -60,15 +58,5 @@ export class DownloadComponent {
 				this.release = release;
 				this.loaded = true;
 			});
-	}
-
-	onPasswordKeyUp(input: HTMLInputElement) {
-		if (
-			input.value.replace(/ /g, "").toLowerCase() ===
-			atob("aGFwcHlzcXVpcnJlbHM")
-		) {
-			this.getLatest();
-			this.correctPassword = true;
-		}
 	}
 }
