@@ -71,9 +71,25 @@ export class PuppeteerService implements OnModuleInit {
 		const username = user.username;
 		const staff = user.admin;
 
-		const { stream } = await this.userService.getUserImage(username);
-		const buffer = await streamToRx(stream).toPromise();
-		const userImage = "data:image/png;base64," + buffer.toString("base64");
+		const { stream, contentType } = await this.userService.getUserImage(
+			user.id,
+		);
+
+		const chunks = [];
+		stream.on("data", chunk => {
+			chunks.push(chunk);
+		});
+
+		await new Promise((resolve, reject) => {
+			stream.on("end", resolve);
+			stream.on("error", reject);
+		});
+
+		const userImage =
+			"data:" +
+			contentType +
+			";base64," +
+			Buffer.concat(chunks).toString("base64");
 
 		const html = Handlebars.compile(
 			fs.readFileSync(
