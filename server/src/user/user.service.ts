@@ -121,15 +121,14 @@ export class UserService implements OnModuleInit {
 	}
 
 	findByIdOrUsername(idOrUsername: string) {
-		try {
-			const id = new ObjectID(idOrUsername);
-			return this.userModel.findById(id);
-		} catch (err) {
-			const queryRegExp = this.regexForFinding(idOrUsername);
-			return this.userModel.findOne({
-				username: queryRegExp,
-			});
-		}
+		return this.userModel.findOne({
+			$or: [
+				{ username: this.regexForFinding(idOrUsername) },
+				...(ObjectID.isValid(idOrUsername)
+					? [{ _id: new ObjectID(idOrUsername) }]
+					: []),
+			],
+		});
 	}
 
 	async createUser(
