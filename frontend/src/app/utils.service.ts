@@ -199,5 +199,19 @@ export class UtilsService {
 	displayPluralName = (name: string) =>
 		name.toLowerCase().endsWith("s") ? name + "'" : name + "'s";
 
+	displayMinutes(mins: number): string {
+		if (mins >= 60) {
+			const hours = Math.floor(mins / 60);
+			mins = mins - hours * 60;
+			return (
+				this.displayPlural(hours, "hour") +
+				" " +
+				this.displayPlural(mins, "minute")
+			);
+		} else {
+			return mins + (mins === 1 ? " minute" : " minutes");
+		}
+	}
+
 	getEmailDomain = (email: string) => email.split("@").pop();
 }

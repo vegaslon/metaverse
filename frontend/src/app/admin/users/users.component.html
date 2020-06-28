@@ -26,8 +26,8 @@
 					<th mdcDataTableHeaderCell>Username</th>
 					<th mdcDataTableHeaderCell>Email</th>
 					<th mdcDataTableHeaderCell>Created</th>
-					<th mdcDataTableHeaderCell>Total minutes</th>
-					<th mdcDataTableHeaderCell>Online minutes</th>
+					<th mdcDataTableHeaderCell>Total time</th>
+					<th mdcDataTableHeaderCell>Online time</th>
 					<th mdcDataTableHeaderCell>Current location</th>
 				</tr>
 			</thead>
@@ -58,10 +58,16 @@
 					<td mdcDataTableCell>
 						{{ user.created | date: "MMM d, y, HH:mm" }}
 					</td>
-					<td mdcDataTableCell>{{ user.minutes }} mins</td>
+					<td mdcDataTableCell>
+						{{ utilsService.displayMinutes(user.minutes) }}
+					</td>
 					<td mdcDataTableCell>
 						<span *ngIf="user.session">
-							{{ user.session.minutes }} mins
+							{{
+								utilsService.displayMinutes(
+									user.session.minutes
+								)
+							}}
 						</span>
 						<span *ngIf="!user.session" style="opacity: 0.5;">
 							Offline

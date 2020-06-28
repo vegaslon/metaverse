@@ -69,8 +69,10 @@
 							</td>
 						</tr>
 						<tr mdcDataTableRow>
-							<th mdcDataTableHeaderCell>Total minutes</th>
-							<td mdcDataTableCell>{{ user.minutes }} minutes</td>
+							<th mdcDataTableHeaderCell>Total time</th>
+							<td mdcDataTableCell>
+								{{ utilsService.displayMinutes(user.minutes) }}
+							</td>
 						</tr>
 						<tr mdcDataTableRow>
 							<th mdcDataTableHeaderCell>ID</th>
@@ -133,9 +135,13 @@
 							</td>
 						</tr>
 						<tr mdcDataTableRow>
-							<th mdcDataTableHeaderCell>Online minutes</th>
+							<th mdcDataTableHeaderCell>Online time</th>
 							<td mdcDataTableCell>
-								{{ user.session.minutes }} minutes
+								{{
+									utilsService.displayMinutes(
+										user.session.minutes
+									)
+								}}
 							</td>
 						</tr>
 					</tbody>

@@ -1,7 +1,8 @@
 import { Component, OnInit } from "@angular/core";
-import { Router, ActivatedRoute } from "@angular/router";
-import { AdminUser, AdminService } from "../admin.service";
+import { ActivatedRoute } from "@angular/router";
 import { AuthService } from "../../auth/auth.service";
+import { UtilsService } from "../../utils.service";
+import { AdminService, AdminUser } from "../admin.service";
 
 @Component({
 	selector: "app-user",
@@ -15,6 +16,7 @@ export class UserComponent implements OnInit {
 		private readonly route: ActivatedRoute,
 		private readonly adminService: AdminService,
 		private readonly authService: AuthService,
+		public readonly utilsService: UtilsService,
 	) {}
 
 	refreshUser(username?: string) {

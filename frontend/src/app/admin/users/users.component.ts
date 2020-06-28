@@ -1,8 +1,9 @@
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { AuthService } from "../../auth/auth.service";
-import { AdminService, AdminUser } from "../admin.service";
 import { ActivatedRoute } from "@angular/router";
+import { AuthService } from "../../auth/auth.service";
+import { UtilsService } from "../../utils.service";
+import { AdminService, AdminUser } from "../admin.service";
 
 @Component({
 	selector: "app-users",
@@ -22,6 +23,7 @@ export class UsersComponent implements OnInit {
 		private readonly adminService: AdminService,
 		private readonly authService: AuthService,
 		private readonly route: ActivatedRoute,
+		public readonly utilsService: UtilsService,
 	) {}
 
 	ngOnInit() {
