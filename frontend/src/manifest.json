@@ -10,7 +10,7 @@
 	"orientation": "any",
 	"icons": [
 		{
-			"src": "logo-circle.png",
+			"src": "assets/logo-circle.png",
 			"sizes": "1024x1024",
 			"type": "image/png"
 		}
