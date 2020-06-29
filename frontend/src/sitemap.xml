@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<urlset xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://tivolicloud.com</loc>
+  </url>
+  <url>
+    <loc>https://blog.tivolicloud.com</loc>
+  </url>
+  <url>
+    <loc>https://tivolicloud.com/discord</loc>
+  </url>
+  <url>
+    <loc>https://docs.tivolicloud.com</loc>
+  </url>
+  <url>
+    <loc>https://git.tivolicloud.com</loc>
+  </url>
+  <url>
+    <loc>https://roadmap.tivolicloud.com</loc>
+  </url>
+</urlset>
