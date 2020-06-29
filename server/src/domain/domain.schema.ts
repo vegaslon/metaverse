@@ -1,6 +1,7 @@
 import { Document, Schema } from "mongoose";
-import { User } from "../user/user.schema";
 import { v4 as uuid } from "uuid";
+import { MongooseFilterUnused } from "../common/mongoose-filter-unused";
+import { User } from "../user/user.schema";
 
 export enum DomainAutomaticNetworking {
 	full = "full",
@@ -96,6 +97,8 @@ export interface Domain extends Document {
 	ownerPlaces: string[];
 	userLikes: User[];
 }
+
+MongooseFilterUnused(DomainSchema);
 
 DomainSchema.pre("remove", async function (next) {
 	try {

@@ -1,4 +1,5 @@
 import { Document, Schema } from "mongoose";
+import { MongooseFilterUnused } from "../common/mongoose-filter-unused";
 import { Domain } from "../domain/domain.schema";
 
 export const UserSchema = new Schema({
@@ -49,3 +50,5 @@ export interface User extends Document {
 	created: Date;
 	minutes: number;
 }
+
+MongooseFilterUnused(UserSchema);

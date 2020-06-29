@@ -1,5 +1,6 @@
-import { Document, Model, Query, Schema, Aggregate } from "mongoose";
+import { Document, Model, Query, Schema } from "mongoose";
 import { v4 as uuid } from "uuid";
+import { MongooseFilterUnused } from "../common/mongoose-filter-unused";
 import { Domain } from "../domain/domain.schema";
 import { User } from "../user/user.schema";
 
@@ -57,6 +58,8 @@ export interface DomainSession extends Document {
 // /^find/ includes .countDocuments
 // TODO: check if .countDocuments is respecting down below
 [UserSessionSchema, DomainSessionSchema].forEach(schema => {
+	MongooseFilterUnused(schema);
+
 	schema.index({ expireAt: 1 }, { expireAfterSeconds: 0 });
 	schema.pre(/^find/, function () {
 		if (this instanceof Query)

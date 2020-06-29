@@ -1,6 +1,6 @@
 import { Document, Query, Schema } from "mongoose";
-import { generateRandomString } from "../common/utils";
 import os from "os";
+import { MongooseFilterUnused } from "../common/mongoose-filter-unused";
 
 export const MetricsSchema = new Schema({
 	// _id: { type: String, default: () => generateRandomString(16) },
@@ -30,6 +30,8 @@ export interface Metrics extends Document {
 
 	expireAt: Date | number;
 }
+
+MongooseFilterUnused(MetricsSchema);
 
 MetricsSchema.index({ expireAt: 1 }, { expireAfterSeconds: 0 });
 MetricsSchema.pre(/^find/, function () {
