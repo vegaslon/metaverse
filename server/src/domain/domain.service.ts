@@ -322,17 +322,28 @@ export class DomainService implements OnModuleInit {
 		return { stream, contentType: "image/jpg" };
 	}
 
-	async getDomainImage(id: string) {
+	async getDomainImage(
+		id: string,
+		onlyUserUploaded = false,
+	): Promise<{
+		stream: Readable | NodeJS.ReadableStream;
+		contentType: string;
+	}> {
 		const domain = await this.findById(id);
 
-		if (domain == null) return this.getDefaultDomainImage();
+		if (domain == null)
+			return onlyUserUploaded
+				? { stream: null, contentType: null }
+				: this.getDefaultDomainImage();
 
 		if ((await this.images.find({ _id: domain._id }).count()) > 0) {
 			const stream = this.images.openDownloadStream(domain._id);
 			return { stream, contentType: "image/jpg" };
 		}
 
-		return this.getDefaultDomainImage();
+		return onlyUserUploaded
+			? { stream: null, contentType: null }
+			: this.getDefaultDomainImage();
 	}
 
 	async getDomainsStats() {

@@ -291,15 +291,26 @@ export class UserService implements OnModuleInit {
 		return { stream: res.body, contentType: "image/jpg" };
 	}
 
-	async getUserImage(username: string) {
+	async getUserImage(
+		username: string,
+		onlyUserUploaded = false,
+	): Promise<{
+		stream: Readable | NodeJS.ReadableStream;
+		contentType: string;
+	}> {
 		const user = await this.findByIdOrUsername(username);
 
-		if (user == null) return this.getDefaultUserImage();
+		if (user == null)
+			return onlyUserUploaded
+				? { stream: null, contentType: null }
+				: this.getDefaultUserImage();
 
 		if ((await this.images.find({ _id: user._id }).count()) > 0) {
 			const stream = this.images.openDownloadStream(user._id);
 			return { stream, contentType: "image/jpg" };
 		}
+
+		if (onlyUserUploaded) return { stream: null, contentType: null };
 
 		try {
 			const gravatar = await this.getGravatarUserImage(user.email);
@@ -650,17 +661,31 @@ export class UserService implements OnModuleInit {
 		for (const domainId of user.domains) {
 			const domain = await this.domainService.findById(domainId as any);
 			zip.file(
-				"domains " + domain.id + ".json",
+				"domain " + domain.id + ".json",
 				JSON.stringify(domain, null, 4),
 			);
+
+			const {
+				stream,
+				contentType,
+			} = await this.domainService.getDomainImage(domain.id, true);
+			if (stream)
+				zip.file(
+					"domain " + domain.id + "." + contentType.split("/").pop(),
+					await streamToBuffer(stream),
+				);
 		}
 
-		if ((await this.images.find({ _id: user._id }).count()) > 0) {
-			const stream = this.images.openDownloadStream(user._id);
-			zip.file(
-				"users.images " + user.id + ".jpg",
-				await streamToBuffer(stream),
+		{
+			const { stream, contentType } = await this.getUserImage(
+				user.id,
+				true,
 			);
+			if (stream)
+				zip.file(
+					"user " + user.id + "." + contentType.split("/").pop(),
+					await streamToBuffer(stream),
+				);
 		}
 
 		return zip.generateNodeStream({
