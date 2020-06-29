@@ -133,7 +133,9 @@ export class UserController {
 
 		if (user == null) {
 			user = {
+				id: "",
 				username: String().padStart(4, String.fromCharCode(0x2800)),
+				admin: false,
 			} as any;
 			admin = null;
 			friend = null;
