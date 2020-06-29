@@ -1,9 +1,11 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Subscription } from "rxjs";
 import { AuthService, User } from "../../auth/auth.service";
 import { UserService } from "../user.service";
+import { ExportDataComponent } from "./export-data/export-data.component";
 
 @Component({
 	selector: "app-settings",
@@ -23,9 +25,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
 	}
 
 	constructor(
-		private userService: UserService,
-		private authService: AuthService,
-		private snackBar: MatSnackBar,
+		private readonly userService: UserService,
+		private readonly authService: AuthService,
+		private readonly snackBar: MatSnackBar,
+		private readonly dialog: MatDialog,
 	) {
 		this.userSub = this.authService.user$.subscribe(user => {
 			this.user = user;
@@ -186,6 +189,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
 				this.imageFormError = err;
 			},
 		);
+	}
+
+	onExportData() {
+		this.dialog.open(ExportDataComponent, {
+			width: "600px",
+		});
 	}
 
 	ngOnInit() {}

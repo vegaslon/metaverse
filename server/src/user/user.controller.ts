@@ -13,7 +13,13 @@ import {
 	Delete,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from "@nestjs/swagger";
+import {
+	ApiBearerAuth,
+	ApiBody,
+	ApiConsumes,
+	ApiTags,
+	ApiQuery,
+} from "@nestjs/swagger";
 import { Response } from "express";
 import { MetaverseUnverifiedAuthGuard } from "../auth/auth-unverified.guard";
 import { MetaverseAuthGuard } from "../auth/auth.guard";
@@ -210,5 +216,18 @@ export class UserController {
 		res.redirect(
 			URL + (justVerified ? "?emailVerified&token=" + userToken : ""),
 		);
+	}
+
+	@Get("export-data")
+	@ApiBearerAuth()
+	@UseGuards(MetaverseUnverifiedAuthGuard)
+	async exportAllData(
+		@CurrentUser() user: User,
+		@Query("password") password: string,
+		@Res() res: Response,
+	) {
+		const stream = await this.userService.exportAllData(user, password);
+		res.header("Content-Type", "application/octet-stream");
+		stream.pipe(res);
 	}
 }

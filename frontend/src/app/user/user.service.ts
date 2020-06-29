@@ -105,4 +105,15 @@ export class UserService {
 			.post<Domain>("/api/user/domain", domain)
 			.pipe(catchError(this.handleError));
 	}
+
+	// extra
+
+	exportData(password: string) {
+		return this.http.get("/api/user/export-data", {
+			responseType: "blob",
+			params: {
+				password,
+			},
+		});
+	}
 }

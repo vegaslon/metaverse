@@ -271,6 +271,27 @@
 					<mat-progress-bar mode="indeterminate"></mat-progress-bar>
 				</div>
 			</mat-card>
+			<mat-card>
+				<h2>Export all my data</h2>
+				<p>
+					You can download all of your personal data we keep as a zip
+					archive. You have the right to
+					<a
+						href="https://en.wikipedia.org/wiki/Data_portability"
+						target="_blank"
+					>
+						data portability</a
+					>.
+				</p>
+				<button
+					mat-flat-button
+					color="primary"
+					(click)="onExportData()"
+				>
+					<mat-icon>get_app</mat-icon>
+					Download my data
+				</button>
+			</mat-card>
 		</div>
 	</div>
 </div>

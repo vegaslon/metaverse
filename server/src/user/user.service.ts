@@ -7,12 +7,15 @@ import {
 	InternalServerErrorException,
 	NotFoundException,
 	OnModuleInit,
+	UnauthorizedException,
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { InjectConnection, InjectModel } from "@nestjs/mongoose";
 import * as bcrypt from "bcrypt";
 import { ObjectID } from "bson";
+import crypto from "crypto";
 import * as fs from "fs";
+import JSZip from "jszip";
 import * as mailchecker from "mailchecker";
 import { GridFSBucket } from "mongodb";
 import { Connection, Model } from "mongoose";
@@ -43,7 +46,6 @@ import {
 	UserUpdatePasswordDto,
 } from "./user.dto";
 import { User } from "./user.schema";
-import crypto from "crypto";
 
 const defaultUserImage = fs.readFileSync(
 	path.resolve(__dirname, "../../assets/user-image.jpg"),
@@ -634,4 +636,45 @@ export class UserService implements OnModuleInit {
 
 	// // will also delete friend request
 	// async deleteFriend(currentUser: User, username: string) {}
+
+	async exportAllData(user: User, password: string) {
+		user = await this.userModel.findOne(user._id).select("+hash").exec();
+
+		const valid = await bcrypt.compare(password, user.hash);
+		if (!valid) throw new UnauthorizedException("Invalid password");
+
+		const zip = new JSZip();
+		zip.file("user " + user.id + ".json", JSON.stringify(user, null, 4));
+
+		for (const domainId of user.domains) {
+			const domain = await this.domainService.findById(domainId as any);
+			zip.file(
+				"domains " + domain.id + ".json",
+				JSON.stringify(domain, null, 4),
+			);
+		}
+
+		if ((await this.images.find({ _id: user._id }).count()) > 0) {
+			const stream = this.images.openDownloadStream(user._id);
+
+			const chunks = [];
+			stream.on("data", chunk => {
+				chunks.push(chunk);
+			});
+
+			await new Promise((resolve, reject) => {
+				stream.on("end", resolve);
+				stream.on("error", reject);
+			});
+
+			zip.file("users.images " + user.id + ".jpg", Buffer.concat(chunks));
+		}
+
+		return zip.generateNodeStream({
+			compression: "DEFLATE",
+			compressionOptions: {
+				level: 6, // 1 best speed, 9 best compression
+			},
+		});
+	}
 }

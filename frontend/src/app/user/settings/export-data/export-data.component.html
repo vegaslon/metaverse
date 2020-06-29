@@ -1,0 +1,64 @@
+<form [formGroup]="form" (submit)="onSubmit()">
+	<h1 style="margin-top: 0;">Export all my data</h1>
+
+	<mat-card
+		*ngIf="error"
+		class="bg-warn"
+		style="
+			margin-bottom: 16px;
+			color: #fff;
+			display: flex;
+			vertical-align: middle;
+		"
+	>
+		<mat-icon style="margin-top: -3px; margin-right: 8px;">
+			error_outline
+		</mat-icon>
+		{{ error }}
+	</mat-card>
+
+	<p>
+		You can download all of your personal data we keep as a zip archive. You
+		have the right to
+		<a
+			href="https://en.wikipedia.org/wiki/Data_portability"
+			target="_blank"
+		>
+			data portability</a
+		>. <br /><br />
+		To continue, please verify yourself with your password.
+	</p>
+
+	<div style="margin: 4px 0;"></div>
+
+	<mat-form-field style="width: 100%;">
+		<input
+			matInput
+			type="password"
+			placeholder="Password"
+			required
+			formControlName="password"
+		/>
+		<mat-error *ngIf="form.hasError('required', 'password')">
+			Password is required
+		</mat-error>
+		<mat-error *ngIf="form.hasError('minlength', 'password')">
+			Password is too short
+		</mat-error>
+		<mat-error *ngIf="form.hasError('maxlength', 'password')">
+			Password is too long
+		</mat-error>
+	</mat-form-field>
+
+	<div style="margin: 8px 0;"></div>
+
+	<button
+		mat-flat-button
+		color="primary"
+		type="submit"
+		[disabled]="form.disabled || form.invalid"
+	>
+		<mat-icon>get_app</mat-icon>
+		Download my data
+	</button>
+</form>

@@ -12,6 +12,7 @@ import { FolderViewComponent } from "./files/folder-view/folder-view.component";
 import { TreeItemComponent } from "./files/tree-item/tree-item.component";
 import { UploadComponent } from "./files/upload/upload.component";
 import { SettingsComponent } from "./settings/settings.component";
+import { ExportDataComponent } from "./settings/export-data/export-data.component";
 
 const routes: Routes = [
 	{ path: "", redirectTo: "settings", pathMatch: "full" },
@@ -30,6 +31,7 @@ const routes: Routes = [
 		FolderViewComponent,
 		UploadComponent,
 		InputComponent,
+		ExportDataComponent,
 	],
 	imports: [
 		CommonModule,
@@ -39,6 +41,6 @@ const routes: Routes = [
 		ReactiveFormsModule,
 		ClipboardModule,
 	],
-	entryComponents: [UploadComponent, InputComponent],
+	entryComponents: [UploadComponent, InputComponent, ExportDataComponent],
 })
 export class UserModule {}
