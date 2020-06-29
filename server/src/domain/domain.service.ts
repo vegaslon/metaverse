@@ -7,16 +7,19 @@ import {
 	OnModuleInit,
 } from "@nestjs/common";
 import { InjectConnection, InjectModel } from "@nestjs/mongoose";
+import fs from "fs";
 import { GridFSBucket } from "mongodb";
 import { Connection, Model } from "mongoose";
+import path from "path";
 import sharp from "sharp";
+import { Readable } from "stream";
 import { derPublicKeyHeader } from "../common/der-public-key-header";
 import { MulterFile } from "../common/multer-file.model";
 import {
+	decompressUuid,
 	patchDoc,
 	snakeToCamelCaseObject,
 	validUuid,
-	decompressUuid,
 } from "../common/utils";
 import { DomainSession } from "../session/session.schema";
 import { SessionService } from "../session/session.service";
@@ -26,9 +29,9 @@ import { CreateDomainDto, GetDomainsDto, UpdateDomainDto } from "./domain.dto";
 import { Domain } from "./domain.schema";
 import escapeString = require("escape-string-regexp");
 
-// export interface DomainSession {
-// 	users: { [id: string]: UserSession };
-// }
+const defaultDomainImage = fs.readFileSync(
+	path.resolve(__dirname, "../../assets/domain-image.jpg"),
+);
 
 @Injectable()
 export class DomainService implements OnModuleInit {
@@ -301,6 +304,35 @@ export class DomainService implements OnModuleInit {
 				resolve();
 			});
 		});
+	}
+
+	async getDefaultDomainImage() {
+		let read = false;
+		const stream = new Readable({
+			read() {
+				if (read) {
+					this.push(null);
+				} else {
+					read = true;
+					this.push(defaultDomainImage);
+				}
+				return;
+			},
+		});
+		return { stream, contentType: "image/jpg" };
+	}
+
+	async getDomainImage(id: string) {
+		const domain = await this.findById(id);
+
+		if (domain == null) return this.getDefaultDomainImage();
+
+		if ((await this.images.find({ _id: domain._id }).count()) > 0) {
+			const stream = this.images.openDownloadStream(domain._id);
+			return { stream, contentType: "image/jpg" };
+		}
+
+		return this.getDefaultDomainImage();
 	}
 
 	async getDomainsStats() {
