@@ -9,6 +9,7 @@ import { take } from "rxjs/operators";
 import { UserService } from "../user/user.service";
 import fetch from "node-fetch";
 import { User } from "../user/user.schema";
+import { streamToBuffer } from "../common/utils";
 
 @Injectable()
 export class PuppeteerService implements OnModuleInit {
@@ -75,21 +76,10 @@ export class PuppeteerService implements OnModuleInit {
 			user.id,
 		);
 
-		const chunks = [];
-		stream.on("data", chunk => {
-			chunks.push(chunk);
-		});
-
-		await new Promise((resolve, reject) => {
-			stream.on("end", resolve);
-			stream.on("error", reject);
-		});
+		const buffer = await streamToBuffer(stream);
 
 		const userImage =
-			"data:" +
-			contentType +
-			";base64," +
-			Buffer.concat(chunks).toString("base64");
+			"data:" + contentType + ";base64," + buffer.toString("base64");
 
 		const html = Handlebars.compile(
 			fs.readFileSync(

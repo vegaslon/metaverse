@@ -1,8 +1,9 @@
-import { DomainSession, UserSession } from "../session/session.schema";
+import baseX from "base-x";
+import { Readable } from "stream";
 import { Domain } from "../domain/domain.schema";
 import { URL, WORLD_URL } from "../environment";
+import { DomainSession, UserSession } from "../session/session.schema";
 import { User } from "../user/user.schema";
-import baseX from "base-x";
 
 const base62 = baseX(
 	"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
@@ -190,3 +191,19 @@ export const validUuid = (uuid: string) =>
 	/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
 		uuid,
 	);
+
+export const streamToBuffer = async (
+	stream: Readable | NodeJS.ReadableStream,
+) => {
+	const chunks = [];
+	stream.on("data", chunk => {
+		chunks.push(chunk);
+	});
+
+	await new Promise((resolve, reject) => {
+		stream.on("end", resolve);
+		stream.on("error", reject);
+	});
+
+	return Buffer.concat(chunks);
+};

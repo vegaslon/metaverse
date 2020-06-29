@@ -32,6 +32,7 @@ import {
 	pagination,
 	renderDomain,
 	renderFriend,
+	streamToBuffer,
 } from "../common/utils";
 import { GetDomainsDto } from "../domain/domain.dto";
 import { Domain } from "../domain/domain.schema";
@@ -656,18 +657,10 @@ export class UserService implements OnModuleInit {
 
 		if ((await this.images.find({ _id: user._id }).count()) > 0) {
 			const stream = this.images.openDownloadStream(user._id);
-
-			const chunks = [];
-			stream.on("data", chunk => {
-				chunks.push(chunk);
-			});
-
-			await new Promise((resolve, reject) => {
-				stream.on("end", resolve);
-				stream.on("error", reject);
-			});
-
-			zip.file("users.images " + user.id + ".jpg", Buffer.concat(chunks));
+			zip.file(
+				"users.images " + user.id + ".jpg",
+				await streamToBuffer(stream),
+			);
 		}
 
 		return zip.generateNodeStream({
