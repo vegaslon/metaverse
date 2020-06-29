@@ -22,7 +22,6 @@ export const UserSchema = new Schema({
 	domainLikes: [{ type: String, ref: "domains" }],
 
 	friends: [{ type: Schema.Types.ObjectId, ref: "users" }],
-	friendRequests: [{ type: Schema.Types.ObjectId, ref: "users" }],
 
 	created: { type: Date, default: () => new Date() },
 	minutes: { type: Number, default: 0 },
@@ -46,7 +45,6 @@ export interface User extends Document {
 	domainLikes: Domain[];
 
 	friends: User[];
-	friendRequests: User[];
 
 	created: Date;
 	minutes: number;
