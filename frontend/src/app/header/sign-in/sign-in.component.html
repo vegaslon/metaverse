@@ -80,10 +80,10 @@
 				<mat-error *ngIf="signInForm.hasError('required', 'password')">
 					Password is required
 				</mat-error>
-				<mat-error *ngIf="signInForm.hasError('minlength', 'username')">
+				<mat-error *ngIf="signInForm.hasError('minlength', 'password')">
 					Password is too short
 				</mat-error>
-				<mat-error *ngIf="signInForm.hasError('maxlength', 'username')">
+				<mat-error *ngIf="signInForm.hasError('maxlength', 'password')">
 					Password is too long
 				</mat-error>
 			</mat-form-field>
