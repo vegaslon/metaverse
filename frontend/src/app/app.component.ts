@@ -74,6 +74,24 @@ export class AppComponent implements OnInit {
 			removeQuery = true;
 		}
 
+		if (query.has("signIn")) {
+			this.dialog.open(SignInComponent, {
+				data: {
+					mode: "signIn",
+				},
+			});
+			removeQuery = true;
+		}
+
+		if (query.has("resetPassword")) {
+			this.dialog.open(SignInComponent, {
+				data: {
+					mode: "resetPassword",
+				},
+			});
+			removeQuery = true;
+		}
+
 		if (removeQuery) this.router.navigate([], { relativeTo: this.route });
 	}
 }
