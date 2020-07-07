@@ -83,7 +83,7 @@ export class AppComponent implements OnInit {
 			removeQuery = true;
 		}
 
-		if (query.has("resetPassword")) {
+		if (query.has("forgotPassword")) {
 			this.dialog.open(SignInComponent, {
 				data: {
 					mode: "resetPassword",
