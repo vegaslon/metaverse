@@ -1,9 +1,9 @@
 import { Controller, Get, HttpException, Param } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { SessionService } from "../../session/session.service";
+import { renderDomainForHifi } from "../../common/utils";
 import { DomainService } from "../../domain/domain.service";
 import { URL } from "../../environment";
-import { UserService } from "../../user/user.service";
+import { SessionService } from "../../session/session.service";
 import { Place } from "./places.dto";
 
 @ApiTags("from hifi")
@@ -11,7 +11,6 @@ import { Place } from "./places.dto";
 export class PlacesController {
 	constructor(
 		private domainService: DomainService,
-		private userService: UserService,
 		private sessionService: SessionService,
 	) {}
 
@@ -32,7 +31,6 @@ export class PlacesController {
 		const thumbnailUrl = URL + "/api/domain/" + domain._id + "/image";
 
 		const session = await this.sessionService.findDomainById(domain.id);
-		const online = session != null;
 
 		return {
 			status: "success",
@@ -43,19 +41,7 @@ export class PlacesController {
 					path: domain.path,
 					name: domain.label,
 					address: domain._id, // hifi://address/path
-					domain: {
-						id: domain._id,
-						...(domain.automaticNetworking === "full"
-							? {
-									ice_server_address: domain.iceServerAddress,
-							  }
-							: {
-									network_address: domain.networkAddress,
-									network_port: domain.networkPort,
-							  }),
-						online,
-						default_place_name: domain._id,
-					},
+					domain: renderDomainForHifi(domain, session),
 					previews: {
 						lobby: thumbnailUrl,
 						thumbnail: thumbnailUrl,

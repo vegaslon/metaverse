@@ -3,10 +3,11 @@ import { HttpException } from "@nestjs/common/exceptions";
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { OptionalAuthGuard } from "../../auth/optional.guard";
 import { CurrentUser } from "../../auth/user.decorator";
-import { pagination } from "../../common/utils";
+import { pagination, renderDomainForHifi } from "../../common/utils";
 import { DomainRestriction } from "../../domain/domain.schema";
 import { DomainService } from "../../domain/domain.service";
 import { URL } from "../../environment";
+import { SessionService } from "../../session/session.service";
 import { User } from "../../user/user.schema";
 import { UserService } from "../../user/user.service";
 import {
@@ -15,7 +16,6 @@ import {
 	UsersLocation,
 	UsersUser,
 } from "./users.dto";
-import { SessionService } from "../../session/session.service";
 
 @ApiTags("from hifi")
 @Controller("/api/v1/users")
@@ -209,13 +209,19 @@ export class UsersController {
 		const user = await this.userService.findByUsername(username);
 		if (user == null) throw NoLocation();
 
-		const session = await this.sessionService
+		const userSession = await this.sessionService
 			.findUserById(user._id)
 			.populate("domain");
-		if (session == null) throw NoLocation();
+		if (userSession == null) throw NoLocation();
 
-		const domain = session.domain;
+		const domain = await userSession.domain
+			.populate("author")
+			.execPopulate();
 		if (domain == null) throw NoLocation();
+
+		const domainSession = await this.sessionService.findDomainById(
+			domain._id,
+		);
 
 		// TODO: check whether they're friends or not
 
@@ -223,25 +229,12 @@ export class UsersController {
 			status: "success",
 			data: {
 				location: {
-					path: session.path,
-					node_id: session.nodeId,
+					path: userSession.path,
+					node_id: userSession.nodeId,
 					root: {
 						id: domain._id,
 						name: domain.label,
-						domain: {
-							id: domain._id,
-							...(domain.automaticNetworking === "full"
-								? {
-										ice_server_address:
-											domain.iceServerAddress,
-								  }
-								: {
-										network_address: domain.networkAddress,
-										network_port: domain.networkPort,
-								  }),
-							online: true,
-							default_place_name: domain._id,
-						},
+						domain: renderDomainForHifi(domain, domainSession),
 					},
 					online: true,
 				} as UsersLocation,
