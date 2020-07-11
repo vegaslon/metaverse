@@ -49,6 +49,11 @@ const routes: Routes = [
 			import("./explore/explore.module").then(m => m.ExploreModule),
 	},
 	{
+		path: "events",
+		loadChildren: () =>
+			import("./events/events.module").then(m => m.EventsModule),
+	},
+	{
 		path: "user",
 		canActivate: [AuthGuard],
 		loadChildren: () =>
