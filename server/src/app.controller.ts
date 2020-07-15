@@ -1,15 +1,12 @@
 import {
 	Controller,
 	Get,
+	Header,
 	InternalServerErrorException,
-	Query,
-	Res,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { Response } from "express";
 import fetch from "node-fetch";
 import * as YAML from "yaml";
-import { PuppeteerService } from "./puppeteer/puppeteer.service";
 
 async function getRelease(channel: string) {
 	const releasesUrl = "https://cdn.tivolicloud.com/releases/";
@@ -24,10 +21,7 @@ async function getRelease(channel: string) {
 	const { url, size, sha512 } = yaml.files
 		.filter(file =>
 			["exe", "dmg", "appimage"].includes(
-				file.url
-					.split(".")
-					.pop()
-					.toLowerCase(),
+				file.url.split(".").pop().toLowerCase(),
 			),
 		)
 		.pop();
@@ -47,7 +41,10 @@ async function getRelease(channel: string) {
 @Controller("api")
 @ApiTags("api")
 export class AppController {
-	constructor(private puppeteerService: PuppeteerService) {}
+	readonly calendarUrl =
+		"https://calendar.google.com/calendar/ical/emob4ufq80k6t6e515nu9qev5c%40group.calendar.google.com/public/basic.ics";
+
+	constructor() {}
 
 	@Get("releases/latest")
 	async getLatest() {
@@ -64,6 +61,13 @@ export class AppController {
 			releaseDate: release.releaseDate,
 			platforms,
 		};
+	}
+
+	@Get("events")
+	@Header("Content-Type", "text/plain")
+	async getEvents() {
+		const res = await fetch(this.calendarUrl);
+		return res.text();
 	}
 
 	// @Get("render")

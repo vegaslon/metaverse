@@ -1,8 +1,79 @@
-.calendar {
+$height-offset: 160px;
+
+.google-calendar {
 	border: none;
 	display: block;
 	margin: 0 auto;
-	margin-top: 16px;
 	width: calc(100vw - 32px);
-	height: calc(100vh - 100px);
+	height: calc(100vh - #{$height-offset});
+}
+
+.calendar {
+	display: block;
+	margin: 0 auto;
+	width: calc(100vw - 32px);
+
+	$week-day-height: 18px;
+	height: calc(100vh - #{$height-offset} - #{$week-day-height});
+
+	.week-day {
+		display: inline-block;
+		width: calc(100% / 7);
+		text-align: center;
+		margin-bottom: 8px;
+		height: $week-day-height;
+	}
+
+	.day {
+		display: inline-block;
+		width: calc(100% / 7);
+		height: calc(100% / 5);
+		vertical-align: top;
+		overflow: hidden;
+
+		outline: solid 2px mix(#1d1f21, #fff, 20%);
+		outline-offset: -1px;
+		padding: 8px;
+
+		&.empty {
+			outline: none;
+		}
+
+		&.finished {
+			outline-color: mix(#1d1f21, #fff, 5%);
+			color: mix(#000, #fff, 25%);
+		}
+
+		&.today {
+			border: solid 4px #e91e63;
+		}
+
+		.number {
+			text-align: center;
+			margin-bottom: 4px;
+			width: 24px;
+			height: 24px;
+			margin: 0 auto;
+			padding-top: 1px;
+
+			&.today {
+				background-color: #e91e63;
+				color: #fff;
+				border-radius: 9999px;
+			}
+		}
+
+		* {
+			margin: 0;
+		}
+
+		.circle {
+			width: 8px;
+			height: 8px;
+			background-color: red;
+			border-radius: 999px;
+			display: inline-block;
+			vertical-align: middle;
+		}
+	}
 }

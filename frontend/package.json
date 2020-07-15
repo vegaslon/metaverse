@@ -29,6 +29,7 @@
 		"@types/node": "^13.11.0",
 		"bootstrap": "^4.3.1",
 		"express": "^4.15.2",
+		"moment-timezone": "^0.5.31",
 		"ngx-cookie-service": "^3.0.4",
 		"ngx-infinite-scroll": "^8.0.1",
 		"rxjs": "~6.5.5",
