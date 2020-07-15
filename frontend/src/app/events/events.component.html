@@ -27,6 +27,10 @@
 		<mat-icon>events</mat-icon>
 		Google Calendar
 	</button>
+	<span style="width: 12px;"></span>
+	<mat-slide-toggle [checked]="amPm" (change)="amPm = $event.checked">
+		AM/PM
+	</mat-slide-toggle>
 </div>
 <div class="calendar" *ngIf="!googleCalendar && calendar">
 	<div class="week-day" *ngFor="let weekDay of weekDays">{{ weekDay }}</div>
@@ -42,7 +46,13 @@
 		</p>
 		<p *ngFor="let event of day">
 			<!-- <span class="circle"></span> -->
-			{{ event.date | date: "HH:mm" }}&nbsp;&nbsp;<b>{{ event.name }}</b>
+			<ng-container *ngIf="!amPm">
+				{{ event.date | date: "HH:mm" }}
+			</ng-container>
+			<ng-container *ngIf="amPm">
+				{{ event.date | date: "h:mm a" }}
+			</ng-container>
+			&nbsp;&nbsp;<b>{{ event.name }}</b>
 		</p>
 	</div>
 </div>

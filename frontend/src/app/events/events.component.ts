@@ -33,6 +33,8 @@ export class EventsComponent implements OnInit {
 
 	loading = false;
 
+	amPm = false;
+
 	googleCalendar = false;
 	googleCalendarUrl =
 		"https://calendar.google.com/calendar/embed?" +
