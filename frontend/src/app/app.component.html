@@ -1,3 +1,3 @@
 <app-header *ngIf="showHeader"></app-header>
 <router-outlet></router-outlet>
-<app-cookie-consent></app-cookie-consent>
+<app-cookie-consent *ngIf="showHeader"></app-cookie-consent>
