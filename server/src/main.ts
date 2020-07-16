@@ -7,7 +7,7 @@ import cookieParser from "cookie-parser";
 import { Request, Response } from "express";
 import helmet from "helmet";
 import { AppModule } from "./app.module";
-import { DEV, WWW_PATH } from "./environment";
+import { DEV, WWW_PATH, URL as METAVERSE_URL } from "./environment";
 import { initFrontend } from "./frontend";
 
 function initSwagger(app: NestExpressApplication) {
@@ -44,12 +44,34 @@ async function bootstrap() {
 	const app = await NestFactory.create<NestExpressApplication>(AppModule);
 	const logger = new Logger("Main");
 
-	app.enableCors({
-		origin: /^((null)|(file:\/\/))$/i, // null from chrome file://
-	});
+	if (!DEV)
+		app.use((req: Request, res: Response, next: () => any) => {
+			if (req.protocol === "https") {
+				next();
+			} else {
+				res.redirect("https://" + req.headers.host + req.originalUrl);
+			}
+		});
+
+	// app.enableCors({
+	// 	origin: URL,
+	// });
+
+	// const hostWildcard = "*." + new URL(METAVERSE_URL).host;
 
 	app.use(
 		helmet(),
+
+		// https://helmetjs.github.io/docs/csp/
+		// TODO: finish csp
+		// helmet.contentSecurityPolicy({
+		// 	directives: {
+		// 		defaultSrc: ["'self'"],
+		// 		scriptSrc: ["'self'", "'unsafe-inline'", hostWildcard],
+		// 		styleSrc: ["'self'", "'unsafe-inline'", hostWildcard],
+		// 	},
+		// }),
+
 		// compression(),
 		cookieParser(),
 	);
