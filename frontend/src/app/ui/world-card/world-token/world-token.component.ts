@@ -4,18 +4,18 @@ import { Domain, UserService } from "../../../user/user.service";
 import { Clipboard } from "@angular/cdk/clipboard";
 
 @Component({
-	selector: "app-domain-token",
-	templateUrl: "./domain-token.component.html",
-	styleUrls: ["./domain-token.component.scss"],
+	selector: "app-world-token",
+	templateUrl: "./world-token.component.html",
+	styleUrls: ["./world-token.component.scss"],
 })
-export class DomainTokenComponent {
+export class WorldTokenComponent {
 	loading = false;
 	token = "";
 	copied = false;
 
 	constructor(
 		private readonly userService: UserService,
-		private readonly dialogRef: MatDialogRef<DomainTokenComponent>,
+		private readonly dialogRef: MatDialogRef<WorldTokenComponent>,
 		private readonly clipboard: Clipboard,
 		@Inject(MAT_DIALOG_DATA) public readonly domain: Domain,
 	) {}

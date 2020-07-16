@@ -1,7 +1,7 @@
 .domains {
 	padding: 8px;
 
-	app-domain-card {
+	app-world-card {
 		width: calc(100% / 6);
 		display: inline-block;
 		padding: 8px;
@@ -9,7 +9,7 @@
 
 	@for $i from 12 through 2 {
 		@media screen and (max-width: 275px * $i) {
-			app-domain-card {
+			app-world-card {
 				width: 100% / ($i - 1);
 			}
 		}

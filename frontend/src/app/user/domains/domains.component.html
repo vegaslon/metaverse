@@ -1,5 +1,5 @@
 <div class="container">
-	<h1 style="padding-top: 16px">My worlds</h1>
+	<h1 style="padding-top: 16px;">My worlds</h1>
 	<button
 		mat-flat-button
 		color="primary"
@@ -22,11 +22,11 @@
 			*ngFor="let domain of domains"
 			style="padding-bottom: 40px;"
 		>
-			<app-domain-card
-				[domain]="domain"
-				editMode="true"
+			<app-world-card
+				[world]="domain"
+				editMode="false"
 				(onEdit)="onEditDomain(domain)"
-			></app-domain-card>
+			></app-world-card>
 		</div>
 	</div>
 </div>
