@@ -44,17 +44,17 @@ async function bootstrap() {
 	const app = await NestFactory.create<NestExpressApplication>(AppModule);
 	const logger = new Logger("Main");
 
-	if (!DEV)
-		app.use((req: Request, res: Response, next: () => any) => {
-			if (
-				req.protocol === "https" ||
-				req.url.split(/[#?]/g)[0] === "/health"
-			) {
-				next();
-			} else {
-				res.redirect("https://" + req.headers.host + req.originalUrl);
-			}
-		});
+	// if (!DEV)
+	// 	app.use((req: Request, res: Response, next: () => any) => {
+	// 		if (
+	// 			req.protocol === "https" ||
+	// 			req.url.split(/[#?]/g)[0] === "/health"
+	// 		) {
+	// 			next();
+	// 		} else {
+	// 			res.redirect("https://" + req.headers.host + req.originalUrl);
+	// 		}
+	// 	});
 
 	// app.enableCors({
 	// 	origin: URL,
