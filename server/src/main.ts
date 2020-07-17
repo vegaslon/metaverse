@@ -44,6 +44,10 @@ async function bootstrap() {
 	const app = await NestFactory.create<NestExpressApplication>(AppModule);
 	const logger = new Logger("Main");
 
+	app.enableCors({
+		origin: /^((null)|(file:\/\/))$/i, // null from chrome file://
+	});
+
 	// if (!DEV)
 	// 	app.use((req: Request, res: Response, next: () => any) => {
 	// 		if (
@@ -55,10 +59,6 @@ async function bootstrap() {
 	// 			res.redirect("https://" + req.headers.host + req.originalUrl);
 	// 		}
 	// 	});
-
-	// app.enableCors({
-	// 	origin: URL,
-	// });
 
 	// const hostWildcard = "*." + new URL(METAVERSE_URL).host;
 
