@@ -48,17 +48,17 @@ async function bootstrap() {
 		origin: /^((null)|(file:\/\/))$/i, // null from chrome file://
 	});
 
-	// if (!DEV)
-	// 	app.use((req: Request, res: Response, next: () => any) => {
-	// 		if (
-	// 			req.protocol === "https" ||
-	// 			req.url.split(/[#?]/g)[0] === "/health"
-	// 		) {
-	// 			next();
-	// 		} else {
-	// 			res.redirect("https://" + req.headers.host + req.originalUrl);
-	// 		}
-	// 	});
+	if (!DEV)
+		app.use((req: Request, res: Response, next: () => any) => {
+			if (
+				req.headers["x-forwarded-proto"] === "http" ||
+				req.headers.host.includes("appspot.com")
+			) {
+				res.redirect(METAVERSE_URL + req.originalUrl);
+			} else {
+				next();
+			}
+		});
 
 	// const hostWildcard = "*." + new URL(METAVERSE_URL).host;
 
