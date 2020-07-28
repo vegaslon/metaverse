@@ -4,8 +4,7 @@
 		"start": "rimraf dist && cross-env DEV=true nest start --watch",
 		"test": "jest",
 		"test:watch": "jest --watch",
-		"test:cov": "jest --coverage",
-		"build:swc": "rimraf dist-swc && swc src -d dist-swc"
+		"test:cov": "jest --coverage"
 	},
 	"dependencies": {
 		"@babel/core": "^7.9.6",
