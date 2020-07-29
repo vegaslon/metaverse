@@ -73,15 +73,17 @@ export class UserDomainController {
 		await user.populate("domains").execPopulate();
 
 		return Promise.all(
-			user.domains.map(async domain => {
-				domain.author = user; // populate
+			user.domains
+				.sort((a, b) => +b.lastUpdated - +a.lastUpdated)
+				.map(async domain => {
+					domain.author = user; // populate
 
-				const session = await this.sessionService.findDomainById(
-					domain.id,
-				);
+					const session = await this.sessionService.findDomainById(
+						domain.id,
+					);
 
-				return renderDomain(domain, session, user);
-			}),
+					return renderDomain(domain, session, user);
+				}),
 		);
 	}
 
