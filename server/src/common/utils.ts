@@ -1,6 +1,6 @@
 import baseX from "base-x";
 import { Readable } from "stream";
-import { Domain } from "../domain/domain.schema";
+import { Domain, DomainRestriction } from "../domain/domain.schema";
 import { URL, WORLD_URL } from "../environment";
 import { DomainSession, UserSession } from "../session/session.schema";
 import { User } from "../user/user.schema";
@@ -109,6 +109,8 @@ export function generateRandomString(
 }
 
 export function renderDomainForHifi(d: Domain, session?: DomainSession) {
+	// TODO: this is insecure and deprecated
+
 	const online = session != null;
 
 	return {
@@ -151,6 +153,15 @@ export function renderDomain(
 	session: DomainSession,
 	currentUser: User,
 ) {
+	if (domain.restriction === DomainRestriction.acl) {
+		if (currentUser == null) return null;
+		if (domain.author.id !== currentUser.id) {
+			if (domain.whitelist.includes(currentUser.id) === false) {
+				return null;
+			}
+		}
+	}
+
 	const liked =
 		currentUser == null
 			? false

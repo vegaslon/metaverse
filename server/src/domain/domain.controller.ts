@@ -34,18 +34,14 @@ export class DomainController {
 		const domain = await this.domainService.findById(id).populate("author");
 		if (domain == null) throw new NotFoundException();
 
-		// TODO: only access domain info when user owns domain or is in whitelist
-		// if (
-		// 	domain.restriction === DomainRestriction.acl &&
-		// 	(currentUser == null ||
-		// 		domain.whitelist.includes(currentUser.id) === false)
-		// ) {
-		// 	throw new NotFoundException();
-		// }
-
 		const session = await this.sessionService.findDomainById(domain.id);
 
-		return renderDomain(domain, session, currentUser);
+		const renderedDomain = renderDomain(domain, session, currentUser);
+		if (renderedDomain == null) {
+			throw new NotFoundException();
+		} else {
+			return renderedDomain;
+		}
 	}
 
 	@Get("domain/:id/image")
