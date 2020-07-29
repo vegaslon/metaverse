@@ -155,8 +155,11 @@ export function renderDomain(
 ) {
 	if (domain.restriction === DomainRestriction.acl) {
 		if (currentUser == null) return null;
-		if (domain.author.id !== currentUser.id) {
-			if (domain.whitelist.includes(currentUser.id) === false) {
+		if (domain.author._id + "" !== currentUser._id + "") {
+			if (
+				domain.whitelist.includes((currentUser._id + "") as any) ===
+				false
+			) {
 				return null;
 			}
 		}
