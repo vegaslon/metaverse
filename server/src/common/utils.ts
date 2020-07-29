@@ -157,8 +157,9 @@ export function renderDomain(
 		if (currentUser == null) return null;
 		if (domain.author._id + "" !== currentUser._id + "") {
 			if (
-				domain.whitelist.includes((currentUser._id + "") as any) ===
-				false
+				domain.whitelist
+					.map(users => users + "")
+					.includes((currentUser._id + "") as any) === false
 			) {
 				return null;
 			}
