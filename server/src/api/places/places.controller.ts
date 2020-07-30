@@ -39,7 +39,7 @@ export class PlacesController {
 					id: domain._id,
 					description: domain.description,
 					path: domain.path,
-					name: domain.label,
+					name: domain._id,
 					address: domain._id, // hifi://address/path
 					domain: renderDomainForHifi(domain, session),
 					previews: {
