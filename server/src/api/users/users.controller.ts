@@ -233,7 +233,7 @@ export class UsersController {
 					node_id: userSession.nodeId,
 					root: {
 						id: domain._id,
-						name: domain.label,
+						name: domain._id,
 						domain: renderDomainForHifi(domain, domainSession),
 					},
 					online: true,
