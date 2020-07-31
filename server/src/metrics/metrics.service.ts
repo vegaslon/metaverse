@@ -5,6 +5,7 @@ import { Model } from "mongoose";
 import os from "os";
 import { DEV } from "../environment";
 import { SessionService } from "../session/session.service";
+import { generateRandomString } from "../common/utils";
 
 @Injectable()
 export class MetricsService implements OnModuleInit, OnModuleDestroy {
@@ -101,6 +102,10 @@ export class MetricsService implements OnModuleInit, OnModuleDestroy {
 						labels: { type: "users" },
 						data: await this.sessionService.getUserCount(),
 					},
+					{
+						labels: { type: "metaverses" },
+						data: await this.metricsModel.countDocuments(),
+					},
 				],
 			},
 		];
@@ -149,9 +154,11 @@ export class MetricsService implements OnModuleInit, OnModuleDestroy {
 	}
 
 	async onModuleInit() {
-		await this.metricsModel.deleteOne({ _id: os.hostname() });
-
-		this.metrics = new this.metricsModel();
+		const metricsId = os.hostname() + "-" + generateRandomString(8);
+		// await this.metricsModel.deleteOne({ _id: os.hostname() });
+		this.metrics = new this.metricsModel({
+			_id: metricsId,
+		});
 		await this.updateDatebase();
 
 		this.intervals.push(

@@ -1,10 +1,8 @@
 import { Document, Query, Schema } from "mongoose";
-import os from "os";
 import { MongooseFilterUnused } from "../common/mongoose-filter-unused";
 
 export const MetricsSchema = new Schema({
-	// _id: { type: String, default: () => generateRandomString(16) },
-	_id: { type: String, default: () => os.hostname() },
+	_id: { type: String },
 
 	totalReqPerMinute: { type: Number, default: 0 },
 	req4xxPerMinute: { type: Number, default: 0 },
