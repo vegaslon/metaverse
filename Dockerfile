@@ -32,9 +32,9 @@ app/server/yarn.lock \
 
 WORKDIR /app/server
 RUN \
-yarn global add node-gyp && \
+yarn global add node-gyp pm2 && \
 yarn install --production && \
 apk del builds-deps
 
 COPY app /app
-CMD node /app/server/dist/main.js
+CMD pm2-runtime /app/server/ecosystem.config.js

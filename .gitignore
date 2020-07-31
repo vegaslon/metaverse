@@ -4,8 +4,6 @@
 /frontend/dist/
 
 /server/dist/
-/server/dist-swc/
-/server/ecosystem.config.js
 /server/coverage/
 /server/junit.xml
 

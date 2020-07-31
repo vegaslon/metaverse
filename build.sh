@@ -9,6 +9,7 @@ cp -R assets ../app/server
 cp -R templates ../app/server
 cp package.json ../app/server
 cp yarn.lock ../app/server
+cp ecosystem.config.js ../app/server
 cd ..
 
 cd frontend
