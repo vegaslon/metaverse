@@ -35,7 +35,7 @@ export class EventsComponent implements OnInit {
 
 	amPm = false;
 
-	googleCalendar = false;
+	googleCalendar = true;
 	googleCalendarUrl =
 		"https://calendar.google.com/calendar/embed?" +
 		[
@@ -64,102 +64,104 @@ export class EventsComponent implements OnInit {
 		public readonly sanitizer: DomSanitizer,
 	) {}
 
-	parseIcal(ical: string) {
-		this.calendar = new Array(
-			moment().endOf("month").get("date"),
-		).map(() => []);
+	// parseIcal(ical: string) {
+	// 	this.calendar = new Array(
+	// 		moment().endOf("month").get("date"),
+	// 	).map(() => []);
 
-		ical.match(/BEGIN:VEVENT[^]+?END:VEVENT/g).forEach(icalEvent => {
-			const get = property => {
-				const matches = icalEvent.match(
-					new RegExp(property + "[:;]([^]*?)\\n"),
-				);
-				return matches == null ? null : matches[1];
-			};
+	// 	ical.match(/BEGIN:VEVENT[^]+?END:VEVENT/g).forEach(icalEvent => {
+	// 		const get = property => {
+	// 			const matches = icalEvent.match(
+	// 				new RegExp(property + "[:;]([^]*?)\\n"),
+	// 			);
+	// 			return matches == null ? null : matches[1];
+	// 		};
 
-			// get basic info
+	// 		// get basic info
 
-			const name = get("SUMMARY");
-			const description = get("DESCRIPTION");
+	// 		const name = get("SUMMARY");
+	// 		const description = get("DESCRIPTION");
 
-			// get date
+	// 		// get date
 
-			let date: Date = null;
+	// 		let date: Date = null;
 
-			const startWithTz = icalEvent.match(
-				/DTSTART;TZID=([^]*?\/[^]*?):([0-9]{4}[0-9]{2}[0-9]{2}T[0-9]{2}[0-9]{2}[0-9]{2})Z?\s/,
-			);
+	// 		const startWithTz = icalEvent.match(
+	// 			/DTSTART;TZID=([^]*?\/[^]*?):([0-9]{4}[0-9]{2}[0-9]{2}T[0-9]{2}[0-9]{2}[0-9]{2})Z?\s/,
+	// 		);
 
-			if (startWithTz != null) {
-				date = moment
-					.tz(startWithTz[2], "YYYYMMDDTHHmmss", startWithTz[1])
-					.toDate();
-			} else {
-				const start = icalEvent.match(
-					/DTSTART:([0-9]{4}[0-9]{2}[0-9]{2}T[0-9]{2}[0-9]{2}[0-9]{2})Z?\s/,
-				);
-				if (start != null)
-					date = moment.utc(start[1], "YYYYMMDDTHHmmss").toDate();
-			}
+	// 		if (startWithTz != null) {
+	// 			date = moment
+	// 				.tz(startWithTz[2], "YYYYMMDDTHHmmss", startWithTz[1])
+	// 				.toDate();
+	// 		} else {
+	// 			const start = icalEvent.match(
+	// 				/DTSTART:([0-9]{4}[0-9]{2}[0-9]{2}T[0-9]{2}[0-9]{2}[0-9]{2})Z?\s/,
+	// 			);
+	// 			if (start != null)
+	// 				date = moment.utc(start[1], "YYYYMMDDTHHmmss").toDate();
+	// 		}
 
-			// check if current month
+	// 		// check if current month
 
-			if (date.getMonth() !== new Date().getMonth()) return;
+	// 		if (date.getMonth() !== new Date().getMonth()) return;
 
-			if (this.calendar[date.getDate() - 1] == null)
-				this.calendar[date.getDate() - 1] = [];
-			this.calendar[date.getDate() - 1].push({
-				name,
-				description,
-				date,
-			});
+	// 		if (this.calendar[date.getDate() - 1] == null)
+	// 			this.calendar[date.getDate() - 1] = [];
+	// 		this.calendar[date.getDate() - 1].push({
+	// 			name,
+	// 			description,
+	// 			date,
+	// 		});
 
-			// check if theres a sequence
+	// 		// check if theres repetition
 
-			const sequence = Number(get("SEQUENCE"));
-			if (sequence) {
-				for (let i = 0; i < sequence; i++) {
-					const sequenceDate = new Date(date);
-					sequenceDate.setDate(date.getDate() + 7 * (i + 1));
+	// 		// const repetitionRule = get("RRULE");
+	// 		// console.log(repetitionRule)
 
-					if (this.calendar[sequenceDate.getDate() - 1] == null)
-						this.calendar[sequenceDate.getDate() - 1] = [];
-					this.calendar[sequenceDate.getDate() - 1].push({
-						name,
-						description,
-						date: sequenceDate,
-					});
-				}
-			}
-		});
+	// 		// if (sequence) {
+	// 		// 	for (let i = 0; i < sequence; i++) {
+	// 		// 		const sequenceDate = new Date(date);
+	// 		// 		sequenceDate.setDate(date.getDate() + 7 * (i + 1));
 
-		// sort events by date
+	// 		// 		if (this.calendar[sequenceDate.getDate() - 1] == null)
+	// 		// 			this.calendar[sequenceDate.getDate() - 1] = [];
+	// 		// 		this.calendar[sequenceDate.getDate() - 1].push({
+	// 		// 			name,
+	// 		// 			description,
+	// 		// 			date: sequenceDate,
+	// 		// 		});
+	// 		// 	}
+	// 		// }
+	// 	});
 
-		for (const i of Object.keys(this.calendar)) {
-			this.calendar[i] = this.calendar[i].sort(
-				(a, b) => +a.date - +b.date,
-			);
-		}
-	}
+	// 	// sort events by date
+
+	// 	for (const i of Object.keys(this.calendar)) {
+	// 		this.calendar[i] = this.calendar[i].sort(
+	// 			(a, b) => +a.date - +b.date,
+	// 		);
+	// 	}
+	// }
 
 	refresh() {
 		if (this.googleCalendar) {
 			this.googleCalendarUrl = this.googleCalendarUrl;
 		} else {
-			this.loading = true;
-			this.http
-				.get("/api/events", {
-					responseType: "text",
-				})
-				.subscribe(
-					ical => {
-						this.parseIcal(ical);
-						this.loading = false;
-					},
-					err => {
-						this.loading = false;
-					},
-				);
+			// this.loading = true;
+			// this.http
+			// 	.get("/api/events", {
+			// 		responseType: "text",
+			// 	})
+			// 	.subscribe(
+			// 		ical => {
+			// 			this.parseIcal(ical);
+			// 			this.loading = false;
+			// 		},
+			// 		err => {
+			// 			this.loading = false;
+			// 		},
+			// 	);
 		}
 	}
 

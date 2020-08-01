@@ -18,7 +18,7 @@
 		<span style="width: 8px;"></span>
 		<h3 style="margin: 0;">({{ timezone }})</h3>
 	</div>
-	<span style="width: 48px;"></span>
+	<!-- <span style="width: 48px;"></span>
 	<button mat-button (click)="refresh()">
 		<mat-icon>refresh</mat-icon>
 		Refresh
@@ -30,7 +30,7 @@
 	<span style="width: 12px;"></span>
 	<mat-slide-toggle [checked]="amPm" (change)="amPm = $event.checked">
 		AM/PM
-	</mat-slide-toggle>
+	</mat-slide-toggle> -->
 </div>
 <div class="calendar" *ngIf="!googleCalendar && calendar">
 	<div class="week-day" *ngFor="let weekDay of weekDays">{{ weekDay }}</div>
