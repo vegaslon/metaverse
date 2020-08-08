@@ -1,4 +1,4 @@
-FROM alpine:3.12
+FROM alpine:edge 
 
 ENV \
 NODE_ENV=production \
@@ -16,14 +16,19 @@ nodejs yarn \
 vips \
 # for: puppeteer
 chromium nss \
-ttf-roboto font-noto font-noto-cjk \
+font-noto font-noto-cjk \
 # custom fonts
 wget fontconfig \
 && \
 mkdir -p /usr/share/fonts/TTF && \
-# font: Roboto (alpine 3.12+)
-# wget -O /usr/share/fonts/TTF/roboto.zip https://fonts.google.com/download?family=Roboto && \
-# unzip /usr/share/fonts/TTF/roboto.zip -d /usr/share/fonts/TTF "*.ttf" && \
+# font: Roboto
+wget -O /usr/share/fonts/TTF/roboto.zip https://fonts.google.com/download?family=Roboto && \
+unzip /usr/share/fonts/TTF/roboto.zip -d /usr/share/fonts/TTF "*.ttf" && \
+rm -f /usr/share/fonts/TTF/roboto.zip && \
+# font: Roboto Condensed
+wget -O /usr/share/fonts/TTF/roboto-condensed.zip https://fonts.google.com/download?family=Roboto+Condensed && \
+unzip /usr/share/fonts/TTF/roboto-condensed.zip -d /usr/share/fonts/TTF "*.ttf" && \
+rm -f /usr/share/fonts/TTF/roboto-condensed.zip && \
 # font: Twemoji Mozilla
 wget -P /usr/share/fonts/TTF https://github.com/mozilla/twemoji-colr/releases/download/v0.5.0/TwemojiMozilla.ttf && \
 \
