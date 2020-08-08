@@ -23,7 +23,7 @@ wget fontconfig \
 mkdir -p /usr/share/fonts/TTF && \
 # font: Roboto
 wget -O /usr/share/fonts/TTF/roboto.zip https://fonts.google.com/download?family=Roboto && \
-unzip /usr/share/fonts/TTF/roboto.zip "*.ttf" && \
+unzip /usr/share/fonts/TTF/roboto.zip -d /usr/share/fonts/TTF "*.ttf" && \
 # font: Twemoji Mozilla
 wget -P /usr/share/fonts/TTF https://github.com/mozilla/twemoji-colr/releases/download/v0.5.0/TwemojiMozilla.ttf && \
 \
