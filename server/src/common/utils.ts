@@ -198,6 +198,9 @@ export function renderDomain(
 		networkAddress: usingIce ? "" : domain.networkAddress,
 		networkPort: usingIce ? "" : domain.networkPort,
 
+		protocol: domain.protocol,
+		version: domain.version,
+
 		path: domain.path,
 		url: WORLD_URL + "/" + compressUuid(domain._id),
 	};

@@ -161,7 +161,7 @@ export class DomainService implements OnModuleInit {
 	}
 
 	findOnlineDomains(getDomainDto: GetDomainsDto, anonymousOnly = false) {
-		let { page, amount, search } = getDomainDto;
+		let { page, amount, search, protocol } = getDomainDto;
 
 		if (page <= 0) page = 1;
 		page -= 1;
@@ -202,7 +202,11 @@ export class DomainService implements OnModuleInit {
 			: [{}];
 
 		const matchArgs = {
-			$and: [{ $or: restrictionQuery }, { $or: searchQuery }],
+			$and: [
+				{ $or: restrictionQuery },
+				{ $or: searchQuery },
+				...(protocol ? [{ "domain.protocol": protocol }] : []),
+			],
 		};
 
 		return (
@@ -240,7 +244,7 @@ export class DomainService implements OnModuleInit {
 	}
 
 	findPrivateDomains(user: User, getDomainsDto: GetDomainsDto) {
-		let { page, amount, search } = getDomainsDto;
+		let { page, amount } = getDomainsDto;
 
 		if (page <= 0) page = 1;
 		page -= 1;

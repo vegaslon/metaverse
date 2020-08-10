@@ -136,6 +136,10 @@ export class GetDomainsDto {
 	@IsString()
 	@IsOptional()
 	search?: string = "";
+
+	@IsString()
+	@IsOptional()
+	protocol?: string = "";
 }
 
 export class UpdateDomainImageDto {
