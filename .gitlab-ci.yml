@@ -43,10 +43,6 @@ server tests:
     stage: test
     image: node:lts
 
-    needs:
-        - job: server deps
-        - job: frontend deps
-
     cache:
         policy: pull
         paths:
@@ -71,9 +67,7 @@ build all:
     image: node:lts
 
     needs:
-        - job: server deps
-        - job: frontend deps
-        - job: server tests
+        - server tests
 
     cache:
         policy: pull
