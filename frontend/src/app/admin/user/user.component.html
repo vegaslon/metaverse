@@ -69,6 +69,21 @@
 							</td>
 						</tr>
 						<tr mdcDataTableRow>
+							<th mdcDataTableHeaderCell>Supporter</th>
+							<td mdcDataTableCell>
+								<mdc-form-field>
+									<mdc-checkbox
+										disabled
+										[checked]="user.supporter"
+										style="margin-left: -8px;"
+									></mdc-checkbox>
+									<label>
+										{{ user.supporter ? "Yes" : "No" }}
+									</label>
+								</mdc-form-field>
+							</td>
+						</tr>
+						<tr mdcDataTableRow>
 							<th mdcDataTableHeaderCell>Total time</th>
 							<td mdcDataTableCell>
 								{{ utilsService.displayMinutes(user.minutes) }}
@@ -120,6 +135,14 @@
 			<span style="margin: 0 4px;"></span>
 			<button mat-flat-button color="primary" (click)="onToggleAdmin()">
 				<mat-icon>build</mat-icon> Toggle admin
+			</button>
+			<span style="margin: 0 4px;"></span>
+			<button
+				mat-flat-button
+				color="primary"
+				(click)="onToggleSupporter()"
+			>
+				<mat-icon>favorite</mat-icon> Toggle supporter
 			</button>
 		</div>
 

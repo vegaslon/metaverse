@@ -13,6 +13,7 @@ export interface AdminUser {
 	admin: boolean;
 	created: string;
 	minutes: number;
+	supporter: boolean;
 	session: {
 		minutes: number;
 		location: {
@@ -79,6 +80,12 @@ export class AdminService {
 	toggleAdminUser(userId: string) {
 		return this.http
 			.post<AdminUser>("/api/admin/user/" + userId + "/admin", {})
+			.pipe(catchError(this.handleError));
+	}
+
+	toggleSupporterUser(userId: string) {
+		return this.http
+			.post<AdminUser>("/api/admin/user/" + userId + "/supporter", {})
 			.pipe(catchError(this.handleError));
 	}
 }

@@ -98,10 +98,11 @@
 	}
 
 	.nametag .info > div {
-		font-size: 12px;
+		/* font-size: 12px; */
+		font-size: 10px;
 		padding: 0 4px;
 		height: 16px;
-		line-height: 14px;
+		line-height: 16px;
 		overflow: hidden;
 		background: #e91e63;
 		display: inline-block;
@@ -146,7 +147,7 @@
 	</div>
 	<div class="info">
 		{{#if staff}}
-		<div style="background: #e91e63; padding: 0 2px">
+		<div style="background: #e91e63; padding: 0 2px;">
 			<svg class="icon" viewBox="0 0 128 128">
 				<circle fill="#e91e63" r="64" cx="64" cy="64" />
 				<path
@@ -158,6 +159,16 @@
 					d="M55.112 48.051h9.034v10.352h-9.034V84.77c0 1.953.375 3.353 1.123 4.199.749.847 2.181 1.27 4.297 1.27 1.563 0 2.946-.114 4.151-.342v10.693a29.033 29.033 0 01-8.545 1.27c-9.896 0-14.942-4.997-15.137-14.99V58.403h-7.715V48.051h7.715V35.063h14.111v12.988zM81.9 100.883H67.739V48.051H81.9v52.832zM66.909 34.38c0-2.116.708-3.858 2.124-5.225 1.416-1.367 3.345-2.051 5.786-2.051 2.409 0 4.33.684 5.762 2.051 1.432 1.367 2.149 3.109 2.149 5.225 0 2.148-.725 3.906-2.173 5.273-1.449 1.367-3.361 2.051-5.738 2.051-2.376 0-4.288-.684-5.737-2.051-1.448-1.367-2.173-3.125-2.173-5.273z"
 				/>
 			</svg>
+		</div>
+		{{/if}} {{#if supporter}}
+		<div style="background: #e91e63; padding-left: 2px; display: flex;">
+			<svg class="icon" viewBox="0 0 32 32" style="margin-top: 0px;">
+				<path
+					transform="translate(4,4)"
+					d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+				/>
+			</svg>
+			<span>supporter</span>
 		</div>
 		{{/if}} {{#if connected}}
 		<div style="background: #9c27b0;">

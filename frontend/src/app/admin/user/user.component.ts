@@ -56,4 +56,13 @@ export class UserComponent implements OnInit {
 				this.refreshUser();
 			});
 	}
+
+	onToggleSupporter() {
+		if (window.confirm("Are you sure you want to toggle supporter?"))
+			this.adminService
+				.toggleSupporterUser(this.user.id)
+				.subscribe(() => {
+					this.refreshUser();
+				});
+	}
 }

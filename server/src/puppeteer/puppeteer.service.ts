@@ -71,6 +71,7 @@ export class PuppeteerService implements OnModuleInit {
 	) {
 		const username = user.username;
 		const staff = user.admin;
+		const supporter = user.supporter;
 
 		const { stream, contentType } = await this.userService.getUserImage(
 			user.id,
@@ -93,6 +94,7 @@ export class PuppeteerService implements OnModuleInit {
 			admin,
 			friend,
 			staff,
+			supporter,
 		});
 
 		return this.renderHTML(html, 1024, 128);

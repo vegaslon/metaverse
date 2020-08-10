@@ -62,6 +62,7 @@ export class AdminController {
 			admin: user.admin,
 			created: user.created,
 			minutes: user.minutes,
+			supporter: user.supporter,
 			session: online
 				? {
 						minutes: session.minutes,
@@ -159,5 +160,18 @@ export class AdminController {
 		await user.save();
 
 		return user.admin;
+	}
+
+	@Post("user/:id/supporter")
+	@ApiBearerAuth()
+	@UseGuards(AdminAuthGuard)
+	async toggleSupporter(@Param("id") id: string) {
+		const user = await this.userService.findById(id);
+		if (user == null) throw new NotFoundException("User not found");
+
+		user.supporter = !user.supporter;
+		await user.save();
+
+		return user.supporter;
 	}
 }
