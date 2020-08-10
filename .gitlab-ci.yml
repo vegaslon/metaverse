@@ -71,8 +71,6 @@ build all:
     image: node:lts
 
     needs:
-        - server deps
-        - frontend deps
         - server tests
 
     cache:
