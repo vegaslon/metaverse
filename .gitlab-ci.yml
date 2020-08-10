@@ -43,6 +43,10 @@ server tests:
     stage: test
     image: node:lts
 
+    needs:
+        - server deps
+        - frontend deps
+
     cache:
         policy: pull
         paths:
@@ -66,7 +70,9 @@ build all:
     stage: build
     image: node:lts
 
-    dependencies:
+    needs:
+        - server deps
+        - frontend deps
         - server tests
 
     cache:
@@ -110,6 +116,8 @@ deploy app engine:
     when: manual
     allow_failure: false
 
+    needs:
+        - build all
     dependencies:
         - build all
 
