@@ -44,8 +44,8 @@ server tests:
     image: node:lts
 
     needs:
-        - server deps
-        - frontend deps
+        - job: server deps
+        - job: frontend deps
 
     cache:
         policy: pull
@@ -71,7 +71,9 @@ build all:
     image: node:lts
 
     needs:
-        - server tests
+        - job: server deps
+        - job: frontend deps
+        - job: server tests
 
     cache:
         policy: pull
@@ -115,9 +117,8 @@ deploy app engine:
     allow_failure: false
 
     needs:
-        - build all
-    dependencies:
-        - build all
+        - job: build all
+          artifacts: true
 
     # https://medium.com/google-cloud/automatically-deploy-to-google-app-engine-with-gitlab-ci-d1c7237cbe11
     script:
