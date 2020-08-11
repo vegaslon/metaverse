@@ -32,10 +32,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 		["Documentation", "https://docs.tivolicloud.com"],
 		["JavaScript API", "https://apidocs.tivolicloud.com"],
 	];
-	contribute = [
-		["GitLab", "https://git.tivolicloud.com"],
-		["Roadmap", "https://roadmap.tivolicloud.com"],
-	];
+	contribute = [["GitLab", "https://git.tivolicloud.com"]];
 
 	constructor(
 		public dialog: MatDialog,
