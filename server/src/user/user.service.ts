@@ -447,7 +447,15 @@ export class UserService implements OnModuleInit {
 			.populate("user")
 			.populate("domain");
 
-		return userSessions.map(session => renderFriend(session.user, session));
+		return (
+			userSessions
+				// filter out private users until properly implemented
+				.filter(
+					session =>
+						session.domain && session.domain.restriction !== "acl",
+				)
+				.map(session => renderFriend(session.user, session))
+		);
 	}
 
 	async sendVerify(user: User, email: string) {
