@@ -25,7 +25,7 @@ export class MetricsService implements OnModuleInit, OnModuleDestroy {
 	async updateDatebase(isNewMinute = false) {
 		if (
 			this.metrics == null ||
-			this.metricsModel.findOne({ _id: this.metrics.id }) == null
+			this.metricsModel.findOne({ id: this.metrics.id }) == null
 		) {
 			this.metrics = new this.metricsModel({
 				_id: this.generateMetricsID(),
