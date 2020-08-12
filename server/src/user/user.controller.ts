@@ -1,6 +1,7 @@
 import {
 	Body,
 	Controller,
+	Delete,
 	Get,
 	Param,
 	Post,
@@ -10,16 +11,9 @@ import {
 	UploadedFile,
 	UseGuards,
 	UseInterceptors,
-	Delete,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
-import {
-	ApiBearerAuth,
-	ApiBody,
-	ApiConsumes,
-	ApiTags,
-	ApiQuery,
-} from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { Response } from "express";
 import { MetaverseUnverifiedAuthGuard } from "../auth/auth-unverified.guard";
 import { MetaverseAuthGuard } from "../auth/auth.guard";
@@ -77,7 +71,7 @@ export class UserController {
 	@UseInterceptors(
 		FileInterceptor("image", {
 			limits: {
-				fileSize: 1000 * 1000 * 8, // 8 MB
+				fileSize: 1000 * 1000 * 16, // 16 MB
 			},
 		}),
 	)
@@ -86,7 +80,6 @@ export class UserController {
 		@UploadedFile() file: MulterFile,
 	) {
 		await this.userService.changeUserImage(user, file);
-		return { success: true };
 	}
 
 	@Delete("image")
@@ -94,7 +87,6 @@ export class UserController {
 	@UseGuards(MetaverseAuthGuard)
 	async deleteUserImage(@CurrentUser() user: User) {
 		await this.userService.deleteUserImage(user);
-		return { success: true };
 	}
 
 	@Post("reset-password")

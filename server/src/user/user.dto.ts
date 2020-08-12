@@ -47,7 +47,7 @@ export class UserUpdatePasswordDto {
 }
 
 export class UserUpdateImageDto {
-	@ApiProperty({ type: "string", format: "binary" })
+	@ApiProperty({ type: "string", required: true, format: "binary" })
 	image: any;
 }
 
