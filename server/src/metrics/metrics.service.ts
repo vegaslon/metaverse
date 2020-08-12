@@ -18,7 +18,20 @@ export class MetricsService implements OnModuleInit, OnModuleDestroy {
 		private readonly sessionService: SessionService,
 	) {}
 
+	private generateMetricsID() {
+		return os.hostname() + "-" + generateRandomString(8);
+	}
+
 	async updateDatebase(isNewMinute = false) {
+		if (
+			this.metrics == null ||
+			this.metricsModel.findOne({ _id: this.metrics.id }) == null
+		) {
+			this.metrics = new this.metricsModel({
+				_id: this.generateMetricsID(),
+			});
+		}
+
 		this.metrics.expireAt = Date.now() + 1000 * 60;
 		await this.metrics.save();
 
@@ -154,11 +167,6 @@ export class MetricsService implements OnModuleInit, OnModuleDestroy {
 	}
 
 	async onModuleInit() {
-		const metricsId = os.hostname() + "-" + generateRandomString(8);
-		// await this.metricsModel.deleteOne({ _id: os.hostname() });
-		this.metrics = new this.metricsModel({
-			_id: metricsId,
-		});
 		await this.updateDatebase();
 
 		this.intervals.push(
