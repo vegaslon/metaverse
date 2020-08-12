@@ -3,12 +3,14 @@ services:
     db:
         image: mongo:latest
         restart: always
-        #volumes:
-        #    - ./db:/data/db
-    web:
-        image: tivolicloud/metaverse:latest
-        restart: always
-        ports:
-            - 3000:3000/tcp
-        environment:
-            DB_HOST: db
+        network_mode: host
+        volumes:
+            - ./db:/data/db
+            - ./mongodump:/mongodump
+    # web:
+    #     image: tivolicloud/metaverse:latest
+    #     restart: always
+    #     ports:
+    #         - 3000:3000/tcp
+    #     environment:
+    #         DB_HOST: db
