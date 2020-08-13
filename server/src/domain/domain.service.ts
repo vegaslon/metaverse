@@ -277,7 +277,7 @@ export class DomainService implements OnModuleInit {
 		return domain.remove();
 	}
 
-	async changeDomainImage(domain: Domain, file: MulterFile) {
+	changeDomainImage(domain: Domain, file: MulterFile) {
 		return new Promise(async (resolve, reject) => {
 			await new Promise(resolve => {
 				this.images.delete(domain.id, err => {

@@ -3,6 +3,7 @@ import {
 	Controller,
 	Delete,
 	Get,
+	InternalServerErrorException,
 	Param,
 	Post,
 	Put,
@@ -75,18 +76,21 @@ export class UserController {
 			},
 		}),
 	)
-	async updateUserImage(
+	updateUserImage(
 		@CurrentUser() user: User,
 		@UploadedFile() file: MulterFile,
 	) {
-		await this.userService.changeUserImage(user, file);
+		if (file == null)
+			throw new InternalServerErrorException("Image not received");
+
+		return this.userService.changeUserImage(user, file);
 	}
 
 	@Delete("image")
 	@ApiBearerAuth()
 	@UseGuards(MetaverseAuthGuard)
-	async deleteUserImage(@CurrentUser() user: User) {
-		await this.userService.deleteUserImage(user);
+	deleteUserImage(@CurrentUser() user: User) {
+		return this.userService.deleteUserImage(user);
 	}
 
 	@Post("reset-password")

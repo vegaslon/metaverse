@@ -211,7 +211,7 @@ export class UserService implements OnModuleInit {
 		});
 	}
 
-	async changeUserImage(user: User, file: MulterFile) {
+	changeUserImage(user: User, file: MulterFile) {
 		return new Promise(async (resolve, reject) => {
 			await this.deleteUserImage(user);
 

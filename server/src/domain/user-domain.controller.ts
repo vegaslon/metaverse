@@ -3,20 +3,24 @@ import {
 	Controller,
 	Delete,
 	Get,
+	InternalServerErrorException,
 	NotFoundException,
 	Param,
 	Patch,
 	Post,
-	UseGuards,
 	Put,
-	UseInterceptors,
 	UploadedFile,
+	UseGuards,
+	UseInterceptors,
 } from "@nestjs/common";
-import { ApiBearerAuth, ApiTags, ApiBody, ApiConsumes } from "@nestjs/swagger";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { MetaverseAuthGuard } from "../auth/auth.guard";
 import { AuthService } from "../auth/auth.service";
 import { CurrentUser } from "../auth/user.decorator";
+import { MulterFile } from "../common/multer-file.model";
 import { renderDomain } from "../common/utils";
+import { SessionService } from "../session/session.service";
 import { User } from "../user/user.schema";
 import {
 	CreateDomainDto,
@@ -24,9 +28,6 @@ import {
 	UpdateDomainImageDto,
 } from "./domain.dto";
 import { DomainService } from "./domain.service";
-import { FileInterceptor } from "@nestjs/platform-express";
-import { MulterFile } from "../common/multer-file.model";
-import { SessionService } from "../session/session.service";
 
 @ApiTags("user domains")
 @Controller("api/user")
@@ -142,13 +143,15 @@ export class UserDomainController {
 		@UploadedFile() file: MulterFile,
 		@Param("id") id: string,
 	) {
+		if (file == null)
+			throw new InternalServerErrorException("Image not received");
+
 		if (!(user.domains as any[]).includes(id))
 			throw new NotFoundException();
 
 		const domain = await this.domainService.findById(id);
 		if (domain == null) throw new NotFoundException();
 
-		await this.domainService.changeDomainImage(domain, file);
-		return { success: true };
+		return this.domainService.changeDomainImage(domain, file);
 	}
 }
