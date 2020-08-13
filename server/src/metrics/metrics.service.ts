@@ -1,4 +1,9 @@
-import { Injectable, OnModuleInit, OnModuleDestroy } from "@nestjs/common";
+import {
+	Injectable,
+	OnModuleInit,
+	OnModuleDestroy,
+	Logger,
+} from "@nestjs/common";
 import { Metrics } from "./metrics.schema";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
@@ -12,24 +17,30 @@ export class MetricsService implements OnModuleInit, OnModuleDestroy {
 	private intervals: NodeJS.Timeout[] = [];
 
 	metrics: Metrics;
+	readonly metricsId = os.hostname() + "-" + generateRandomString(8);
+
+	private readonly logger = new Logger("Metrics");
 
 	constructor(
 		@InjectModel("metrics") private readonly metricsModel: Model<Metrics>,
 		private readonly sessionService: SessionService,
 	) {}
 
-	private generateMetricsID() {
-		return os.hostname() + "-" + generateRandomString(8);
-	}
-
 	async updateDatebase(isNewMinute = false) {
-		if (
-			this.metrics == null ||
-			this.metricsModel.findOne({ id: this.metrics.id }) == null
-		) {
+		let metricsAvailable = false;
+		try {
+			metricsAvailable =
+				this.metricsModel.findOne({ _id: this.metricsId }) != null;
+		} catch (err) {}
+
+		if (this.metrics == null || metricsAvailable == false) {
+			try {
+				this.metricsModel.deleteOne({ _id: this.metricsId });
+			} catch (err) {}
 			this.metrics = new this.metricsModel({
-				_id: this.generateMetricsID(),
+				_id: this.metricsId,
 			});
+			this.logger.debug("Created new metrics document");
 		}
 
 		this.metrics.expireAt = Date.now() + 1000 * 60;
