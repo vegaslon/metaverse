@@ -63,7 +63,9 @@ async function bootstrap() {
 	// const hostWildcard = "*." + new URL(METAVERSE_URL).host;
 
 	app.use(
-		helmet(),
+		helmet({
+			contentSecurityPolicy: false,
+		}),
 
 		// https://helmetjs.github.io/docs/csp/
 		// TODO: finish csp
