@@ -1,38 +1,25 @@
-FROM alpine:edge 
+FROM ubuntu:20.04 
 
 ENV \
 NODE_ENV=production \
-CHROME_BIN=/usr/bin/chromium-browser \
-PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+CHROME_BIN=/usr/bin/google-chrome-stable \
+PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
+DEBIAN_FRONTEND=noninteractive
 
 RUN \
-echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
-# compiling: bcrypt 
-apk add --no-cache --virtual builds-deps build-base python3 unzip && \
-apk add --no-cache \
-# node
-nodejs yarn \
-# for: sharp
-vips \
-# for: puppeteer
-chromium nss \
-font-noto font-noto-cjk \
-# custom fonts
-wget fontconfig \
-&& \
-mkdir -p /usr/share/fonts/TTF && \
-# font: Roboto
-wget -O /usr/share/fonts/TTF/roboto.zip https://fonts.google.com/download?family=Roboto && \
-unzip /usr/share/fonts/TTF/roboto.zip -d /usr/share/fonts/TTF "*.ttf" && \
-rm -f /usr/share/fonts/TTF/roboto.zip && \
-# font: Roboto Condensed
-wget -O /usr/share/fonts/TTF/roboto-condensed.zip https://fonts.google.com/download?family=Roboto+Condensed && \
-unzip /usr/share/fonts/TTF/roboto-condensed.zip -d /usr/share/fonts/TTF "*.ttf" && \
-rm -f /usr/share/fonts/TTF/roboto-condensed.zip && \
-# font: Twemoji Mozilla
-wget -P /usr/share/fonts/TTF https://github.com/mozilla/twemoji-colr/releases/download/v0.5.0/TwemojiMozilla.ttf && \
-\
-fc-cache -fv
+apt-get update -y && \
+apt-get install -y curl fonts-roboto fonts-noto fontconfig && \ 
+# install nodejs
+curl -sL https://deb.nodesource.com/setup_lts.x | bash - && \
+apt-get install -y nodejs && \
+npm i -g yarn node-gyp pm2 && \
+# install twemoji mozilla
+curl -Lo /usr/share/fonts/truetype/TwemojiMozilla.ttf https://github.com/mozilla/twemoji-colr/releases/download/v0.5.1/TwemojiMozilla.ttf && \
+fc-cache -fv && \
+# install google chrome
+curl -LO https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
+apt-get install -y ./google-chrome-stable_current_amd64.deb && \
+rm -f google-chrome-stable_current_amd64.deb
 
 COPY \
 app/server/package.json \
@@ -40,10 +27,9 @@ app/server/yarn.lock \
 /app/server/
 
 WORKDIR /app/server
-RUN \
-yarn global add node-gyp pm2 && \
-yarn install --production && \
-apk del builds-deps
+RUN yarn install --production
 
 COPY app /app
+
+# CMD node /app/server/dist/main.js
 CMD pm2-runtime /app/server/ecosystem.config.js
