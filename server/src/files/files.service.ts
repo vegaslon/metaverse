@@ -224,6 +224,7 @@ export class FilesService {
 
 		let mimetype = file.mimetype;
 		if (key.toLowerCase().endsWith(".ts")) mimetype = "text/typescript";
+		if (key.toLowerCase().endsWith(".fst")) mimetype = "text/plain";
 
 		// await this.s3
 		// 	.upload({

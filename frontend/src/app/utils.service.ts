@@ -80,6 +80,8 @@ export class UtilsService {
 
 			"html",
 			"css",
+
+			"fst",
 		],
 		video: [
 			// https://en.wikipedia.org/wiki/List_of_file_formats#Video

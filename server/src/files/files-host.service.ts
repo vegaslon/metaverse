@@ -141,6 +141,11 @@ export class FilesHostService {
 
 		if (!fileRes.ok) throw new NotFoundException("File not found");
 
+		// force .fst files as text/plain
+		if (/\.fst$/i.test(location)) {
+			fileRes.headers.set("Content-Type", "text/plain");
+		}
+
 		if (query.download != null) this.forceDownload(res);
 
 		this.metricsService.metrics.fileReadsPerMinute++;
