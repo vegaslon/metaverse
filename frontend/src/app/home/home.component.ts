@@ -4,6 +4,8 @@ import {
 	ViewChild,
 	ElementRef,
 	OnDestroy,
+	Inject,
+	PLATFORM_ID,
 } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { DownloadComponent } from "../header/download/download.component";
@@ -11,6 +13,7 @@ import { Subscription, interval } from "rxjs";
 import { ActivatedRoute, Router } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
 import { UtilsService } from "../utils.service";
+import { isPlatformServer } from "@angular/common";
 
 @Component({
 	selector: "app-home",
@@ -46,6 +49,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 		private readonly router: Router,
 		private readonly http: HttpClient,
 		public readonly utilsService: UtilsService,
+		@Inject(PLATFORM_ID) private readonly platformId: Object,
 	) {}
 
 	refreshStats() {
@@ -65,6 +69,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit() {
+		if (isPlatformServer(this.platformId)) return;
+
 		this.route.url.subscribe(url => {
 			if (url.length === 0) return;
 			if (url[0].path !== "download") return;
