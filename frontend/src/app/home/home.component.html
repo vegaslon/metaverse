@@ -31,6 +31,24 @@
 				<!-- <img src="/assets/get-started-arrow.png" class="arrow" /> -->
 			</a>
 		</div>
+		<div class="stats" *ngIf="stats != null">
+			<h3 style="display: flex; align-items: center;">
+				<mat-icon style="margin-right: 4px;">people</mat-icon>
+				{{
+					utilsService.displayPlural(stats.onlineUsers, "online user")
+				}}
+			</h3>
+			<span style="margin: 0 16px;"></span>
+			<h3 style="display: flex; align-items: center;">
+				<mat-icon style="margin-right: 4px;">public</mat-icon>
+				{{
+					utilsService.displayPlural(
+						stats.onlineDomains,
+						"online world"
+					)
+				}}
+			</h3>
+		</div>
 	</div>
 </div>
 <div class="info">

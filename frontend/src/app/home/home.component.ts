@@ -9,6 +9,8 @@ import { MatDialog } from "@angular/material/dialog";
 import { DownloadComponent } from "../header/download/download.component";
 import { Subscription, interval } from "rxjs";
 import { ActivatedRoute, Router } from "@angular/router";
+import { HttpClient } from "@angular/common/http";
+import { UtilsService } from "../utils.service";
 
 @Component({
 	selector: "app-home",
@@ -34,10 +36,14 @@ export class HomeComponent implements OnInit, OnDestroy {
 	];
 	contribute = [["GitLab", "https://git.tivolicloud.com"]];
 
+	stats: { onlineUsers: number; onlineDomains: number } = null;
+
 	constructor(
-		public dialog: MatDialog,
+		public readonly dialog: MatDialog,
 		private readonly route: ActivatedRoute,
 		private readonly router: Router,
+		private readonly http: HttpClient,
+		public readonly utilsService: UtilsService,
 	) {}
 
 	ngOnInit() {
@@ -65,6 +71,14 @@ export class HomeComponent implements OnInit, OnDestroy {
 				videoSub.unsubscribe();
 			}
 		});
+
+		this.http
+			.get<{ onlineUsers: number; onlineDomains: number }>(
+				"/api/domains/stats",
+			)
+			.subscribe(stats => {
+				this.stats = stats;
+			});
 	}
 
 	ngOnDestroy() {
