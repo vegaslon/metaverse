@@ -38,6 +38,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 	stats: { onlineUsers: number; onlineDomains: number } = null;
 
+	subs: Subscription[] = [];
+
 	constructor(
 		public readonly dialog: MatDialog,
 		private readonly route: ActivatedRoute,
@@ -45,6 +47,22 @@ export class HomeComponent implements OnInit, OnDestroy {
 		private readonly http: HttpClient,
 		public readonly utilsService: UtilsService,
 	) {}
+
+	refreshStats() {
+		this.http
+			.get<{ onlineUsers: number; onlineDomains: number }>(
+				"/api/domains/stats",
+			)
+			.subscribe(stats => {
+				if (
+					stats != null &&
+					stats.onlineDomains != null &&
+					stats.onlineUsers != null
+				) {
+					this.stats = stats;
+				}
+			});
+	}
 
 	ngOnInit() {
 		this.route.url.subscribe(url => {
@@ -72,16 +90,18 @@ export class HomeComponent implements OnInit, OnDestroy {
 			}
 		});
 
-		this.http
-			.get<{ onlineUsers: number; onlineDomains: number }>(
-				"/api/domains/stats",
-			)
-			.subscribe(stats => {
-				this.stats = stats;
-			});
+		this.refreshStats();
+		this.subs.push(
+			interval(1000 * 60).subscribe(() => {
+				this.refreshStats();
+			}),
+		);
 	}
 
 	ngOnDestroy() {
 		if (this.videoSub) this.videoSub.unsubscribe();
+		for (const sub of this.subs) {
+			sub.unsubscribe();
+		}
 	}
 }
