@@ -63,7 +63,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
 			this.router.events.subscribe(val => {
 				if (val instanceof NavigationEnd) {
 					this.onToggleMobileMenu(true);
-					this.ontop = val.url === "/" || val.url === "/download";
+					const url = val.url.toLowerCase();
+					this.ontop =
+						url === "/" ||
+						/^\/\?/.test(url) ||
+						url === "/download" ||
+						/^\/download\?/.test(url);
 				}
 			}),
 			this.authService.loggingIn$.subscribe(loggingIn => {
