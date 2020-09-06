@@ -31,6 +31,7 @@
 		"express": "^4.15.2",
 		"moment-timezone": "^0.5.31",
 		"monaco-editor": "^0.20.0",
+		"monaco-languages": "^1.10.0",
 		"ngx-cookie-service": "^3.0.4",
 		"ngx-infinite-scroll": "^8.0.1",
 		"rxjs": "~6.5.5",

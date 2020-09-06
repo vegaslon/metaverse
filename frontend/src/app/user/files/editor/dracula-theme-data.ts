@@ -1,9 +1,7 @@
-import { editor } from "monaco-editor";
-
 // https://bitwiser.in/monaco-themes
 // https://github.com/dracula/sublime/blob/master/Dracula.tmTheme
 export const draculaThemeData = {
-	base: "vs-dark" as editor.BuiltinTheme,
+	base: "vs-dark" as any,
 	inherit: true,
 	rules: [
 		{

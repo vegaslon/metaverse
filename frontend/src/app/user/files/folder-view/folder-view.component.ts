@@ -283,6 +283,7 @@ export class FolderViewComponent {
 				file: this.contextMenu.file,
 			},
 		});
+		this.contextMenu = null;
 	}
 
 	onContextMenuDownload() {

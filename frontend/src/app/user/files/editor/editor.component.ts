@@ -1,3 +1,4 @@
+import { isPlatformServer } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
 import {
 	Component,
@@ -6,10 +7,10 @@ import {
 	Inject,
 	OnDestroy,
 	OnInit,
+	PLATFORM_ID,
 	ViewChild,
 } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { editor } from "monaco-editor";
 import { tap } from "rxjs/operators";
 import { File, FilesService } from "../files.service";
 
@@ -22,7 +23,9 @@ export class EditorComponent implements OnInit, OnDestroy {
 	monaco: typeof import("monaco-editor");
 
 	@ViewChild("editor") editorRef: ElementRef<HTMLDivElement>;
-	editor: editor.IStandaloneCodeEditor;
+	// TODO: look into this
+	// editor: typeof import("monaco-editor").editor.IStandaloneCodeEditor;
+	editor: any;
 
 	loading: "file" | "editor" = "file";
 	saving = false;
@@ -35,9 +38,10 @@ export class EditorComponent implements OnInit, OnDestroy {
 		public readonly data: {
 			file: File;
 		},
-
 		private readonly http: HttpClient,
 		private readonly filesService: FilesService,
+		@Inject(PLATFORM_ID)
+		private readonly platformId: Object,
 	) {}
 
 	private initMonaco() {
@@ -105,6 +109,8 @@ export class EditorComponent implements OnInit, OnDestroy {
 	}
 
 	async ngOnInit() {
+		if (isPlatformServer(this.platformId)) return;
+
 		this.loading = "file";
 		const fileData = await this.getFileData();
 

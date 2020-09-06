@@ -52,8 +52,8 @@
 							"src/sitemap.xml",
 							{
 								"glob": "**/*",
-								"input": "node_modules/monaco-editor/",
-								"output": "./assets/monaco-editor"
+								"input": "node_modules/monaco-editor/min",
+								"output": "./assets/monaco-editor/min"
 							}
 						],
 						"styles": ["src/styles.scss"],
@@ -81,13 +81,13 @@
 							"budgets": [
 								{
 									"type": "initial",
-									"maximumWarning": "2mb",
+									"maximumWarning": "3mb",
 									"maximumError": "5mb"
 								},
 								{
 									"type": "anyComponentStyle",
-									"maximumWarning": "6kb",
-									"maximumError": "10kb"
+									"maximumWarning": "90kb",
+									"maximumError": "100kb"
 								}
 							]
 						}
