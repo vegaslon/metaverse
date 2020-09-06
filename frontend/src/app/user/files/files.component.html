@@ -1,6 +1,6 @@
 <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
 <div class="sidebar" *ngIf="status">
-	<br />
+	<div style="margin: 12px 0;"></div>
 	<div class="storage" style="display: flex; align-items: top;">
 		<mat-icon style="margin-right: 8px;">storage</mat-icon>
 		<p style="margin: 0; width: 100%;">
@@ -18,7 +18,7 @@
 			used
 		</p>
 	</div>
-	<br />
+	<div style="margin: 12px 0;"></div>
 	<button mat-flat-button color="primary" (click)="onUpload()">
 		<mat-icon style="margin-right: 4px;">cloud_upload</mat-icon>
 		Upload

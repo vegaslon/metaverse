@@ -129,7 +129,9 @@ $mobileMaxWidth: 1160px;
 	}
 
 	hr {
-		border-top: solid 1px rgba(#000, 0.08);
+		border: none;
+		height: 2px;
+		background: rgba(#000, 0.08);
 	}
 
 	a {
