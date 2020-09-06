@@ -1,0 +1,29 @@
+<div class="editor-container">
+	<h2 style="margin: 6px 12px;">{{ data.file.key }}</h2>
+	<div *ngIf="loading" class="editor loading">
+		<mat-spinner mode="indeterminate" diameter="64"></mat-spinner>
+		<p style="margin-top: 24px;">Loading {{ loading }}...</p>
+	</div>
+	<div
+		#editor
+		class="editor"
+		[style.display]="loading ? 'none' : 'initial'"
+	></div>
+	<mat-progress-bar
+		mode="indeterminate"
+		[style.opacity]="saving ? '1' : '0'"
+	></mat-progress-bar>
+	<div style="display: flex; padding: 8px; align-items: center;">
+		<div style="flex-grow: 1;"></div>
+		<p style="margin: 0;" [style.opacity]="saving ? '0.5' : '0'">
+			Saving file...
+		</p>
+		<div style="margin: 0 8px;"></div>
+		<button mat-flat-button (click)="onDiscard()">Discard</button>
+		<div style="margin: 0 4px;"></div>
+		<button mat-flat-button color="primary" (click)="onSave()">
+			<mat-icon>save</mat-icon>
+			Save file
+		</button>
+	</div>
+</div>

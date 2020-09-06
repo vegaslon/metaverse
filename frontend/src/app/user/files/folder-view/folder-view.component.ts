@@ -12,6 +12,7 @@ import {
 import { Validators } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { UtilsService } from "../../../utils.service";
+import { EditorComponent } from "../editor/editor.component";
 import { File, FilesService, Folder } from "../files.service";
 import { InputComponent } from "../input/input.component";
 
@@ -110,10 +111,7 @@ export class FolderViewComponent {
 	private onContextMenuMoveFile() {
 		const oldKey = this.contextMenu.file.key;
 
-		const currentPath = oldKey
-			.split("/")
-			.slice(0, -1)
-			.join("/");
+		const currentPath = oldKey.split("/").slice(0, -1).join("/");
 
 		const dialog = this.dialog.open(InputComponent, {
 			width: "600px",
@@ -194,11 +192,7 @@ export class FolderViewComponent {
 	private onContextMenuRenameFile() {
 		const oldKey = this.contextMenu.file.key;
 
-		const currentPath =
-			oldKey
-				.split("/")
-				.slice(0, -1)
-				.join("/") + "/";
+		const currentPath = oldKey.split("/").slice(0, -1).join("/") + "/";
 
 		const dialog = this.dialog.open(InputComponent, {
 			width: "600px",
@@ -279,6 +273,16 @@ export class FolderViewComponent {
 		} else if (this.contextMenu.type == "folder") {
 			return this.onContextMenuRenameFolder();
 		}
+	}
+
+	onContextMenuEditFile() {
+		this.dialog.open(EditorComponent, {
+			width: "calc(100vw - 50px)",
+			height: "calc(100vh - 50px)",
+			data: {
+				file: this.contextMenu.file,
+			},
+		});
 	}
 
 	onContextMenuDownload() {

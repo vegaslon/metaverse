@@ -6,13 +6,14 @@ import { RouterModule, Routes } from "@angular/router";
 import { MaterialModule } from "../material.module";
 import { UiModule } from "../ui/ui.module";
 import { DomainsComponent } from "./domains/domains.component";
-import { InputComponent } from "./files/input/input.component";
+import { EditorComponent } from "./files/editor/editor.component";
 import { FilesComponent } from "./files/files.component";
 import { FolderViewComponent } from "./files/folder-view/folder-view.component";
+import { InputComponent } from "./files/input/input.component";
 import { TreeItemComponent } from "./files/tree-item/tree-item.component";
 import { UploadComponent } from "./files/upload/upload.component";
-import { SettingsComponent } from "./settings/settings.component";
 import { ExportDataComponent } from "./settings/export-data/export-data.component";
+import { SettingsComponent } from "./settings/settings.component";
 
 const routes: Routes = [
 	{ path: "", redirectTo: "settings", pathMatch: "full" },
@@ -32,6 +33,7 @@ const routes: Routes = [
 		UploadComponent,
 		InputComponent,
 		ExportDataComponent,
+		EditorComponent,
 	],
 	imports: [
 		CommonModule,
@@ -41,6 +43,11 @@ const routes: Routes = [
 		ReactiveFormsModule,
 		ClipboardModule,
 	],
-	entryComponents: [UploadComponent, InputComponent, ExportDataComponent],
+	entryComponents: [
+		UploadComponent,
+		InputComponent,
+		ExportDataComponent,
+		EditorComponent,
+	],
 })
 export class UserModule {}

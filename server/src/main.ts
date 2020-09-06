@@ -7,7 +7,7 @@ import cookieParser from "cookie-parser";
 import { Request, Response } from "express";
 import helmet from "helmet";
 import { AppModule } from "./app.module";
-import { DEV, WWW_PATH, URL as METAVERSE_URL } from "./environment";
+import { DEV, URL as METAVERSE_URL, WWW_PATH, FILES_URL } from "./environment";
 import { initFrontend } from "./frontend";
 
 function initSwagger(app: NestExpressApplication) {
@@ -44,8 +44,16 @@ async function bootstrap() {
 	const app = await NestFactory.create<NestExpressApplication>(AppModule);
 	const logger = new Logger("Main");
 
+	// https://expressjs.com/en/guide/behind-proxies.html
+	app.set("trust proxy", true);
+
 	app.enableCors({
-		origin: /^((null)|(file:\/\/))$/i, // null from chrome file://
+		origin: [
+			"null", // chrome file://
+			"file://",
+			new URL(METAVERSE_URL).origin,
+			new URL(FILES_URL).origin,
+		],
 	});
 
 	if (!DEV)

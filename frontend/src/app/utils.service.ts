@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import * as monaco from "monaco-editor";
 
 @Injectable({
 	providedIn: "root",
@@ -48,39 +49,12 @@ export class UtilsService {
 			"ktx",
 		],
 		code: [
-			// https://en.wikipedia.org/wiki/List_of_file_formats#Programming_languages_and_scripts
-			"bat",
-			"cmd",
-			"coffee",
-			"c",
-			"cpp",
-			"h",
-			"hpp",
-			"js",
-			"jsx",
-			"lua",
-			"php",
-			"pl",
-			"ps1",
-			"py",
-			"rb",
-			"rs",
-			"sh",
-			"ts",
-			"tsx",
-
-			"json",
-			"xml",
-			"yaml",
-			"yml",
-
-			"glsl",
-			"fs",
-			"vs",
-
-			"html",
-			"css",
-
+			...monaco.languages
+				.getLanguages()
+				.map(language =>
+					language.extensions.map(ext => ext.replace(/^\./, "")),
+				)
+				.reduce((a, b) => [...a, ...b]),
 			"fst",
 		],
 		video: [
@@ -125,7 +99,7 @@ export class UtilsService {
 			"3ds",
 			"dxf",
 		],
-		text: ["txt", "doc", "docx", "mobi", "pdf", "epub", "odt"],
+		text: ["doc", "docx", "mobi", "pdf", "epub", "odt"],
 		font: ["bdf", "otf", "ttf", "woff"],
 	};
 

@@ -87,6 +87,14 @@
 				Copied!
 			</ng-container>
 		</button>
+		<button
+			mat-button
+			*ngIf="contextMenu.file.type == 'code'"
+			(click)="onContextMenuEditFile()"
+		>
+			<mat-icon>launch</mat-icon>
+			Open in editor
+		</button>
 		<mat-divider></mat-divider>
 	</ng-container>
 	<button mat-button (click)="onContextMenuMove()">
