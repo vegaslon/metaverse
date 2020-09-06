@@ -22,14 +22,17 @@ interface Release {
 	templateUrl: "./download.component.html",
 	styleUrls: ["./download.component.scss"],
 })
-export class DownloadComponent {
+export class DownloadComponent implements OnInit {
 	// os: Platform = "windows";
 
 	loaded = false;
 
 	release: Release = null;
 
-	constructor(private http: HttpClient) {
+	constructor(private http: HttpClient) {}
+
+	ngOnInit() {
+		// TODO: preload if on home component so download is more instant
 		this.getLatest();
 	}
 
