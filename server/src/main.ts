@@ -45,7 +45,7 @@ async function bootstrap() {
 	const logger = new Logger("Main");
 
 	// https://expressjs.com/en/guide/behind-proxies.html
-	app.set("trust proxy", true);
+	app.set("trust proxy", 1);
 
 	app.enableCors({
 		origin: [
