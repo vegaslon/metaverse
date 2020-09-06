@@ -324,6 +324,11 @@ export class UserService implements OnModuleInit {
 	}
 
 	async setPublicKey(user: User, buffer: Buffer) {
+		if (buffer.byteLength > 1000 * 1000)
+			throw new BadRequestException(
+				"Public key can't be bigger than 1 MB",
+			);
+
 		const publicKey =
 			Buffer.concat([derPublicKeyHeader, buffer])
 				.toString("base64")
@@ -331,7 +336,7 @@ export class UserService implements OnModuleInit {
 				.join(" ") + " ";
 
 		user.publicKey = publicKey;
-		return await user.save();
+		return user.save();
 	}
 
 	async setUserLocation(
