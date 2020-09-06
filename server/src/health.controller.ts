@@ -37,5 +37,7 @@ export class HealthController {
 			// async () => this.memory.checkRSS("memory", 150 * 1024 * 1024),
 			// async () => this.disk.checkStorage("disk", {}),
 		]);
+
+		// TODO: check if / frontend is working
 	}
 }
