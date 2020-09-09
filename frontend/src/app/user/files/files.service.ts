@@ -4,6 +4,7 @@ import { map, catchError } from "rxjs/operators";
 import { UtilsService } from "../../utils.service";
 import { Upload } from "./upload/upload.component";
 import { throwError } from "rxjs";
+import { AuthService } from "../../auth/auth.service";
 
 export class File {
 	public type: string;
@@ -13,7 +14,8 @@ export class File {
 		public key: string,
 		public name: string,
 		public size: number,
-		public url: string,
+		public httpUrl: string,
+		public teaUrl: string,
 		public parent: Folder = null,
 	) {}
 }
@@ -37,6 +39,7 @@ export class Status {
 })
 export class FilesService {
 	constructor(
+		private readonly authService: AuthService,
 		private readonly utilsService: UtilsService,
 		private readonly http: HttpClient,
 	) {}
@@ -116,17 +119,26 @@ export class FilesService {
 
 	getFiles() {
 		return this.http
-			.get<
-				{
+			.get<{
+				url: string;
+				files: {
 					key: string;
 					lastModified: Date;
 					size: number;
-					url: string;
-				}[]
-			>("/api/user/files")
+				}[];
+			}>("/api/user/files")
 			.pipe(
 				//map(() => this.fakeGetFiles()),
-				map(files => {
+				map(data => {
+					const files = data.files;
+
+					const username = this.authService.user$
+						.getValue()
+						.profile.username.toLowerCase();
+
+					const httpUrlBase = data.url + "/" + username;
+					const teaUrlBase = "tea://" + username;
+
 					const rootFolder = new Folder("");
 					let totalFiles = 0;
 
@@ -143,7 +155,8 @@ export class FilesService {
 								keyedFile.key,
 								fileName,
 								keyedFile.size,
-								keyedFile.url,
+								httpUrlBase + keyedFile.key,
+								teaUrlBase + keyedFile.key,
 								folder,
 							);
 							const ext = this.utilsService.formatExt(file.name);

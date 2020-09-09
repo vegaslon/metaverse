@@ -24,7 +24,9 @@ interface ContextMenu {
 	x: number;
 	y: number;
 
-	urlCopied: boolean;
+	httpUrlCopied: boolean;
+	teaUrlCopied: boolean;
+
 	areYouSureDelete: boolean;
 	loading: boolean;
 }
@@ -62,7 +64,7 @@ export class FolderViewComponent {
 	}
 
 	onItemClick(file: File) {
-		if (isPlatformBrowser(this.platformId)) window.open(file.url);
+		if (isPlatformBrowser(this.platformId)) window.open(file.httpUrl);
 	}
 
 	contextMenu: ContextMenu = null;
@@ -82,7 +84,9 @@ export class FolderViewComponent {
 			x: e.clientX,
 			y: e.clientY,
 
-			urlCopied: false,
+			httpUrlCopied: false,
+			teaUrlCopied: false,
+
 			areYouSureDelete: false,
 			loading: false,
 		};
@@ -102,10 +106,16 @@ export class FolderViewComponent {
 			this.contextMenu = null;
 	}
 
-	onContextMenuCopyUrl() {
-		this.clipboard.copy(this.contextMenu.file.url);
-		this.contextMenu.urlCopied = true;
-		// this.contextMenu = null;
+	onContextMenuCopyHttpUrl() {
+		this.clipboard.copy(this.contextMenu.file.httpUrl);
+		this.contextMenu.teaUrlCopied = false;
+		this.contextMenu.httpUrlCopied = true;
+	}
+
+	onContextMenuCopyTeaUrl() {
+		this.clipboard.copy(this.contextMenu.file.teaUrl);
+		this.contextMenu.httpUrlCopied = false;
+		this.contextMenu.teaUrlCopied = true;
 	}
 
 	private onContextMenuMoveFile() {
@@ -288,7 +298,7 @@ export class FolderViewComponent {
 
 	onContextMenuDownload() {
 		if (isPlatformServer(this.platformId)) return;
-		window.open(this.contextMenu.file.url + "?download", "_self");
+		window.open(this.contextMenu.file.httpUrl + "?download", "_self");
 	}
 
 	onContextMenuDelete() {

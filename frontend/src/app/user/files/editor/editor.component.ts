@@ -83,7 +83,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
 	private getFileData() {
 		return this.http
-			.get(this.data.file.url, {
+			.get(this.data.file.httpUrl, {
 				responseType: "text",
 				// observe: "response",
 			})

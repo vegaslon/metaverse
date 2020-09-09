@@ -52,7 +52,6 @@ export interface UserFile {
 	key: string;
 	updated: Date;
 	size: number;
-	url: string;
 }
 
 @Injectable()
@@ -164,7 +163,10 @@ export class FilesService {
 		);
 	}
 
-	async getFiles(user: User, pathStr: string): Promise<UserFile[]> {
+	async getFiles(
+		user: User,
+		pathStr: string,
+	): Promise<{ url: string; files: UserFile[] }> {
 		const prefix = this.validatePath(user, pathStr);
 
 		// const objects = await this.s3
@@ -185,16 +187,18 @@ export class FilesService {
 			prefix,
 		});
 
-		return files.map(file => {
-			const metadata: GoogleFileMetadata = file.metadata;
+		return {
+			url: FILES_URL,
+			files: files.map(file => {
+				const metadata: GoogleFileMetadata = file.metadata;
 
-			return {
-				key: metadata.name.replace(user.id, ""),
-				updated: metadata.updated,
-				size: parseInt(metadata.size),
-				url: this.getUrl(user, metadata.name),
-			};
-		});
+				return {
+					key: metadata.name.replace(user.id, ""),
+					updated: metadata.updated,
+					size: parseInt(metadata.size),
+				};
+			}),
+		};
 	}
 
 	async uploadFile(user: User, pathStr: string, file: MulterStream) {

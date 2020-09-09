@@ -78,15 +78,46 @@
 				{{ utilsService.formatBytes(contextMenu.file.size) }}
 			</span>
 		</div>
-		<button mat-button (click)="onContextMenuCopyUrl()">
-			<mat-icon>link</mat-icon>
-			<ng-container *ngIf="!contextMenu.urlCopied">
-				Copy URL to clipboard
-			</ng-container>
-			<ng-container *ngIf="contextMenu.urlCopied">
-				Copied!
-			</ng-container>
-		</button>
+		<mat-divider></mat-divider>
+		<p
+			style="
+				opacity: 0.6;
+				text-align: center;
+				margin-bottom: 4px;
+				margin-top: 16px;
+			"
+		>
+			Copy URL to clipboard
+		</p>
+		<div style="display: flex; padding: 0 16px;">
+			<button
+				mat-button
+				(click)="onContextMenuCopyHttpUrl()"
+				style="text-align: center;"
+			>
+				<mat-icon>link</mat-icon>
+				<ng-container *ngIf="!contextMenu.httpUrlCopied">
+					http://
+				</ng-container>
+				<ng-container *ngIf="contextMenu.httpUrlCopied">
+					Copied!
+				</ng-container>
+			</button>
+			<button
+				mat-button
+				(click)="onContextMenuCopyTeaUrl()"
+				style="text-align: center;"
+			>
+				<mat-icon>emoji_food_beverage</mat-icon>
+				<ng-container *ngIf="!contextMenu.teaUrlCopied">
+					tea://
+				</ng-container>
+				<ng-container *ngIf="contextMenu.teaUrlCopied">
+					Copied!
+				</ng-container>
+			</button>
+		</div>
+		<mat-divider></mat-divider>
 		<button
 			mat-button
 			*ngIf="contextMenu.file.type == 'code'"
@@ -95,7 +126,6 @@
 			<mat-icon>launch</mat-icon>
 			Open in editor
 		</button>
-		<mat-divider></mat-divider>
 	</ng-container>
 	<button mat-button (click)="onContextMenuMove()">
 		<mat-icon>folder</mat-icon>
