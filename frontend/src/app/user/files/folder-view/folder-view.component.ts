@@ -93,7 +93,7 @@ export class FolderViewComponent {
 		if (this.contextMenu == null) return;
 
 		if (
-			[...(e as any).path].some((e: HTMLElement) =>
+			[...(e as any).composedPath()].some((e: HTMLElement) =>
 				e.className == undefined
 					? false
 					: e.className.includes("context-menu"),
