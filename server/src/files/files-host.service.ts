@@ -107,7 +107,7 @@ export class FilesHostService {
 	async getFile(
 		res: ExpressResponse,
 		location: string,
-		query: { [key: string]: string },
+		query: { [key: string]: string } = {},
 	) {
 		const filePath = location.split("/");
 
@@ -133,23 +133,31 @@ export class FilesHostService {
 
 			const code = await this.compileTypeScript(tsFileRes);
 
-			this.setHeaders(tsFileRes, res);
-			res.header("Content-Type", "text/javascript");
+			if (res) {
+				this.setHeaders(tsFileRes, res);
+				res.header("Content-Type", "text/javascript");
+				res.send(code);
+			}
 
-			return res.send(code);
+			return;
 		}
 
 		if (!fileRes.ok) throw new NotFoundException("File not found");
 
-		// force .fst files as text/plain
-		if (/\.fst$/i.test(location)) {
-			fileRes.headers.set("Content-Type", "text/plain");
+		if (res) {
+			// force .fst files as text/plain
+			if (/\.fst$/i.test(location)) {
+				fileRes.headers.set("Content-Type", "text/plain");
+			}
+
+			if (query.download != null) this.forceDownload(res);
+
+			this.setHeaders(fileRes, res);
+			fileRes.body.pipe(res);
 		}
 
-		if (query.download != null) this.forceDownload(res);
-
 		this.metricsService.metrics.fileReadsPerMinute++;
-		this.setHeaders(fileRes, res);
-		fileRes.body.pipe(res);
+
+		return fileRes.body;
 	}
 }

@@ -1,14 +1,14 @@
 import { Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
-import { MongooseModule } from "@nestjs/mongoose";
 import { AuthModule } from "../auth/auth.module";
 import { JWT_SECRET } from "../environment";
+import { MetricsModule } from "../metrics/metrics.module";
 import { UserModule } from "../user/user.module";
 import { FilesHostController } from "./files-host.controller";
 import { FilesHostService } from "./files-host.service";
 import { FilesController } from "./files.controller";
 import { FilesService } from "./files.service";
-import { MetricsModule } from "../metrics/metrics.module";
+import { TeaService } from "./tea.service";
 // import { UserFilesCacheSchema } from "./user-files-cache.schema";
 
 @Module({
@@ -30,8 +30,13 @@ import { MetricsModule } from "../metrics/metrics.module";
 		// ]),
 		MetricsModule,
 	],
-	providers: [FilesService, FilesHostService],
+	providers: [FilesService, FilesHostService, TeaService],
 	exports: [FilesService],
 	controllers: [FilesController, FilesHostController],
 })
-export class FilesModule {}
+export class FilesModule {
+	constructor(
+		// make sure it's initialized
+		private readonly teaService: TeaService,
+	) {}
+}
