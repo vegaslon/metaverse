@@ -12,3 +12,8 @@ liveness_check:
 
 readiness_check:
     path: /health
+
+network:
+    # session_affinity: true
+    forwarded_ports:
+        - 17486/tcp
