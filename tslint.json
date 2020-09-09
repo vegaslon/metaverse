@@ -4,6 +4,7 @@
 		"no-any": false,
 		"file-name-casing": [true, "kebab-case"],
 		"max-classes-per-file": false,
+		"triple-equals": false,
 		"ban": {
 			"options": [
 				{
