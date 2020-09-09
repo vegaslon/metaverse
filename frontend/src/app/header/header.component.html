@@ -95,7 +95,7 @@
 		<span style="flex-grow: 1;"></span>
 
 		<button
-			*ngIf="!user"
+			*ngIf="!isSSR && !user"
 			mat-flat-button
 			(click)="onSignIn()"
 			[disabled]="loggingIn"

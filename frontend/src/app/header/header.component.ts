@@ -1,8 +1,11 @@
+import { isPlatformServer } from "@angular/common";
 import {
 	Component,
 	ElementRef,
+	Inject,
 	OnDestroy,
 	OnInit,
+	PLATFORM_ID,
 	ViewChild,
 } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
@@ -28,10 +31,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
 	@ViewChild("mobileMenu") mobileMenuRef: ElementRef<HTMLDivElement>;
 
+	isSSR = isPlatformServer(this.platformId);
+
 	constructor(
 		public readonly dialog: MatDialog,
 		private readonly authService: AuthService,
 		private readonly router: Router,
+		@Inject(PLATFORM_ID) private readonly platformId: Object,
 	) {}
 
 	onToggleMobileMenu(forceCollapse = false) {
