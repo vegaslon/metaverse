@@ -109,10 +109,12 @@ export class SessionService {
 		session.domain = domainId as any; // reference
 		await session.save();
 
-		await this.domainSessionModel.updateOne(
-			{ _id: domainId },
-			{ $addToSet: { userSessions: session } },
-		);
+		try {
+			await this.domainSessionModel.updateOne(
+				{ _id: domainId },
+				{ $addToSet: { userSessions: session } },
+			);
+		} catch (err) {}
 
 		return session;
 	}
@@ -121,13 +123,14 @@ export class SessionService {
 		let session = await this.findDomainById(domain._id);
 
 		if (session == null) {
-			session = new this.domainSessionModel({
-				_id: domain._id,
-				domain,
-				expireAt: this.getExpireTime(),
-			});
-
-			await session.save();
+			try {
+				session = new this.domainSessionModel({
+					_id: domain._id,
+					domain,
+					expireAt: this.getExpireTime(),
+				});
+				await session.save();
+			} catch (err) {}
 		} else {
 			session.expireAt = this.getExpireTime();
 
