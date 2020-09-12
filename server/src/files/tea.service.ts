@@ -236,7 +236,7 @@ export class TeaService implements OnModuleInit, OnModuleDestroy {
 			});
 		});
 
-		this.server.listen(this.port, "0.0.0.0", () => {
+		this.server.listen(this.port, () => {
 			this.logger.log("Tea server listening on *:" + this.port);
 		});
 	}
