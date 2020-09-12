@@ -103,9 +103,26 @@ build all:
 #         - docker login $CI_REGISTRY -u gitlab-ci-token -p $CI_JOB_TOKEN
 #         - docker push $CI_REGISTRY/tivolicloud-private/metaverse:latest
 
-deploy app engine:
+# deploy app engine:
+#     stage: deploy
+#     image: google/cloud-sdk:alpine
+
+#     when: manual
+#     allow_failure: false
+
+#     needs:
+#         - job: build all
+#           artifacts: true
+
+#     # https://medium.com/google-cloud/automatically-deploy-to-google-app-engine-with-gitlab-ci-d1c7237cbe11
+#     script:
+#         - cat $GCP_ENV_VARIABLES >> app.yaml
+#         - gcloud auth activate-service-account --key-file $GCP_AUTH_JSON
+#         - gcloud --quiet --project tivolicloud app deploy --version $CI_PIPELINE_ID
+
+deploy eb:
     stage: deploy
-    image: google/cloud-sdk:alpine
+    image: python:latest
 
     when: manual
     allow_failure: false
@@ -114,8 +131,10 @@ deploy app engine:
         - job: build all
           artifacts: true
 
-    # https://medium.com/google-cloud/automatically-deploy-to-google-app-engine-with-gitlab-ci-d1c7237cbe11
+    # https://dba-presents.com/index.php/cloud/amazon-web-services/224-deployment-to-aws-elastic-beanstalk-with-gitlab-ci-cd
     script:
-        - cat $GCP_ENV_VARIABLES >> app.yaml
-        - gcloud auth activate-service-account --key-file $GCP_AUTH_JSON
-        - gcloud --quiet --project tivolicloud app deploy --version $CI_PIPELINE_ID
+        - pip install awscli awsebcli
+        - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+        - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+        - eb init tivolicloud -r us-east-1
+        - eb deploy metaverse
