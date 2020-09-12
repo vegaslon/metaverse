@@ -32,6 +32,5 @@ RUN yarn install --production
 COPY app /app
 
 EXPOSE 3000
-EXPOSE 17486
 
 CMD pm2-runtime /app/server/ecosystem.config.js
