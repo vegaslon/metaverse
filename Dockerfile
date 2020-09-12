@@ -1,16 +1,3 @@
-# build the metaverse!
-
-FROM node:lts
-
-WORKDIR /build
-COPY server /build/server
-COPY frontend /build/frontend
-COPY build.sh /build/build.sh
-
-RUN ./build.sh
-
-# package the metaverse!
-
 FROM ubuntu:20.04 
 
 ENV \
@@ -34,9 +21,15 @@ curl -LO https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.d
 apt-get install -y ./google-chrome-stable_current_amd64.deb && \
 rm -f google-chrome-stable_current_amd64.deb
 
-COPY --from=0 /build/app /app
+COPY \
+app/server/package.json \
+app/server/yarn.lock \
+/app/server/
 
 WORKDIR /app/server
 RUN yarn install --production
 
+COPY app /app
+
+# CMD node /app/server/dist/main.js
 CMD pm2-runtime /app/server/ecosystem.config.js

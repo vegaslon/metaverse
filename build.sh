@@ -2,6 +2,7 @@ rm -rf app
 mkdir -p app/server app/frontend
 
 cd server
+rm -rf dist
 yarn install
 yarn build
 cp -R dist ../app/server
@@ -13,6 +14,7 @@ cp ecosystem.config.js ../app/server
 cd ..
 
 cd frontend
+rm -rf dist
 yarn install
 yarn build:ssr
 cp -R dist ../app/frontend
