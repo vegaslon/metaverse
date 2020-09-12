@@ -141,5 +141,6 @@ deploy eb:
         - echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" >> ~/.aws/config
 
         - git checkout master # WARNING: Git is in a detached head state. Using branch "default".
-        - yes n | eb init tivolicloud -r us-east-1 # no codecommit
+        # no codecommit
+        - yes n | eb init tivolicloud -r us-east-1 || if [ $? -eq 1 ]; then echo ""; else echo ""; fi
         - eb deploy metaverse
