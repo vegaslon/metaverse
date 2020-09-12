@@ -9,3 +9,7 @@ db
 /server/junit.xml
 
 /app/
+
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
