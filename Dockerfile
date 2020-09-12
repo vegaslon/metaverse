@@ -31,5 +31,5 @@ RUN yarn install --production
 
 COPY app /app
 
-# CMD node /app/server/dist/main.js
+EXPOSE 3000
 CMD pm2-runtime /app/server/ecosystem.config.js
