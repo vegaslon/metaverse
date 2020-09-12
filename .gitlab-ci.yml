@@ -136,5 +136,5 @@ deploy eb:
         - pip install awscli awsebcli
         - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
         - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-        - eb init tivolicloud -r us-east-1
+        - yes n | eb init tivolicloud -r us-east-1 # no codecommit
         - eb deploy metaverse
