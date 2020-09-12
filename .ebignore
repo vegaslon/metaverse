@@ -1,4 +1,4 @@
 **
 !app/**
 !Dockerfile
-!.ebextensions
+!.ebextensions/**
