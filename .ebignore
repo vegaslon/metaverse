@@ -2,3 +2,4 @@
 !app/**
 !Dockerfile
 !.ebextensions/**
+!Dockerrun.aws.json
