@@ -26,14 +26,14 @@
 				class="preview"
 				*ngIf="file.type == 'image' && file.size < 10000000"
 				[style.backgroundImage]="
-					'url(' + file.url + '?' + previewCache + ')'
+					'url(' + file.httpUrl + '?' + previewCache + ')'
 				"
 			></div>
 			<!-- <div
 				class="preview contain"
 				*ngIf="file.type == 'model'"
 				[style.backgroundImage]="
-					'url(/api/render?url=' + file.url + ')'
+					'url(/api/render?url=' + file.httpUrl + ')'
 				"
 			></div> -->
 			<video
@@ -44,13 +44,13 @@
 				loop
 				mute
 			>
-				<source [src]="file.url + '?' + previewCache" />
+				<source [src]="file.httpUrl + '?' + previewCache" />
 			</video>
 			<audio
 				class="preview"
 				style="background: #fff;"
 				*ngIf="file.type == 'audio'"
-				[src]="file.url"
+				[src]="file.httpUrl"
 				controls
 			></audio>
 		</div>
