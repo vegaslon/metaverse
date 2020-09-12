@@ -4,9 +4,7 @@ export const {
 
 	WWW_PATH = "",
 
-	DB_HOST = "localhost",
-	DB_USER = "",
-	DB_PASS = "",
+	DB_URI = "mongodb://localhost",
 	DB_NAME = "metaverse",
 
 	EMAIL_USER = "",

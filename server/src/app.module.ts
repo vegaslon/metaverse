@@ -12,7 +12,7 @@ import { AppController } from "./app.controller";
 import { AuthModule } from "./auth/auth.module";
 import { DomainModule } from "./domain/domain.module";
 import { EmailModule } from "./email/email.module";
-import { DB_HOST, DB_NAME, DB_PASS, DB_USER, DEV } from "./environment";
+import { DB_URI, DB_NAME, DEV } from "./environment";
 import { HealthController } from "./health.controller";
 import { PuppeteerModule } from "./puppeteer/puppeteer.module";
 import { UserModule } from "./user/user.module";
@@ -41,9 +41,7 @@ import { SessionModule } from "./session/session.module";
 		// 	  ]),
 
 		// https://mongoosejs.com/docs/connections.html#options
-		MongooseModule.forRoot("mongodb://" + DB_HOST, {
-			user: DB_USER,
-			pass: DB_PASS,
+		MongooseModule.forRoot(DB_URI, {
 			dbName: DB_NAME,
 			useNewUrlParser: true,
 			useUnifiedTopology: true,
