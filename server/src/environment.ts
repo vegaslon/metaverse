@@ -1,3 +1,16 @@
+import fs from "fs";
+
+// environment.dev.ts
+
+// export default {
+// 	URL: "http://127.0.0.1:3000",
+// };
+
+let environmentDev: object;
+if (fs.existsSync(__dirname + "/environment.dev.js")) {
+	environmentDev = require("./environment.dev").default;
+}
+
 export const {
 	URL = "http://127.0.0.1:3000",
 	DEV = false,
@@ -37,4 +50,4 @@ export const {
 	// https://github.com/settings/developers
 	AUTH_GITHUB_ID = " ",
 	AUTH_GITHUB_SECRET = " ",
-} = process.env;
+} = environmentDev ? { ...process.env, ...environmentDev } : process.env;
