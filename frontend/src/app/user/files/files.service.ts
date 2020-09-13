@@ -136,9 +136,6 @@ export class FilesService {
 						.getValue()
 						.profile.username.toLowerCase();
 
-					const httpUrlBase = data.url + "/" + username;
-					const teaUrlBase = "tea://" + username;
-
 					const rootFolder = new Folder("");
 					let totalFiles = 0;
 
@@ -155,8 +152,8 @@ export class FilesService {
 								keyedFile.key,
 								fileName,
 								keyedFile.size,
-								httpUrlBase + keyedFile.key,
-								teaUrlBase + keyedFile.key,
+								data.url + keyedFile.key,
+								"tea://" + username + keyedFile.key,
 								folder,
 							);
 							const ext = this.utilsService.formatExt(file.name);

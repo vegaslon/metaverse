@@ -188,7 +188,7 @@ export class FilesService {
 		});
 
 		return {
-			url: FILES_URL,
+			url: FILES_URL + "/" + user.username.toLowerCase(),
 			files: files.map(file => {
 				const metadata: GoogleFileMetadata = file.metadata;
 
