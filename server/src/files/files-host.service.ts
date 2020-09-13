@@ -110,6 +110,8 @@ export class FilesHostService {
 		query: { [key: string]: string } = {},
 	) {
 		const filePath = location.split("/");
+		if (filePath.some(part => part == ".."))
+			throw new BadRequestException();
 
 		// resolve user
 		const user = await this.userService.findByIdOrUsername(filePath[0]);
