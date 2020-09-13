@@ -25,8 +25,8 @@ export class UploadComponent {
 	error = "";
 	disabled = false;
 
-	private readonly maxSize = "32 MB";
-	private readonly maxSizeBytes = 32000000;
+	private readonly maxSize = "50 MB";
+	private readonly maxSizeBytes = 50000000;
 
 	constructor(
 		public readonly utilsService: UtilsService,
