@@ -51,10 +51,10 @@ export class FilesHostService {
 
 	async getFile(
 		res: ExpressResponse,
-		location: string,
+		path: string,
 		query: { [key: string]: string } = {},
 	) {
-		const filePath = location.split("/");
+		const filePath = path.split("/");
 		if (filePath.some(part => part == ".."))
 			throw new BadRequestException();
 
@@ -73,7 +73,7 @@ export class FilesHostService {
 
 		if (res) {
 			// force .fst files as text/plain
-			if (/\.fst$/i.test(location)) {
+			if (/\.fst$/i.test(path)) {
 				fileRes.headers.set("Content-Type", "text/plain");
 			}
 

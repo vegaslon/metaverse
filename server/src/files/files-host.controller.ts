@@ -21,9 +21,9 @@ export class FilesHostController {
 	@ApiExcludeEndpoint()
 	getFile(
 		@Res() res: Response,
-		@Param("0") location: string,
+		@Param("0") path: string,
 		@Query() query: { [key: string]: string },
 	) {
-		return this.filesHostService.getFile(res, location, query);
+		return this.filesHostService.getFile(res, path, query);
 	}
 }
