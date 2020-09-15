@@ -162,7 +162,7 @@ export class TeaService implements OnModuleInit {
 		if (!req.header("user-agent").startsWith("TivoliCloudVR")) {
 			if (DEV) {
 				this.logger.verbose(
-					"Invalid user agent" + req.header("user-agent"),
+					"Invalid user agent! " + req.header("user-agent"),
 				);
 			}
 			throw new ImATeapotException();
