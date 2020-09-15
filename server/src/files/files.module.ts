@@ -21,13 +21,6 @@ import { TeaService } from "./tea.service";
 				noTimestamp: true,
 			},
 		}),
-		// MongooseModule.forFeature([
-		// 	{
-		// 		name: "users.files.cache",
-		// 		schema: UserFilesCacheSchema,
-		// 		collection: "users.files.cache",
-		// 	},
-		// ]),
 		MetricsModule,
 	],
 	providers: [FilesService, FilesHostService, TeaService],
