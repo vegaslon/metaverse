@@ -55,6 +55,7 @@
 		"passport-google-oauth20": "2.0.0",
 		"passport-jwt": "4.0.0",
 		"puppeteer": "5.2.1",
+		"raw-body": "^2.4.1",
 		"reflect-metadata": "0.1.13",
 		"rxjs": "6.6.2",
 		"rxjs-stream": "3.2.1",

@@ -8,8 +8,8 @@ import { FilesHostController } from "./files-host.controller";
 import { FilesHostService } from "./files-host.service";
 import { FilesController } from "./files.controller";
 import { FilesService } from "./files.service";
+import { TeaController } from "./tea.controller";
 import { TeaService } from "./tea.service";
-// import { UserFilesCacheSchema } from "./user-files-cache.schema";
 
 @Module({
 	imports: [
@@ -25,11 +25,6 @@ import { TeaService } from "./tea.service";
 	],
 	providers: [FilesService, FilesHostService, TeaService],
 	exports: [FilesService],
-	controllers: [FilesController, FilesHostController],
+	controllers: [FilesController, FilesHostController, TeaController],
 })
-export class FilesModule {
-	constructor(
-		// make sure it's initialized
-		private readonly teaService: TeaService,
-	) {}
-}
+export class FilesModule {}

@@ -1,20 +1,19 @@
 import {
-	ImATeapotException,
 	Injectable,
 	Logger,
+	OnModuleDestroy,
 	OnModuleInit,
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import crypto from "crypto";
-import { Request, Response } from "express";
+import net from "net";
 import { exec as openssl } from "openssl-wrapper";
-import rawBody from "raw-body";
-import { JwtPayload, JwtPayloadType } from "../auth/jwt.strategy";
-import { streamToBuffer } from "../common/utils";
-import { DEV, TEA_URL } from "../environment";
-import { User } from "../user/user.schema";
-import { UserService } from "../user/user.service";
-import { FilesHostService } from "./files-host.service";
+import { JwtPayload, JwtPayloadType } from "../../auth/jwt.strategy";
+import { streamToBuffer } from "../../common/utils";
+import { DEV } from "../../environment";
+import { User } from "../../user/user.schema";
+import { UserService } from "../../user/user.service";
+import { FilesHostService } from "../files-host.service";
 
 function hash(data: crypto.BinaryLike, algorithm: string) {
 	const hashed = crypto.createHash(algorithm);
@@ -23,18 +22,16 @@ function hash(data: crypto.BinaryLike, algorithm: string) {
 }
 
 @Injectable()
-export class TeaService implements OnModuleInit {
+export class TeaService implements OnModuleInit, OnModuleDestroy {
+	port = 17486;
 	logger = new Logger("TeaServer");
+	server: net.Server;
 
 	constructor(
 		private readonly filesHostService: FilesHostService,
 		private readonly jwtService: JwtService,
 		private readonly userService: UserService,
 	) {}
-
-	onModuleInit() {
-		this.logger.log("Tea server available at " + TEA_URL);
-	}
 
 	private password(seed: string) {
 		const a1 = hash("1. " + seed + "y0u", "SHA224");
@@ -127,12 +124,12 @@ export class TeaService implements OnModuleInit {
 						k: this.password(seed),
 					},
 					(err, output) => {
-						if (err) return resolve(null);
-						return resolve(output);
+						if (err) return reject(err);
+						resolve(output);
 					},
 				);
 			} catch (err) {
-				return resolve(null);
+				return reject(err);
 			}
 		});
 	}
@@ -156,47 +153,39 @@ export class TeaService implements OnModuleInit {
 		return user;
 	}
 
-	async getFile(req: Request, res: Response) {
-		if (DEV) this.logger.verbose("tea://");
+	private async onSocketData(socket: net.Socket, data: Buffer) {
+		let request: { accessToken: string; path: string };
 
-		if (!req.header("user-agent").startsWith("TivoliCloudVR")) {
-			if (DEV) {
-				this.logger.verbose(
-					"Invalid user agent" + req.header("user-agent"),
-				);
-			}
-			throw new ImATeapotException();
+		if (DEV) {
+			this.logger.verbose("tea://");
+			this.logger.verbose("ip: " + (socket.address() as any).address);
 		}
 
-		const body = await rawBody(req, { limit: "1MB" });
-		if (body.length <= 0) throw new ImATeapotException();
-
-		let decryptedRequest: Buffer;
-		decryptedRequest = await this.decrypt(body, "");
+		const decryptedRequest = await this.decrypt(data, "");
 		if (Buffer.isBuffer(decryptedRequest) === false) {
 			if (DEV) {
-				this.logger.verbose("request: " + body.toString("utf-8"));
+				this.logger.verbose("request: " + data.toString("utf-8"));
 				this.logger.verbose("Could not decrypt!");
 			}
-			throw new ImATeapotException();
+			return socket.destroy();
 		}
+
+		const decryptedRequestStr = decryptedRequest.toString("utf-8");
+		if (DEV) this.logger.verbose("request: " + decryptedRequestStr);
 
 		// parse request
 
-		let request: { accessToken: string; path: string };
 		try {
-			request = JSON.parse(decryptedRequest.toString("utf-8"));
+			request = JSON.parse(decryptedRequestStr);
 		} catch (err) {
-			throw new ImATeapotException();
+			return socket.destroy();
 		}
-		if (DEV)
-			this.logger.verbose("request: " + JSON.stringify(request, null, 4));
 
 		const accessToken = request.accessToken;
-		if (typeof accessToken !== "string") throw new ImATeapotException();
+		if (typeof accessToken !== "string") return socket.destroy();
 
 		const path = request.path;
-		if (typeof path !== "string") throw new ImATeapotException();
+		if (typeof path !== "string") return socket.destroy();
 
 		// authenticate
 
@@ -205,22 +194,18 @@ export class TeaService implements OnModuleInit {
 			user = await this.authenticate(accessToken);
 		} catch (err) {
 			if (DEV) this.logger.verbose("Could not authenticate!");
-			throw new ImATeapotException();
+			return socket.destroy();
 		}
 		if (DEV) this.logger.verbose("username: " + user.username);
 
 		// get file
 
 		let stream: NodeJS.ReadableStream;
-		let headers: { [key: string]: string };
-
 		try {
-			const file = await this.filesHostService.getFile(null, path);
-			stream = file.stream;
-			headers = file.headers;
+			stream = await this.filesHostService.getFile(null, path);
 		} catch (err) {
 			if (DEV) this.logger.verbose("path: " + path + " not found!");
-			return res.send("");
+			return socket.destroy();
 		}
 
 		// encrypt and write
@@ -228,11 +213,35 @@ export class TeaService implements OnModuleInit {
 		const buffer = await streamToBuffer(stream);
 		const output = await this.encrypt(buffer, path);
 
-		for (const key of Object.keys(headers)) {
-			res.header(key, headers[key]);
+		if (socket.writable) {
+			socket.write(output, error => {
+				if (error && DEV) this.logger.verbose(error);
+				socket.destroy();
+			});
+		} else if (DEV) {
+			this.logger.verbose("Socket not writable!");
 		}
-		res.send(output);
+	}
 
-		if (DEV) this.logger.verbose("");
+	onModuleInit() {
+		this.server = net.createServer(socket => {
+			socket.on("data", data => {
+				try {
+					this.onSocketData(socket, data).catch(err => {
+						socket.destroy();
+					});
+				} catch (err) {
+					socket.destroy();
+				}
+			});
+		});
+
+		this.server.listen(this.port, "0.0.0.0", () => {
+			this.logger.log("Tea server listening on *:" + this.port);
+		});
+	}
+
+	onModuleDestroy() {
+		this.server.close();
 	}
 }

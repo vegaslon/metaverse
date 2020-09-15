@@ -31,6 +31,7 @@ export const {
 	FILES_GCP_AUTH_JSON = "{}",
 
 	WORLD_URL = "http://world.localhost:3000",
+	TEA_URL = "http://tea.localhost:3000",
 
 	ZOOM_API_KEY = "0nB3LiC_RiedIJgIU9QRAw",
 	ZOOM_API_SECRET = "J6wg3LD6FA32BtP3pnKdBeYsCBeUgu44I7rh",

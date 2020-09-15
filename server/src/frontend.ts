@@ -5,7 +5,7 @@ import { Request, Response } from "express";
 import * as path from "path";
 import { URL } from "url";
 import "zone.js";
-import { DEV, FILES_URL } from "./environment";
+import { DEV, FILES_URL, TEA_URL } from "./environment";
 
 // this all needs to be fixed eventually
 // using https://github.com/nestjs/ng-universal
@@ -24,6 +24,7 @@ const frontend = {
 @Catch(NotFoundException)
 class FrontendRenderFilter extends BaseExceptionFilter {
 	private readonly filesHost = new URL(FILES_URL).hostname;
+	private readonly teaHost = new URL(TEA_URL).hostname;
 
 	catch(exception: NotFoundException, host: ArgumentsHost) {
 		const ctx = host.switchToHttp();
@@ -31,7 +32,8 @@ class FrontendRenderFilter extends BaseExceptionFilter {
 
 		if (
 			req.originalUrl.startsWith("/api/") ||
-			this.filesHost === req.hostname
+			this.filesHost === req.hostname ||
+			this.teaHost === req.hostname
 		)
 			return super.catch(exception, host);
 

@@ -7,7 +7,14 @@ import cookieParser from "cookie-parser";
 import { Request, Response } from "express";
 import helmet from "helmet";
 import { AppModule } from "./app.module";
-import { DEV, URL as METAVERSE_URL, WWW_PATH, FILES_URL } from "./environment";
+import {
+	DEV,
+	URL as METAVERSE_URL,
+	WWW_PATH,
+	FILES_URL,
+	WORLD_URL,
+	TEA_URL,
+} from "./environment";
 import { initFrontend } from "./frontend";
 
 function initSwagger(app: NestExpressApplication) {
@@ -27,7 +34,10 @@ function initSwagger(app: NestExpressApplication) {
 }
 
 function initDebugLogs(app: NestExpressApplication, logger: Logger) {
+	const teaHostname = new URL(TEA_URL).hostname;
+
 	app.use((req: Request, res: Response, next: () => void) => {
+		if (req.hostname == teaHostname) return next();
 		bodyParser.json()(req, res, () => {
 			bodyParser.urlencoded()(req, res, () => {
 				logger.verbose(req.method + " " + req.originalUrl); // tslint:disable-line
@@ -42,7 +52,7 @@ function initDebugLogs(app: NestExpressApplication, logger: Logger) {
 
 async function bootstrap() {
 	const app = await NestFactory.create<NestExpressApplication>(AppModule);
-	const logger = new Logger("Main");
+	const logger = new Logger("HttpServer");
 
 	// https://expressjs.com/en/guide/behind-proxies.html
 	app.set("trust proxy", 1);
@@ -53,6 +63,8 @@ async function bootstrap() {
 			"file://",
 			new URL(METAVERSE_URL).origin,
 			new URL(FILES_URL).origin,
+			new URL(WORLD_URL).origin,
+			new URL(TEA_URL).origin,
 		],
 	});
 

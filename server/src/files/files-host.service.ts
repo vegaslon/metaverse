@@ -25,6 +25,23 @@ export class FilesHostService {
 			"etag",
 			//"last-modified",
 		];
+		const exportedHeaders = {};
+
+		const setHeader = (key: string, value: string) => {
+			const capitalizedKey =
+				key.toLowerCase() == "etag"
+					? "ETag"
+					: key
+							.split("-")
+							.map(
+								word =>
+									word.slice(0, 1).toUpperCase() +
+									word.slice(1).toLowerCase(),
+							)
+							.join("-");
+			if (toRes) toRes.header(capitalizedKey, value);
+			exportedHeaders[capitalizedKey] = value;
+		};
 
 		for (const header of fromRes.headers) {
 			const key = header[0].toLowerCase();
@@ -34,15 +51,17 @@ export class FilesHostService {
 				if (key == "etag") {
 					const hash = value.match(/^"([^]+?)"$/);
 					if (hash != null) {
-						toRes.header(key, `W/"${hash[1]}"`);
+						setHeader(key, `W/"${hash[1]}"`);
 					} else {
-						toRes.header(key, value);
+						setHeader(key, value);
 					}
 				} else {
-					toRes.header(key, value);
+					setHeader(key, value);
 				}
 			}
 		}
+
+		return exportedHeaders;
 	}
 
 	private forceDownload(res: ExpressResponse) {
@@ -71,6 +90,8 @@ export class FilesHostService {
 
 		if (!fileRes.ok) throw new NotFoundException("File not found");
 
+		let headers: { [key: string]: string } = {};
+
 		if (res) {
 			// force .fst files as text/plain
 			if (/\.fst$/i.test(path)) {
@@ -79,12 +100,17 @@ export class FilesHostService {
 
 			if (query.download != null) this.forceDownload(res);
 
-			this.setHeaders(fileRes, res);
+			headers = this.setHeaders(fileRes, res);
 			fileRes.body.pipe(res);
+		} else {
+			headers = this.setHeaders(fileRes, null);
 		}
 
 		this.metricsService.metrics.fileReadsPerMinute++;
 
-		return fileRes.body;
+		return {
+			stream: fileRes.body,
+			headers,
+		};
 	}
 }
