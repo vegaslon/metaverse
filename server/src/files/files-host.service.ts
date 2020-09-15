@@ -10,22 +10,6 @@ import { MetricsService } from "../metrics/metrics.service";
 import { UserService } from "../user/user.service";
 import { FilesService } from "./files.service";
 
-const functionBindPolyfill = `if (!Function.prototype.bind) {
-	Function.prototype.bind = function(context) {
-		var fn = this;
-		var args = Array.prototype.slice.call(arguments, 1);
-
-		if (typeof fn !== 'function') {
-			throw new TypeError('Function.prototype.bind - context must be a valid function');
-		}
-
-		return function() {
-			return fn.apply(context, args.concat(Array.prototype.slice.call(arguments)));
-		}
-	}
-}
-`;
-
 @Injectable()
 export class FilesHostService {
 	constructor(
@@ -65,60 +49,6 @@ export class FilesHostService {
 		res.header("Content-Disposition", "attachment");
 	}
 
-	private async compileTypeScript(tsFileRes: FetchResponse) {
-		const src = await tsFileRes.text();
-		// const out = await swc.transform(src, {
-		// 	jsc: {
-		// 		parser: {
-		// 			syntax: "typescript",
-		// 		},
-		// 		target: "es3",
-		// 		loose: true,
-		// 	},
-		// });
-
-		try {
-			const out = babel.transform(src, {
-				presets: [
-					[
-						"@babel/preset-env",
-						{
-							targets: "ie < 5",
-							loose: true,
-						},
-					],
-					[
-						"@babel/preset-typescript",
-						{
-							allExtensions: true,
-						},
-					],
-				],
-				plugins: [
-					"@babel/plugin-proposal-class-properties",
-					"@babel/plugin-proposal-optional-chaining", // obj?.foo?.bar?.baz
-					"@babel/plugin-proposal-nullish-coalescing-operator", // object.foo ?? "default"
-					[
-						"@babel/plugin-proposal-pipeline-operator",
-						{ proposal: "minimal" },
-					], // 64 |> sqrt
-				],
-			});
-
-			let code = out.code;
-			if (/\.bind\(/i.test(code))
-				code = code.replace(
-					'"use strict";\n',
-					'"use strict";\n\n' + functionBindPolyfill,
-				);
-
-			return code;
-		} catch (err) {
-			console.error(err);
-			throw new BadRequestException("Failed to compile", err);
-		}
-	}
-
 	async getFile(
 		res: ExpressResponse,
 		location: string,
@@ -138,26 +68,6 @@ export class FilesHostService {
 			await this.filesService.getObjectUrl(filePath.join("/"))
 		)[0];
 		const fileRes = await fetch(fileUrl);
-
-		// try to find typescript and compile
-		if (
-			!fileRes.ok &&
-			//query.compileFromTs != null &&
-			/\.js$/i.test(location)
-		) {
-			const tsFileRes = await fetch(fileUrl.replace(/\.js$/i, ".ts"));
-			if (!tsFileRes.ok) throw new NotFoundException("File not found");
-
-			const code = await this.compileTypeScript(tsFileRes);
-
-			if (res) {
-				this.setHeaders(tsFileRes, res);
-				res.header("Content-Type", "text/javascript");
-				res.send(code);
-			}
-
-			return;
-		}
 
 		if (!fileRes.ok) throw new NotFoundException("File not found");
 
