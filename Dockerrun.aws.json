@@ -3,10 +3,6 @@
 	"Ports": [
 		{
 			"ContainerPort": "3000"
-		},
-		{
-			"ContainerPort": "17486",
-			"HostPort": "17486"
 		}
 	]
 }
