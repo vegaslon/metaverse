@@ -10,6 +10,7 @@ import { UserService } from "../user/user.service";
 import fetch from "node-fetch";
 import { User } from "../user/user.schema";
 import { streamToBuffer } from "../common/utils";
+import { DEV } from "../environment";
 
 @Injectable()
 export class PuppeteerService implements OnModuleInit {
@@ -19,20 +20,22 @@ export class PuppeteerService implements OnModuleInit {
 
 	async onModuleInit() {
 		// https://github.com/puppeteer/puppeteer/issues/1793
-		this.browser$.next(
-			await Puppeteer.launch({
-				executablePath: process.env.CHROME_BIN || null,
-				ignoreHTTPSErrors: true,
-				args: [
-					"--no-sandbox",
-					"--disable-setuid-sandbox",
-					"--ignore-certificate-errors",
-					"--proxy-server='direct://'",
-					"--proxy-bypass-list=*",
-				],
-				// headless: false,
-			}),
-		);
+		if (!DEV) {
+			this.browser$.next(
+				await Puppeteer.launch({
+					executablePath: process.env.CHROME_BIN || null,
+					ignoreHTTPSErrors: true,
+					args: [
+						"--no-sandbox",
+						"--disable-setuid-sandbox",
+						"--ignore-certificate-errors",
+						"--proxy-server='direct://'",
+						"--proxy-bypass-list=*",
+					],
+					// headless: false,
+				}),
+			);
+		}
 	}
 
 	async renderHTML(
