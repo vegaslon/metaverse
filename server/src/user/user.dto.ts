@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { Type, Transform } from "class-transformer";
+import { Transform, Type } from "class-transformer";
 import {
+	IsBoolean,
 	IsEmail,
 	IsEnum,
 	IsOptional,
@@ -8,8 +9,6 @@ import {
 	MaxLength,
 	MinLength,
 	ValidateNested,
-	IsBoolean,
-	IsNumber,
 } from "class-validator";
 
 export class UserUpdateEmailDto {

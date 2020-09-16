@@ -3,12 +3,11 @@ import {
 	IsEmail,
 	IsEnum,
 	IsNotEmpty,
+	IsOptional,
 	IsString,
 	Matches,
 	MaxLength,
 	MinLength,
-	NotContains,
-	IsOptional,
 } from "class-validator";
 
 export enum AuthTokenGrantType {
