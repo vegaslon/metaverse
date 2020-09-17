@@ -1,6 +1,6 @@
-import { Controller, Get, Param, Query, Res } from "@nestjs/common";
+import { Controller, Get, Param, Query, Req, Res } from "@nestjs/common";
 import { ApiExcludeEndpoint, ApiTags } from "@nestjs/swagger";
-import { Response } from "express";
+import { Request, Response } from "express";
 import { FILES_URL, URL as METAVERSE_URL } from "../environment";
 import { FilesHostService } from "./files-host.service";
 
@@ -20,10 +20,11 @@ export class FilesHostController {
 	@Get("*")
 	@ApiExcludeEndpoint()
 	getFile(
+		@Req() req: Request,
 		@Res() res: Response,
 		@Param("0") path: string,
 		@Query() query: { [key: string]: string },
 	) {
-		return this.filesHostService.getFile(res, path, query);
+		return this.filesHostService.getFile(req, res, path, query);
 	}
 }

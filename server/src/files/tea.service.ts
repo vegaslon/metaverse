@@ -213,11 +213,13 @@ export class TeaService implements OnModuleInit {
 
 		let stream: NodeJS.ReadableStream;
 		let headers: { [key: string]: string };
+		let status: number;
 
 		try {
-			const file = await this.filesHostService.getFile(null, path);
+			const file = await this.filesHostService.getFile(req, null, path);
 			stream = file.stream;
 			headers = file.headers;
+			status = file.status;
 		} catch (err) {
 			if (DEV) this.logger.verbose("path: " + path + " not found!");
 			return res.send("");
@@ -231,6 +233,7 @@ export class TeaService implements OnModuleInit {
 		for (const key of Object.keys(headers)) {
 			res.header(key, headers[key]);
 		}
+		res.status(status);
 		res.send(output);
 
 		if (DEV) this.logger.verbose("");

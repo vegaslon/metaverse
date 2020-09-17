@@ -3,7 +3,10 @@ import {
 	Injectable,
 	NotFoundException,
 } from "@nestjs/common";
-import { Response as ExpressResponse } from "express";
+import {
+	Request as ExpressRequest,
+	Response as ExpressResponse,
+} from "express";
 import fetch, { Response as FetchResponse } from "node-fetch";
 import { MetricsService } from "../metrics/metrics.service";
 import { UserService } from "../user/user.service";
@@ -19,45 +22,27 @@ export class FilesHostService {
 
 	private setHeaders(fromRes: FetchResponse, toRes: ExpressResponse) {
 		const headers = [
-			"content-length",
-			"content-type",
-			"etag",
-			//"last-modified",
+			"Content-Length",
+			"Content-Type",
+			"Last-Modified",
+			"ETag",
 		];
 		const exportedHeaders = {};
 
 		const setHeader = (key: string, value: string) => {
-			const capitalizedKey =
-				key.toLowerCase() == "etag"
-					? "ETag"
-					: key
-							.split("-")
-							.map(
-								word =>
-									word.slice(0, 1).toUpperCase() +
-									word.slice(1).toLowerCase(),
-							)
-							.join("-");
-			if (toRes) toRes.header(capitalizedKey, value);
-			exportedHeaders[capitalizedKey] = value;
+			if (toRes) toRes.header(key, value);
+			exportedHeaders[key] = value;
 		};
 
 		for (const header of fromRes.headers) {
-			const key = header[0].toLowerCase();
+			const lowerKey = header[0].toLowerCase();
 			const value = header[1];
 
-			if (headers.includes(key)) {
-				if (key == "etag") {
-					const hash = value.match(/^"([^]+?)"$/);
-					if (hash != null) {
-						setHeader(key, `W/"${hash[1]}"`);
-					} else {
-						setHeader(key, value);
-					}
-				} else {
-					setHeader(key, value);
-				}
-			}
+			const key = headers.find(
+				queryKey => queryKey.toLowerCase() == lowerKey,
+			);
+
+			if (key != null) setHeader(key, value);
 		}
 
 		return exportedHeaders;
@@ -68,6 +53,7 @@ export class FilesHostService {
 	}
 
 	async getFile(
+		req: ExpressRequest,
 		res: ExpressResponse,
 		path: string,
 		query: { [key: string]: string } = {},
@@ -85,7 +71,12 @@ export class FilesHostService {
 		const fileUrl = (
 			await this.filesService.getObjectUrl(filePath.join("/"))
 		)[0];
-		const fileRes = await fetch(fileUrl);
+
+		const requestHeaders = req.headers as { [key: string]: string };
+		delete requestHeaders.host;
+		const fileRes = await fetch(fileUrl, {
+			headers: requestHeaders,
+		});
 
 		if (!fileRes.ok) throw new NotFoundException("File not found");
 
@@ -100,6 +91,7 @@ export class FilesHostService {
 			if (query.download != null) this.forceDownload(res);
 
 			headers = this.setHeaders(fileRes, res);
+			res.status(fileRes.status);
 			fileRes.body.pipe(res);
 		} else {
 			headers = this.setHeaders(fileRes, null);
@@ -110,6 +102,7 @@ export class FilesHostService {
 		return {
 			stream: fileRes.body,
 			headers,
+			status: fileRes.status,
 		};
 	}
 }
