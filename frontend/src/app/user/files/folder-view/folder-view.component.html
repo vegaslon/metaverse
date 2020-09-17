@@ -26,7 +26,10 @@
 				class="preview"
 				*ngIf="file.type == 'image' && file.size < 10000000"
 				[style.backgroundImage]="
-					'url(' + file.httpUrl + '?' + previewCache + ')'
+					'url(' +
+					file.httpUrl +
+					(file.cacheBust > 0 ? '?' + file.cacheBust : '') +
+					')'
 				"
 			></div>
 			<!-- <div
@@ -44,13 +47,21 @@
 				loop
 				mute
 			>
-				<source [src]="file.httpUrl + '?' + previewCache" />
+				<source
+					[src]="
+						file.httpUrl +
+						(file.cacheBust > 0 ? '?' + file.cacheBust : '')
+					"
+				/>
 			</video>
 			<audio
 				class="preview"
 				style="background: #fff;"
 				*ngIf="file.type == 'audio'"
-				[src]="file.httpUrl"
+				[src]="
+					file.httpUrl +
+					(file.cacheBust > 0 ? '?' + file.cacheBust : '')
+				"
 				controls
 			></audio>
 		</div>

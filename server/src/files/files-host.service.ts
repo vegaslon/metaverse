@@ -1,5 +1,6 @@
 import {
 	BadRequestException,
+	HttpException,
 	Injectable,
 	NotFoundException,
 } from "@nestjs/common";
@@ -7,7 +8,7 @@ import {
 	Request as ExpressRequest,
 	Response as ExpressResponse,
 } from "express";
-import fetch, { Response as FetchResponse } from "node-fetch";
+import fetch from "node-fetch";
 import { MetricsService } from "../metrics/metrics.service";
 import { UserService } from "../user/user.service";
 import { FilesService } from "./files.service";
@@ -20,44 +21,7 @@ export class FilesHostService {
 		private readonly metricsService: MetricsService,
 	) {}
 
-	private setHeaders(fromRes: FetchResponse, toRes: ExpressResponse) {
-		const headers = [
-			"Content-Length",
-			"Content-Type",
-			"Last-Modified",
-			"ETag",
-		];
-		const exportedHeaders = {};
-
-		const setHeader = (key: string, value: string) => {
-			if (toRes) toRes.header(key, value);
-			exportedHeaders[key] = value;
-		};
-
-		for (const header of fromRes.headers) {
-			const lowerKey = header[0].toLowerCase();
-			const value = header[1];
-
-			const key = headers.find(
-				queryKey => queryKey.toLowerCase() == lowerKey,
-			);
-
-			if (key != null) setHeader(key, value);
-		}
-
-		return exportedHeaders;
-	}
-
-	private forceDownload(res: ExpressResponse) {
-		res.header("Content-Disposition", "attachment");
-	}
-
-	async getFile(
-		req: ExpressRequest,
-		res: ExpressResponse,
-		path: string,
-		query: { [key: string]: string } = {},
-	) {
+	async getFile(req: ExpressRequest, res: ExpressResponse, path: string) {
 		const filePath = path.split("/");
 		if (filePath.some(part => part == ".."))
 			throw new BadRequestException();
@@ -72,37 +36,61 @@ export class FilesHostService {
 			await this.filesService.getObjectUrl(filePath.join("/"))
 		)[0];
 
-		const requestHeaders = req.headers as { [key: string]: string };
-		delete requestHeaders.host;
+		const reqHeaders = JSON.parse(JSON.stringify(req.headers));
+		delete reqHeaders.host;
+		delete reqHeaders["content-length"];
+		delete reqHeaders["content-type"];
+
 		const fileRes = await fetch(fileUrl, {
-			headers: requestHeaders,
+			headers: reqHeaders,
 		});
 
-		if (!fileRes.ok) throw new NotFoundException("File not found");
+		// make sure it doesnt reveal any info
 
-		let headers: { [key: string]: string } = {};
+		if (fileRes.status >= 400) {
+			throw new HttpException(fileRes.statusText, fileRes.status);
+		}
+
+		// clean up headers
+
+		const headers: { [key: string]: string } = {};
+		for (const header of fileRes.headers) {
+			const key = header[0].toLowerCase();
+			if (
+				key == "alt-svc" ||
+				key == "server" ||
+				key == "x-guploader-uploadid" ||
+				key.startsWith("x-goog")
+			) {
+				continue;
+			}
+			headers[header[0]] = header[1];
+		}
 
 		if (res) {
-			// force .fst files as text/plain
-			if (/\.fst$/i.test(path)) {
-				fileRes.headers.set("Content-Type", "text/plain");
+			res.status(fileRes.status);
+			for (const header of Object.entries(headers)) {
+				res.setHeader(header[0], header[1]);
 			}
 
-			if (query.download != null) this.forceDownload(res);
+			// force .fst files as text/plain
+			if (/\.fst$/i.test(path)) {
+				res.setHeader("Content-Type", "text/plain");
+			}
 
-			headers = this.setHeaders(fileRes, res);
-			res.status(fileRes.status);
+			if (req.query.download != null) {
+				res.setHeader("Content-Disposition", "attachment");
+			}
+
 			fileRes.body.pipe(res);
-		} else {
-			headers = this.setHeaders(fileRes, null);
 		}
 
 		this.metricsService.metrics.fileReadsPerMinute++;
 
 		return {
-			stream: fileRes.body,
-			headers,
 			status: fileRes.status,
+			headers,
+			body: fileRes.body,
 		};
 	}
 }

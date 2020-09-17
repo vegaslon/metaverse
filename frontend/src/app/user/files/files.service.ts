@@ -1,14 +1,20 @@
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import {
+	HttpClient,
+	HttpErrorResponse,
+	HttpEvent,
+	HttpEventType,
+} from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { map, catchError } from "rxjs/operators";
+import { throwError } from "rxjs";
+import { catchError, map, tap } from "rxjs/operators";
+import { AuthService } from "../../auth/auth.service";
 import { UtilsService } from "../../utils.service";
 import { Upload } from "./upload/upload.component";
-import { throwError } from "rxjs";
-import { AuthService } from "../../auth/auth.service";
 
 export class File {
 	public type: string;
 	public icon: string;
+	public cacheBust = 0;
 
 	constructor(
 		public key: string,
@@ -38,6 +44,8 @@ export class Status {
 	providedIn: "root",
 })
 export class FilesService {
+	pathsForCacheBust: { [path: string]: number } = {};
+
 	constructor(
 		private readonly authService: AuthService,
 		private readonly utilsService: UtilsService,
@@ -156,9 +164,15 @@ export class FilesService {
 								"tea://" + username + keyedFile.key,
 								folder,
 							);
+
 							const ext = this.utilsService.formatExt(file.name);
 							file.type = ext.type;
 							file.icon = ext.icon;
+
+							const cacheBust = this.pathsForCacheBust[
+								keyedFile.key
+							];
+							if (cacheBust != null) file.cacheBust = cacheBust;
 
 							folder.files.push(file);
 							totalFiles++;
@@ -195,6 +209,15 @@ export class FilesService {
 					...data,
 					upload,
 				})),
+				tap((event: HttpEvent<any> & { upload: Upload }) => {
+					if (event.type == HttpEventType.Response) {
+						if (this.pathsForCacheBust[path] == null) {
+							this.pathsForCacheBust[path] = 1;
+						} else {
+							this.pathsForCacheBust[path]++;
+						}
+					}
+				}),
 			);
 	}
 

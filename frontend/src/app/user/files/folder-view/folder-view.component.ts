@@ -41,8 +41,6 @@ export class FolderViewComponent {
 	@Output() onFolderClick = new EventEmitter<Folder>();
 	@Output() onRefresh = new EventEmitter<null>();
 
-	previewCache = Date.now();
-
 	constructor(
 		public readonly utilsService: UtilsService,
 		public readonly filesService: FilesService,

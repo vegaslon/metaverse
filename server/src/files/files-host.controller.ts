@@ -23,8 +23,7 @@ export class FilesHostController {
 		@Req() req: Request,
 		@Res() res: Response,
 		@Param("0") path: string,
-		@Query() query: { [key: string]: string },
 	) {
-		return this.filesHostService.getFile(req, res, path, query);
+		return this.filesHostService.getFile(req, res, path);
 	}
 }

@@ -1,17 +1,20 @@
 import {
+	HttpException,
 	ImATeapotException,
 	Injectable,
 	Logger,
+	NotFoundException,
 	OnModuleInit,
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import crypto from "crypto";
 import { Request, Response } from "express";
+import { writeFileSync } from "fs";
 import { exec as openssl } from "openssl-wrapper";
 import rawBody from "raw-body";
 import { JwtPayload, JwtPayloadType } from "../auth/jwt.strategy";
 import { streamToBuffer } from "../common/utils";
-import { DEV, TEA_URL } from "../environment";
+import { DEV, TEA_URL, URL as METAVERSE_URL } from "../environment";
 import { User } from "../user/user.schema";
 import { UserService } from "../user/user.service";
 import { FilesHostService } from "./files-host.service";
@@ -30,7 +33,19 @@ export class TeaService implements OnModuleInit {
 		private readonly filesHostService: FilesHostService,
 		private readonly jwtService: JwtService,
 		private readonly userService: UserService,
-	) {}
+	) {
+		// this.encrypt(
+		// 	Buffer.from(
+		// 		JSON.stringify({
+		// 			path: "maki/Screenshot-20200723163409-1381x886.png",
+		// 			accessToken: "",
+		// 		}),
+		// 	),
+		// 	"",
+		// ).then(data => {
+		// 	writeFileSync("/home/maki/tea-data.raw", data);
+		// });
+	}
 
 	onModuleInit() {
 		this.logger.log("Tea server available at " + TEA_URL);
@@ -165,7 +180,7 @@ export class TeaService implements OnModuleInit {
 					"Invalid user agent! " + req.header("user-agent"),
 				);
 			}
-			throw new ImATeapotException();
+			return res.redirect(METAVERSE_URL);
 		}
 
 		const body = await rawBody(req, { limit: "1MB" });
@@ -211,29 +226,43 @@ export class TeaService implements OnModuleInit {
 
 		// get file
 
-		let stream: NodeJS.ReadableStream;
-		let headers: { [key: string]: string };
-		let status: number;
-
+		let file: {
+			status: number;
+			headers: { [key: string]: string };
+			body: NodeJS.ReadableStream;
+		};
 		try {
-			const file = await this.filesHostService.getFile(req, null, path);
-			stream = file.stream;
-			headers = file.headers;
-			status = file.status;
+			file = await this.filesHostService.getFile(req, null, path);
 		} catch (err) {
-			if (DEV) this.logger.verbose("path: " + path + " not found!");
-			return res.send("");
+			if (DEV) {
+				this.logger.verbose(err);
+			}
+			if (typeof err == "object" && typeof err.status == "number") {
+				throw new HttpException(err.message, err.status);
+			} else {
+				throw new NotFoundException();
+			}
 		}
 
 		// encrypt and write
 
-		const buffer = await streamToBuffer(stream);
+		const buffer = await streamToBuffer(file.body);
 		const output = await this.encrypt(buffer, path);
 
-		for (const key of Object.keys(headers)) {
-			res.header(key, headers[key]);
+		res.status(file.status);
+		for (const header of Object.entries(file.headers)) {
+			res.setHeader(header[0], header[1]);
 		}
-		res.status(status);
+
+		// force .fst files as text/plain
+		if (/\.fst$/i.test(path)) {
+			res.setHeader("Content-Type", "text/plain");
+		}
+
+		if (req.query.download != null) {
+			res.setHeader("Content-Disposition", "attachment");
+		}
+
 		res.send(output);
 
 		if (DEV) this.logger.verbose("");
