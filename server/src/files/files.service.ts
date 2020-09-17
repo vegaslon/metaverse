@@ -5,6 +5,7 @@ import {
 	InternalServerErrorException,
 } from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
+import mimeTypes from "mime-db";
 import * as path from "path";
 import { from, merge } from "rxjs";
 import { rxToStream, streamToRx } from "rxjs-stream";
@@ -16,8 +17,8 @@ import {
 	FILES_GCP_PROJECT_ID,
 	FILES_URL,
 } from "../environment";
-import { User } from "../user/user.schema";
 import { MetricsService } from "../metrics/metrics.service";
+import { User } from "../user/user.schema";
 
 export class UserFileUploadDto {
 	@ApiProperty({ type: "string", required: true })
@@ -201,6 +202,24 @@ export class FilesService {
 		};
 	}
 
+	private getMimeType(filename: string) {
+		const ext = filename.split(".").pop().toLowerCase();
+
+		if (ext == "ts") return "text/typescript";
+		if (ext == "fst") return "text/plain";
+
+		const mimeType = Object.entries(mimeTypes).find(
+			(data: [string, { extensions?: string[] }]) =>
+				data[1].extensions != null && data[1].extensions.includes(ext),
+		);
+
+		if (mimeType == null) {
+			return "application/octet-stream";
+		} else {
+			return mimeType[0];
+		}
+	}
+
 	async uploadFile(user: User, pathStr: string, file: MulterStream) {
 		const key = this.validatePath(user, pathStr);
 		const maxUserSize = this.getMaxUserSize(user);
@@ -226,10 +245,6 @@ export class FilesService {
 			},
 		);
 
-		let mimetype = file.mimetype;
-		if (key.toLowerCase().endsWith(".ts")) mimetype = "text/typescript";
-		if (key.toLowerCase().endsWith(".fst")) mimetype = "text/plain";
-
 		// await this.s3
 		// 	.upload({
 		// 		Bucket: this.bucket,
@@ -244,7 +259,7 @@ export class FilesService {
 		const blob = this.bucket.file(key, {});
 		const stream = blob.createWriteStream({
 			private: true,
-			contentType: mimetype,
+			contentType: this.getMimeType(key),
 		});
 
 		body.pipe(stream);
@@ -259,7 +274,7 @@ export class FilesService {
 	}
 
 	async createFolder(user: User, pathStr: string) {
-		let key = this.validatePath(user, pathStr, true);
+		const key = this.validatePath(user, pathStr, true);
 
 		// await this.s3
 		// 	.upload({
@@ -348,7 +363,19 @@ export class FilesService {
 		// 		})
 		// 		.promise();
 
-		await this.bucket.file(oldKey).move(newKey);
+		const file = this.bucket.file(oldKey);
+
+		// fix content type
+		const metadata = await file.getMetadata();
+		if (metadata.length > 0) {
+			const contentType = this.getMimeType(newPathStr);
+			if (metadata[0].contentType != contentType) {
+				metadata[0].contentType = contentType;
+				await file.setMetadata(metadata[0]);
+			}
+		}
+
+		await file.move(newKey);
 
 		return {
 			old: oldKey.replace(user.id, ""),
