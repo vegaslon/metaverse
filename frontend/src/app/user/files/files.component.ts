@@ -182,4 +182,29 @@ export class FilesComponent implements OnInit {
 				});
 		});
 	}
+
+	onCreateFile() {
+		let currentPath = "/" + this.getCurrentPath().join("/");
+		if (!currentPath.endsWith("/")) currentPath += "/";
+
+		const dialog = this.dialog.open(InputComponent, {
+			width: "600px",
+			data: {
+				inputPrefix: currentPath,
+				inputDefault: "",
+				titleText: "Create a new file",
+				buttonText: "Create file",
+				buttonIcon: "note_add",
+			},
+		});
+
+		const submitSub = dialog.componentInstance.onSubmit.subscribe(value => {
+			this.filesService.createFile(currentPath + value).subscribe(() => {
+				dialog.close();
+				this.refresh();
+
+				submitSub.unsubscribe();
+			});
+		});
+	}
 }

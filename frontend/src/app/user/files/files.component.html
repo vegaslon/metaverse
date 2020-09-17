@@ -24,12 +24,20 @@
 		Upload
 	</button>
 	<div style="margin: 4px 0;"></div>
-	<button mat-flat-button (click)="onCreateFolder()">
-		<mat-icon style="margin-right: 4px;">
-			create_new_folder
-		</mat-icon>
-		Create folder
-	</button>
+	<div style="display: flex;">
+		<button mat-flat-button (click)="onCreateFolder()">
+			<mat-icon style="margin-right: 4px;">
+				create_new_folder
+			</mat-icon>
+			Create folder
+		</button>
+		<button mat-flat-button (click)="onCreateFile()">
+			<mat-icon style="margin-right: 4px;">
+				note_add
+			</mat-icon>
+			Create file
+		</button>
+	</div>
 	<br />
 	<div class="tree">
 		<app-tree-item [folder]="rootFolder"></app-tree-item>

@@ -218,6 +218,15 @@ export class FilesService {
 		);
 	}
 
+	createFile(path: string) {
+		const filename = path.split("/").pop();
+		const file = new globalThis.File([], filename, {
+			type: "application/octet-stream",
+		});
+
+		return this.uploadFile(path, file);
+	}
+
 	deleteFolder(path: string) {
 		return this.http.delete("/api/user/files/folder", {
 			params: {
