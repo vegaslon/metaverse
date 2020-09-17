@@ -1,5 +1,29 @@
 <div class="editor-container">
-	<h2 style="margin: 6px 12px;">{{ data.file.key }}</h2>
+	<div
+		style="
+			display: flex;
+			width: 100%;
+			flex-direction: row;
+			align-items: center;
+		"
+	>
+		<h2 style="margin: 6px 12px;">
+			{{ data.file.key }}
+		</h2>
+		<div style="flex-grow: 1;"></div>
+		<mat-icon
+			(click)="onSaveAndClose()"
+			style="
+				font-size: 32px;
+				width: 32px;
+				height: 32px;
+				margin-right: 12px;
+				cursor: pointer;
+			"
+		>
+			close
+		</mat-icon>
+	</div>
 	<div *ngIf="loading" class="editor loading">
 		<mat-spinner mode="indeterminate" diameter="64"></mat-spinner>
 		<p style="margin-top: 24px;">Loading {{ loading }}...</p>
@@ -19,9 +43,21 @@
 			Saving file...
 		</p>
 		<div style="margin: 0 8px;"></div>
-		<button mat-flat-button (click)="onDiscard()">Discard</button>
+		<button [disabled]="saving" mat-flat-button (click)="onDiscard()">
+			Discard
+		</button>
 		<div style="margin: 0 4px;"></div>
-		<button mat-flat-button color="primary" (click)="onSave()">
+		<button [disabled]="saving" mat-flat-button (click)="onSave()">
+			<mat-icon>save</mat-icon>
+			Save
+		</button>
+		<div style="margin: 0 4px;"></div>
+		<button
+			[disabled]="saving"
+			mat-flat-button
+			color="primary"
+			(click)="onSaveAndClose()"
+		>
 			<mat-icon>save</mat-icon>
 			Save & Close
 		</button>

@@ -185,6 +185,10 @@ export class EditorComponent implements OnInit, OnDestroy {
 	}
 
 	onSave() {
+		this.save().subscribe(event => {});
+	}
+
+	onSaveAndClose() {
 		this.save().subscribe(event => {
 			if (event.type >= 4) this.dialogRef.close();
 		});
