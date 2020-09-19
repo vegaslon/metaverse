@@ -158,25 +158,33 @@ describe("UserService", () => {
 
 		const userImage = await userService.getUserImage(String(user._id));
 
-		userImage.stream
-			.pipe(new Writable({ write: (chunk, enc, cb) => cb() }))
-			.on("finish", () => {
-				expect(userImage.stream).toBeTruthy();
-				expect(userImage.contentType).toBeTruthy();
-				done();
-			});
+		// userImage.stream
+		// 	.pipe(new Writable({ write: (chunk, enc, cb) => cb() }))
+		// 	.on("finish", () => {
+		// 		expect(userImage.stream).toBeTruthy();
+		// 		expect(userImage.contentType).toBeTruthy();
+		// 		done();
+		// 	});
+
+		expect(userImage.buffer).toBeTruthy();
+		expect(userImage.contentType).toBeTruthy();
+		done();
 	});
 
 	it("should return a user image that doesn't exist", async done => {
 		const userImage = await userService.getUserImage("idontexist");
 
-		userImage.stream
-			.pipe(new Writable({ write: (chunk, enc, cb) => cb() }))
-			.on("finish", () => {
-				expect(userImage.stream).toBeTruthy();
-				expect(userImage.contentType).toBeTruthy();
-				done();
-			});
+		// userImage.stream
+		// 	.pipe(new Writable({ write: (chunk, enc, cb) => cb() }))
+		// 	.on("finish", () => {
+		// 		expect(userImage.stream).toBeTruthy();
+		// 		expect(userImage.contentType).toBeTruthy();
+		// 		done();
+		// 	});
+
+		expect(userImage.buffer).toBeTruthy();
+		expect(userImage.contentType).toBeTruthy();
+		done();
 	});
 
 	it("should heart beat a user, count more than a minute and die", async () => {
