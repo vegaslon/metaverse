@@ -6,6 +6,7 @@ import {
 	IsEnum,
 	IsOptional,
 	IsString,
+	Matches,
 	MaxLength,
 	MinLength,
 	ValidateNested,
@@ -48,6 +49,21 @@ export class UserUpdatePasswordDto {
 export class UserUpdateImageDto {
 	@ApiProperty({ type: "string", required: true, format: "binary" })
 	image: any;
+}
+
+export class UserUpdateNametagDto {
+	@ApiPropertyOptional({ example: "Makitje" })
+	@IsOptional()
+	@IsString()
+	@MaxLength(48)
+	displayName?: string;
+
+	@ApiPropertyOptional({ example: "She/Her" })
+	@IsOptional()
+	@IsString()
+	@MaxLength(12)
+	@Matches(/^\S+$/, { message: "Gender pronoun can't have spaces" })
+	genderPronoun?: string;
 }
 
 // updating user location

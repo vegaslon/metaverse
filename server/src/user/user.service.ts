@@ -44,6 +44,7 @@ import { UserSettings } from "./user-settings.schema";
 import {
 	UserUpdateEmailDto,
 	UserUpdateLocationDto,
+	UserUpdateNametagDto,
 	UserUpdatePasswordDto,
 } from "./user.dto";
 import { User } from "./user.schema";
@@ -328,6 +329,19 @@ export class UserService implements OnModuleInit {
 		}
 
 		return this.getDefaultUserImage();
+	}
+
+	async updateNametag(
+		user: User,
+		userUpdateNametagDto: UserUpdateNametagDto,
+	) {
+		const { displayName, genderPronoun } = userUpdateNametagDto;
+
+		if (displayName != null) user.nametag.displayName = displayName;
+		if (genderPronoun != null) user.nametag.genderPronoun = genderPronoun;
+
+		await user.save();
+		return user.nametag;
 	}
 
 	async setPublicKey(user: User, buffer: Buffer) {

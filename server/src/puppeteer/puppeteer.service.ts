@@ -63,12 +63,7 @@ export class PuppeteerService implements OnModuleInit {
 		return buffer;
 	}
 
-	async renderNametag(
-		user: User,
-		displayName: string = null,
-		admin = false,
-		friend = false,
-	) {
+	async renderNametag(user: User, admin = false, friend = false) {
 		const username = user.username;
 		const staff = user.admin;
 		const supporter = user.supporter;
@@ -80,6 +75,13 @@ export class PuppeteerService implements OnModuleInit {
 		const userImage =
 			"data:" + contentType + ";base64," + buffer.toString("base64");
 
+		const displayName = user.nametag.displayName;
+		const showUsernameUnderneath = !displayName
+			.toLowerCase()
+			.includes(username.toLowerCase());
+
+		const genderPronoun = user.nametag.genderPronoun.toLowerCase();
+
 		const html = Handlebars.compile(
 			fs.readFileSync(
 				path.resolve(__dirname, "../../assets/nametag.html"),
@@ -88,11 +90,13 @@ export class PuppeteerService implements OnModuleInit {
 		)({
 			username,
 			displayName,
+			showUsernameUnderneath,
 			userImage,
 			admin,
 			friend,
 			staff,
 			supporter,
+			genderPronoun,
 		});
 
 		return this.renderHTML(html, 1024, 128);

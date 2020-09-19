@@ -25,6 +25,13 @@ export const UserSchema = new Schema({
 	friends: [{ type: Schema.Types.ObjectId, ref: "users" }],
 
 	supporter: { type: Boolean, default: false },
+	nametag: {
+		type: new Schema({
+			displayName: { type: String, default: "" },
+			genderPronoun: { type: String, default: "" },
+		}),
+		default: {},
+	},
 
 	created: { type: Date, default: () => new Date() },
 	minutes: { type: Number, default: 0 },
@@ -50,6 +57,10 @@ export interface User extends Document {
 	friends: User[];
 
 	supporter: boolean;
+	nametag: {
+		displayName: string;
+		genderPronoun: string;
+	};
 
 	created: Date;
 	minutes: number;

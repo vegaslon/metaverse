@@ -28,6 +28,7 @@ import { PuppeteerService } from "../puppeteer/puppeteer.service";
 import {
 	UserUpdateEmailDto,
 	UserUpdateImageDto,
+	UserUpdateNametagDto,
 	UserUpdatePasswordDto,
 } from "./user.dto";
 import { User } from "./user.schema";
@@ -124,7 +125,7 @@ export class UserController {
 	@Get(":username/nametag")
 	async getUserNametag(
 		@Param("username") username: string,
-		@Query("displayName") displayName: string,
+		// @Query("displayName") displayName: string,
 		@Query("admin") admin: string,
 		@Query("friend") friend: string,
 		@Res() res: Response,
@@ -143,13 +144,22 @@ export class UserController {
 
 		const buffer = await this.puppeteerService.renderNametag(
 			user,
-			displayName,
 			admin != null,
 			friend != null,
 		);
 
 		res.set("Content-Type", "image/png");
 		res.send(buffer);
+	}
+
+	@Post("nametag")
+	@ApiBearerAuth()
+	@UseGuards(MetaverseAuthGuard)
+	updateNametag(
+		@CurrentUser() user: User,
+		@Body() userUpdateNametagDto: UserUpdateNametagDto,
+	) {
+		return this.userService.updateNametag(user, userUpdateNametagDto);
 	}
 
 	// @Get("settings")
