@@ -22,13 +22,13 @@ import { Connection, Model } from "mongoose";
 import fetch from "node-fetch";
 import * as path from "path";
 import sharp from "sharp";
-import { Readable } from "stream";
 import { AuthSignUpDto } from "../auth/auth.dto";
 import { AuthService } from "../auth/auth.service";
 import { derPublicKeyHeader } from "../common/der-public-key-header";
 import { MulterFile } from "../common/multer-file.model";
 import {
 	generateRandomString,
+	getMimeType,
 	pagination,
 	renderDomain,
 	renderFriend,
@@ -48,9 +48,11 @@ import {
 } from "./user.dto";
 import { User } from "./user.schema";
 
-const defaultUserImage = fs.readFileSync(
-	path.resolve(__dirname, "../../assets/user-image.jpg"),
+const defaultUserImagePath = path.resolve(
+	__dirname,
+	"../../assets/user-image.jpg",
 );
+const defaultUserImage = fs.readFileSync(defaultUserImagePath);
 
 @Injectable()
 export class UserService implements OnModuleInit {
@@ -262,19 +264,22 @@ export class UserService implements OnModuleInit {
 	}
 
 	async getDefaultUserImage() {
-		let read = false;
-		const stream = new Readable({
-			read() {
-				if (read) {
-					this.push(null);
-				} else {
-					read = true;
-					this.push(defaultUserImage);
-				}
-				return;
-			},
-		});
-		return { stream, contentType: "image/jpg" };
+		// let read = false;
+		// const stream = new Readable({
+		// 	read() {
+		// 		if (read) {
+		// 			this.push(null);
+		// 		} else {
+		// 			read = true;
+		// 			this.push(defaultUserImage);
+		// 		}
+		// 		return;
+		// 	},
+		// });
+		return {
+			buffer: defaultUserImage,
+			contentType: getMimeType(defaultUserImagePath),
+		};
 	}
 
 	async getGravatarUserImage(email: string) {
@@ -287,30 +292,32 @@ export class UserService implements OnModuleInit {
 			"https://www.gravatar.com/avatar/" + hash + "?s=128&d=404",
 		);
 		if (res.ok === false) return null;
+		const buffer = await res.buffer();
 
-		return { stream: res.body, contentType: "image/jpg" };
+		return { buffer, contentType: res.headers.get("Content-Type") };
 	}
 
 	async getUserImage(
 		username: string,
 		onlyUserUploaded = false,
 	): Promise<{
-		stream: Readable | NodeJS.ReadableStream;
+		buffer: Buffer;
 		contentType: string;
 	}> {
 		const user = await this.findByIdOrUsername(username);
 
 		if (user == null)
 			return onlyUserUploaded
-				? { stream: null, contentType: null }
+				? { buffer: null, contentType: null }
 				: this.getDefaultUserImage();
 
 		if ((await this.images.find({ _id: user._id }).count()) > 0) {
 			const stream = this.images.openDownloadStream(user._id);
-			return { stream, contentType: "image/jpg" };
+			const buffer = await streamToBuffer(stream);
+			return { buffer, contentType: "image/jpg" };
 		}
 
-		if (onlyUserUploaded) return { stream: null, contentType: null };
+		if (onlyUserUploaded) return { buffer: null, contentType: null };
 
 		try {
 			const gravatar = await this.getGravatarUserImage(user.email);
@@ -679,25 +686,25 @@ export class UserService implements OnModuleInit {
 			);
 
 			const {
-				stream,
+				buffer,
 				contentType,
 			} = await this.domainService.getDomainImage(domain.id, true);
-			if (stream)
+			if (buffer)
 				zip.file(
 					"domain " + domain.id + "." + contentType.split("/").pop(),
-					await streamToBuffer(stream),
+					buffer,
 				);
 		}
 
 		{
-			const { stream, contentType } = await this.getUserImage(
+			const { buffer, contentType } = await this.getUserImage(
 				user.id,
 				true,
 			);
-			if (stream)
+			if (buffer)
 				zip.file(
 					"user " + user.id + "." + contentType.split("/").pop(),
-					await streamToBuffer(stream),
+					buffer,
 				);
 		}
 

@@ -1,4 +1,5 @@
 import {
+	BadGatewayException,
 	Controller,
 	Get,
 	NotFoundException,
@@ -46,10 +47,13 @@ export class DomainController {
 
 	@Get("domain/:id/image")
 	async getUserImage(@Param("id") id: string, @Res() res: Response) {
-		const response = await this.domainService.getDomainImage(id);
+		const { buffer, contentType } = await this.domainService.getDomainImage(
+			id,
+		);
+		if (buffer == null) throw new BadGatewayException();
 
-		res.set("Content-Type", response.contentType);
-		if (response.stream) return response.stream.pipe(res);
+		res.set("Content-Type", contentType);
+		return res.send(buffer);
 	}
 
 	@Get("domains")

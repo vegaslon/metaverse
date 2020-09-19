@@ -5,12 +5,12 @@ import {
 	InternalServerErrorException,
 } from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
-import mimeTypes from "mime-db";
 import * as path from "path";
 import { from, merge } from "rxjs";
 import { rxToStream, streamToRx } from "rxjs-stream";
 import { map } from "rxjs/operators";
 import { MulterStream } from "../common/multer-file.model";
+import { getMimeType } from "../common/utils";
 import {
 	FILES_GCP_AUTH_JSON,
 	FILES_GCP_BUCKET,
@@ -22,7 +22,7 @@ import { User } from "../user/user.schema";
 
 export class UserFileUploadDto {
 	@ApiProperty({ type: "string", required: true })
-	path: String;
+	path: string;
 
 	@ApiProperty({ type: "string", required: true, format: "binary" })
 	file: any;
@@ -202,24 +202,6 @@ export class FilesService {
 		};
 	}
 
-	private getMimeType(filename: string) {
-		const ext = filename.split(".").pop().toLowerCase();
-
-		if (ext == "ts") return "text/typescript";
-		if (ext == "fst") return "text/plain";
-
-		const mimeType = Object.entries(mimeTypes).find(
-			(data: [string, { extensions?: string[] }]) =>
-				data[1].extensions != null && data[1].extensions.includes(ext),
-		);
-
-		if (mimeType == null) {
-			return "application/octet-stream";
-		} else {
-			return mimeType[0];
-		}
-	}
-
 	async uploadFile(user: User, pathStr: string, file: MulterStream) {
 		const key = this.validatePath(user, pathStr);
 		const maxUserSize = this.getMaxUserSize(user);
@@ -259,7 +241,7 @@ export class FilesService {
 		const blob = this.bucket.file(key, {});
 		const stream = blob.createWriteStream({
 			private: true,
-			contentType: this.getMimeType(key),
+			contentType: getMimeType(key),
 		});
 
 		body.pipe(stream);
@@ -368,7 +350,7 @@ export class FilesService {
 		// fix content type
 		const metadata = await file.getMetadata();
 		if (metadata.length > 0) {
-			const contentType = this.getMimeType(newPathStr);
+			const contentType = getMimeType(newPathStr);
 			if (metadata[0].contentType != contentType) {
 				metadata[0].contentType = contentType;
 				await file.setMetadata(metadata[0]);

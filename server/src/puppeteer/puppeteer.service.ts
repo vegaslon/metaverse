@@ -4,13 +4,10 @@ import * as Handlebars from "handlebars";
 import * as path from "path";
 import Puppeteer from "puppeteer";
 import { ReplaySubject } from "rxjs";
-import { streamToRx } from "rxjs-stream";
 import { take } from "rxjs/operators";
-import { UserService } from "../user/user.service";
-import fetch from "node-fetch";
-import { User } from "../user/user.schema";
-import { streamToBuffer } from "../common/utils";
 import { DEV } from "../environment";
+import { User } from "../user/user.schema";
+import { UserService } from "../user/user.service";
 
 @Injectable()
 export class PuppeteerService implements OnModuleInit {
@@ -76,11 +73,9 @@ export class PuppeteerService implements OnModuleInit {
 		const staff = user.admin;
 		const supporter = user.supporter;
 
-		const { stream, contentType } = await this.userService.getUserImage(
+		const { buffer, contentType } = await this.userService.getUserImage(
 			user.id,
 		);
-
-		const buffer = await streamToBuffer(stream);
 
 		const userImage =
 			"data:" + contentType + ";base64," + buffer.toString("base64");

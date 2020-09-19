@@ -1,4 +1,5 @@
 import baseX from "base-x";
+import mimeTypes from "mime-db";
 import { Readable } from "stream";
 import { Domain, DomainRestriction } from "../domain/domain.schema";
 import { URL, WORLD_URL } from "../environment";
@@ -262,4 +263,22 @@ export const streamToBuffer = async (
 	});
 
 	return Buffer.concat(chunks);
+};
+
+export const getMimeType = (filename: string) => {
+	const ext = filename.split(".").pop().toLowerCase();
+
+	if (ext == "ts") return "text/typescript";
+	if (ext == "fst") return "text/plain";
+
+	const mimeType = Object.entries(mimeTypes).find(
+		(data: [string, { extensions?: string[] }]) =>
+			data[1].extensions != null && data[1].extensions.includes(ext),
+	);
+
+	if (mimeType == null) {
+		return "application/octet-stream";
+	} else {
+		return mimeType[0];
+	}
 };

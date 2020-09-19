@@ -12,13 +12,14 @@ import { GridFSBucket } from "mongodb";
 import { Connection, Model } from "mongoose";
 import path from "path";
 import sharp from "sharp";
-import { Readable } from "stream";
 import { derPublicKeyHeader } from "../common/der-public-key-header";
 import { MulterFile } from "../common/multer-file.model";
 import {
 	decompressUuid,
+	getMimeType,
 	patchDoc,
 	snakeToCamelCaseObject,
+	streamToBuffer,
 	validUuid,
 } from "../common/utils";
 import { DomainSession } from "../session/session.schema";
@@ -29,9 +30,11 @@ import { CreateDomainDto, GetDomainsDto, UpdateDomainDto } from "./domain.dto";
 import { Domain } from "./domain.schema";
 import escapeString = require("escape-string-regexp");
 
-const defaultDomainImage = fs.readFileSync(
-	path.resolve(__dirname, "../../assets/domain-image.jpg"),
+const defaultDomainImagePath = path.resolve(
+	__dirname,
+	"../../assets/domain-image.jpg",
 );
+const defaultDomainImage = fs.readFileSync(defaultDomainImagePath);
 
 @Injectable()
 export class DomainService implements OnModuleInit {
@@ -311,42 +314,46 @@ export class DomainService implements OnModuleInit {
 	}
 
 	async getDefaultDomainImage() {
-		let read = false;
-		const stream = new Readable({
-			read() {
-				if (read) {
-					this.push(null);
-				} else {
-					read = true;
-					this.push(defaultDomainImage);
-				}
-				return;
-			},
-		});
-		return { stream, contentType: "image/jpg" };
+		// let read = false;
+		// const stream = new Readable({
+		// 	read() {
+		// 		if (read) {
+		// 			this.push(null);
+		// 		} else {
+		// 			read = true;
+		// 			this.push(defaultDomainImage);
+		// 		}
+		// 		return;
+		// 	},
+		// });
+		return {
+			buffer: defaultDomainImage,
+			contentType: getMimeType(defaultDomainImagePath),
+		};
 	}
 
 	async getDomainImage(
 		id: string,
 		onlyUserUploaded = false,
 	): Promise<{
-		stream: Readable | NodeJS.ReadableStream;
+		buffer: Buffer;
 		contentType: string;
 	}> {
 		const domain = await this.findById(id);
 
 		if (domain == null)
 			return onlyUserUploaded
-				? { stream: null, contentType: null }
+				? { buffer: null, contentType: null }
 				: this.getDefaultDomainImage();
 
 		if ((await this.images.find({ _id: domain._id }).count()) > 0) {
 			const stream = this.images.openDownloadStream(domain._id);
-			return { stream, contentType: "image/jpg" };
+			const buffer = await streamToBuffer(stream);
+			return { buffer, contentType: "image/jpg" };
 		}
 
 		return onlyUserUploaded
-			? { stream: null, contentType: null }
+			? { buffer: null, contentType: null }
 			: this.getDefaultDomainImage();
 	}
 

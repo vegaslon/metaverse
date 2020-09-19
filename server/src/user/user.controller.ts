@@ -1,4 +1,5 @@
 import {
+	BadGatewayException,
 	Body,
 	Controller,
 	Delete,
@@ -111,10 +112,13 @@ export class UserController {
 		@Param("username") username: string,
 		@Res() res: Response,
 	) {
-		const response = await this.userService.getUserImage(username);
+		const { buffer, contentType } = await this.userService.getUserImage(
+			username,
+		);
+		if (buffer == null) throw new BadGatewayException();
 
-		res.set("Content-Type", response.contentType);
-		if (response.stream) return response.stream.pipe(res);
+		res.set("Content-Type", contentType);
+		return res.send(buffer);
 	}
 
 	@Get(":username/nametag")
