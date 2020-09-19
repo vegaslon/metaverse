@@ -152,6 +152,15 @@ export class UserController {
 		res.send(buffer);
 	}
 
+	@Get("nametag")
+	@ApiBearerAuth()
+	@UseGuards(MetaverseAuthGuard)
+	getNametag(@CurrentUser() user: User) {
+		const nametag = JSON.parse(JSON.stringify(user.nametag));
+		delete nametag._id;
+		return nametag;
+	}
+
 	@Post("nametag")
 	@ApiBearerAuth()
 	@UseGuards(MetaverseAuthGuard)
