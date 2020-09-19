@@ -331,7 +331,7 @@ export class UserService implements OnModuleInit {
 		return this.getDefaultUserImage();
 	}
 
-	async updateNametag(
+	async updateNametagDetails(
 		user: User,
 		userUpdateNametagDto: UserUpdateNametagDto,
 	) {

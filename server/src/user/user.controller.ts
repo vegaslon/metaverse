@@ -152,23 +152,26 @@ export class UserController {
 		res.send(buffer);
 	}
 
-	@Get("nametag")
+	@Get("nametag-details")
 	@ApiBearerAuth()
 	@UseGuards(MetaverseAuthGuard)
-	getNametag(@CurrentUser() user: User) {
+	getNametagDetails(@CurrentUser() user: User) {
 		const nametag = JSON.parse(JSON.stringify(user.nametag));
 		delete nametag._id;
 		return nametag;
 	}
 
-	@Post("nametag")
+	@Post("nametag-details")
 	@ApiBearerAuth()
 	@UseGuards(MetaverseAuthGuard)
-	updateNametag(
+	updateNametagDetails(
 		@CurrentUser() user: User,
 		@Body() userUpdateNametagDto: UserUpdateNametagDto,
 	) {
-		return this.userService.updateNametag(user, userUpdateNametagDto);
+		return this.userService.updateNametagDetails(
+			user,
+			userUpdateNametagDto,
+		);
 	}
 
 	// @Get("settings")
