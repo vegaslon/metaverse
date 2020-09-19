@@ -341,7 +341,10 @@ export class UserService implements OnModuleInit {
 		if (genderPronoun != null) user.nametag.genderPronoun = genderPronoun;
 
 		await user.save();
-		return user.nametag;
+
+		const nametag = JSON.parse(JSON.stringify(user.nametag));
+		delete nametag._id;
+		return nametag;
 	}
 
 	async setPublicKey(user: User, buffer: Buffer) {
