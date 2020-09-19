@@ -150,7 +150,7 @@ describe("UserService", () => {
 			fieldname: "image",
 			originalname: "image.jpg",
 			encoding: "",
-			mimetype: "image/jpg",
+			mimetype: "image/jpeg",
 			buffer: fs.readFileSync(
 				path.resolve(__dirname, "../../assets/user-image.jpg"),
 			),

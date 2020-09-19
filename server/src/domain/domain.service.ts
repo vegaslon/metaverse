@@ -299,7 +299,7 @@ export class DomainService implements OnModuleInit {
 
 			stream.pipe(
 				this.images.openUploadStreamWithId(domain.id, null, {
-					contentType: "image/jpg",
+					contentType: "image/jpeg",
 				}),
 			);
 
@@ -349,7 +349,7 @@ export class DomainService implements OnModuleInit {
 		if ((await this.images.find({ _id: domain._id }).count()) > 0) {
 			const stream = this.images.openDownloadStream(domain._id);
 			const buffer = await streamToBuffer(stream);
-			return { buffer, contentType: "image/jpg" };
+			return { buffer, contentType: "image/jpeg" };
 		}
 
 		return onlyUserUploaded

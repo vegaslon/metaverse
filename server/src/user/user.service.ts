@@ -230,7 +230,7 @@ export class UserService implements OnModuleInit {
 				user._id,
 				null,
 				{
-					contentType: "image/jpg",
+					contentType: "image/jpeg",
 				},
 			);
 
@@ -314,7 +314,7 @@ export class UserService implements OnModuleInit {
 		if ((await this.images.find({ _id: user._id }).count()) > 0) {
 			const stream = this.images.openDownloadStream(user._id);
 			const buffer = await streamToBuffer(stream);
-			return { buffer, contentType: "image/jpg" };
+			return { buffer, contentType: "image/jpeg" };
 		}
 
 		if (onlyUserUploaded) return { buffer: null, contentType: null };

@@ -74,7 +74,7 @@ export class AppController {
 	// async renderModel(@Query("url") modelUrl: string, @Res() res: Response) {
 	// 	const buffer = await this.puppeteerService.renderModel(modelUrl);
 
-	// 	res.set("Content-Type", "image/jpg");
+	// 	res.set("Content-Type", "image/jpeg");
 	// 	res.send(buffer);
 	// }
 }
