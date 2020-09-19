@@ -142,4 +142,4 @@ deploy eb:
 
         # no codecommit or exit code 1
         - yes n | eb init tivolicloud -r us-east-1 || if [ $? -eq 1 ]; then echo ""; else echo ""; fi
-        - eb deploy metaverse --timeout 60
+        - eb deploy tivolicloud --timeout 60
