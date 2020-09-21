@@ -62,7 +62,7 @@ export class UserUpdateNametagDto {
 	@IsOptional()
 	@IsString()
 	@MaxLength(12)
-	@Matches(/^\S+$/, { message: "Gender pronoun can't have spaces" })
+	@Matches(/^\S*$/, { message: "Gender pronoun can't have spaces" })
 	genderPronoun?: string;
 }
 
