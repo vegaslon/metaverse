@@ -1,14 +1,7 @@
-import {
-	Controller,
-	Get,
-	ImATeapotException,
-	Post,
-	Req,
-	Res,
-} from "@nestjs/common";
+import { Controller, Get, ImATeapotException, Req, Res } from "@nestjs/common";
 import { ApiExcludeEndpoint, ApiTags } from "@nestjs/swagger";
 import { Request, Response } from "express";
-import { TEA_URL, URL as METAVERSE_URL } from "../environment";
+import { TEA_URL } from "../environment";
 import { TeaService } from "./tea.service";
 
 @Controller({

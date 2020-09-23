@@ -43,7 +43,10 @@ export class TeaService implements OnModuleInit {
 		// 	),
 		// 	"",
 		// ).then(data => {
-		// 	writeFileSync("/home/maki/tea-data.raw", data);
+		// 	writeFileSync(
+		// 		"/home/maki/X-Tea-Request.txt",
+		// 		data.toString("base64"),
+		// 	);
 		// });
 	}
 
@@ -183,7 +186,8 @@ export class TeaService implements OnModuleInit {
 			return res.redirect(METAVERSE_URL);
 		}
 
-		const body = await rawBody(req, { limit: "1MB" });
+		// const body = await rawBody(req, { limit: "1MB" });
+		const body = Buffer.from(req.header("X-Tea-Request"), "base64");
 		if (body.length <= 0) throw new ImATeapotException();
 
 		let decryptedRequest: Buffer;
@@ -258,16 +262,16 @@ export class TeaService implements OnModuleInit {
 			const buffer = await streamToBuffer(file.body);
 			const output = await this.encrypt(buffer, path);
 
-		// force .fst files as text/plain
-		if (/\.fst$/i.test(path)) {
-			res.setHeader("Content-Type", "text/plain");
-		}
+			// force .fst files as text/plain
+			if (/\.fst$/i.test(path)) {
+				res.setHeader("Content-Type", "text/plain");
+			}
 
-		if (req.query.download != null) {
-			res.setHeader("Content-Disposition", "attachment");
-		}
+			if (req.query.download != null) {
+				res.setHeader("Content-Disposition", "attachment");
+			}
 
-		res.send(output);
+			res.send(output);
 		}
 
 		if (DEV) this.logger.verbose("");
