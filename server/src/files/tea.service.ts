@@ -244,15 +244,19 @@ export class TeaService implements OnModuleInit {
 			}
 		}
 
-		// encrypt and write
-
-		const buffer = await streamToBuffer(file.body);
-		const output = await this.encrypt(buffer, path);
-
 		res.status(file.status);
 		for (const header of Object.entries(file.headers)) {
 			res.setHeader(header[0], header[1]);
 		}
+
+		// early out if 304 not modified
+
+		if (file.status == 304) {
+			res.send("");
+		} else {
+			// encrypt and write
+			const buffer = await streamToBuffer(file.body);
+			const output = await this.encrypt(buffer, path);
 
 		// force .fst files as text/plain
 		if (/\.fst$/i.test(path)) {
@@ -264,6 +268,7 @@ export class TeaService implements OnModuleInit {
 		}
 
 		res.send(output);
+		}
 
 		if (DEV) this.logger.verbose("");
 	}

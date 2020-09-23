@@ -20,12 +20,6 @@ export class TeaController {
 
 	@Get("*")
 	@ApiExcludeEndpoint()
-	redirect(@Res() res: Response) {
-		return res.redirect(METAVERSE_URL);
-	}
-
-	@Post("*")
-	@ApiExcludeEndpoint()
 	getFile(@Req() req: Request, @Res() res: Response) {
 		try {
 			return this.teaService.getFile(req, res);
