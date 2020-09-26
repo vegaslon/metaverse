@@ -242,6 +242,7 @@ export class FilesService {
 		const stream = blob.createWriteStream({
 			private: true,
 			contentType: getMimeType(key),
+			gzip: false,
 		});
 
 		body.pipe(stream);
