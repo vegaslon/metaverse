@@ -1,12 +1,12 @@
 import { Document, Model, Query, Schema } from "mongoose";
-import { v4 as uuid } from "uuid";
+import * as uuid from "uuid";
 import { MongooseFilterUnused } from "../common/mongoose-filter-unused";
 import { Domain } from "../domain/domain.schema";
 import { User } from "../user/user.schema";
 
 export const UserSessionSchema = new Schema({
 	user: { type: Schema.Types.ObjectId, ref: "users", required: true },
-	sessionId: { type: String, default: () => uuid() },
+	sessionId: { type: String, default: () => uuid.v4() },
 
 	minutes: { type: Number, default: 0 },
 	createdAt: { type: Date, default: () => new Date() },

@@ -1,5 +1,5 @@
 import { Document, Schema } from "mongoose";
-import { v4 as uuid } from "uuid";
+import * as uuid from "uuid";
 import { MongooseFilterUnused } from "../common/mongoose-filter-unused";
 import { User } from "../user/user.schema";
 
@@ -17,7 +17,7 @@ export enum DomainRestriction {
 
 export const DomainSchema = new Schema(
 	{
-		_id: { type: String, default: () => uuid() },
+		_id: { type: String, default: () => uuid.v4() },
 		lastUpdated: { type: Date, default: new Date() },
 
 		author: { type: Schema.Types.ObjectId, ref: "users", required: true },

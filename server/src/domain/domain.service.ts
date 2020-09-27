@@ -12,15 +12,15 @@ import { GridFSBucket } from "mongodb";
 import { Connection, Model } from "mongoose";
 import path from "path";
 import sharp from "sharp";
+import * as uuid from "uuid";
 import { derPublicKeyHeader } from "../common/der-public-key-header";
 import { MulterFile } from "../common/multer-file.model";
 import {
-	decompressUuid,
+	decodeUuid,
 	getMimeType,
 	patchDoc,
 	snakeToCamelCaseObject,
 	streamToBuffer,
-	validUuid,
 } from "../common/utils";
 import { DomainSession } from "../session/session.schema";
 import { SessionService } from "../session/session.service";
@@ -64,7 +64,7 @@ export class DomainService implements OnModuleInit {
 	findById(id: string) {
 		try {
 			return this.domainModel.findById(
-				validUuid(id) ? id : decompressUuid(id),
+				uuid.validate(id) ? id : decodeUuid(id),
 			);
 		} catch (err) {
 			throw new BadRequestException();

@@ -1,6 +1,7 @@
 import baseX from "base-x";
 import mimeTypes from "mime-db";
 import { Readable } from "stream";
+import * as uuid from "uuid";
 import { Domain, DomainRestriction } from "../domain/domain.schema";
 import { URL, WORLD_URL } from "../environment";
 import { DomainSession, UserSession } from "../session/session.schema";
@@ -203,7 +204,7 @@ export function renderDomain(
 		version: domain.version,
 
 		path: domain.path,
-		url: WORLD_URL + "/" + compressUuid(domain._id),
+		url: WORLD_URL + "/" + encodeUuid(domain._id),
 	};
 }
 
@@ -231,23 +232,11 @@ export const displayPlural = (n: number, singular: string, plural?: string) =>
 export const displayPluralName = (name: string) =>
 	name.toLowerCase().endsWith("s") ? name + "'" : name + "'s";
 
-export const compressUuid = (uuid: string) =>
-	base62.encode(
-		Buffer.from(uuid.toLowerCase().replace(/[^0-9a-f]/g, ""), "hex"),
-	);
+export const encodeUuid = (uuidStr: string) =>
+	base62.encode(Buffer.from(uuid.parse(uuidStr)));
 
-export const decompressUuid = (uuid: string) => {
-	const hex = base62.decode(uuid).toString("hex").split("");
-	for (let i = 8; i < 8 + 5 * 4; i += 5) {
-		hex.splice(i, 0, "-");
-	}
-	return hex.join("");
-};
-
-export const validUuid = (uuid: string) =>
-	/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
-		uuid,
-	);
+export const decodeUuid = (shortUuidStr: string) =>
+	uuid.stringify(base62.decode(shortUuidStr));
 
 export const streamToBuffer = async (
 	stream: Readable | NodeJS.ReadableStream,

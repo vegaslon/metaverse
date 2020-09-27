@@ -23,7 +23,7 @@ import { UserSettings, UserSettingsSchema } from "./user-settings.schema";
 import { UserUpdateLocationDto } from "./user.dto";
 import { User, UserSchema } from "./user.schema";
 import { UserService } from "./user.service";
-import { v4 as uuid } from "uuid";
+import * as uuid from "uuid";
 import { MetricsService } from "../metrics/metrics.service";
 
 // let mongo server download if it hasn't already
@@ -238,7 +238,7 @@ describe("UserService", () => {
 
 		expect(await sessionService.findUserById(user._id)).toBeNull();
 
-		const currentDomainId = uuid();
+		const currentDomainId = uuid.v4();
 
 		const dto = new UserUpdateLocationDto();
 		dto.location = {};
