@@ -3,7 +3,11 @@ import { HttpException } from "@nestjs/common/exceptions";
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { OptionalAuthGuard } from "../../auth/optional.guard";
 import { CurrentUser } from "../../auth/user.decorator";
-import { pagination, renderDomainForHifi } from "../../common/utils";
+import {
+	objectIdToUuid,
+	pagination,
+	renderDomainForHifi,
+} from "../../common/utils";
 import { DomainRestriction } from "../../domain/domain.schema";
 import { DomainService } from "../../domain/domain.service";
 import { URL } from "../../environment";
@@ -27,7 +31,7 @@ export class UsersController {
 	) {}
 
 	private async getNearbyUsers(currentUser: User, domainId: string) {
-		let users: UsersUser[] = [];
+		const users: UsersUser[] = [];
 
 		if (domainId == null) return users;
 
@@ -35,7 +39,7 @@ export class UsersController {
 		if (domain == null) return users;
 
 		const domainSession = await this.sessionService
-			.findDomainById(domainId)
+			.findDomainById(domain._id)
 			.populate("userSessions");
 		if (domainSession == null) return users;
 
@@ -64,7 +68,7 @@ export class UsersController {
 		if (showUsers == false) return users;
 
 		// turning user sessions into UsersUser
-		for (let userSession of domainSession.userSessions) {
+		for (const userSession of domainSession.userSessions) {
 			const user = await this.userService.findById(userSession.id);
 			if (user == null) continue;
 
@@ -225,19 +229,21 @@ export class UsersController {
 
 		// TODO: check whether they're friends or not
 
+		const location: UsersLocation = {
+			path: userSession.path,
+			node_id: userSession.nodeId,
+			root: {
+				id: objectIdToUuid(domain._id),
+				name: objectIdToUuid(domain._id),
+				domain: renderDomainForHifi(domain, domainSession),
+			},
+			online: true,
+		};
+
 		return {
 			status: "success",
 			data: {
-				location: {
-					path: userSession.path,
-					node_id: userSession.nodeId,
-					root: {
-						id: domain._id,
-						name: domain._id,
-						domain: renderDomainForHifi(domain, domainSession),
-					},
-					online: true,
-				} as UsersLocation,
+				location,
 			},
 		};
 	}

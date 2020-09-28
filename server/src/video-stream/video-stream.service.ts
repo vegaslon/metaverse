@@ -51,7 +51,7 @@ export class VideoStreamService {
 	}
 
 	deleteHost(host: VideoStreamHost) {
-		for (let client of host.clients) {
+		for (const client of host.clients) {
 			client.socket.disconnect();
 			this.deleteFromArray(this.clients, client);
 		}

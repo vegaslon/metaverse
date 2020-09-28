@@ -12,11 +12,11 @@ import * as mailchecker from "mailchecker";
 import { generateRandomString } from "../common/utils";
 import { Domain } from "../domain/domain.schema";
 import { URL } from "../environment";
+import { MetricsService } from "../metrics/metrics.service";
 import { User } from "../user/user.schema";
 import { UserService } from "../user/user.service";
 import { AuthExtSignUpDto, AuthSignUpDto, AuthTokenDto } from "./auth.dto";
 import { JwtPayload, JwtPayloadType } from "./jwt.strategy";
-import { MetricsService } from "../metrics/metrics.service";
 
 // aaah... cant camel case here
 export interface InterfaceAuthToken {
@@ -31,6 +31,7 @@ export interface InterfaceAuthToken {
 export interface AuthRegisterToken {
 	token: string;
 	username: string;
+	email: string;
 	imageUrl: string;
 }
 
@@ -70,18 +71,16 @@ export class AuthService {
 		return user;
 	}
 
-	login(user: User) {
-		const jwt = this.jwtService.sign(
-			{
-				t: JwtPayloadType.USER,
-				id: user._id,
-			} as JwtPayload,
-			{
-				expiresIn: "30d",
-			},
-		);
+	login(user: User): InterfaceAuthToken {
+		const payload: JwtPayload = {
+			t: JwtPayloadType.USER,
+			id: user._id.toHexString(),
+		};
+		const jwt = this.jwtService.sign(payload, {
+			expiresIn: "30d",
+		});
 
-		const payload = this.jwtService.decode(jwt) as {
+		const decodedPayload = this.jwtService.decode(jwt) as {
 			exp: number;
 		};
 
@@ -96,7 +95,7 @@ export class AuthService {
 			refresh_token: "",
 			scope: "owner",
 			token_type: "Bearer",
-		} as InterfaceAuthToken;
+		};
 	}
 
 	async signUp(authSignUpDto: AuthSignUpDto) {
@@ -147,14 +146,19 @@ export class AuthService {
 		return this.login(user);
 	}
 
-	async externalLogin(email: string, username: string, imageUrl: string) {
+	async externalLogin(
+		email: string,
+		username: string,
+		imageUrl: string,
+	): Promise<{ register: AuthRegisterToken } | { user: User }> {
 		const user = await this.userService.findByEmail(email);
 		if (user != null) return { user };
 
 		// create temporary jwt token so user can pick username before registering
-		const token = this.jwtService.sign({
+		const payload: JwtRegisterPayload = {
 			email,
-		} as JwtRegisterPayload);
+		};
+		const token = this.jwtService.sign(payload);
 
 		return {
 			register: {
@@ -162,7 +166,7 @@ export class AuthService {
 				username,
 				email,
 				imageUrl,
-			} as AuthRegisterToken,
+			},
 		};
 	}
 
@@ -174,11 +178,12 @@ export class AuthService {
 		domain.secret = s;
 		await domain.save();
 
-		return this.jwtService.sign({
+		const payload: JwtPayload = {
 			t: JwtPayloadType.DOMAIN,
-			id: domain._id,
+			id: domain._id.toHexString(),
 			s,
-		} as JwtPayload);
+		};
+		return this.jwtService.sign(payload);
 	}
 
 	// sso
@@ -186,7 +191,7 @@ export class AuthService {
 	async ssoGitlabToken(user: User) {
 		return this.jwtService.sign(
 			{
-				//id: user.id,
+				// id: user.id,
 				name: user.username,
 				username: user.username.toLowerCase(),
 				email: user.email,

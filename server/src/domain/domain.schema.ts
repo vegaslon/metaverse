@@ -1,6 +1,7 @@
-import { Document, Schema } from "mongoose";
-import * as uuid from "uuid";
+import { ObjectId } from "bson";
+import { Document, Schema, Types } from "mongoose";
 import { MongooseFilterUnused } from "../common/mongoose-filter-unused";
+import { docInsideDocArray } from "../common/utils";
 import { User } from "../user/user.schema";
 
 export enum DomainAutomaticNetworking {
@@ -17,7 +18,6 @@ export enum DomainRestriction {
 
 export const DomainSchema = new Schema(
 	{
-		_id: { type: String, default: () => uuid.v4() },
 		lastUpdated: { type: Date, default: new Date() },
 
 		author: { type: Schema.Types.ObjectId, ref: "users", required: true },
@@ -66,6 +66,8 @@ export const DomainSchema = new Schema(
 );
 
 export interface Domain extends Document {
+	_id: ObjectId;
+
 	lastUpdated: Date;
 
 	author: User;
@@ -81,10 +83,10 @@ export interface Domain extends Document {
 	description: string;
 	capacity: number;
 	restriction: DomainRestriction;
-	whitelist: User[];
+	whitelist: Types.Array<User>;
 	maturity: string;
 	hosts: string;
-	tags: string[];
+	tags: Types.Array<string>;
 
 	version: string;
 	protocol: string;
@@ -94,8 +96,8 @@ export interface Domain extends Document {
 	// not from hifi
 	label: string;
 	path: string;
-	ownerPlaces: string[];
-	userLikes: User[];
+	ownerPlaces: Types.Array<string>;
+	userLikes: Types.Array<User>;
 }
 
 MongooseFilterUnused(DomainSchema);
@@ -108,23 +110,25 @@ DomainSchema.pre("remove", async function (next) {
 			.execPopulate();
 
 		// remove domain from author
-		await (async () => {
+		try {
 			const user = domain.author;
-			const i = (user.domains as any[]).indexOf(domain._id);
-			user.domains.splice(i, 1);
-			await user.save();
-		})().catch(() => {});
+			if (docInsideDocArray(user.domains, domain._id)) {
+				user.domains.pull(domain);
+				await user.save();
+			}
+		} catch (err) {}
 
 		// remove domain from user's likes
-		await (async () => {
-			for (let user of domain.userLikes) {
+		try {
+			for (const user of domain.userLikes.values()) {
 				try {
-					const i = (user.domainLikes as any[]).indexOf(domain._id);
-					user.domainLikes.splice(i, 1);
-					await user.save();
+					if (docInsideDocArray(user.domainLikes, domain._id)) {
+						user.domainLikes.pull(domain);
+						await user.save();
+					}
 				} catch (err) {}
 			}
-		})().catch(() => {});
+		} catch (err) {}
 
 		next();
 	} catch (err) {

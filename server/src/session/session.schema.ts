@@ -1,4 +1,5 @@
-import { Document, Model, Query, Schema } from "mongoose";
+import { ObjectId } from "bson";
+import { Document, Model, Query, Schema, Types } from "mongoose";
 import * as uuid from "uuid";
 import { MongooseFilterUnused } from "../common/mongoose-filter-unused";
 import { Domain } from "../domain/domain.schema";
@@ -12,7 +13,7 @@ export const UserSessionSchema = new Schema({
 	createdAt: { type: Date, default: () => new Date() },
 
 	path: { type: String, default: null },
-	domain: { type: String, ref: "domains" },
+	domain: { type: Schema.Types.ObjectId, ref: "domains" },
 	nodeId: { type: String, default: null },
 	// networkAddress: { type: String, default: null },
 	// networkPort: { type: String, default: null },
@@ -21,6 +22,8 @@ export const UserSessionSchema = new Schema({
 });
 
 export interface UserSession extends Document {
+	_id: ObjectId;
+
 	user: User;
 	sessionId: string;
 
@@ -35,8 +38,7 @@ export interface UserSession extends Document {
 }
 
 export const DomainSessionSchema = new Schema({
-	_id: { type: String, required: true },
-	domain: { type: String, ref: "domains", required: true },
+	domain: { type: Schema.Types.ObjectId, ref: "domains", required: true },
 
 	onlineUsers: { type: Number, default: 0 }, // what the domain reports
 	userSessions: [{ type: Schema.Types.ObjectId, ref: "users.sessions" }],
@@ -45,10 +47,12 @@ export const DomainSessionSchema = new Schema({
 });
 
 export interface DomainSession extends Document {
+	id: ObjectId;
+
 	domain: Domain;
 
 	onlineUsers: number;
-	userSessions: UserSession[];
+	userSessions: Types.Array<UserSession>;
 
 	expireAt: Date | number;
 }

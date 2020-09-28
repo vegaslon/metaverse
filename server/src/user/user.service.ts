@@ -12,7 +12,7 @@ import {
 import { JwtService } from "@nestjs/jwt";
 import { InjectConnection, InjectModel } from "@nestjs/mongoose";
 import * as bcrypt from "bcrypt";
-import { ObjectID } from "bson";
+import { ObjectId } from "bson";
 import crypto from "crypto";
 import * as fs from "fs";
 import JSZip from "jszip";
@@ -27,6 +27,7 @@ import { AuthService } from "../auth/auth.service";
 import { derPublicKeyHeader } from "../common/der-public-key-header";
 import { MulterFile } from "../common/multer-file.model";
 import {
+	docInsideDocArray,
 	generateRandomString,
 	getMimeType,
 	pagination,
@@ -40,7 +41,6 @@ import { DomainService } from "../domain/domain.service";
 import { EmailService } from "../email/email.service";
 import { DEV } from "../environment";
 import { SessionService } from "../session/session.service";
-import { UserSettings } from "./user-settings.schema";
 import {
 	UserUpdateEmailDto,
 	UserUpdateLocationDto,
@@ -63,8 +63,8 @@ export class UserService implements OnModuleInit {
 		// database
 		@InjectConnection() private connection: Connection,
 		@InjectModel("users") private readonly userModel: Model<User>,
-		@InjectModel("users.settings")
-		private readonly userSettingsModel: Model<UserSettings>,
+		// @InjectModel("users.settings")
+		// private readonly userSettingsModel: Model<UserSettings>,
 
 		// services
 		@Inject(forwardRef(() => DomainService))
@@ -98,12 +98,15 @@ export class UserService implements OnModuleInit {
 		);
 	}
 
-	findById(idStr: string) {
-		try {
-			const id = new ObjectID(idStr);
+	findById(id: ObjectId | string) {
+		if (typeof id == "string") {
+			if (ObjectId.isValid(id)) {
+				return this.userModel.findById(new ObjectId(id));
+			} else {
+				return null;
+			}
+		} else {
 			return this.userModel.findById(id);
-		} catch (err) {
-			return null;
 		}
 	}
 
@@ -130,8 +133,8 @@ export class UserService implements OnModuleInit {
 		return this.userModel.findOne({
 			$or: [
 				{ username: this.regexForFinding(idOrUsername) },
-				...(ObjectID.isValid(idOrUsername)
-					? [{ _id: new ObjectID(idOrUsername) }]
+				...(ObjectId.isValid(idOrUsername)
+					? [{ _id: new ObjectId(idOrUsername) }]
 					: []),
 			],
 		});
@@ -372,24 +375,11 @@ export class UserService implements OnModuleInit {
 			userUpdateLocationDto,
 		);
 
-		// update user in domain
 		if (userUpdateLocationDto.location.domain_id) {
-			const domainId = userUpdateLocationDto.location.domain_id;
-
-			const domainSession = await this.sessionService.findDomainById(
-				domainId,
-			);
-
-			if (domainSession != null) {
-				domainSession.userSessions[user._id] = session;
-
-				// move domain to top in user's likes if it exists
-				if ((user.domainLikes as any[]).includes(domainId)) {
-					this.domainService.moveLikedDomainToTopForUser(
-						user,
-						domainId,
-					);
-				}
+			// updateUserLocation doesn't populate
+			const domainId: ObjectId = session.domain as any;
+			if (docInsideDocArray(user.domainLikes, domainId)) {
+				this.domainService.moveLikedDomainToTopForUser(user, domainId);
 			}
 		}
 
@@ -695,8 +685,8 @@ export class UserService implements OnModuleInit {
 		const zip = new JSZip();
 		zip.file("user " + user.id + ".json", JSON.stringify(user, null, 4));
 
-		for (const domainId of user.domains) {
-			const domain = await this.domainService.findById(domainId as any);
+		await user.populate("domains").execPopulate();
+		for (const domain of user.domains) {
 			zip.file(
 				"domain " + domain.id + ".json",
 				JSON.stringify(domain, null, 4),

@@ -44,14 +44,15 @@ export class AdminController {
 			}
 		}
 
-		let domains: any[] = user.domains;
-		if (!fast) {
-			await user.populate("domains").execPopulate();
-			domains = user.domains.map(domain => ({
-				name: domain.label,
-				id: domain.id,
-			}));
-		}
+		const domains = fast
+			? user.domains
+			: await (async () => {
+					await user.populate("domains").execPopulate();
+					return user.domains.map(domain => ({
+						name: domain.label,
+						id: domain.id,
+					}));
+			  })();
 
 		return {
 			id: user.id,

@@ -1,5 +1,7 @@
 import baseX from "base-x";
+import { ObjectId } from "bson";
 import mimeTypes from "mime-db";
+import { Types } from "mongoose";
 import { Readable } from "stream";
 import * as uuid from "uuid";
 import { Domain, DomainRestriction } from "../domain/domain.schema";
@@ -116,7 +118,8 @@ export function renderDomainForHifi(d: Domain, session?: DomainSession) {
 	const online = session != null;
 
 	return {
-		id: d._id,
+		id: objectIdToUuid(d._id),
+		_id: d._id,
 
 		...(d.automaticNetworking === "full"
 			? {
@@ -130,7 +133,7 @@ export function renderDomainForHifi(d: Domain, session?: DomainSession) {
 		cloud_domain: false,
 		online,
 
-		default_place_name: d._id,
+		default_place_name: objectIdToUuid(d._id),
 		owner_places: d.ownerPlaces,
 		label: d.label, // tivoli
 		author: d.author.username, // tivoli
@@ -175,7 +178,12 @@ export function renderDomain(
 					if (typeof likedDomain == "string") {
 						return likedDomain == domain._id;
 					} else if (typeof likedDomain == "object") {
-						return likedDomain._id == domain._id;
+						return (
+							(typeof (likedDomain as any).toHexString ==
+							"function"
+								? (likedDomain as any).toHexString()
+								: likedDomain._id) == domain._id
+						);
 					}
 			  });
 
@@ -183,7 +191,8 @@ export function renderDomain(
 	const usingIce = domain.automaticNetworking === "full";
 
 	return {
-		id: domain._id,
+		id: objectIdToUuid(domain._id), // TODO: needs to eventually become _id
+		_id: domain._id,
 		label: domain.label,
 		username: domain.author.username, // TODO deprecated, use author
 		author: domain.author.username,
@@ -204,7 +213,7 @@ export function renderDomain(
 		version: domain.version,
 
 		path: domain.path,
-		url: WORLD_URL + "/" + encodeUuid(domain._id),
+		url: WORLD_URL + "/" + encodeObjectId(domain._id),
 	};
 }
 
@@ -219,7 +228,7 @@ export function renderFriend(user: User, userSession: UserSession) {
 		image: URL + "/api/user/" + user.username + "/image",
 		domain: showDomain
 			? {
-					id: domain.id,
+					id: domain._id,
 					name: domain.label,
 			  }
 			: null,
@@ -232,11 +241,11 @@ export const displayPlural = (n: number, singular: string, plural?: string) =>
 export const displayPluralName = (name: string) =>
 	name.toLowerCase().endsWith("s") ? name + "'" : name + "'s";
 
-export const encodeUuid = (uuidStr: string) =>
-	base62.encode(Buffer.from(uuid.parse(uuidStr)));
+export const encodeObjectId = (objectId: ObjectId) =>
+	base62.encode(Buffer.from(objectId.toHexString(), "hex").reverse());
 
-export const decodeUuid = (shortUuidStr: string) =>
-	uuid.stringify(base62.decode(shortUuidStr));
+export const decodeObjectId = (shortObjectId: string) =>
+	base62.decode(shortObjectId).reverse().toString("hex");
 
 export const streamToBuffer = async (
 	stream: Readable | NodeJS.ReadableStream,
@@ -270,4 +279,82 @@ export const getMimeType = (filename: string) => {
 	} else {
 		return mimeType[0];
 	}
+};
+
+export const objectIdToUuid = (objectId: ObjectId) => {
+	const objectIdBuffer = Buffer.from(objectId.toHexString(), "hex");
+
+	// xx xx xx xx - xx xx - [1-5]x xx - [89ab]x xx - xx xx xx xx xx x
+
+	const uuidBuffer = Buffer.from([
+		objectIdBuffer[0],
+		objectIdBuffer[1],
+		objectIdBuffer[2],
+		objectIdBuffer[3],
+		// -
+		objectIdBuffer[4],
+		objectIdBuffer[5],
+		// -
+		0x10,
+		0x0,
+		// -
+		0x80,
+		0x0,
+		// -
+		objectIdBuffer[6],
+		objectIdBuffer[7],
+		objectIdBuffer[8],
+		objectIdBuffer[9],
+		objectIdBuffer[10],
+		objectIdBuffer[11],
+	]);
+
+	return uuid.stringify(uuidBuffer);
+};
+
+export const uuidToObjectId = (uuidStr: string) => {
+	const uuidBuffer = Buffer.from(uuid.parse(uuidStr));
+
+	const objectIdBuffer = Buffer.from([
+		uuidBuffer[0],
+		uuidBuffer[1],
+		uuidBuffer[2],
+		uuidBuffer[3],
+		// -
+		uuidBuffer[4],
+		uuidBuffer[5],
+		// -
+		// 0x10
+		// 0x0
+		// -
+		// 0x80
+		// 0x0
+		// -
+		uuidBuffer[10],
+		uuidBuffer[11],
+		uuidBuffer[12],
+		uuidBuffer[13],
+		uuidBuffer[14],
+		uuidBuffer[15],
+	]);
+
+	return new ObjectId(objectIdBuffer.toString("hex"));
+};
+
+export const docInsideDocArray = <T>(
+	array: Types.Array<T>,
+	id: ObjectId | string,
+) => {
+	const idStr = typeof id == "object" ? id.toHexString() : id;
+	return array.some(doc => {
+		if (typeof doc == "object") {
+			if (typeof (doc as any).toHexString == "function") {
+				return idStr == (doc as any).toHexString();
+			} else if ((doc as any)._id != null) {
+				return idStr == (doc as any)._id;
+			}
+		} else if (typeof doc == "string") {
+			return idStr == doc;
+		}
+	});
 };

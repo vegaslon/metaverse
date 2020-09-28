@@ -1,6 +1,6 @@
 import { Controller, Get, HttpException, Param } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { renderDomainForHifi } from "../../common/utils";
+import { objectIdToUuid, renderDomainForHifi } from "../../common/utils";
 import { DomainService } from "../../domain/domain.service";
 import { URL } from "../../environment";
 import { SessionService } from "../../session/session.service";
@@ -30,23 +30,26 @@ export class PlacesController {
 
 		const thumbnailUrl = URL + "/api/domain/" + domain._id + "/image";
 
-		const session = await this.sessionService.findDomainById(domain.id);
+		const session = await this.sessionService.findDomainById(domain._id);
+		const id = objectIdToUuid(domain._id);
+
+		const place: Place = {
+			id,
+			description: domain.description,
+			path: domain.path,
+			name: id,
+			address: id, // hifi://address/path
+			domain: renderDomainForHifi(domain, session),
+			previews: {
+				lobby: thumbnailUrl,
+				thumbnail: thumbnailUrl,
+			},
+		};
 
 		return {
 			status: "success",
 			data: {
-				place: {
-					id: domain._id,
-					description: domain.description,
-					path: domain.path,
-					name: domain._id,
-					address: domain._id, // hifi://address/path
-					domain: renderDomainForHifi(domain, session),
-					previews: {
-						lobby: thumbnailUrl,
-						thumbnail: thumbnailUrl,
-					},
-				} as Place,
+				place,
 			},
 		};
 	}

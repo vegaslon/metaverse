@@ -3,10 +3,10 @@ import {
 	forwardRef,
 	Inject,
 	Injectable,
-	NotFoundException,
 	OnModuleInit,
 } from "@nestjs/common";
 import { InjectConnection, InjectModel } from "@nestjs/mongoose";
+import { ObjectId } from "bson";
 import fs from "fs";
 import { GridFSBucket } from "mongodb";
 import { Connection, Model } from "mongoose";
@@ -16,11 +16,13 @@ import * as uuid from "uuid";
 import { derPublicKeyHeader } from "../common/der-public-key-header";
 import { MulterFile } from "../common/multer-file.model";
 import {
-	decodeUuid,
+	decodeObjectId,
+	docInsideDocArray,
 	getMimeType,
 	patchDoc,
 	snakeToCamelCaseObject,
 	streamToBuffer,
+	uuidToObjectId,
 } from "../common/utils";
 import { DomainSession } from "../session/session.schema";
 import { SessionService } from "../session/session.service";
@@ -61,13 +63,21 @@ export class DomainService implements OnModuleInit {
 		});
 	}
 
-	findById(id: string) {
-		try {
-			return this.domainModel.findById(
-				uuid.validate(id) ? id : decodeUuid(id),
-			);
-		} catch (err) {
-			throw new BadRequestException();
+	findById(id: ObjectId | string) {
+		if (typeof id === "string") {
+			if (uuid.validate(id)) {
+				return this.domainModel.findById(uuidToObjectId(id));
+			} else if (ObjectId.isValid(id)) {
+				return this.domainModel.findById(new ObjectId(id));
+			} else {
+				try {
+					return this.domainModel.findById(decodeObjectId(id));
+				} catch (err) {
+					throw new BadRequestException();
+				}
+			}
+		} else {
+			return this.domainModel.findById(id);
 		}
 	}
 
@@ -112,14 +122,13 @@ export class DomainService implements OnModuleInit {
 			const whitelist: User[] = [];
 
 			for (const username of updateDomainDto.domain.whitelist) {
-				const user = await this.userService.findByUsername(
-					username as any,
-				);
+				const user = await this.userService.findByUsername(username);
 				if (user == null) continue;
 				whitelist.push(user);
 			}
 
-			domain.whitelist = whitelist;
+			// TODO: dont want to do it like this but im not sure how else
+			(domain.whitelist as any) = whitelist;
 			delete updateDomainDto.domain.whitelist; // dont use in patchDoc
 		}
 
@@ -273,13 +282,6 @@ export class DomainService implements OnModuleInit {
 		);
 	}
 
-	async deleteDomain(domainId: string) {
-		const domain = await this.findById(domainId);
-		if (domain == null) throw new NotFoundException();
-
-		return domain.remove();
-	}
-
 	changeDomainImage(domain: Domain, file: MulterFile) {
 		return new Promise(async (resolve, reject) => {
 			await new Promise(resolve => {
@@ -298,7 +300,7 @@ export class DomainService implements OnModuleInit {
 				});
 
 			stream.pipe(
-				this.images.openUploadStreamWithId(domain.id, null, {
+				this.images.openUploadStreamWithId(domain._id, null, {
 					contentType: "image/jpeg",
 				}),
 			);
@@ -380,39 +382,35 @@ export class DomainService implements OnModuleInit {
 	}
 
 	async likeDomain(user: User, domain: Domain) {
-		if (!(user.domainLikes as any[]).includes(domain._id)) {
-			// new domains appear at the top
-			user.domainLikes.unshift(domain._id);
+		if (!docInsideDocArray(user.domainLikes, domain._id)) {
+			user.domainLikes.unshift(domain);
 			await user.save();
 		}
-
-		if (!(domain.userLikes as any[]).includes(user._id)) {
-			domain.userLikes.push(user._id);
+		if (!docInsideDocArray(domain.userLikes, user._id)) {
+			domain.userLikes.unshift(user);
 			await domain.save();
 		}
 	}
 
 	async unlikeDomain(user: User, domain: Domain) {
-		if ((user.domainLikes as any[]).includes(domain._id)) {
-			const i = user.domainLikes.indexOf(domain._id);
-			user.domainLikes.splice(i, 1);
+		if (docInsideDocArray(user.domainLikes, domain._id)) {
+			user.domainLikes.pull(domain);
 			await user.save();
 		}
-
-		if ((domain.userLikes as any[]).includes(user._id)) {
-			const i = domain.userLikes.indexOf(user._id);
-			domain.userLikes.splice(i, 1);
+		if (docInsideDocArray(domain.userLikes, user._id)) {
+			domain.userLikes.pull(user);
 			await domain.save();
 		}
 	}
 
-	async moveLikedDomainToTopForUser(user: User, domainId: any) {
-		if (!(user.domainLikes as any[]).includes(domainId)) return;
+	async moveLikedDomainToTopForUser(user: User, domainId: ObjectId) {
+		if (!docInsideDocArray(user.domainLikes, domainId)) return;
 
-		const i = user.domainLikes.indexOf(domainId);
-		user.domainLikes.splice(i, 1);
-		user.domainLikes.unshift(domainId);
-
-		await user.save();
+		// dont need to move to top if it's already at the top
+		if (user.domainLikes.indexOf(domainId) > 0) {
+			user.domainLikes.pull(domainId);
+			user.domainLikes.unshift(domainId);
+			await user.save();
+		}
 	}
 }

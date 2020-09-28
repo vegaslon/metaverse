@@ -12,10 +12,11 @@ import {
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
+import * as uuid from "uuid";
 import { CurrentDomain } from "../../auth/domain.decorator";
 import { DomainAuthGuard } from "../../auth/domain.guard";
 import { MulterFile } from "../../common/multer-file.model";
-import { renderDomainForHifi } from "../../common/utils";
+import { objectIdToUuid, renderDomainForHifi } from "../../common/utils";
 import { UpdateDomainDto } from "../../domain/domain.dto";
 import { Domain } from "../../domain/domain.schema";
 import { DomainService } from "../../domain/domain.service";
@@ -45,7 +46,7 @@ export class DomainsController {
 
 		await domain.populate("author").execPopulate();
 
-		const session = await this.sessionService.findDomainById(domain.id);
+		const session = await this.sessionService.findDomainById(domain._id);
 
 		return {
 			status: "success",
@@ -53,6 +54,14 @@ export class DomainsController {
 				domains: [renderDomainForHifi(domain, session)],
 			},
 		};
+	}
+
+	isValidDomainId(domain: Domain, id: string) {
+		if (uuid.validate(id)) {
+			return id == objectIdToUuid(domain._id);
+		} else {
+			return id == domain._id.toHexString();
+		}
 	}
 
 	@Put(":id")
@@ -63,7 +72,7 @@ export class DomainsController {
 		@Param("id") id: string,
 		@Body() updateDomainDto: UpdateDomainDto,
 	) {
-		if (domain._id !== id) throw new ForbiddenException();
+		if (!this.isValidDomainId(domain, id)) throw new ForbiddenException();
 
 		const updatedDomain = await this.domainService.updateDomain(
 			domain,
@@ -72,7 +81,7 @@ export class DomainsController {
 		await updatedDomain.populate("author").execPopulate();
 
 		const session = await this.sessionService.findDomainById(
-			updatedDomain.id,
+			updatedDomain._id,
 		);
 
 		return {
@@ -89,7 +98,7 @@ export class DomainsController {
 		@Param("id") id: string,
 		@Body() updateDomainDto: UpdateDomainDto,
 	) {
-		if (domain._id !== id) throw new ForbiddenException();
+		if (!this.isValidDomainId(domain, id)) throw new ForbiddenException();
 
 		const updatedDomain = await this.domainService.updateDomain(
 			domain,
@@ -98,7 +107,7 @@ export class DomainsController {
 		await updatedDomain.populate("author").execPopulate();
 
 		const session = await this.sessionService.findDomainById(
-			updatedDomain.id,
+			updatedDomain._id,
 		);
 
 		return {
@@ -116,7 +125,7 @@ export class DomainsController {
 		@Param("id") id: string,
 		@UploadedFile() file: MulterFile,
 	) {
-		if (domain._id !== id) throw new ForbiddenException();
+		if (!this.isValidDomainId(domain, id)) throw new ForbiddenException();
 
 		await this.domainService.setPublicKey(domain, file.buffer);
 
@@ -156,7 +165,7 @@ export class DomainsController {
 		}
 		await domain.populate("author").execPopulate();
 
-		const session = await this.sessionService.findDomainById(domain.id);
+		const session = await this.sessionService.findDomainById(domain._id);
 
 		return {
 			status: "success",

@@ -1,4 +1,5 @@
-import { Document, Schema } from "mongoose";
+import { ObjectId } from "bson";
+import { Document, Schema, Types } from "mongoose";
 import { MongooseFilterUnused } from "../common/mongoose-filter-unused";
 import { Domain } from "../domain/domain.schema";
 
@@ -12,7 +13,7 @@ export const UserSchema = new Schema({
 	resetPasswordSecret: { type: String, default: "" },
 
 	domains: {
-		type: [{ type: String, ref: "domains" }],
+		type: [{ type: Schema.Types.ObjectId, ref: "domains" }],
 		required: true,
 	},
 
@@ -20,7 +21,9 @@ export const UserSchema = new Schema({
 	hash: { type: String, requred: true, select: false },
 	publicKey: { type: String, default: "" },
 
-	domainLikes: [{ type: String, ref: "domains" }],
+	domainLikes: {
+		type: [{ type: Schema.Types.ObjectId, ref: "domains" }],
+	},
 
 	friends: [{ type: Schema.Types.ObjectId, ref: "users" }],
 
@@ -38,6 +41,8 @@ export const UserSchema = new Schema({
 });
 
 export interface User extends Document {
+	_id: ObjectId;
+
 	username: string;
 
 	email: string;
@@ -46,15 +51,15 @@ export interface User extends Document {
 	emailVerifySecret: string;
 	resetPasswordSecret: string;
 
-	domains: Domain[];
+	domains: Types.Array<Domain>;
 
 	admin: boolean;
 	hash: string;
 	publicKey: string;
 
-	domainLikes: Domain[];
+	domainLikes: Types.Array<Domain>;
 
-	friends: User[];
+	friends: Types.Array<User>;
 
 	supporter: boolean;
 	nametag: {

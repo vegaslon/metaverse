@@ -19,7 +19,7 @@ import { MetaverseAuthGuard } from "../auth/auth.guard";
 import { AuthService } from "../auth/auth.service";
 import { CurrentUser } from "../auth/user.decorator";
 import { MulterFile } from "../common/multer-file.model";
-import { renderDomain } from "../common/utils";
+import { docInsideDocArray, renderDomain } from "../common/utils";
 import { SessionService } from "../session/session.service";
 import { User } from "../user/user.schema";
 import {
@@ -57,11 +57,11 @@ export class UserDomainController {
 	@ApiBearerAuth()
 	@UseGuards(MetaverseAuthGuard)
 	async newToken(@CurrentUser() user: User, @Param("id") id: string) {
-		if (!(user.domains as any[]).includes(id))
-			throw new NotFoundException();
-
 		const domain = await this.domainService.findById(id);
 		if (domain == null) throw new NotFoundException();
+
+		if (!docInsideDocArray(user.domains, domain._id))
+			throw new NotFoundException();
 
 		const token = await this.authService.newDomainToken(user, domain);
 		return { token };
@@ -96,10 +96,11 @@ export class UserDomainController {
 		@Param("id") id: string,
 		@Body() updateDomainDto: UpdateDomainDto,
 	) {
-		if (!(user.domains as any[]).includes(id))
-			throw new NotFoundException();
-
 		const domain = await this.domainService.findById(id);
+		if (domain == null) throw new NotFoundException();
+
+		if (!docInsideDocArray(user.domains, domain._id))
+			throw new NotFoundException();
 
 		const updatedDomain = await this.domainService.updateDomain(
 			domain,
@@ -117,10 +118,13 @@ export class UserDomainController {
 	@ApiBearerAuth()
 	@UseGuards(MetaverseAuthGuard)
 	async deleteDomain(@CurrentUser() user: User, @Param("id") id: string) {
-		if (!(user.domains as any[]).includes(id))
+		const domain = await this.domainService.findById(id);
+		if (domain == null) throw new NotFoundException();
+
+		if (!docInsideDocArray(user.domains, domain._id))
 			throw new NotFoundException();
 
-		return this.domainService.deleteDomain(id);
+		return domain.remove();
 	}
 
 	@Put("domain/:id/image")
@@ -146,11 +150,11 @@ export class UserDomainController {
 		if (file == null)
 			throw new InternalServerErrorException("Image not received");
 
-		if (!(user.domains as any[]).includes(id))
-			throw new NotFoundException();
-
 		const domain = await this.domainService.findById(id);
 		if (domain == null) throw new NotFoundException();
+
+		if (!docInsideDocArray(user.domains, domain._id))
+			throw new NotFoundException();
 
 		return this.domainService.changeDomainImage(domain, file);
 	}

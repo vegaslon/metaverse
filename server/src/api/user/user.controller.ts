@@ -13,10 +13,10 @@ import { MetaverseUnverifiedAuthGuard } from "../../auth/auth-unverified.guard";
 import { MetaverseAuthGuard } from "../../auth/auth.guard";
 import { CurrentUser } from "../../auth/user.decorator";
 import { MulterFile } from "../../common/multer-file.model";
+import { SessionService } from "../../session/session.service";
 import { UserUpdateLocationDto } from "../../user/user.dto";
 import { User } from "../../user/user.schema";
 import { UserService } from "../../user/user.service";
-import { SessionService } from "../../session/session.service";
 
 @ApiTags("from hifi")
 @ApiBearerAuth()

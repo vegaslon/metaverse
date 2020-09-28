@@ -1,8 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
+import { ObjectId } from "bson";
 import { Model } from "mongoose";
-import { UserUpdateLocationDto } from "../user/user.dto";
+import * as uuid from "uuid";
+import { uuidToObjectId } from "../common/utils";
 import { Domain } from "../domain/domain.schema";
+import { UserUpdateLocationDto } from "../user/user.dto";
 import { User } from "../user/user.schema";
 import { DomainSession, UserSession } from "./session.schema";
 
@@ -24,8 +27,8 @@ export class SessionService {
 		readonly domainSessionModel: Model<DomainSession>,
 	) {}
 
-	findUserById = (userId: string) => this.userSessionModel.findById(userId);
-	findDomainById = (domainId: string) =>
+	findUserById = (userId: ObjectId) => this.userSessionModel.findById(userId);
+	findDomainById = (domainId: ObjectId) =>
 		this.domainSessionModel.findById(domainId);
 
 	getUserCount = () => this.userSessionModel.countDocuments();
@@ -80,33 +83,19 @@ export class SessionService {
 		const {
 			path,
 			node_id: nodeId,
-			domain_id: domainId,
+			domain_id: domainUuid,
 		} = userUpdateLocationDto.location;
 
-		//const prevDomain = session.domain;
-
-		// if (prevDomain == null) {
-		// 	// add to domainSession
-		// 	await this.domainSessionModel.updateOne(
-		// 		{ _id: domainId },
-		// 		{ $addToSet: { userSessions: session } },
-		// 	);
-		// } else if (prevDomain.id != domainId) {
-		// 	// changed domain, clean up from old domainSession
-		// 	await this.domainSessionModel.updateOne(
-		// 		{ _id: prevDomain._id },
-		// 		{ $pull: { userSessions: session._id } },
-		// 	);
-		// 	// add to domainSession
-		// 	await this.domainSessionModel.updateOne(
-		// 		{ _id: domainId },
-		// 		{ $addToSet: { userSessions: session } },
-		// 	);
-		// }
+		const domainId = uuid.validate(domainUuid)
+			? uuidToObjectId(domainUuid)
+			: ObjectId.isValid(domainUuid)
+			? new ObjectId(domainUuid)
+			: null;
+		// TODO: doesn't try to decodeObjectId
 
 		session.path = path;
 		session.nodeId = nodeId;
-		session.domain = domainId as any; // reference
+		session.domain = domainId as any;
 		await session.save();
 
 		try {
@@ -123,17 +112,17 @@ export class SessionService {
 		let session = await this.findDomainById(domain._id);
 
 		if (session == null) {
-			try {
-				session = new this.domainSessionModel({
-					_id: domain._id,
-					domain,
-					expireAt: this.getExpireTime(),
-				});
-				await session.save();
-			} catch (err) {}
+			// the repear might not have reaped yet
+			await this.domainSessionModel.deleteOne({ _id: domain._id });
+
+			session = new this.domainSessionModel({
+				_id: domain._id,
+				domain,
+				expireAt: this.getExpireTime(),
+			});
+			await session.save();
 		} else {
 			session.expireAt = this.getExpireTime();
-
 			await session.save();
 		}
 
