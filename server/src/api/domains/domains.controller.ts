@@ -16,7 +16,7 @@ import * as uuid from "uuid";
 import { CurrentDomain } from "../../auth/domain.decorator";
 import { DomainAuthGuard } from "../../auth/domain.guard";
 import { MulterFile } from "../../common/multer-file.model";
-import { objectIdToUuid, renderDomainForHifi } from "../../common/utils";
+import { renderDomainForHifi, uuidToObjectId } from "../../common/utils";
 import { UpdateDomainDto } from "../../domain/domain.dto";
 import { Domain } from "../../domain/domain.schema";
 import { DomainService } from "../../domain/domain.service";
@@ -58,7 +58,7 @@ export class DomainsController {
 
 	isValidDomainId(domain: Domain, id: string) {
 		if (uuid.validate(id)) {
-			return id == objectIdToUuid(domain._id);
+			return uuidToObjectId(id).toHexString() == domain._id.toHexString();
 		} else {
 			return id == domain._id.toHexString();
 		}

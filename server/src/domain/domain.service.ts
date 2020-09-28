@@ -166,7 +166,7 @@ export class DomainService implements OnModuleInit {
 
 	async getUserDomains(user: User) {
 		const userPopulated = await this.userService
-			.findById(user.id)
+			.findById(user._id)
 			.populate("domains");
 
 		return userPopulated.domains;
@@ -285,7 +285,7 @@ export class DomainService implements OnModuleInit {
 	changeDomainImage(domain: Domain, file: MulterFile) {
 		return new Promise(async (resolve, reject) => {
 			await new Promise(resolve => {
-				this.images.delete(domain.id, err => {
+				this.images.delete(domain._id, err => {
 					resolve();
 				});
 			});
