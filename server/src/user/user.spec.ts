@@ -5,26 +5,25 @@ import * as fs from "fs";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import { Model, Mongoose, Schema } from "mongoose";
 import * as path from "path";
-import { Writable } from "stream";
+import * as uuid from "uuid";
 import { AuthSignUpDto } from "../auth/auth.dto";
 import { AuthService } from "../auth/auth.service";
-import { generateRandomString } from "../common/utils";
+import { generateRandomString, uuidToObjectId } from "../common/utils";
 import { Domain, DomainSchema } from "../domain/domain.schema";
 import { DomainService } from "../domain/domain.service";
 import { EmailModule } from "../email/email.module";
 import { JWT_SECRET } from "../environment";
+import { MetricsService } from "../metrics/metrics.service";
 import {
+	DomainSessionSchema,
 	UserSession,
 	UserSessionSchema,
-	DomainSessionSchema,
 } from "../session/session.schema";
 import { SessionService } from "../session/session.service";
 import { UserSettings, UserSettingsSchema } from "./user-settings.schema";
 import { UserUpdateLocationDto } from "./user.dto";
 import { User, UserSchema } from "./user.schema";
 import { UserService } from "./user.service";
-import * as uuid from "uuid";
-import { MetricsService } from "../metrics/metrics.service";
 
 // let mongo server download if it hasn't already
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000 * 60 * 10;
@@ -248,7 +247,9 @@ describe("UserService", () => {
 		await sessionService.updateUserLocation(user, dto);
 
 		const foundSession = await sessionService.findUserById(user._id);
-		expect(foundSession.domain).toBe(currentDomainId); // not populated
+		expect(String(foundSession.domain)).toBe(
+			uuidToObjectId(currentDomainId).toHexString(),
+		); // not populated
 	});
 
 	// it("should get a users domain likes", async () => {
