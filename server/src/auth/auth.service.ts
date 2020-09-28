@@ -91,7 +91,7 @@ export class AuthService {
 		return {
 			access_token: jwt,
 			created_at: iat,
-			expires_in: payload.exp - iat,
+			expires_in: decodedPayload.exp - iat,
 			refresh_token: "",
 			scope: "owner",
 			token_type: "Bearer",
