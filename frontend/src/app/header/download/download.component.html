@@ -91,13 +91,32 @@
 				>
 					Download for Linux
 				</button>
-				<p><b>Ubuntu 18.04 (glibc 2.27)</b> or higher</p>
-				<mat-menu #linuxMenu="matMenu">
-					<a mat-menu-item [href]="release.platforms.linux.url">
-						.AppImage ({{ release.platforms.linux.size }})
+				<p><b>glibc 2.27 (Ubuntu 18.04)</b> or higher</p>
+				<mat-menu
+					#linuxMenu="matMenu"
+					xPosition="before"
+					style="width: 1000px;"
+				>
+					<a
+						mat-menu-item
+						style="
+							line-height: 20px;
+							padding-top: 12px;
+							height: 64px;
+						"
+						[href]="release.platforms.linux.url"
+					>
+						<b>AppImage ({{ release.platforms.linux.size }})</b>
+						<br />
+						chmod +x ./tivoli.AppImage && ./tivoli.AppImage
 					</a>
 					<a
 						mat-menu-item
+						style="
+							line-height: 20px;
+							padding-top: 12px;
+							height: 64px;
+						"
 						[href]="
 							release.platforms.linux.url.replace(
 								'.AppImage',
@@ -105,24 +124,24 @@
 							)
 						"
 					>
-						.deb (~630 MB)
-						<span style="opacity: 0.5;">
-							&ndash; apt install ./tivoli.deb
-						</span>
+						<b>Debian/Ubuntu</b>
+						<br />
+						apt install ./tivoli.deb
 					</a>
 					<a
 						mat-menu-item
-						[href]="
-							release.platforms.linux.url.replace(
-								'.AppImage',
-								'.pacman'
-							)
+						style="
+							line-height: 20px;
+							padding-top: 12px;
+							height: 64px;
 						"
+						target="_blank"
+						href="https://aur.archlinux.org/packages/tivoli-cloud-vr-bin"
 					>
-						.pacman (~630 MB)
-						<span style="opacity: 0.5;">
-							&ndash; pacman -U tivoli.pacman
-						</span>
+						<b>Arch Linux</b>
+						<br />
+						yay -S
+						<span style="color: #e91e63;">tivoli-cloud-vr-bin</span>
 					</a>
 				</mat-menu>
 			</mat-card>
