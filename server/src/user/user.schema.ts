@@ -29,10 +29,13 @@ export const UserSchema = new Schema({
 
 	supporter: { type: Boolean, default: false },
 	nametag: {
-		type: new Schema({
-			displayName: { type: String, default: "" },
-			genderPronoun: { type: String, default: "" },
-		}),
+		type: new Schema(
+			{
+				displayName: { type: String, default: "" },
+				genderPronoun: { type: String, default: "" },
+			},
+			{ _id: false },
+		),
 		default: {},
 	},
 
