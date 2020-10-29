@@ -2,35 +2,26 @@ import {
 	Body,
 	Controller,
 	Get,
-	Param,
 	Post,
 	Req,
 	Res,
 	UseGuards,
-	Query,
-	HttpException,
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
-import { ApiBearerAuth, ApiExcludeEndpoint, ApiTags } from "@nestjs/swagger";
+import { ApiExcludeEndpoint, ApiTags } from "@nestjs/swagger";
 import { Request, Response } from "express";
 import { User } from "../user/user.schema";
 import { AuthExtSignUpDto, AuthSignUpDto } from "./auth.dto";
-import { MetaverseAuthGuard } from "./auth.guard";
 import {
 	AuthRegisterToken,
 	AuthService,
 	InterfaceAuthToken,
 } from "./auth.service";
-import { CurrentUser } from "./user.decorator";
-import { JwtService } from "@nestjs/jwt";
 
 @ApiTags("auth")
 @Controller("api/auth")
 export class AuthController {
-	constructor(
-		private readonly authService: AuthService,
-		private readonly jwtService: JwtService,
-	) {}
+	constructor(private readonly authService: AuthService) {}
 
 	@Post("signup")
 	async signUp(@Body() authSignUpDto: AuthSignUpDto) {
@@ -93,15 +84,6 @@ export class AuthController {
 		res.send(
 			`<script>if(window.opener)window.opener.postMessage(${json},"*")</script>`,
 		);
-	}
-
-	// gitlab sso
-	// TODO: replace with oauth
-	@Post("sso/gitlab")
-	@UseGuards(MetaverseAuthGuard)
-	@ApiBearerAuth()
-	ssoGitlab(@CurrentUser() user: User) {
-		return this.authService.ssoGitlabToken(user);
 	}
 
 	// oauth for fider. has been moved to frontend.

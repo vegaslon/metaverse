@@ -11,7 +11,6 @@ import * as bcrypt from "bcrypt";
 import * as mailchecker from "mailchecker";
 import { generateRandomString } from "../common/utils";
 import { Domain } from "../domain/domain.schema";
-import { URL } from "../environment";
 import { MetricsService } from "../metrics/metrics.service";
 import { User } from "../user/user.schema";
 import { UserService } from "../user/user.service";
@@ -188,7 +187,7 @@ export class AuthService {
 
 	// sso
 
-	async ssoGitlabToken(user: User) {
+	ssoGitlabToken(user: User) {
 		return this.jwtService.sign(
 			{
 				// id: user.id,

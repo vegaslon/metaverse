@@ -1,15 +1,16 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
-import { SsoComponent } from "./sso/sso.component";
+import { ReactiveFormsModule } from "@angular/forms";
 import { RouterModule, Routes } from "@angular/router";
-import { SsoRedirectingComponent } from "./sso/sso-redirecting/sso-redirecting.component";
 import { MaterialModule } from "../material.module";
 import { ResetPasswordComponent } from "./reset-password/reset-password.component";
+import { SsoRedirectingComponent } from "./sso/sso-redirecting/sso-redirecting.component";
+import { SsoComponent } from "./sso/sso.component";
 import { VerifyEmailComponent } from "./verify-email/verify-email.component";
-import { ReactiveFormsModule } from "@angular/forms";
 
 const routes: Routes = [
-	{ path: "sso/:service", component: SsoComponent },
+	// disabled because server side auth cookie is faster
+	// { path: "sso/:service", component: SsoComponent },
 	{ path: "**", redirectTo: "/" },
 ];
 

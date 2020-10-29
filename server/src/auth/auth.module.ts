@@ -1,7 +1,9 @@
 import { forwardRef, Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
+import { DomainModule } from "../domain/domain.module";
 import { JWT_SECRET } from "../environment";
+import { MetricsModule } from "../metrics/metrics.module";
 import { UserModule } from "../user/user.module";
 import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
@@ -12,8 +14,7 @@ import {
 } from "./external.strategy";
 import { JwtStrategy } from "./jwt.strategy";
 import { OauthController } from "./oauth.controller";
-import { DomainModule } from "../domain/domain.module";
-import { MetricsModule } from "../metrics/metrics.module";
+import { SsoAuthController } from "./sso-auth-controller";
 
 const strategies = [GoogleStrategy, DiscordStrategy, GitHubStrategy];
 
@@ -32,7 +33,7 @@ const strategies = [GoogleStrategy, DiscordStrategy, GitHubStrategy];
 		forwardRef(() => DomainModule),
 		MetricsModule,
 	],
-	controllers: [OauthController, AuthController],
+	controllers: [OauthController, AuthController, SsoAuthController],
 	providers: [AuthService, JwtStrategy, ...strategies],
 	exports: [PassportModule, JwtStrategy, AuthService],
 })

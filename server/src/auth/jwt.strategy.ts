@@ -1,5 +1,6 @@
 import { forwardRef, Inject, Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
+import { Request } from "express";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { DomainService } from "../domain/domain.service";
 import { JWT_SECRET } from "../environment";
@@ -27,7 +28,23 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 		private readonly domainService: DomainService,
 	) {
 		super({
-			jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+			jwtFromRequest: (req: Request) => {
+				if (req.headers.authorization != null) {
+					return ExtractJwt.fromAuthHeaderAsBearerToken()(req);
+				} else if (req.cookies.auth != null) {
+					try {
+						const auth: { access_token: string } = JSON.parse(
+							req.cookies.auth,
+						);
+						if (auth.access_token == null) return "";
+						return auth.access_token;
+					} catch (err) {
+						return "";
+					}
+				} else {
+					return "";
+				}
+			},
 			secretOrKey: JWT_SECRET,
 			ignoreExpiration: true,
 		});

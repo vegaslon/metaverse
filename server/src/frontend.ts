@@ -1,11 +1,16 @@
-import { ArgumentsHost, Catch, NotFoundException } from "@nestjs/common";
+import {
+	ArgumentsHost,
+	Catch,
+	NotFoundException,
+	UnauthorizedException,
+} from "@nestjs/common";
 import { BaseExceptionFilter, HttpAdapterHost } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { Request, Response } from "express";
 import * as path from "path";
 import { URL } from "url";
 import "zone.js";
-import { DEV, FILES_URL, TEA_URL } from "./environment";
+import { DEV, FILES_URL, TEA_URL, URL as METAVERSE_URL } from "./environment";
 
 // this all needs to be fixed eventually
 // using https://github.com/nestjs/ng-universal
@@ -22,7 +27,7 @@ const frontend = {
 };
 
 @Catch(NotFoundException)
-class FrontendRenderFilter extends BaseExceptionFilter {
+class NotFoundExceptionFilter extends BaseExceptionFilter {
 	private readonly filesHost = new URL(FILES_URL).hostname;
 	private readonly teaHost = new URL(TEA_URL).hostname;
 
@@ -50,6 +55,21 @@ class FrontendRenderFilter extends BaseExceptionFilter {
 	}
 }
 
+@Catch(UnauthorizedException)
+class UnauthorizedExceptionFilter extends BaseExceptionFilter {
+	catch(exception: UnauthorizedException, host: ArgumentsHost) {
+		const ctx = host.switchToHttp();
+		const req: Request = ctx.getRequest();
+
+		if (req.originalUrl.startsWith("/auth/sso/")) {
+			const res: Response = ctx.getResponse();
+			return res.redirect(METAVERSE_URL + "?signIn");
+		} else {
+			return super.catch(exception, host);
+		}
+	}
+}
+
 export function initFrontend(app: NestExpressApplication) {
 	if (!DEV) {
 		const {
@@ -73,5 +93,6 @@ export function initFrontend(app: NestExpressApplication) {
 	});
 
 	const { httpAdapter } = app.get(HttpAdapterHost);
-	app.useGlobalFilters(new FrontendRenderFilter(httpAdapter));
+	app.useGlobalFilters(new NotFoundExceptionFilter(httpAdapter));
+	app.useGlobalFilters(new UnauthorizedExceptionFilter(httpAdapter));
 }
