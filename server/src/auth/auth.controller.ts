@@ -152,32 +152,32 @@ export class AuthController {
 	// 	}
 	// }
 
-	@Post("sso/fider")
-	oauthToken(
-		@Body("grant_type") grantType: string,
-		@Body("code") code: string,
-		@Body("redirect_uri") redirectUri: string,
-		@Body("client_id") clientId: string,
-		@Body("client_secret") clientSecret: string,
-	) {
-		const error = (message: string) =>
-			new HttpException(
-				{
-					error: "invalid_request",
-					error_message: message,
-				},
-				401,
-			);
+	// @Post("sso/fider")
+	// oauthToken(
+	// 	@Body("grant_type") grantType: string,
+	// 	@Body("code") code: string,
+	// 	@Body("redirect_uri") redirectUri: string,
+	// 	@Body("client_id") clientId: string,
+	// 	@Body("client_secret") clientSecret: string,
+	// ) {
+	// 	const error = (message: string) =>
+	// 		new HttpException(
+	// 			{
+	// 				error: "invalid_request",
+	// 				error_message: message,
+	// 			},
+	// 			401,
+	// 		);
 
-		if (grantType !== "authorization_code")
-			throw error("Grant type not authorization code");
-		if (clientSecret !== "headbone") throw error("Incorrect client secret");
+	// 	if (grantType !== "authorization_code")
+	// 		throw error("Grant type not authorization code");
+	// 	if (clientSecret !== "headbone") throw error("Incorrect client secret");
 
-		const payload = this.jwtService.decode(code) as { exp: number };
+	// 	const payload = this.jwtService.decode(code) as { exp: number };
 
-		return {
-			access_token: code,
-			expires_in: payload.exp == null ? -1 : payload.exp,
-		};
-	}
+	// 	return {
+	// 		access_token: code,
+	// 		expires_in: payload.exp == null ? -1 : payload.exp,
+	// 	};
+	// }
 }
