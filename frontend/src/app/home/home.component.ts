@@ -1,19 +1,20 @@
+import { isPlatformServer } from "@angular/common";
+import { HttpClient } from "@angular/common/http";
 import {
 	Component,
-	OnInit,
-	ViewChild,
 	ElementRef,
-	OnDestroy,
 	Inject,
+	OnDestroy,
+	OnInit,
 	PLATFORM_ID,
+	ViewChild,
 } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import { DownloadComponent } from "../header/download/download.component";
-import { Subscription, interval } from "rxjs";
 import { ActivatedRoute, Router } from "@angular/router";
-import { HttpClient } from "@angular/common/http";
+import { interval, Subscription } from "rxjs";
+import { DownloadComponent } from "../header/download/download.component";
+import { SignInComponent } from "../header/sign-in/sign-in.component";
 import { UtilsService } from "../utils.service";
-import { isPlatformServer } from "@angular/common";
 
 @Component({
 	selector: "app-home",
@@ -102,6 +103,14 @@ export class HomeComponent implements OnInit, OnDestroy {
 				this.refreshStats();
 			}),
 		);
+	}
+
+	openSignIn() {
+		this.dialog.open(SignInComponent, {
+			data: {
+				mode: "signIn",
+			},
+		});
 	}
 
 	ngOnDestroy() {
