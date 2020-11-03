@@ -9,31 +9,31 @@ import * as moment from "moment-timezone";
 	styleUrls: ["./events.component.scss"],
 })
 export class EventsComponent implements OnInit {
-	today = new Date();
+	// today = new Date();
 	timezone = moment.tz.guess();
-	currentDate = new Date().getDate() - 1;
+	// currentDate = new Date().getDate() - 1;
 
-	offset = new Array(moment().startOf("month").get("day") - 1);
+	// offset = new Array(moment().startOf("month").get("day") - 1);
 
-	calendar: {
-		name: string;
-		description: string;
-		date: Date;
-	}[][];
+	// calendar: {
+	// 	name: string;
+	// 	description: string;
+	// 	date: Date;
+	// }[][];
 
-	weekDays = [
-		"Monday",
-		"Tuesday",
-		"Wednesday",
-		"Thursday",
-		"Friday",
-		"Saturday",
-		"Sunday",
-	];
+	// weekDays = [
+	// 	"Monday",
+	// 	"Tuesday",
+	// 	"Wednesday",
+	// 	"Thursday",
+	// 	"Friday",
+	// 	"Saturday",
+	// 	"Sunday",
+	// ];
 
-	loading = false;
+	// loading = false;
 
-	amPm = false;
+	// amPm = false;
 
 	googleCalendar = true;
 	googleCalendarUrl =
