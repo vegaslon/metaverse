@@ -32,7 +32,7 @@
 		AM/PM
 	</mat-slide-toggle> -->
 </div>
-<div class="calendar" *ngIf="!googleCalendar && calendar">
+<!-- <div class="calendar" *ngIf="!googleCalendar && calendar">
 	<div class="week-day" *ngFor="let weekDay of weekDays">{{ weekDay }}</div>
 	<div class="day empty" *ngFor="let _ of offset"></div>
 	<div
@@ -45,7 +45,7 @@
 			{{ i + 1 }}
 		</p>
 		<p *ngFor="let event of day">
-			<!-- <span class="circle"></span> -->
+			<span class="circle"></span>
 			<ng-container *ngIf="!amPm">
 				{{ event.date | date: "HH:mm" }}
 			</ng-container>
@@ -55,7 +55,7 @@
 			&nbsp;&nbsp;<b>{{ event.name }}</b>
 		</p>
 	</div>
-</div>
+</div> -->
 <iframe
 	*ngIf="googleCalendar"
 	class="google-calendar"

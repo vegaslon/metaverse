@@ -9,7 +9,7 @@ import * as moment from "moment-timezone";
 	styleUrls: ["./events.component.scss"],
 })
 export class EventsComponent implements OnInit {
-	// today = new Date();
+	today = new Date();
 	timezone = moment.tz.guess();
 	// currentDate = new Date().getDate() - 1;
 
@@ -31,7 +31,7 @@ export class EventsComponent implements OnInit {
 	// 	"Sunday",
 	// ];
 
-	// loading = false;
+	loading = false;
 
 	// amPm = false;
 
