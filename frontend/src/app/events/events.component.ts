@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Component, OnInit } from "@angular/core";
 import { DomSanitizer } from "@angular/platform-browser";
+import { ActivatedRoute } from "@angular/router";
 import * as moment from "moment-timezone";
 
 @Component({
@@ -36,32 +37,13 @@ export class EventsComponent implements OnInit {
 	// amPm = false;
 
 	googleCalendar = true;
-	googleCalendarUrl =
-		"https://calendar.google.com/calendar/embed?" +
-		[
-			"wkst=2",
-			"bgcolor=#ffffff",
-			"src=ZW1vYjR1ZnE4MGs2dDZlNTE1bnU5cWV2NWNAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ",
-			"color=#D81B60",
-			"showTitle=0",
-			"showNav=1",
-			"showDate=1",
-			"showPrint=0",
-			"showTabs=1",
-			"showCalendars=0",
-			"showTz=1",
-			"mode=MONTH",
-			"ctz=" + this.timezone,
-		]
-			.map(param => {
-				const [key, value] = param.split("=");
-				return key + "=" + encodeURIComponent(value);
-			})
-			.join("&");
+	googleCalendarUrl: string;
+	googleCalendarMode = "MONTH";
 
 	constructor(
 		private readonly http: HttpClient,
 		public readonly sanitizer: DomSanitizer,
+		public readonly route: ActivatedRoute,
 	) {}
 
 	// parseIcal(ical: string) {
@@ -146,7 +128,28 @@ export class EventsComponent implements OnInit {
 
 	refresh() {
 		if (this.googleCalendar) {
-			this.googleCalendarUrl = this.googleCalendarUrl;
+			this.googleCalendarUrl =
+				"https://calendar.google.com/calendar/embed?" +
+				[
+					"wkst=2",
+					"bgcolor=#ffffff",
+					"src=ZW1vYjR1ZnE4MGs2dDZlNTE1bnU5cWV2NWNAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ",
+					"color=#D81B60",
+					"showTitle=0",
+					"showNav=1",
+					"showDate=1",
+					"showPrint=0",
+					"showTabs=1",
+					"showCalendars=0",
+					"showTz=1",
+					"mode=" + this.googleCalendarMode,
+					"ctz=" + this.timezone,
+				]
+					.map(param => {
+						const [key, value] = param.split("=");
+						return key + "=" + encodeURIComponent(value);
+					})
+					.join("&");
 		} else {
 			// this.loading = true;
 			// this.http
@@ -170,6 +173,13 @@ export class EventsComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
+		this.route.queryParams.subscribe(params => {
+			if (typeof params.mode == "string" && params.mode.length != 0) {
+				this.googleCalendarMode = params.mode.toUpperCase();
+				this.refresh();
+			}
+		});
+
 		this.refresh();
 	}
 }
