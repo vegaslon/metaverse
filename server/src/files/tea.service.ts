@@ -9,11 +9,10 @@ import {
 import { JwtService } from "@nestjs/jwt";
 import crypto from "crypto";
 import { Request, Response } from "express";
-import { writeFileSync } from "fs";
 import { exec as openssl } from "openssl-wrapper";
-import rawBody from "raw-body";
 import { JwtPayload, JwtPayloadType } from "../auth/jwt.strategy";
 import { streamToBuffer } from "../common/utils";
+import { DomainService } from "../domain/domain.service";
 import { DEV, TEA_URL, URL as METAVERSE_URL } from "../environment";
 import { User } from "../user/user.schema";
 import { UserService } from "../user/user.service";
@@ -33,6 +32,7 @@ export class TeaService implements OnModuleInit {
 		private readonly filesHostService: FilesHostService,
 		private readonly jwtService: JwtService,
 		private readonly userService: UserService,
+		private readonly domainService: DomainService,
 	) {
 		// this.encrypt(
 		// 	Buffer.from(
@@ -158,20 +158,27 @@ export class TeaService implements OnModuleInit {
 	private async authenticate(accessToken: string): Promise<User> {
 		const payload = this.jwtService.decode(accessToken) as JwtPayload;
 
-		if (
-			payload.t !== JwtPayloadType.USER ||
-			payload.id == null ||
-			payload.exp == null
-		)
+		if (payload.t == null || payload.id == null || payload.exp == null)
 			throw new Error("Invalid token");
 
 		const now = +new Date() / 1000;
 		if (now > payload.exp) throw new Error("Expired token");
 
-		const user = await this.userService.findById(payload.id);
-		if (user == null) throw new Error("Invalid token");
-
-		return user;
+		if (payload.t == JwtPayloadType.USER) {
+			const user = await this.userService.findById(payload.id);
+			if (user == null) throw new Error("Invalid user");
+			return user;
+		} else if (payload.t == JwtPayloadType.DOMAIN) {
+			const domain = await this.domainService
+				.findById(payload.id)
+				.populate("author");
+			if (domain == null) throw new Error("Invalid world");
+			const user = domain.author;
+			if (user == null) throw new Error("Invalid user");
+			return user;
+		} else {
+			throw new Error("Invalid token");
+		}
 	}
 
 	async getFile(req: Request, res: Response) {
