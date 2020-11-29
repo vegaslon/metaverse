@@ -7,19 +7,19 @@ import { MetricsController } from "./metrics.controller";
 import { SessionModule } from "../session/session.module";
 
 @Module({
-	imports: [
-		MongooseModule.forFeature([
-			{
-				name: "metrics",
-				schema: MetricsSchema,
-				collection: "metrics",
-			},
-		]),
-		SessionModule,
-	],
+	// imports: [
+	// 	MongooseModule.forFeature([
+	// 		{
+	// 			name: "metrics",
+	// 			schema: MetricsSchema,
+	// 			collection: "metrics",
+	// 		},
+	// 	]),
+	// 	SessionModule,
+	// ],
 	providers: [MetricsService],
 	exports: [MetricsService],
-	controllers: [MetricsController],
+	// controllers: [MetricsController],
 })
 export class MetricsModule {
 	configure(consumer: MiddlewareConsumer) {

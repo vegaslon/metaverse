@@ -11,6 +11,7 @@ import { MetricsService } from "./metrics.service";
 
 @Controller("metrics")
 export class MetricsController {
+	/*
 	constructor(private readonly metricsService: MetricsService) {}
 
 	@Get()
@@ -24,4 +25,5 @@ export class MetricsController {
 
 		return this.metricsService.generatePrometheusMetrics();
 	}
+	*/
 }

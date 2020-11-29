@@ -14,6 +14,7 @@ import { generateRandomString } from "../common/utils";
 
 @Injectable()
 export class MetricsService implements OnModuleInit, OnModuleDestroy {
+	/*
 	private intervals: NodeJS.Timeout[] = [];
 
 	metrics: Metrics;
@@ -196,4 +197,10 @@ export class MetricsService implements OnModuleInit, OnModuleDestroy {
 			clearInterval(interval);
 		}
 	}
+	*/
+
+	metrics: any = {};
+
+	onModuleInit() {}
+	onModuleDestroy() {}
 }

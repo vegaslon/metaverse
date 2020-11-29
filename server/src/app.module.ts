@@ -67,8 +67,8 @@ import { SessionModule } from "./session/session.module";
 		ApiPlacesModule,
 
 		// extras
-		VideoStreamModule,
-		ZoomModule,
+		// VideoStreamModule,
+		// ZoomModule,
 	],
 	providers: [],
 	controllers: [
