@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
 import { AuthModule } from "../auth/auth.module";
+import { DomainModule } from "../domain/domain.module";
 import { JWT_SECRET } from "../environment";
 import { MetricsModule } from "../metrics/metrics.module";
 import { UserModule } from "../user/user.module";
@@ -22,6 +23,7 @@ import { TeaService } from "./tea.service";
 			},
 		}),
 		MetricsModule,
+		DomainModule,
 	],
 	providers: [FilesService, FilesHostService, TeaService],
 	exports: [FilesService],
