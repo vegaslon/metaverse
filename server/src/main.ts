@@ -39,7 +39,9 @@ function initDebugLogs(app: NestExpressApplication, logger: Logger) {
 	app.use((req: Request, res: Response, next: () => void) => {
 		if (req.hostname == teaHostname) return next();
 		bodyParser.json()(req, res, () => {
-			bodyParser.urlencoded()(req, res, () => {
+			bodyParser.urlencoded({
+				extended: true,
+			})(req, res, () => {
 				logger.verbose(req.method + " " + req.originalUrl); // tslint:disable-line
 				logger.verbose("auth: " + req.headers.authorization); // tslint:disable-line
 				logger.verbose("body: " + JSON.stringify(req.body, null, 4)); // tslint:disable-line
