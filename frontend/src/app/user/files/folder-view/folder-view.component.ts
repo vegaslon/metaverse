@@ -287,6 +287,7 @@ export class FolderViewComponent {
 		this.dialog.open(EditorComponent, {
 			width: "calc(100vw - 50px)",
 			height: "calc(100vh - 50px)",
+			disableClose: true,
 			data: {
 				file: this.contextMenu.file,
 			},
