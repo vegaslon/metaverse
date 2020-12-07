@@ -11,7 +11,9 @@ import * as YAML from "yaml";
 async function getRelease(channel: string) {
 	const releasesUrl = "https://cdn.tivolicloud.com/releases/";
 
-	const yamlStr = await (await fetch(releasesUrl + channel + ".yml")).text();
+	const yamlStr = await (
+		await fetch(releasesUrl + channel + ".yml?" + Date.now())
+	).text();
 
 	const yaml = YAML.parse(yamlStr);
 	if (typeof yaml !== "object")
