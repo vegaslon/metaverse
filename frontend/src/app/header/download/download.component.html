@@ -1,4 +1,4 @@
-<h1 style="text-align: center; margin-top: 24px;">
+<h1 style="text-align: center; margin-top: 24px">
 	Download
 	<b *ngIf="!loaded">Tivoli Cloud VR</b>
 	<b *ngIf="loaded" class="wiggle">
@@ -8,19 +8,19 @@
 		<span>o</span>
 		<span>l</span>
 		<span>i</span>
-		<span style="padding-left: 0.25em;"></span>
+		<span style="padding-left: 0.25em"></span>
 		<span>C</span>
 		<span>l</span>
 		<span>o</span>
 		<span>u</span>
 		<span>d</span>
-		<span style="padding-left: 0.25em;"></span>
+		<span style="padding-left: 0.25em"></span>
 		<span>V</span>
 		<span>R</span>
 	</b>
 	today!
 </h1>
-<p style="text-align: center;">
+<p style="text-align: center">
 	The early access version of Tivoli is unfinished and doesn't represent
 	<br />
 	the final product. Expect issues which can be
@@ -35,7 +35,7 @@
 	<mat-progress-bar
 		*ngIf="!loaded"
 		mode="indeterminate"
-		style="margin-top: 32px; margin-bottom: 24px;"
+		style="margin-top: 32px; margin-bottom: 24px"
 	></mat-progress-bar>
 	<ng-container *ngIf="loaded">
 		<div class="platforms">
@@ -76,7 +76,7 @@
 					}})
 				</p> -->
 				<p>
-					<b>macOS 10.11</b> or higher ({{
+					<b>macOS 10.13</b> or higher ({{
 						release.platforms.macos.size
 					}})
 				</p>
@@ -95,7 +95,7 @@
 				<mat-menu
 					#linuxMenu="matMenu"
 					xPosition="before"
-					style="width: 1000px;"
+					style="width: 1000px"
 				>
 					<a
 						mat-menu-item
@@ -141,14 +141,14 @@
 						<b>Arch Linux</b>
 						<br />
 						yay -S
-						<span style="color: #e91e63;">tivoli-cloud-vr-bin</span>
+						<span style="color: #e91e63">tivoli-cloud-vr-bin</span>
 					</a>
 				</mat-menu>
 			</mat-card>
 		</div>
 		<div class="current-info">
 			<h3>
-				<span style="font-size: 1.25em;"
+				<span style="font-size: 1.25em"
 					>Version {{ release.version }}</span
 				>
 				<br />
