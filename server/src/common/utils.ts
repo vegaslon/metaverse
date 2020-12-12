@@ -198,6 +198,7 @@ export function renderDomain(
 		author: domain.author.username,
 		description: domain.description,
 		restriction: domain.restriction,
+		maturity: domain.maturity,
 
 		online,
 		numUsers: online ? session.onlineUsers : 0,
