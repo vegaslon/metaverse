@@ -161,7 +161,7 @@ export class SignInComponent implements OnInit {
 		const authWindow = window.open(
 			window.location.origin + "/api/auth/" + serviceName,
 			"",
-			"toolbar=no,menubar=no,width=500,height=600",
+			"toolbar=no,menubar=no,width=500,height=700",
 		);
 
 		this.signInForm.disable();
@@ -169,6 +169,12 @@ export class SignInComponent implements OnInit {
 
 		const handleMessage = (e: MessageEvent) => {
 			if (e.origin != window.location.origin) return;
+			try {
+				if (e.data.tivoli != true) return;
+			} catch (err) {
+				return;
+			}
+
 			window.removeEventListener("message", handleMessage);
 			authWindow.close();
 

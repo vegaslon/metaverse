@@ -79,7 +79,7 @@ export class AuthController {
 			register = auth.register;
 		}
 
-		const json = JSON.stringify({ token, register });
+		const json = JSON.stringify({ tivoli: true, token, register });
 
 		res.send(
 			`<script>if(window.opener)window.opener.postMessage(${json},"*")</script>`,

@@ -207,13 +207,37 @@
 				</mat-error>
 			</mat-form-field>
 
+			<div
+				style="
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					margin-left: -8px;
+				"
+			>
+				<mdc-checkbox #agreeToTermsSignUp></mdc-checkbox>
+				<p>
+					<span
+						(click)="agreeToTermsSignUp.toggle()"
+						style="cursor: pointer;"
+					>
+						I have read and agree to the
+					</span>
+					<a href="/privacy-policy" target="_blank">Privacy Policy</a>
+				</p>
+			</div>
+
 			<div style="margin: 16px 0;"></div>
 
 			<button
 				type="submit"
 				mat-flat-button
 				color="primary"
-				[disabled]="signUpForm.invalid || isLoading"
+				[disabled]="
+					!agreeToTermsSignUp.checked ||
+					signUpForm.invalid ||
+					isLoading
+				"
 			>
 				Create a new account
 			</button>
@@ -226,6 +250,29 @@
 			>
 				Sign in instead
 			</button>
+
+			<div style="margin: 8px 0;"></div>
+
+			<span
+				*ngFor="let service of extServices"
+				style="margin-right: 8px;"
+			>
+				<button
+					type="button"
+					mat-stroked-button
+					(click)="onSignInExt(service.toLowerCase())"
+					[disabled]="isLoading"
+					style="margin-bottom: 8px;"
+				>
+					<img
+						style="width: 24px; height: 24px; margin-right: 4px;"
+						[src]="
+							'/assets/icons/' + service.toLowerCase() + '.svg'
+						"
+					/>
+					{{ service }}
+				</button>
+			</span>
 		</form>
 
 		<form
@@ -279,13 +326,37 @@
 				</mat-error>
 			</mat-form-field>
 
+			<div
+				style="
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					margin-left: -8px;
+				"
+			>
+				<mdc-checkbox #agreeToTermsExtSignUp></mdc-checkbox>
+				<p>
+					<span
+						(click)="agreeToTermsExtSignUp.toggle()"
+						style="cursor: pointer;"
+					>
+						I have read and agree to the
+					</span>
+					<a href="/privacy-policy" target="_blank">Privacy Policy</a>
+				</p>
+			</div>
+
 			<div style="margin: 16px 0;"></div>
 
 			<button
 				type="submit"
 				mat-flat-button
 				color="primary"
-				[disabled]="extSignUpForm.invalid || isLoading"
+				[disabled]="
+					!agreeToTermsExtSignUp.checked ||
+					extSignUpForm.invalid ||
+					isLoading
+				"
 			>
 				Create a new account
 			</button>
