@@ -84,6 +84,21 @@
 							</td>
 						</tr>
 						<tr mdcDataTableRow>
+							<th mdcDataTableHeaderCell>Dev</th>
+							<td mdcDataTableCell>
+								<mdc-form-field>
+									<mdc-checkbox
+										disabled
+										[checked]="user.dev"
+										style="margin-left: -8px;"
+									></mdc-checkbox>
+									<label>
+										{{ user.dev ? "Yes" : "No" }}
+									</label>
+								</mdc-form-field>
+							</td>
+						</tr>
+						<tr mdcDataTableRow>
 							<th mdcDataTableHeaderCell>Total time</th>
 							<td mdcDataTableCell>
 								{{ utilsService.displayMinutes(user.minutes) }}
@@ -125,24 +140,31 @@
 			</mdc-data-table>
 
 			<h2>Actions</h2>
-			<button mat-flat-button color="primary" (click)="onImpersonate()">
-				<mat-icon>camera</mat-icon> Impersonate
-			</button>
-			<div style="margin: 8px 0; display: block;"></div>
-			<button mat-flat-button color="primary" (click)="onToggleVerify()">
-				<mat-icon>email</mat-icon> Toggle verified
-			</button>
-			<span style="margin: 0 4px;"></span>
-			<button mat-flat-button color="primary" (click)="onToggleAdmin()">
-				<mat-icon>build</mat-icon> Toggle admin
-			</button>
-			<span style="margin: 0 4px;"></span>
+
 			<button
 				mat-flat-button
 				color="primary"
 				(click)="onToggleSupporter()"
 			>
 				<mat-icon>favorite</mat-icon> Toggle supporter
+			</button>
+			<span style="margin: 0 4px;"></span>
+			<button mat-flat-button color="primary" (click)="onToggleDev()">
+				<mat-icon>build</mat-icon> Toggle dev
+			</button>
+
+			<div style="margin: 8px 0; display: block;"></div>
+
+			<button mat-flat-button color="primary" (click)="onImpersonate()">
+				<mat-icon>camera</mat-icon> Impersonate
+			</button>
+			<span style="margin: 0 4px;"></span>
+			<button mat-flat-button color="primary" (click)="onToggleVerify()">
+				<mat-icon>email</mat-icon> Toggle verified
+			</button>
+			<span style="margin: 0 4px;"></span>
+			<button mat-flat-button color="primary" (click)="onToggleAdmin()">
+				<mat-icon>build</mat-icon> Toggle admin
 			</button>
 		</div>
 

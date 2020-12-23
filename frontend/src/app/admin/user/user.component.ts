@@ -65,4 +65,11 @@ export class UserComponent implements OnInit {
 					this.refreshUser();
 				});
 	}
+
+	onToggleDev() {
+		if (window.confirm("Are you sure you want to toggle dev?"))
+			this.adminService.toggleDevUser(this.user.id).subscribe(() => {
+				this.refreshUser();
+			});
+	}
 }

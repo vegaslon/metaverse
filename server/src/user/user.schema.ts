@@ -28,6 +28,7 @@ export const UserSchema = new Schema({
 	friends: [{ type: Schema.Types.ObjectId, ref: "users" }],
 
 	supporter: { type: Boolean, default: false },
+	dev: { type: Boolean, default: false },
 	nametag: {
 		type: new Schema(
 			{
@@ -65,6 +66,7 @@ export interface User extends Document {
 	friends: Types.Array<User>;
 
 	supporter: boolean;
+	dev: boolean;
 	nametag: {
 		displayName: string;
 		genderPronoun: string;

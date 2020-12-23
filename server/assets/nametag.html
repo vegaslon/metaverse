@@ -51,6 +51,9 @@
 		text-shadow: 2px 2px rgba(29, 31, 33, 0.6);
 		font-weight: 700;
 
+		text-align: center;
+		/* min-width: 96px; */
+
 		position: relative;
 		vertical-align: middle;
 		/* padding-top: 22px; */
@@ -158,14 +161,38 @@
 			</svg>
 		</div>
 		{{/if}} {{#if supporter}}
-		<div style="background: #e91e63; padding-left: 2px; display: flex">
+		<div
+			style="
+				background: #e91e63;
+				padding-left: 2px;
+				padding-right: 6px;
+				display: flex;
+			"
+		>
 			<svg class="icon" viewBox="0 0 32 32" style="margin-top: 0px">
 				<path
 					transform="translate(4,4)"
 					d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
 				/>
 			</svg>
-			<span>supporter</span>
+			<span>contributor</span>
+		</div>
+		{{/if}} {{#if dev}}
+		<div
+			style="
+				background: #9c27b0;
+				padding-left: 2px;
+				padding-right: 6px;
+				display: flex;
+			"
+		>
+			<svg class="icon" viewBox="0 0 32 32" style="margin-top: 0px">
+				<path
+					transform="translate(4,4)"
+					d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"
+				/>
+			</svg>
+			<span>dev</span>
 		</div>
 		{{/if}} {{#if connected}}
 		<div style="background: #9c27b0">
