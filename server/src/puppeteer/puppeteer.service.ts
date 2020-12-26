@@ -102,7 +102,7 @@ export class PuppeteerService implements OnModuleInit {
 			genderPronoun,
 		});
 
-		return this.renderHTML(html, 1024, 128);
+		return this.renderHTML(html, 2048, 256);
 	}
 
 	// async renderModel(modelUrl: string) {
