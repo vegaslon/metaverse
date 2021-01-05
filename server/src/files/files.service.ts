@@ -421,11 +421,13 @@ export class FilesService {
 		if (!avatarRes.ok)
 			throw new BadRequestException("Failed to fetch avatar url");
 
-		await this.uploadFile(user, "/avatars/" + name + "/avatar.glb", {
+		const keyPrefix = "/ready-player-me/" + name.replace(/[\n\r]/g, "");
+
+		await this.uploadFile(user, keyPrefix + "/avatar.glb", {
 			stream: avatarRes.body,
 		} as any);
 
-		await this.uploadFile(user, "/avatars/" + name + "/avatar.fst", {
+		await this.uploadFile(user, keyPrefix + "/avatar.fst", {
 			stream: Readable.from(
 				`name = ${name}
 type = body+head
@@ -450,7 +452,7 @@ bs = EyeBlink_R = eyeBlinkRight = 1`,
 		} as any);
 
 		return {
-			avatarUrl: this.getUrl(user, "/avatars/" + name + "/avatar.fst"),
+			avatarUrl: this.getUrl(user, keyPrefix + "/avatar.fst"),
 		};
 	}
 }
