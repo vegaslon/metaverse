@@ -452,7 +452,12 @@ bs = EyeBlink_R = eyeBlinkRight = 1`,
 		} as any);
 
 		return {
-			avatarUrl: this.getUrl(user, keyPrefix + "/avatar.fst"),
+			avatarUrl:
+				FILES_URL +
+				"/" +
+				user.username.toLowerCase() +
+				encodeURI(keyPrefix) +
+				"/avatar.fst",
 		};
 	}
 }
