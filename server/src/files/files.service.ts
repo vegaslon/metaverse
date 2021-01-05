@@ -483,8 +483,12 @@ export class FilesService {
 		)[0];
 
 		if (getMetadata) {
-			const metadata = (await file.getMetadata())[0];
-			return { url, metadata };
+			try {
+				const metadata = (await file.getMetadata())[0];
+				return { url, metadata };
+			} catch (err) {
+				return { url, metadata: {} };
+			}
 		} else {
 			return { url, metadata: {} };
 		}
