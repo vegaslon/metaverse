@@ -24,6 +24,8 @@ interface ContextMenu {
 	x: number;
 	y: number;
 
+	teaOnly: boolean;
+
 	httpUrlCopied: boolean;
 	teaUrlCopied: boolean;
 
@@ -49,20 +51,9 @@ export class FolderViewComponent {
 		private dialog: MatDialog,
 	) {}
 
-	// TODO: outsource together with files.component.ts
-	private getBreadcrumbs(currentFolder: Folder) {
-		const breadcrumbs: Folder[] = [];
-
-		while (currentFolder.parent != null) {
-			breadcrumbs.unshift(currentFolder);
-			currentFolder = currentFolder.parent;
-		}
-
-		return breadcrumbs;
-	}
-
 	onItemClick(file: File) {
-		if (isPlatformBrowser(this.platformId)) window.open(file.httpUrl);
+		if (!file.teaOnly && isPlatformBrowser(this.platformId))
+			window.open(file.httpUrl);
 	}
 
 	contextMenu: ContextMenu = null;
@@ -84,6 +75,8 @@ export class FolderViewComponent {
 
 			httpUrlCopied: false,
 			teaUrlCopied: false,
+
+			teaOnly: item.teaOnly,
 
 			areYouSureDelete: false,
 			loading: false,
@@ -154,7 +147,8 @@ export class FolderViewComponent {
 	}
 
 	private onContextMenuMoveFolder() {
-		const currentPath = this.getBreadcrumbs(this.contextMenu.folder)
+		const currentPath = this.contextMenu.folder
+			.getBreadcrumbs()
 			.map(folder => folder.name)
 			.join("/");
 
@@ -236,7 +230,8 @@ export class FolderViewComponent {
 	private onContextMenuRenameFolder() {
 		let currentPath =
 			"/" +
-			this.getBreadcrumbs(this.contextMenu.folder)
+			this.contextMenu.folder
+				.getBreadcrumbs()
 				.slice(0, -1)
 				.map(folder => folder.name)
 				.join("/");
@@ -283,6 +278,23 @@ export class FolderViewComponent {
 		}
 	}
 
+	onContextMenuToggleTea() {
+		const contextMenu = this.contextMenu;
+		contextMenu.loading = true;
+
+		const obs =
+			this.contextMenu.type == "file"
+				? this.filesService.toggleTeaOnlyFile(this.contextMenu.file.key)
+				: this.filesService.toggleTeaOnlyFolder(
+						this.contextMenu.folder.key,
+				  );
+
+		obs.subscribe(() => {
+			this.onRefresh.emit();
+			if (this.contextMenu == contextMenu) this.contextMenu = null;
+		});
+	}
+
 	onContextMenuEditFile() {
 		this.dialog.open(EditorComponent, {
 			width: "calc(100vw - 50px)",
@@ -312,13 +324,7 @@ export class FolderViewComponent {
 		const obs =
 			contextMenu.type == "file"
 				? this.filesService.deleteFile(this.contextMenu.file.key)
-				: this.filesService.deleteFolder(
-						"/" +
-							this.getBreadcrumbs(this.contextMenu.folder)
-								.map(folder => folder.name)
-								.join("/") +
-							"/",
-				  );
+				: this.filesService.deleteFolder(this.contextMenu.folder.key);
 
 		obs.subscribe(
 			() => {

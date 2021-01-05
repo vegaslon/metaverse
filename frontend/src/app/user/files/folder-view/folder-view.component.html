@@ -5,7 +5,11 @@
 		(click)="onFolderClick.emit(folder)"
 		oncontextmenu="return false;"
 		(contextmenu)="onItemContextMenu('folder', folder, $event)"
+		[class.tea-only]="folder.teaOnly"
 	>
+		<div class="tea-only" *ngIf="folder.teaOnly">
+			<mat-icon class="icon">emoji_food_beverage</mat-icon>
+		</div>
 		<div class="contents">
 			<mat-icon class="icon">folder</mat-icon>
 			{{ folder.name }}
@@ -19,55 +23,61 @@
 		(click)="onItemClick(file)"
 		oncontextmenu="return false;"
 		(contextmenu)="onItemContextMenu('file', file, $event)"
+		[class.tea-only]="file.teaOnly"
 	>
+		<div class="tea-only" *ngIf="file.teaOnly">
+			<mat-icon class="icon">emoji_food_beverage</mat-icon>
+		</div>
 		<div class="thumbnail">
 			<mat-icon class="icon">{{ file.icon }}</mat-icon>
-			<div
-				class="preview"
-				*ngIf="file.type == 'image' && file.size < 10000000"
-				[style.backgroundImage]="
-					'url(' +
-					file.httpUrl +
-					(file.cacheBust > 0 ? '?' + file.cacheBust : '') +
-					')'
-				"
-			></div>
-			<!-- <div
-				class="preview contain"
-				*ngIf="file.type == 'model'"
-				[style.backgroundImage]="
-					'url(/api/render?url=' + file.httpUrl + ')'
-				"
-			></div> -->
-			<video
-				class="preview"
-				*ngIf="file.type == 'video'"
-				style="object-fit: cover;"
-				autoplay
-				loop
-				mute
-			>
-				<source
+			<ng-container *ngIf="!file.teaOnly">
+				<div
+					class="preview"
+					*ngIf="file.type == 'image' && file.size < 10000000"
+					[style.backgroundImage]="
+						'url(' +
+						file.httpUrl +
+						(file.cacheBust > 0 ? '?' + file.cacheBust : '') +
+						')'
+					"
+				></div>
+				<!-- <div
+					class="preview contain"
+					*ngIf="file.type == 'model'"
+					[style.backgroundImage]="
+						'url(/api/render?url=' + file.httpUrl + ')'
+					"
+				></div> -->
+				<video
+					class="preview"
+					*ngIf="file.type == 'video'"
+					style="object-fit: cover;"
+					autoplay
+					loop
+					mute
+				>
+					<source
+						[src]="
+							file.httpUrl +
+							(file.cacheBust > 0 ? '?' + file.cacheBust : '')
+						"
+					/>
+				</video>
+				<audio
+					class="preview"
+					style="background: #fff;"
+					*ngIf="file.type == 'audio'"
 					[src]="
 						file.httpUrl +
 						(file.cacheBust > 0 ? '?' + file.cacheBust : '')
 					"
-				/>
-			</video>
-			<audio
-				class="preview"
-				style="background: #fff;"
-				*ngIf="file.type == 'audio'"
-				[src]="
-					file.httpUrl +
-					(file.cacheBust > 0 ? '?' + file.cacheBust : '')
-				"
-				controls
-			></audio>
+					controls
+				></audio>
+			</ng-container>
 		</div>
 		<div class="contents">
 			<mat-icon class="icon">{{ file.icon }}</mat-icon>
-			<span>
+			<span style="height: 36px;">
 				<p>{{ file.name }}</p>
 				<p class="size">{{ utilsService.formatBytes(file.size) }}</p>
 			</span>
@@ -105,6 +115,7 @@
 				mat-button
 				(click)="onContextMenuCopyHttpUrl()"
 				style="text-align: center;"
+				[disabled]="contextMenu.teaOnly"
 			>
 				<mat-icon>link</mat-icon>
 				<ng-container *ngIf="!contextMenu.httpUrlCopied">
@@ -128,15 +139,32 @@
 				</ng-container>
 			</button>
 		</div>
+		<div style="margin: 8px 0;"></div>
+	</ng-container>
+	<ng-container>
+		<button mat-button (click)="onContextMenuToggleTea()">
+			<mdc-checkbox
+				[checked]="contextMenu.teaOnly"
+				(change)="onContextMenuToggleTea()"
+				style="margin-left: -8px;"
+			></mdc-checkbox>
+			<mat-icon>emoji_food_beverage</mat-icon>
+			Toggle tea:// only
+		</button>
 		<mat-divider></mat-divider>
+	</ng-container>
+	<ng-container
+		*ngIf="contextMenu.type == 'file' && contextMenu.file.type == 'code'"
+	>
 		<button
 			mat-button
-			*ngIf="contextMenu.file.type == 'code'"
 			(click)="onContextMenuEditFile()"
+			[disabled]="contextMenu.teaOnly"
 		>
 			<mat-icon>launch</mat-icon>
 			Open in editor
 		</button>
+		<mat-divider></mat-divider>
 	</ng-container>
 	<button mat-button (click)="onContextMenuMove()">
 		<mat-icon>folder</mat-icon>
@@ -150,6 +178,7 @@
 		mat-button
 		*ngIf="contextMenu.type == 'file'"
 		(click)="onContextMenuDownload()"
+		[disabled]="contextMenu.teaOnly"
 	>
 		<mat-icon>get_app</mat-icon>
 		Download

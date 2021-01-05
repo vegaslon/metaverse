@@ -1,4 +1,4 @@
-import { Bucket, Storage } from "@google-cloud/storage";
+import { Bucket, File, Storage } from "@google-cloud/storage";
 import {
 	BadRequestException,
 	Injectable,
@@ -49,6 +49,7 @@ interface GoogleFileMetadata {
 	timeCreated: Date;
 	updated: Date;
 	timeStorageClassUpdated: Date;
+	metadata: { [key: string]: string } | null;
 }
 
 export interface UserFile {
@@ -194,17 +195,27 @@ export class FilesService {
 			url: FILES_URL + "/" + user.username.toLowerCase(),
 			files: files.map(file => {
 				const metadata: GoogleFileMetadata = file.metadata;
+				const tea =
+					metadata.metadata == null
+						? false
+						: metadata.metadata.tea == "true";
 
 				return {
 					key: metadata.name.replace(user.id, ""),
 					updated: metadata.updated,
 					size: parseInt(metadata.size),
+					tea,
 				};
 			}),
 		};
 	}
 
-	async uploadFile(user: User, pathStr: string, file: MulterStream) {
+	async uploadFile(
+		user: User,
+		pathStr: string,
+		file: MulterStream,
+		teaOnly = false,
+	) {
 		const key = this.validatePath(user, pathStr);
 		const maxUserSize = this.getMaxUserSize(user);
 		const userSize = await this.getUserSize(user);
@@ -245,6 +256,11 @@ export class FilesService {
 			private: true,
 			contentType: getMimeType(key),
 			gzip: false,
+			metadata: {
+				metadata: {
+					tea: teaOnly,
+				},
+			},
 		});
 
 		body.pipe(stream);
@@ -390,6 +406,56 @@ export class FilesService {
 		}
 	}
 
+	async toggleTeaOnlyFile(user: User, path: string, forceTea = null) {
+		const key = this.validatePath(user, path, false);
+
+		const file = this.bucket.file(key);
+
+		const metadata = await file.getMetadata();
+		if (metadata.length > 0) {
+			let customMetadata = metadata[0].metadata ?? {};
+
+			const tea =
+				forceTea != null ? forceTea : !(customMetadata.tea == "true");
+			customMetadata.tea = tea;
+
+			metadata[0].metadata = customMetadata;
+			await file.setMetadata(metadata[0]);
+
+			return { tea };
+		} else {
+			return { tea: false };
+		}
+	}
+
+	async toggleTeaOnlyFolder(user: User, path: string) {
+		const key = this.validatePath(user, path, true);
+
+		const files: File[] = (
+			await this.bucket.getFiles({
+				prefix: key,
+			})
+		)[0];
+
+		let tea = files.every(
+			f => f.metadata.metadata && f.metadata.metadata.tea == "true",
+		);
+		tea = !tea;
+
+		const promises: Promise<any>[] = [];
+		for (const file of files) {
+			const path = file.name.replace(
+				new RegExp("^" + user.id + "/"),
+				"/",
+			);
+			promises.push(this.toggleTeaOnlyFile(user, path, tea));
+		}
+
+		await Promise.all(promises);
+
+		return { tea };
+	}
+
 	async getStatus(user: User) {
 		const size = await this.getUserSize(user);
 		const maxSize = this.getMaxUserSize(user);
@@ -400,17 +466,28 @@ export class FilesService {
 		};
 	}
 
-	getObjectUrl(pathStr: string) {
+	async getObjectUrl(pathStr: string, getMetadata = false) {
 		// return this.s3.getSignedUrl("getObject", {
 		// 	Bucket: this.bucket,
 		// 	Key: pathStr,
 		// 	Expires: 60,
 		// });
 
-		return this.bucket.file(pathStr).getSignedUrl({
-			action: "read",
-			expires: Date.now() + 1000 * 60,
-		});
+		const file = this.bucket.file(pathStr);
+
+		const url = (
+			await file.getSignedUrl({
+				action: "read",
+				expires: Date.now() + 1000 * 60,
+			})
+		)[0];
+
+		if (getMetadata) {
+			const metadata = (await file.getMetadata())[0];
+			return { url, metadata };
+		} else {
+			return { url, metadata: {} };
+		}
 	}
 
 	async readyPlayerMe(user: User, name: string, avatarUrl: string) {
@@ -423,13 +500,21 @@ export class FilesService {
 
 		const keyPrefix = "/ready-player-me/" + name.replace(/[\n\r]/g, "");
 
-		await this.uploadFile(user, keyPrefix + "/avatar.glb", {
-			stream: avatarRes.body,
-		} as any);
+		await this.uploadFile(
+			user,
+			keyPrefix + "/avatar.glb",
+			{
+				stream: avatarRes.body,
+			} as any,
+			true,
+		);
 
-		await this.uploadFile(user, keyPrefix + "/avatar.fst", {
-			stream: Readable.from(
-				`name = ${name}
+		await this.uploadFile(
+			user,
+			keyPrefix + "/avatar.fst",
+			{
+				stream: Readable.from(
+					`name = ${name}
 type = body+head
 scale = 1
 filename = avatar.glb
@@ -448,8 +533,10 @@ freeJoint = RightForeArm
 bs = JawOpen = mouthOpen = 3
 bs = EyeBlink_L = eyeBlinkLeft = 1
 bs = EyeBlink_R = eyeBlinkRight = 1`,
-			),
-		} as any);
+				),
+			} as any,
+			true,
+		);
 
 		return {
 			// avatarUrl:

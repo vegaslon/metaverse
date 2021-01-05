@@ -123,6 +123,23 @@ export class FilesController {
 		return this.filesService.moveFolder(user, oldPath, newPath);
 	}
 
+	@Post("tea-only")
+	@ApiBearerAuth()
+	@UseGuards(MetaverseAuthGuard)
+	toggleTeaOnlyFile(@CurrentUser() user: User, @Query("path") path: string) {
+		return this.filesService.toggleTeaOnlyFile(user, path);
+	}
+
+	@Post("folder/tea-only")
+	@ApiBearerAuth()
+	@UseGuards(MetaverseAuthGuard)
+	toggleTeaOnlyFolder(
+		@CurrentUser() user: User,
+		@Query("path") path: string,
+	) {
+		return this.filesService.toggleTeaOnlyFolder(user, path);
+	}
+
 	// @Post("folder/move")
 	// @ApiBearerAuth()
 	// @UseGuards(MetaverseAuthGuard)

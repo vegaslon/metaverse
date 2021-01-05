@@ -22,17 +22,58 @@ export class File {
 		public size: number,
 		public httpUrl: string,
 		public teaUrl: string,
+		public teaOnly: boolean = false,
 		public parent: Folder = null,
 	) {}
 }
 
 export class Folder {
+	public readonly key: string;
+
 	constructor(
 		public name: string,
 		public parent: Folder = null,
 		public folders: Folder[] = [],
 		public files: File[] = [],
-	) {}
+		public teaOnly: boolean = false,
+	) {
+		this.key =
+			"/" +
+			this.getBreadcrumbs()
+				.map(folder => folder.name)
+				.join("/") +
+			"/";
+	}
+
+	getBreadcrumbs() {
+		const breadcrumbs: Folder[] = [];
+		let currentFolder: Folder = this;
+
+		while (currentFolder.parent != null) {
+			breadcrumbs.unshift(currentFolder);
+			currentFolder = currentFolder.parent;
+		}
+
+		return breadcrumbs;
+	}
+
+	traverseAndCheckForTeaOnly() {
+		let teaOnly = this.files.length != 0 || this.folders.length != 0;
+		for (const file of this.files) {
+			if (file.teaOnly == false) {
+				teaOnly = false;
+				break;
+			}
+		}
+		for (const folder of this.folders) {
+			if (folder.traverseAndCheckForTeaOnly() == false) {
+				teaOnly = false;
+				// dont break because it needs to recurse for each folder
+			}
+		}
+		this.teaOnly = teaOnly;
+		return teaOnly;
+	}
 }
 
 export class Status {
@@ -131,8 +172,9 @@ export class FilesService {
 				url: string;
 				files: {
 					key: string;
-					lastModified: Date;
 					size: number;
+					tea: boolean;
+					updated: Date;
 				}[];
 			}>("/api/user/files")
 			.pipe(
@@ -162,6 +204,7 @@ export class FilesService {
 								keyedFile.size,
 								data.url + keyedFile.key,
 								"tea://" + username + keyedFile.key,
+								keyedFile.tea,
 								folder,
 							);
 
@@ -178,6 +221,8 @@ export class FilesService {
 							totalFiles++;
 						}
 					}
+
+					rootFolder.traverseAndCheckForTeaOnly();
 
 					return {
 						folder: rootFolder,
@@ -281,6 +326,22 @@ export class FilesService {
 					newPath,
 				},
 			},
+		);
+	}
+
+	toggleTeaOnlyFile(path: string) {
+		return this.http.post(
+			"/api/user/files/tea-only",
+			{},
+			{ params: { path } },
+		);
+	}
+
+	toggleTeaOnlyFolder(path: string) {
+		return this.http.post(
+			"/api/user/files/folder/tea-only",
+			{},
+			{ params: { path } },
 		);
 	}
 }

@@ -1,5 +1,6 @@
 import {
 	BadRequestException,
+	ForbiddenException,
 	HttpException,
 	Injectable,
 	NotFoundException,
@@ -21,7 +22,12 @@ export class FilesHostService {
 		private readonly metricsService: MetricsService,
 	) {}
 
-	async getFile(req: ExpressRequest, res: ExpressResponse, path: string) {
+	async getFile(
+		req: ExpressRequest,
+		res: ExpressResponse,
+		path: string,
+		isTeaRequest = false,
+	) {
 		const filePath = path.split("/");
 		if (filePath.some(part => part == ".."))
 			throw new BadRequestException();
@@ -32,9 +38,18 @@ export class FilesHostService {
 		filePath[0] = user.id;
 
 		// fetch file response
-		const fileUrl = (
-			await this.filesService.getObjectUrl(filePath.join("/"))
-		)[0];
+		const { url: fileUrl, metadata } = await this.filesService.getObjectUrl(
+			filePath.join("/"),
+			!isTeaRequest,
+		);
+
+		if (
+			!isTeaRequest &&
+			metadata.metadata &&
+			metadata.metadata.tea == "true"
+		) {
+			throw new ForbiddenException();
+		}
 
 		const reqHeaders = JSON.parse(JSON.stringify(req.headers));
 		delete reqHeaders.host;

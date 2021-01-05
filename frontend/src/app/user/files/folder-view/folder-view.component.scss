@@ -14,12 +14,45 @@
 		border: solid 1px rgba(#000, 0.15);
 		border-radius: 4px;
 		user-select: none;
-		overflow: hidden;
+		// overflow: hidden;
 		color: #000;
+		position: relative;
 
 		&:hover {
 			background-color: rgba(#000, 0.025);
 			border-color: rgba(#000, 0.2);
+		}
+
+		$teaColor: #e91e63;
+		&.tea-only {
+			border-color: rgba($teaColor, 0.3);
+		}
+		.tea-only {
+			width: 27px;
+			height: 27px;
+			background-color: mix($teaColor, #fff, 70%);
+			color: #fff;
+			// display: flex;
+			// align-items: center;
+			// justify-content: center;
+			padding-left: 1px;
+			padding-top: 1px;
+			border-radius: 3px 0 6px 0;
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			z-index: 999;
+		}
+		&.folder {
+			// .tea-only {
+			// 	bottom: 0;
+			// 	height: auto;
+			// 	border-radius: 3px 0px 0px 3px;
+			// 	margin-right: 16px;
+			// }
+			&.tea-only .contents {
+				margin-left: 27px;
+			}
 		}
 
 		$margin: 8px;
@@ -98,7 +131,8 @@
 			}
 
 			.contents {
-				height: auto;
+				height: 136px - 72px - 32px;
+				overflow: hidden;
 			}
 		}
 	}
@@ -112,6 +146,8 @@
 	border-radius: 4px;
 	top: 0;
 	left: 0;
+	z-index: 999;
+	overflow: hidden;
 
 	.info {
 		padding: 8px 16px;

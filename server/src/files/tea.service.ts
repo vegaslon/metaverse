@@ -243,7 +243,7 @@ export class TeaService implements OnModuleInit {
 			body: NodeJS.ReadableStream;
 		};
 		try {
-			file = await this.filesHostService.getFile(req, null, path);
+			file = await this.filesHostService.getFile(req, null, path, true);
 		} catch (err) {
 			if (DEV) {
 				this.logger.verbose(err);
