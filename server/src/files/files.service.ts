@@ -448,5 +448,9 @@ bs = EyeBlink_L = eyeBlinkLeft = 1
 bs = EyeBlink_R = eyeBlinkRight = 1`,
 			),
 		} as any);
+
+		return {
+			avatarUrl: this.getUrl(user, "/avatars/" + name + "/avatar.fst"),
+		};
 	}
 }
