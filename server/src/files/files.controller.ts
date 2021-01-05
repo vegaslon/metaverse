@@ -133,4 +133,15 @@ export class FilesController {
 	// ) {
 	// 	//return this.filesService.moveFile(user, oldPath, newPath);
 	// }
+
+	@Post("ready-player-me")
+	@ApiBearerAuth()
+	@UseGuards(MetaverseAuthGuard)
+	readyPlayerMe(
+		@CurrentUser() user: User,
+		@Body("name") name: string,
+		@Body("avatarUrl") avatarUrl: string,
+	) {
+		return this.filesService.readyPlayerMe(user, name, avatarUrl);
+	}
 }

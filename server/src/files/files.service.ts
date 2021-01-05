@@ -5,10 +5,12 @@ import {
 	InternalServerErrorException,
 } from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
+import fetch from "node-fetch";
 import * as path from "path";
 import { from, merge } from "rxjs";
 import { rxToStream, streamToRx } from "rxjs-stream";
 import { map } from "rxjs/operators";
+import { Readable } from "stream";
 import { MulterStream } from "../common/multer-file.model";
 import { getMimeType } from "../common/utils";
 import {
@@ -409,5 +411,42 @@ export class FilesService {
 			action: "read",
 			expires: Date.now() + 1000 * 60,
 		});
+	}
+
+	async readyPlayerMe(user: User, name: string, avatarUrl: string) {
+		if (!name) throw new BadRequestException("Name required");
+		if (!avatarUrl) throw new BadRequestException("Avatar url required");
+
+		const avatarRes = await fetch(avatarUrl);
+		if (!avatarRes.ok)
+			throw new BadRequestException("Failed to fetch avatar url");
+
+		await this.uploadFile(user, "/avatars/" + name + "/avatar.glb", {
+			stream: avatarRes.body,
+		} as any);
+
+		await this.uploadFile(user, "/avatars/" + name + "/avatar.fst", {
+			stream: Readable.from(
+				`name = ${name}
+type = body+head
+scale = 1
+filename = avatar.glb
+joint = jointRoot = Hips
+joint = jointLean = Spine
+joint = jointNeck = Neck
+joint = jointHead = Head
+joint = jointEyeRight = RightEye
+joint = jointEyeLeft = LeftEye
+joint = jointLeftHand = LeftHand
+joint = jointRightHand = RightHand
+freeJoint = LeftArm
+freeJoint = LeftForeArm
+freeJoint = RightArm
+freeJoint = RightForeArm
+bs = JawOpen = mouthOpen = 3
+bs = EyeBlink_L = eyeBlinkLeft = 1
+bs = EyeBlink_R = eyeBlinkRight = 1`,
+			),
+		} as any);
 	}
 }
