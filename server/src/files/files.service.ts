@@ -452,9 +452,14 @@ bs = EyeBlink_R = eyeBlinkRight = 1`,
 		} as any);
 
 		return {
+			// avatarUrl:
+			// 	FILES_URL +
+			// 	"/" +
+			// 	user.username.toLowerCase() +
+			// 	encodeURI(keyPrefix) +
+			// 	"/avatar.fst",
 			avatarUrl:
-				FILES_URL +
-				"/" +
+				"tea://" +
 				user.username.toLowerCase() +
 				encodeURI(keyPrefix) +
 				"/avatar.fst",
