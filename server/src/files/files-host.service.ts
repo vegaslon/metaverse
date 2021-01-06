@@ -10,6 +10,7 @@ import {
 	Response as ExpressResponse,
 } from "express";
 import fetch from "node-fetch";
+import { getMimeType } from "../common/utils";
 import { MetricsService } from "../metrics/metrics.service";
 import { UserService } from "../user/user.service";
 import { FilesService } from "./files.service";
@@ -22,11 +23,17 @@ export class FilesHostService {
 		private readonly metricsService: MetricsService,
 	) {}
 
+	private contentEncodingToExt = {
+		gzip: "gz",
+		br: "br",
+	};
+
 	async getFile(
 		req: ExpressRequest,
 		res: ExpressResponse,
 		path: string,
 		isTeaRequest = false,
+		contentEncoding: "gzip" | "br" = null,
 	) {
 		const filePath = path.split("/");
 		if (filePath.some(part => part == ".."))
@@ -37,9 +44,14 @@ export class FilesHostService {
 		if (user == null) throw new NotFoundException("User not found");
 		filePath[0] = user.id;
 
+		const contentEncodingExt =
+			contentEncoding != null
+				? "." + this.contentEncodingToExt[contentEncoding]
+				: "";
+
 		// fetch file response
 		const { url: fileUrl, metadata } = await this.filesService.getObjectUrl(
-			filePath.join("/"),
+			filePath.join("/") + contentEncodingExt,
 			!isTeaRequest,
 		);
 
@@ -60,10 +72,32 @@ export class FilesHostService {
 			headers: reqHeaders,
 		});
 
-		// make sure it doesnt reveal any info
+		// check if br or gz and make sure it doesnt reveal any info
+
+		const acceptEncoding = (req.header("accept-encoding") ?? "")
+			.split(",")
+			.map(enc => enc.trim().toLowerCase());
+
+		console.log(acceptEncoding, contentEncoding);
 
 		if (fileRes.status >= 400) {
-			throw new HttpException(fileRes.statusText, fileRes.status);
+			if (contentEncoding == null) {
+				if (acceptEncoding.includes("br")) {
+					return this.getFile(req, res, path, isTeaRequest, "br");
+				} else if (acceptEncoding.includes("gz")) {
+					return this.getFile(req, res, path, isTeaRequest, "gzip");
+				} else {
+					throw new HttpException(fileRes.statusText, fileRes.status);
+				}
+			} else if (contentEncoding == "br") {
+				if (acceptEncoding.includes("gzip")) {
+					return this.getFile(req, res, path, isTeaRequest, "gzip");
+				} else {
+					throw new HttpException(fileRes.statusText, fileRes.status);
+				}
+			} else {
+				throw new HttpException(fileRes.statusText, fileRes.status);
+			}
 		}
 
 		// clean up headers
@@ -86,6 +120,11 @@ export class FilesHostService {
 			res.status(fileRes.status);
 			for (const header of Object.entries(headers)) {
 				res.setHeader(header[0], header[1]);
+			}
+
+			if (contentEncoding != null) {
+				res.setHeader("Content-Encoding", contentEncoding);
+				res.setHeader("Content-Type", getMimeType(path));
 			}
 
 			// force .fst files as text/plain
