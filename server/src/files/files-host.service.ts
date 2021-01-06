@@ -78,19 +78,22 @@ export class FilesHostService {
 			.split(",")
 			.map(enc => enc.trim().toLowerCase());
 
-		console.log(acceptEncoding, contentEncoding);
+		const hasEncoding = (encoding: "gzip" | "br") => {
+			if (acceptEncoding.includes("*")) return true;
+			return acceptEncoding.includes(encoding);
+		};
 
 		if (fileRes.status >= 400) {
 			if (contentEncoding == null) {
-				if (acceptEncoding.includes("br")) {
+				if (hasEncoding("br")) {
 					return this.getFile(req, res, path, isTeaRequest, "br");
-				} else if (acceptEncoding.includes("gz")) {
+				} else if (hasEncoding("gzip")) {
 					return this.getFile(req, res, path, isTeaRequest, "gzip");
 				} else {
 					throw new HttpException(fileRes.statusText, fileRes.status);
 				}
 			} else if (contentEncoding == "br") {
-				if (acceptEncoding.includes("gzip")) {
+				if (hasEncoding("gzip")) {
 					return this.getFile(req, res, path, isTeaRequest, "gzip");
 				} else {
 					throw new HttpException(fileRes.statusText, fileRes.status);
