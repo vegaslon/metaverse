@@ -119,26 +119,25 @@ export class FilesHostService {
 			headers[header[0]] = header[1];
 		}
 
+		if (contentEncoding != null) {
+			headers["Content-Encoding"] = contentEncoding;
+			headers["Content-Type"] = getMimeType(path);
+		}
+
+		// force .fst files as text/plain
+		if (/\.fst$/i.test(path)) {
+			headers["Content-Type"] = "text/plain";
+		}
+
+		if (req.query.download != null) {
+			headers["Content-Disposition"] = "attachment";
+		}
+
 		if (res) {
 			res.status(fileRes.status);
 			for (const header of Object.entries(headers)) {
 				res.setHeader(header[0], header[1]);
 			}
-
-			if (contentEncoding != null) {
-				res.setHeader("Content-Encoding", contentEncoding);
-				res.setHeader("Content-Type", getMimeType(path));
-			}
-
-			// force .fst files as text/plain
-			if (/\.fst$/i.test(path)) {
-				res.setHeader("Content-Type", "text/plain");
-			}
-
-			if (req.query.download != null) {
-				res.setHeader("Content-Disposition", "attachment");
-			}
-
 			fileRes.body.pipe(res);
 		}
 
