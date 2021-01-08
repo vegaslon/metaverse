@@ -25,6 +25,10 @@ yarn run start
 
 They will both incrementally watch for file changes. The metaverse should now be available at http://localhost:3000
 
+### Deploy
+
+Make sure to **disable Nginx** when deploying to **Elastic Beanstalk**.
+
 ### Docs
 
 https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/platforms-linux-extend.html
