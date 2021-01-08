@@ -504,20 +504,41 @@ export class FilesService {
 
 		const keyPrefix = "/ready-player-me/" + name.replace(/[\n\r]/g, "");
 
-		await this.uploadFile(
-			user,
-			keyPrefix + "/avatar.glb",
-			{
-				stream: avatarRes.body,
-			} as any,
-			true,
-		);
+		const glbBuffer = await avatarRes.buffer();
+		// const gltf = await glbToGltf(glbBuffer, {
+		// 	separate: true,
+		// 	separateTextures: true,
+		// });
 
-		await this.uploadFile(
-			user,
-			keyPrefix + "/avatar.fst",
-			{
-				stream: Readable.from(
+		const upload = async (filename: string, buffer: Buffer) => {
+			// const newBuffer = await new Promise<Buffer>((resolve, reject) => {
+			// 	zlib.brotliCompress(
+			// 		buffer,
+			// 		{
+			// 			params: {
+			// 				[zlib.constants.BROTLI_PARAM_QUALITY]: 4,
+			// 			},
+			// 		},
+			// 		(error, result) => {
+			// 			if (error) return reject(error);
+			// 			resolve(result);
+			// 		},
+			// 	);
+			// });
+			await this.uploadFile(
+				user,
+				keyPrefix + "/" + filename,
+				{ stream: Readable.from(buffer) } as any,
+				true,
+			);
+		};
+
+		const uploads: Promise<any>[] = [
+			// upload("avatar.gltf", Buffer.from(JSON.stringify(gltf.gltf))),
+			upload("avatar.glb", glbBuffer),
+			upload(
+				"avatar.fst",
+				Buffer.from(
 					`name = ${name}
 type = body+head
 scale = 1
@@ -538,9 +559,14 @@ bs = JawOpen = mouthOpen = 3
 bs = EyeBlink_L = eyeBlinkLeft = 1
 bs = EyeBlink_R = eyeBlinkRight = 1`,
 				),
-			} as any,
-			true,
-		);
+			),
+		];
+
+		// for (const [key, buffer] of Object.entries(gltf.separateResources)) {
+		// 	uploads.push(upload(key, buffer as Buffer));
+		// }
+
+		await Promise.all(uploads);
 
 		return {
 			// avatarUrl:
