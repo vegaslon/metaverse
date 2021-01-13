@@ -36,7 +36,7 @@
 					*ngIf="file.type == 'image' && file.size < 10000000"
 					[style.backgroundImage]="
 						'url(' +
-						file.httpUrl +
+						encodeURI(file.httpUrl) +
 						(file.cacheBust > 0 ? '?' + file.cacheBust : '') +
 						')'
 					"
@@ -45,7 +45,7 @@
 					class="preview contain"
 					*ngIf="file.type == 'model'"
 					[style.backgroundImage]="
-						'url(/api/render?url=' + file.httpUrl + ')'
+						'url(/api/render?url=' + encodeURI(file.httpUrl) + ')'
 					"
 				></div> -->
 				<video
@@ -58,7 +58,7 @@
 				>
 					<source
 						[src]="
-							file.httpUrl +
+							encodeURI(file.httpUrl) +
 							(file.cacheBust > 0 ? '?' + file.cacheBust : '')
 						"
 					/>
@@ -68,7 +68,7 @@
 					style="background: #fff;"
 					*ngIf="file.type == 'audio'"
 					[src]="
-						file.httpUrl +
+						encodeURI(file.httpUrl) +
 						(file.cacheBust > 0 ? '?' + file.cacheBust : '')
 					"
 					controls

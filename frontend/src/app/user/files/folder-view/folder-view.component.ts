@@ -51,6 +51,10 @@ export class FolderViewComponent {
 		private dialog: MatDialog,
 	) {}
 
+	encodeURI(uri: string) {
+		return encodeURI(uri);
+	}
+
 	onItemClick(file: File) {
 		if (!file.teaOnly && isPlatformBrowser(this.platformId))
 			window.open(file.httpUrl);
