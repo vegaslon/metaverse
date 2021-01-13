@@ -510,7 +510,11 @@ export class FilesService {
 		// 	separateTextures: true,
 		// });
 
-		const upload = async (filename: string, buffer: Buffer) => {
+		const upload = async (
+			filename: string,
+			buffer: Buffer,
+			teaOnly = true,
+		) => {
 			// const newBuffer = await new Promise<Buffer>((resolve, reject) => {
 			// 	zlib.brotliCompress(
 			// 		buffer,
@@ -529,38 +533,51 @@ export class FilesService {
 				user,
 				keyPrefix + "/" + filename,
 				{ stream: Readable.from(buffer) } as any,
-				true,
+				teaOnly,
 			);
 		};
+
+		const fst = [
+			"name = " + name,
+			"type = body+head",
+			"scale = 1",
+			"filename = avatar.glb",
+			"preview = avatar.jpg",
+			"bs = JawOpen = mouthOpen = 3",
+			"bs = EyeBlink_L = eyeBlinkLeft = 1",
+			"bs = EyeBlink_R = eyeBlinkRight = 1",
+		].join("\n");
 
 		const uploads: Promise<any>[] = [
 			// upload("avatar.gltf", Buffer.from(JSON.stringify(gltf.gltf))),
 			upload("avatar.glb", glbBuffer),
-			upload(
-				"avatar.fst",
-				Buffer.from(
-					`name = ${name}
-type = body+head
-scale = 1
-filename = avatar.glb
-joint = jointRoot = Hips
-joint = jointLean = Spine
-joint = jointNeck = Neck
-joint = jointHead = Head
-joint = jointEyeRight = RightEye
-joint = jointEyeLeft = LeftEye
-joint = jointLeftHand = LeftHand
-joint = jointRightHand = RightHand
-freeJoint = LeftArm
-freeJoint = LeftForeArm
-freeJoint = RightArm
-freeJoint = RightForeArm
-bs = JawOpen = mouthOpen = 3
-bs = EyeBlink_L = eyeBlinkLeft = 1
-bs = EyeBlink_R = eyeBlinkRight = 1`,
-				),
-			),
+			upload("avatar.fst", Buffer.from(fst)),
 		];
+
+		// try to make preview asynchronously
+		(async () => {
+			const avatarRenderRes = await fetch(
+				"https://cyberpunk.readyplayer.me/api/render_image?url=" +
+					avatarUrl +
+					"&target=cyberpunk",
+			);
+			if (avatarRenderRes.ok) {
+				try {
+					const buffer = await avatarRenderRes.buffer();
+					const header = "data:image/jpeg;base64,";
+					if (buffer.length > header.length) {
+						upload(
+							"avatar.jpg",
+							Buffer.from(
+								buffer.toString().slice(header.length),
+								"base64",
+							),
+							false,
+						);
+					}
+				} catch (err) {}
+			}
+		})();
 
 		// for (const [key, buffer] of Object.entries(gltf.separateResources)) {
 		// 	uploads.push(upload(key, buffer as Buffer));
