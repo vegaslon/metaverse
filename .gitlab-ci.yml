@@ -2,6 +2,7 @@ stages:
     - dependencies
     - test
     - build
+    - upload
     - deploy
 
 before_script:
@@ -119,6 +120,27 @@ build all:
 #         - cat $GCP_ENV_VARIABLES >> app.yaml
 #         - gcloud auth activate-service-account --key-file $GCP_AUTH_JSON
 #         - gcloud --quiet --project tivolicloud app deploy --version $CI_PIPELINE_ID
+
+deploy docker image:
+    stage: upload
+    image: docker:latest
+
+    only:
+        refs:
+            - master@tivolicloud-private/metaverse
+        changes:
+            - Dockerfile.base
+
+    variables:
+        DOCKER_TLS_CERTDIR: ""
+
+    services:
+        - docker:dind
+
+    script:
+        - docker login -u makitsune -p $DOCKER_HUB_ACCESS_TOKEN
+        - docker build -t tivolicloud/metaverse-base:latest -f Dockerfile.base .
+        - docker push tivolicloud/metaverse-base:latest
 
 deploy eb:
     stage: deploy
