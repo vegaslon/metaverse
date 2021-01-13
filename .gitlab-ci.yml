@@ -2,7 +2,6 @@ stages:
     - dependencies
     - test
     - build
-    - upload
     - deploy
 
 before_script:
@@ -121,8 +120,8 @@ build all:
 #         - gcloud auth activate-service-account --key-file $GCP_AUTH_JSON
 #         - gcloud --quiet --project tivolicloud app deploy --version $CI_PIPELINE_ID
 
-deploy docker image:
-    stage: upload
+build base image:
+    stage: build
     image: docker:latest
 
     only:
