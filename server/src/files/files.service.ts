@@ -10,6 +10,7 @@ import * as path from "path";
 import { from, merge } from "rxjs";
 import { rxToStream, streamToRx } from "rxjs-stream";
 import { map } from "rxjs/operators";
+import sharp from "sharp";
 import { Readable } from "stream";
 import { MulterStream } from "../common/multer-file.model";
 import { getMimeType } from "../common/utils";
@@ -564,17 +565,27 @@ export class FilesService {
 			if (avatarRenderRes.ok) {
 				try {
 					const buffer = await avatarRenderRes.buffer();
-					const header = "data:image/jpeg;base64,";
-					if (buffer.length > header.length) {
-						upload(
-							"avatar.jpg",
-							Buffer.from(
-								buffer.toString().slice(header.length),
-								"base64",
-							),
-							false,
-						);
-					}
+					const image = sharp(
+						Buffer.from(
+							buffer
+								.toString()
+								.replace(/^data:[^]*?;base64,/i, ""),
+							"base64",
+						),
+					);
+					// const width = (await image.metadata()).width;
+					const jpgBuffer = await image
+						.extract({
+							top: 80,
+							left: 220,
+							width: 650,
+							height: 650,
+						})
+						.jpeg({
+							quality: 90,
+						})
+						.toBuffer();
+					upload("avatar.jpg", jpgBuffer, false);
 				} catch (err) {}
 			}
 		})();
