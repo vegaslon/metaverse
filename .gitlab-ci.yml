@@ -143,7 +143,8 @@ build base image:
 
 deploy eb:
     stage: deploy
-    image: python:latest
+    # TODO: replace with own image
+    image: agoncaruks/aws-elastic-beanstalk-cli
 
     when: manual
     allow_failure: false
@@ -152,10 +153,7 @@ deploy eb:
         - job: build all
           artifacts: true
 
-    # https://dba-presents.com/index.php/cloud/amazon-web-services/224-deployment-to-aws-elastic-beanstalk-with-gitlab-ci-cd
     script:
-        - pip install awsebcli
-
         - mkdir -p ~/.aws/
         - echo "[profile eb-cli]" > ~/.aws/config
         - echo "aws_access_key_id = $AWS_ACCESS_KEY_ID" >> ~/.aws/config
