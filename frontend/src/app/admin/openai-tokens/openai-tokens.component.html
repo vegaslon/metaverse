@@ -42,26 +42,69 @@
 					</mat-form-field>
 				</td>
 				<td mdcDataTableCell>
-					<b>{{ token.totalEstTokens }}</b> est. tokens
+					<b>{{ token.totalCalls }}</b> api calls
 					<br />
-					<b>{{ token.totalCalls }}</b> calls
+					<ng-container
+						*ngFor="let engine of getKeys(token.totalTokens)"
+					>
+						<b>{{ engine }}: {{ token.totalTokens[engine] }}</b>
+						est. tokens
+						<br />
+					</ng-container>
 				</td>
 				<td mdcDataTableCell>
-					<b>{{ getMonthlyToken(token, 0).estTokens }}</b> est. tokens
+					<b>{{ getMonthlyToken(token, 0).calls }}</b> api calls
 					<br />
-					<b>{{ getMonthlyToken(token, 0).calls }} calls</b>
+					<ng-container
+						*ngFor="
+							let engine of getKeys(
+								getMonthlyToken(token, 0).tokens
+							)
+						"
+					>
+						<b>
+							{{ engine }}:
+							{{ getMonthlyToken(token, 0).tokens[engine] }}
+						</b>
+						est. tokens
+						<br />
+					</ng-container>
 				</td>
 				<td mdcDataTableCell>
-					<b>{{ getMonthlyToken(token, -1).estTokens }}</b> est.
-					tokens
+					<b>{{ getMonthlyToken(token, -1).calls }}</b> api calls
 					<br />
-					<b>{{ getMonthlyToken(token, -1).calls }} calls</b>
+					<ng-container
+						*ngFor="
+							let engine of getKeys(
+								getMonthlyToken(token, -1).tokens
+							)
+						"
+					>
+						<b>
+							{{ engine }}:
+							{{ getMonthlyToken(token, -1).tokens[engine] }}
+						</b>
+						est. tokens
+						<br />
+					</ng-container>
 				</td>
 				<td mdcDataTableCell>
-					<b>{{ getMonthlyToken(token, -2).estTokens }}</b> est.
-					tokens
+					<b>{{ getMonthlyToken(token, -2).calls }}</b> api calls
 					<br />
-					<b>{{ getMonthlyToken(token, -2).calls }} calls</b>
+					<ng-container
+						*ngFor="
+							let engine of getKeys(
+								getMonthlyToken(token, -2).tokens
+							)
+						"
+					>
+						<b>
+							{{ engine }}:
+							{{ getMonthlyToken(token, -2).tokens[engine] }}
+						</b>
+						est. tokens
+						<br />
+					</ng-container>
 				</td>
 				<td mdcDataTableCell>
 					<div style="display: flex; flex-direction: row;">

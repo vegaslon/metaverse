@@ -45,6 +45,10 @@ export class OpenaiTokensComponent implements OnInit {
 		);
 	}
 
+	getKeys(obj: any) {
+		return Object.keys(obj);
+	}
+
 	constructor(
 		private readonly dialog: MatDialog,
 		private readonly adminService: AdminService,
@@ -65,7 +69,7 @@ export class OpenaiTokensComponent implements OnInit {
 		const monthKey = this.getDateStringForMonth(monthOffset);
 		const month = token.monthly[monthKey];
 		if (month == null) {
-			return { estTokens: 0, calls: 0 };
+			return { tokens: 0, calls: 0 };
 		} else {
 			return month;
 		}

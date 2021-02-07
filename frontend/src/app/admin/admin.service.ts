@@ -37,9 +37,9 @@ export interface OpenaiToken {
 	name: string;
 
 	totalCalls: number;
-	totalEstTokens: number;
+	totalTokens: number;
 
-	monthly: { [key: string]: { calls: number; estTokens: number } };
+	monthly: { [key: string]: { calls: number; tokens: number } };
 
 	created: string;
 }

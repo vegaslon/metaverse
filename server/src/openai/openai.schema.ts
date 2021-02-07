@@ -10,10 +10,7 @@ export const OpenaiTokenSchema = new Schema({
 	},
 	name: { type: String, default: "" },
 
-	totalCalls: { type: Number, default: 0 },
-	totalEstTokens: { type: Number, default: 0 },
-
-	monthly: { type: Map, default: new Map() },
+	monthly: { type: Object, default: {} },
 
 	created: { type: Date, default: () => new Date() },
 });
@@ -24,10 +21,12 @@ export interface OpenaiToken extends Document {
 	token: string;
 	name: string;
 
-	totalCalls: number;
-	totalEstTokens: number;
-
-	monthly: Map<string, { calls: number; estTokens: number }>;
+	monthly: {
+		[monthKey: string]: {
+			calls: number;
+			tokens: { [engine: string]: number };
+		};
+	};
 
 	created: Date;
 }

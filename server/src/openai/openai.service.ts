@@ -29,7 +29,30 @@ export class OpenaiService {
 	}
 
 	async getTokens() {
-		const tokens = await this.openaiTokenModel.find({});
+		const tokens = JSON.parse(
+			JSON.stringify(await this.openaiTokenModel.find({})),
+		);
+
+		for (const token of tokens) {
+			if (token.monthly == null) token.monthly = {};
+
+			token.totalCalls = Object.values(token.monthly).reduce(
+				(calls, month: any) => calls + month.calls,
+				0,
+			);
+
+			token.totalTokens = {};
+			for (const month of Object.values<any>(token.monthly)) {
+				for (const [engine, tokens] of Object.entries(month.tokens)) {
+					if (token.totalTokens[engine] == null) {
+						token.totalTokens[engine] = tokens;
+					} else {
+						token.totalTokens[engine] += tokens;
+					}
+				}
+			}
+		}
+
 		return tokens;
 	}
 
@@ -53,9 +76,8 @@ export class OpenaiService {
 		await token.save();
 	}
 
-	updateDocEstTokensAndCalls(doc: OpenaiToken, estTokens: number) {
-		doc.totalCalls++;
-		doc.totalEstTokens += estTokens;
+	updateDocTokensAndCalls(doc: OpenaiToken, tokens: number, engine: string) {
+		engine = engine.toLowerCase().trim();
 
 		const date = new Date();
 		const monthKey =
@@ -63,19 +85,22 @@ export class OpenaiService {
 			"-" +
 			String(date.getMonth() + 1).padStart(2, "0");
 
-		const month = doc.monthly.get(monthKey);
-
-		if (month == null) {
-			doc.monthly.set(monthKey, {
+		if (doc.monthly[monthKey] == null) {
+			doc.monthly[monthKey] = {
 				calls: 1,
-				estTokens,
-			});
+				tokens: { [engine]: tokens },
+			};
 		} else {
-			doc.monthly.set(monthKey, {
-				calls: month.calls + 1,
-				estTokens: month.estTokens += estTokens,
-			});
+			doc.monthly[monthKey].calls++;
+			if (doc.monthly[monthKey].tokens[engine] == null) {
+				doc.monthly[monthKey].tokens[engine] = tokens;
+			} else {
+				doc.monthly[monthKey].tokens[engine] += tokens;
+			}
 		}
+
+		doc.markModified("totalTokens");
+		doc.markModified("monthly");
 
 		doc.save(); // dont need to await
 	}
@@ -99,20 +124,34 @@ export class OpenaiService {
 		res.status(apiRes.status);
 		const apiResJson = await apiRes.json();
 
-		let estTokens = 0;
-		if (typeof body.prompt == "string") {
-			estTokens += body.prompt.length / 4;
-		}
-		if (Array.isArray(apiResJson.choices)) {
-			for (const choice of apiResJson.choices) {
-				if (typeof choice.text == "string") {
-					estTokens += choice.text.length / 4;
+		if (apiRes.status < 400) {
+			// num_tokens(prompt) + max_tokens * max(n, best_of)
+
+			let promptEstTokens = 0;
+			if (typeof body.prompt == "string") {
+				promptEstTokens += body.prompt.length / 4;
+			}
+
+			let maxTokens = 0;
+			if (Array.isArray(apiResJson.choices)) {
+				for (const choice of apiResJson.choices) {
+					if (typeof choice.text == "string") {
+						maxTokens += choice.text.length / 4;
+					}
 				}
 			}
-		}
 
-		// important!
-		this.updateDocEstTokensAndCalls(doc, estTokens);
+			let n = 1; // default is 1
+			if (typeof body.n == "number") n += body.n;
+
+			let bestOf = 1; // default is 1
+			if (typeof body.best_of == "number") n += body.best_of;
+
+			const estTokens = promptEstTokens + maxTokens * Math.max(n, bestOf);
+
+			// important!
+			this.updateDocTokensAndCalls(doc, estTokens, engine);
+		}
 
 		res.json(apiResJson);
 	}
@@ -136,20 +175,36 @@ export class OpenaiService {
 		res.status(apiRes.status);
 		const apiResJson = await apiRes.json();
 
-		let estTokens = 0;
-		if (typeof body.query == "string") {
-			estTokens += body.query.length / 4;
-		}
-		if (Array.isArray(body.documents)) {
-			for (const document of body.documents) {
-				if (typeof document == "string") {
-					estTokens += document.length / 4;
+		if (apiRes.status < 400) {
+			// Number of tokens in all of your documents
+			// + (Number of documents + 1) * 14
+			// + (Number of documents + 1) * Number of tokens in your query
+			// = Total tokens
+
+			let documentsEstTokens = 0;
+			let documentsAmount = 0;
+			if (Array.isArray(body.documents)) {
+				for (const document of body.documents) {
+					documentsAmount++;
+					if (typeof document == "string") {
+						documentsEstTokens += document.length / 4;
+					}
 				}
 			}
-		}
 
-		// important!
-		this.updateDocEstTokensAndCalls(doc, estTokens);
+			let queryEstTokens = 0;
+			if (typeof body.query == "string") {
+				queryEstTokens += body.query.length / 4;
+			}
+
+			let estTokens =
+				documentsEstTokens +
+				(documentsAmount + 1) * 14 +
+				(documentsAmount + 1) * queryEstTokens;
+
+			// important!
+			this.updateDocTokensAndCalls(doc, estTokens, engine);
+		}
 
 		res.json(apiResJson);
 	}
