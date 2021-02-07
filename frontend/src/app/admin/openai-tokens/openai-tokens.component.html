@@ -1,0 +1,105 @@
+<div style="display: flex; align-items: center; margin-bottom: 16px;">
+	<button mat-button (click)="createToken()">
+		<mat-icon>add</mat-icon>
+		Create token
+	</button>
+	<button mat-button (click)="refresh()">
+		<mat-icon>refresh</mat-icon>
+		Refresh
+	</button>
+</div>
+<mdc-data-table style="width: 100%;">
+	<table mdcDataTableTable>
+		<thead>
+			<tr mdcDataTableHeaderRow>
+				<th mdcDataTableHeaderCell>Name</th>
+				<th mdcDataTableHeaderCell>Total</th>
+				<th mdcDataTableHeaderCell>
+					{{ prettyPrintDateString(getDateStringForMonth(0)) }}
+				</th>
+				<th mdcDataTableHeaderCell>
+					{{ prettyPrintDateString(getDateStringForMonth(-1)) }}
+				</th>
+				<th mdcDataTableHeaderCell>
+					{{ prettyPrintDateString(getDateStringForMonth(-2)) }}
+				</th>
+			</tr>
+		</thead>
+		<tbody mdcDataTableContent>
+			<tr mdcDataTableRow *ngFor="let token of tokens">
+				<td mdcDataTableCell>
+					<mat-form-field
+						style="width: 100%; margin-bottom: -18px;"
+						appearance="outline"
+					>
+						<mat-label>Name</mat-label>
+						<input
+							matInput
+							#tokenName
+							[value]="token.name"
+							(change)="renameToken(token, tokenName.value)"
+						/>
+					</mat-form-field>
+				</td>
+				<td mdcDataTableCell>
+					<b>{{ token.totalEstTokens }}</b> est. tokens
+					<br />
+					<b>{{ token.totalCalls }}</b> calls
+				</td>
+				<td mdcDataTableCell>
+					<b>{{ getMonthlyToken(token, 0).estTokens }}</b> est. tokens
+					<br />
+					<b>{{ getMonthlyToken(token, 0).calls }} calls</b>
+				</td>
+				<td mdcDataTableCell>
+					<b>{{ getMonthlyToken(token, -1).estTokens }}</b> est.
+					tokens
+					<br />
+					<b>{{ getMonthlyToken(token, -1).calls }} calls</b>
+				</td>
+				<td mdcDataTableCell>
+					<b>{{ getMonthlyToken(token, -2).estTokens }}</b> est.
+					tokens
+					<br />
+					<b>{{ getMonthlyToken(token, -2).calls }} calls</b>
+				</td>
+				<td mdcDataTableCell>
+					<div style="display: flex; flex-direction: row;">
+						<mat-form-field
+							style="margin-bottom: -18px; width: 280px;"
+						>
+							<input
+								matInput
+								placeholder="Token"
+								disabled
+								[value]="token.token"
+							/>
+						</mat-form-field>
+						<div style="margin: 0 8px;"></div>
+						<button
+							mat-icon-button
+							class="mat-elevation-z0"
+							(click)="copyToClipboard(token)"
+						>
+							<mat-icon>content_copy</mat-icon>
+						</button>
+						<button
+							mat-icon-button
+							class="mat-elevation-z0"
+							(click)="refreshToken(token)"
+						>
+							<mat-icon>refresh</mat-icon>
+						</button>
+						<button
+							mat-icon-button
+							class="mat-elevation-z0"
+							(click)="deleteToken(token)"
+						>
+							<mat-icon>delete</mat-icon>
+						</button>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</mdc-data-table>

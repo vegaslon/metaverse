@@ -1,14 +1,18 @@
 <h2 *ngIf="!editMode" style="margin-top: 0;">Creating a new world</h2>
 <h2 *ngIf="editMode" style="margin-top: 0;">
 	Editing
-	<span style="font-weight: 500">{{ domain.label }}</span>
+	<span style="font-weight: 500;">{{ domain.label }}</span>
 </h2>
 
 <mat-card
 	*ngIf="error"
 	class="bg-warn"
-	style="margin-bottom: 16px; color: #fff;
-display: flex; vertical-align: middle;"
+	style="
+		margin-bottom: 16px;
+		color: #fff;
+		display: flex;
+		vertical-align: middle;
+	"
 >
 	<mat-icon style="margin-top: -3px; margin-right: 8px;">
 		error_outline
@@ -90,7 +94,7 @@ display: flex; vertical-align: middle;"
 	</button>
 
 	<button
-		style="margin-left: 8px"
+		style="margin-left: 8px;"
 		type="button"
 		mat-flat-button
 		(click)="onDiscard()"

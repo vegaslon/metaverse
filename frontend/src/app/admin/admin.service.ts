@@ -30,6 +30,20 @@ export interface AdminUser {
 	} | null;
 }
 
+export interface OpenaiToken {
+	_id: string;
+
+	token: string;
+	name: string;
+
+	totalCalls: number;
+	totalEstTokens: number;
+
+	monthly: { [key: string]: { calls: number; estTokens: number } };
+
+	created: string;
+}
+
 @Injectable({
 	providedIn: "root",
 })
@@ -93,6 +107,34 @@ export class AdminService {
 	toggleDevUser(userId: string) {
 		return this.http
 			.post<AdminUser>("/api/admin/user/" + userId + "/dev", {})
+			.pipe(catchError(this.handleError));
+	}
+
+	createOpenaiToken(name: string) {
+		return this.http
+			.post<{}>("/api/admin/openai/create-token", { name })
+			.pipe(catchError(this.handleError));
+	}
+
+	getOpenaiTokens() {
+		return this.http.get<OpenaiToken[]>("/api/admin/openai/tokens");
+	}
+
+	deleteOpenaiToken(id: string) {
+		return this.http
+			.delete<{}>("/api/admin/openai/token/" + id)
+			.pipe(catchError(this.handleError));
+	}
+
+	renameOpenaiToken(id: string, name: string) {
+		return this.http
+			.put<{}>("/api/admin/openai/token/" + id + "/rename", { name })
+			.pipe(catchError(this.handleError));
+	}
+
+	refreshOpenaiToken(id: string) {
+		return this.http
+			.post<{}>("/api/admin/openai/token/" + id + "/refresh", {})
 			.pipe(catchError(this.handleError));
 	}
 }

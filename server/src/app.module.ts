@@ -1,7 +1,6 @@
 import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
 import { TerminusModule } from "@nestjs/terminus";
-import { SentryModule } from "@ntegral/nestjs-sentry";
 import { AdminModule } from "./admin/admin.module";
 import { ApiDomainsModule } from "./api/domains/domains.module";
 import { ApiPlacesModule } from "./api/places/places.module";
@@ -12,17 +11,16 @@ import { AppController } from "./app.controller";
 import { AuthModule } from "./auth/auth.module";
 import { DomainModule } from "./domain/domain.module";
 import { EmailModule } from "./email/email.module";
-import { DB_URI, DB_NAME, DEV } from "./environment";
-import { HealthController } from "./health.controller";
-import { PuppeteerModule } from "./puppeteer/puppeteer.module";
-import { UserModule } from "./user/user.module";
-import { VideoStreamModule } from "./video-stream/video-stream.module";
+import { DB_NAME, DB_URI } from "./environment";
 import { FilesModule } from "./files/files.module";
-import { ZoomModule } from "./zoom/zoom.module";
+import { HealthController } from "./health.controller";
 import { LyndenController } from "./lynden/lynden.controller";
 import { MetricsModule } from "./metrics/metrics.module";
-import { WorldController } from "./world.controller";
+import { OpenaiModule } from "./openai/openai.module";
+import { PuppeteerModule } from "./puppeteer/puppeteer.module";
 import { SessionModule } from "./session/session.module";
+import { UserModule } from "./user/user.module";
+import { WorldController } from "./world.controller";
 
 @Module({
 	imports: [
@@ -69,6 +67,7 @@ import { SessionModule } from "./session/session.module";
 		// extras
 		// VideoStreamModule,
 		// ZoomModule,
+		OpenaiModule,
 	],
 	providers: [],
 	controllers: [

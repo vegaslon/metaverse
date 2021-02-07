@@ -1,0 +1,37 @@
+<h2 style="margin-top: 0;">Creating a new OpenAI token</h2>
+
+<mat-card
+	*ngIf="error"
+	class="bg-warn"
+	style="
+		margin-bottom: 16px;
+		color: #fff;
+		display: flex;
+		vertical-align: middle;
+	"
+>
+	<mat-icon style="margin-top: -3px; margin-right: 8px;">
+		error_outline
+	</mat-icon>
+	{{ error }}
+</mat-card>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+	<mat-form-field style="width: 100%;">
+		<input matInput placeholder="Name" required formControlName="name" />
+		<mat-error *ngIf="form.hasError('required', 'name')">
+			Name is required
+		</mat-error>
+	</mat-form-field>
+
+	<div style="margin: 8px 0;"></div>
+
+	<button
+		type="submit"
+		mat-flat-button
+		color="primary"
+		[disabled]="form.invalid || form.pristine || isLoading"
+	>
+		<mat-icon>add</mat-icon> Create OpenAI token
+	</button>
+</form>

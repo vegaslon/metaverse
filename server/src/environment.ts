@@ -36,6 +36,8 @@ export const {
 	ZOOM_API_KEY = "0nB3LiC_RiedIJgIU9QRAw",
 	ZOOM_API_SECRET = "J6wg3LD6FA32BtP3pnKdBeYsCBeUgu44I7rh",
 
+	OPENAI_API_KEY = "",
+
 	JWT_SECRET = "thisIsSoVerySecretyou literally have no idealol1610239012",
 
 	METRICS_SECRET = "",

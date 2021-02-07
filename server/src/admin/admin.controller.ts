@@ -1,9 +1,12 @@
 import {
+	Body,
 	Controller,
+	Delete,
 	Get,
 	NotFoundException,
 	Param,
 	Post,
+	Put,
 	Query,
 	UseGuards,
 } from "@nestjs/common";
@@ -11,6 +14,7 @@ import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { AdminAuthGuard } from "../auth/admin.guard";
 import { AuthService } from "../auth/auth.service";
 import { DomainService } from "../domain/domain.service";
+import { OpenaiService } from "../openai/openai.service";
 import { SessionService } from "../session/session.service";
 import { User } from "../user/user.schema";
 import { UserService } from "../user/user.service";
@@ -20,11 +24,12 @@ import { VideoStreamService } from "../video-stream/video-stream.service";
 @ApiTags("admin")
 export class AdminController {
 	constructor(
-		private userService: UserService,
-		private domainService: DomainService,
-		private videoStreamService: VideoStreamService,
-		private sessionService: SessionService,
-		private authService: AuthService,
+		private readonly userService: UserService,
+		private readonly domainService: DomainService,
+		private readonly videoStreamService: VideoStreamService,
+		private readonly sessionService: SessionService,
+		private readonly authService: AuthService,
+		private readonly openaiService: OpenaiService,
 	) {}
 
 	private async renderUser(user: User, fast = false) {
@@ -188,5 +193,40 @@ export class AdminController {
 		await user.save();
 
 		return user.dev;
+	}
+
+	@Post("openai/create-token")
+	@ApiBearerAuth()
+	@UseGuards(AdminAuthGuard)
+	createOpenaiToken(@Body() body: { name: string }) {
+		return this.openaiService.createToken(body.name);
+	}
+
+	@Get("openai/tokens")
+	@ApiBearerAuth()
+	@UseGuards(AdminAuthGuard)
+	getOpenaiTokens() {
+		return this.openaiService.getTokens();
+	}
+
+	@Delete("openai/token/:id")
+	@ApiBearerAuth()
+	@UseGuards(AdminAuthGuard)
+	deleteOpenaiToken(@Param("id") id: string) {
+		return this.openaiService.deleteToken(id);
+	}
+
+	@Put("openai/token/:id/rename")
+	@ApiBearerAuth()
+	@UseGuards(AdminAuthGuard)
+	renameOpenaiToken(@Param("id") id: string, @Body() body: { name: string }) {
+		return this.openaiService.renameToken(id, body.name);
+	}
+
+	@Post("openai/token/:id/refresh")
+	@ApiBearerAuth()
+	@UseGuards(AdminAuthGuard)
+	refreshOpenaiToken(@Param("id") id: string) {
+		return this.openaiService.refreshToken(id);
 	}
 }
