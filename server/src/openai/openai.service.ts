@@ -209,24 +209,21 @@ export class OpenaiService implements OnModuleInit, OnModuleDestroy {
 					promptTokens += await this.tokenizer.numTokens(body.prompt);
 				}
 
-				let maxTokens = 0;
+				let responseTokens = 0;
 				if (Array.isArray(apiResJson.choices)) {
 					for (const choice of apiResJson.choices) {
 						if (typeof choice.text == "string") {
-							maxTokens += await this.tokenizer.numTokens(
+							responseTokens += await this.tokenizer.numTokens(
 								choice.text,
 							);
 						}
 					}
 				}
 
-				let n = 1; // default is 1
-				if (typeof body.n == "number") n += body.n;
-
 				let bestOf = 1; // default is 1
-				if (typeof body.best_of == "number") n += body.best_of;
+				if (typeof body.best_of == "number") bestOf += body.best_of;
 
-				const tokens = promptTokens + maxTokens * Math.max(n, bestOf);
+				const tokens = promptTokens + responseTokens * bestOf;
 
 				// important!
 				this.updateDocTokensAndCalls(doc, tokens, engine);
