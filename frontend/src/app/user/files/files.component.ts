@@ -69,7 +69,7 @@ export class FilesComponent implements OnInit {
 					currentFolder != null ? currentFolder : this.rootFolder;
 
 				this.loading = false;
-				resolve();
+				resolve(null);
 			});
 		});
 	}

@@ -53,7 +53,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 				self.require.config({ paths: { vs: baseUrl } });
 				self.require(["vs/editor/editor.main"], () => {
 					this.monaco = self.monaco;
-					resolve();
+					resolve(null);
 				});
 			};
 

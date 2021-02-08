@@ -26,6 +26,8 @@ const frontend = {
 	serverMain: path.join(__dirname, "../../frontend/dist/server/main.js"),
 };
 
+const renderPages = !DEV;
+
 @Catch(NotFoundException)
 class NotFoundExceptionFilter extends BaseExceptionFilter {
 	private readonly filesHost = new URL(FILES_URL).hostname;
@@ -44,7 +46,7 @@ class NotFoundExceptionFilter extends BaseExceptionFilter {
 
 		const res: Response = ctx.getResponse();
 
-		if (DEV) {
+		if (!renderPages) {
 			res.sendFile(frontend.browserIndex);
 		} else {
 			res.render("index", {
@@ -71,7 +73,7 @@ class UnauthorizedExceptionFilter extends BaseExceptionFilter {
 }
 
 export function initFrontend(app: NestExpressApplication) {
-	if (!DEV) {
+	if (renderPages) {
 		const {
 			ngExpressEngine,
 			AppServerModule,

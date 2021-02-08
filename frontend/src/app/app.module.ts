@@ -106,6 +106,7 @@ const routes: Routes = [
 		RouterModule.forRoot(routes, {
 			initialNavigation: "enabled",
 			scrollPositionRestoration: "enabled",
+			relativeLinkResolution: "legacy",
 		}),
 		// RecaptchaModule,
 		// RecaptchaFormsModule,
