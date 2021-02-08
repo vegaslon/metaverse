@@ -48,7 +48,7 @@
 						*ngFor="let engine of getKeys(token.totalTokens)"
 					>
 						<b>{{ engine }}: {{ token.totalTokens[engine] }}</b>
-						est. tokens
+						tokens
 						<br />
 					</ng-container>
 				</td>
@@ -66,7 +66,7 @@
 							{{ engine }}:
 							{{ getMonthlyToken(token, 0).tokens[engine] }}
 						</b>
-						est. tokens
+						tokens
 						<br />
 					</ng-container>
 				</td>
@@ -84,7 +84,7 @@
 							{{ engine }}:
 							{{ getMonthlyToken(token, -1).tokens[engine] }}
 						</b>
-						est. tokens
+						tokens
 						<br />
 					</ng-container>
 				</td>
@@ -102,7 +102,7 @@
 							{{ engine }}:
 							{{ getMonthlyToken(token, -2).tokens[engine] }}
 						</b>
-						est. tokens
+						tokens
 						<br />
 					</ng-container>
 				</td>
