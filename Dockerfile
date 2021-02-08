@@ -7,6 +7,7 @@ app/server/yarn.lock \
 
 WORKDIR /app/server
 RUN yarn install --production
+# TODO: run tokenizer-server.py once so it downloads dataset
 
 COPY app /app
 
