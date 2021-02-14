@@ -34,17 +34,21 @@
 							<td mdcDataTableCell>
 								{{ user.email }}
 								<span
-									*ngIf="user.emailVerified"
 									class="verified"
+									[class.not]="!user.emailVerified"
+									>{{
+										user.emailVerified
+											? "verified"
+											: "not verified"
+									}}</span
 								>
-									verified
-								</span>
-								<span
-									*ngIf="!user.emailVerified"
-									class="not verified"
+								<button
+									mat-stroked-button
+									(click)="onToggleVerify()"
+									style="margin-left: 16px;"
 								>
-									not verified
-								</span>
+									<mat-icon>email</mat-icon> Toggle verified
+								</button>
 							</td>
 						</tr>
 						<tr mdcDataTableRow>
@@ -66,6 +70,13 @@
 										{{ user.admin ? "Yes" : "No" }}
 									</label>
 								</mdc-form-field>
+								<button
+									mat-stroked-button
+									(click)="onToggleAdmin()"
+									style="margin-left: 16px;"
+								>
+									<mat-icon>build</mat-icon> Toggle admin
+								</button>
 							</td>
 						</tr>
 						<tr mdcDataTableRow>
@@ -81,6 +92,14 @@
 										{{ user.supporter ? "Yes" : "No" }}
 									</label>
 								</mdc-form-field>
+								<button
+									mat-stroked-button
+									(click)="onToggleSupporter()"
+									style="margin-left: 16px;"
+								>
+									<mat-icon>favorite</mat-icon> Toggle
+									supporter
+								</button>
 							</td>
 						</tr>
 						<tr mdcDataTableRow>
@@ -96,6 +115,13 @@
 										{{ user.dev ? "Yes" : "No" }}
 									</label>
 								</mdc-form-field>
+								<button
+									mat-stroked-button
+									(click)="onToggleDev()"
+									style="margin-left: 16px;"
+								>
+									<mat-icon>build</mat-icon> Toggle dev
+								</button>
 							</td>
 						</tr>
 						<tr mdcDataTableRow>
@@ -138,33 +164,9 @@
 					</tbody>
 				</table>
 			</mdc-data-table>
-
-			<h2>Actions</h2>
-
-			<button
-				mat-flat-button
-				color="primary"
-				(click)="onToggleSupporter()"
-			>
-				<mat-icon>favorite</mat-icon> Toggle supporter
-			</button>
-			<span style="margin: 0 4px;"></span>
-			<button mat-flat-button color="primary" (click)="onToggleDev()">
-				<mat-icon>build</mat-icon> Toggle dev
-			</button>
-
-			<div style="margin: 8px 0; display: block;"></div>
-
+			<div style="margin: 16px 0;"></div>
 			<button mat-flat-button color="primary" (click)="onImpersonate()">
 				<mat-icon>camera</mat-icon> Impersonate
-			</button>
-			<span style="margin: 0 4px;"></span>
-			<button mat-flat-button color="primary" (click)="onToggleVerify()">
-				<mat-icon>email</mat-icon> Toggle verified
-			</button>
-			<span style="margin: 0 4px;"></span>
-			<button mat-flat-button color="primary" (click)="onToggleAdmin()">
-				<mat-icon>build</mat-icon> Toggle admin
 			</button>
 		</div>
 
