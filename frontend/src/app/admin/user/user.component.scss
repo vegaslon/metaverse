@@ -18,3 +18,9 @@
 mdc-data-table {
 	width: 100%;
 }
+
+::ng-deep {
+	.no-title-input .mat-form-field-infix {
+		border-top: 0.5em solid transparent;
+	}
+}

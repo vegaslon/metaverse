@@ -99,7 +99,7 @@ export class FilesService {
 		if (user.admin) {
 			return -1;
 		} else {
-			return 1024 * 1024 * 1024; // 1 GB
+			return 1024 * 1024 * 1024 * user.maxFilesSize; // per GB
 		}
 	}
 

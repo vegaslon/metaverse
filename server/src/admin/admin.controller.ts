@@ -1,4 +1,5 @@
 import {
+	BadRequestException,
 	Body,
 	Controller,
 	Delete,
@@ -70,6 +71,7 @@ export class AdminController {
 			minutes: user.minutes,
 			supporter: user.supporter,
 			dev: user.dev,
+			maxFilesSize: user.maxFilesSize,
 			session: online
 				? {
 						minutes: session.minutes,
@@ -193,6 +195,25 @@ export class AdminController {
 		await user.save();
 
 		return user.dev;
+	}
+
+	@Put("user/:id/max-files-size")
+	@ApiBearerAuth()
+	@UseGuards(AdminAuthGuard)
+	async updateMaxFilesSize(
+		@Param("id") id: string,
+		@Body("maxFilesSize") maxFilesSize: number,
+	) {
+		if (typeof maxFilesSize != "number")
+			throw new BadRequestException("Invalid max files size");
+
+		const user = await this.userService.findById(id);
+		if (user == null) throw new NotFoundException("User not found");
+
+		user.maxFilesSize = maxFilesSize;
+		await user.save();
+
+		return { maxFilesSize };
 	}
 
 	@Post("openai/create-token")

@@ -15,6 +15,7 @@ export interface AdminUser {
 	minutes: number;
 	supporter: boolean;
 	dev: boolean;
+	maxFilesSize: number;
 	session: {
 		minutes: number;
 		location: {
@@ -107,6 +108,14 @@ export class AdminService {
 	toggleDevUser(userId: string) {
 		return this.http
 			.post<AdminUser>("/api/admin/user/" + userId + "/dev", {})
+			.pipe(catchError(this.handleError));
+	}
+
+	updateMaxFilesSize(userId: string, maxFilesSize: number) {
+		return this.http
+			.put<AdminUser>("/api/admin/user/" + userId + "/max-files-size", {
+				maxFilesSize,
+			})
 			.pipe(catchError(this.handleError));
 	}
 

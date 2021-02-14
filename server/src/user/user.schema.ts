@@ -40,6 +40,8 @@ export const UserSchema = new Schema({
 		default: {},
 	},
 
+	maxFilesSize: { type: Number, default: 1 }, // 1 GB for free
+
 	created: { type: Date, default: () => new Date() },
 	minutes: { type: Number, default: 0 },
 });
@@ -71,6 +73,8 @@ export interface User extends Document {
 		displayName: string;
 		genderPronoun: string;
 	};
+
+	maxFilesSize: number;
 
 	created: Date;
 	minutes: number;

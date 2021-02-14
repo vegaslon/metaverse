@@ -131,6 +131,38 @@
 							</td>
 						</tr>
 						<tr mdcDataTableRow>
+							<th mdcDataTableHeaderCell>Max files size</th>
+							<td mdcDataTableCell>
+								<mat-form-field
+									style="width: 100px; margin-bottom: -18px;"
+									appearance="outline"
+									class="no-title-input"
+								>
+									<input
+										matInput
+										#maxFilesSizeInput
+										type="number"
+										[value]="user.maxFilesSize"
+									/>
+									<span matSuffix>GB</span>
+								</mat-form-field>
+								<button
+									mat-icon-button
+									class="mat-elevation-z0"
+									style="margin-left: 8px;"
+									[disabled]="
+										user.maxFilesSize ==
+										maxFilesSizeInput.value
+									"
+									(click)="
+										onUpdateMaxFilesSize(maxFilesSizeInput)
+									"
+								>
+									<mat-icon>save</mat-icon>
+								</button>
+							</td>
+						</tr>
+						<tr mdcDataTableRow>
 							<th mdcDataTableHeaderCell>ID</th>
 							<td mdcDataTableCell>{{ user.id }}</td>
 						</tr>

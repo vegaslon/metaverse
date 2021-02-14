@@ -72,4 +72,23 @@ export class UserComponent implements OnInit {
 				this.refreshUser();
 			});
 	}
+
+	onUpdateMaxFilesSize(maxFilesSizeInput: HTMLInputElement) {
+		const maxFilesSize = Number(maxFilesSizeInput.value);
+		if (Number.isNaN(maxFilesSize))
+			return window.alert("Invalid max files size");
+
+		if (
+			window.confirm(
+				"Are you sure you want to update max files size to " +
+					maxFilesSize +
+					" GB?",
+			)
+		)
+			this.adminService
+				.updateMaxFilesSize(this.user.id, maxFilesSize)
+				.subscribe(() => {
+					this.refreshUser();
+				});
+	}
 }
