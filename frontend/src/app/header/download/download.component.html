@@ -1,4 +1,4 @@
-<h1 style="text-align: center; margin-top: 24px">
+<h1 style="text-align: center; margin-top: 24px;">
 	Download
 	<b *ngIf="!loaded">Tivoli Cloud VR</b>
 	<b *ngIf="loaded" class="wiggle">
@@ -8,19 +8,19 @@
 		<span>o</span>
 		<span>l</span>
 		<span>i</span>
-		<span style="padding-left: 0.25em"></span>
+		<span style="padding-left: 0.25em;"></span>
 		<span>C</span>
 		<span>l</span>
 		<span>o</span>
 		<span>u</span>
 		<span>d</span>
-		<span style="padding-left: 0.25em"></span>
+		<span style="padding-left: 0.25em;"></span>
 		<span>V</span>
 		<span>R</span>
 	</b>
 	today!
 </h1>
-<p style="text-align: center">
+<p style="text-align: center;">
 	The early access version of Tivoli is unfinished and doesn't represent
 	<br />
 	the final product. Expect issues which can be
@@ -31,11 +31,30 @@
 		reported here
 	</a>
 </p>
+<mat-card
+	class="mat-elevation-z0"
+	style="
+		background-color: #f44336;
+		color: #fff;
+		text-align: center;
+		margin: 0 auto;
+		width: 550px;
+	"
+>
+	<p>
+		Requires a <b style="font-weight: 700;">high end computer</b> and an
+		<b style="font-weight: 700;">Nvidia GTX 1060</b> or higher.
+		<br />
+		<span style="font-size: 12px;">
+			AMD graphics cards are not supported.
+		</span>
+	</p>
+</mat-card>
 <ng-container>
 	<mat-progress-bar
 		*ngIf="!loaded"
 		mode="indeterminate"
-		style="margin-top: 32px; margin-bottom: 24px"
+		style="margin-top: 32px; margin-bottom: 24px;"
 	></mat-progress-bar>
 	<ng-container *ngIf="loaded">
 		<div class="platforms">
@@ -49,35 +68,9 @@
 				>
 					Download for Windows
 				</a>
-				<!-- <p>
-					{{ release.platforms.windows.filename }} ({{
-						release.platforms.windows.size
-					}})
-				</p> -->
-				<p>
+				<p class="under-text">
 					<b>Windows 10 64-bit</b> ({{
 						release.platforms.windows.size
-					}})
-				</p>
-			</mat-card>
-			<mat-card class="mat-elevation-z2">
-				<img src="/assets/logos/macos.svg" />
-				<h2>macOS</h2>
-				<a
-					mat-flat-button
-					color="primary"
-					[href]="release.platforms.macos.url"
-				>
-					Download for macOS
-				</a>
-				<!-- <p>
-					{{ release.platforms.macos.filename }} ({{
-						release.platforms.macos.size
-					}})
-				</p> -->
-				<p>
-					<b>macOS 10.13</b> or higher ({{
-						release.platforms.macos.size
 					}})
 				</p>
 			</mat-card>
@@ -91,11 +84,13 @@
 				>
 					Download for Linux
 				</button>
-				<p><b>glibc 2.27 (Ubuntu 18.04)</b> or higher</p>
+				<p class="under-text">
+					<b>glibc 2.27 (Ubuntu 18.04)</b> or higher
+				</p>
 				<mat-menu
 					#linuxMenu="matMenu"
 					xPosition="before"
-					style="width: 1000px"
+					style="width: 1000px;"
 				>
 					<a
 						mat-menu-item
@@ -141,14 +136,56 @@
 						<b>Arch Linux</b>
 						<br />
 						yay -S
-						<span style="color: #e91e63">tivoli-cloud-vr-bin</span>
+						<span style="color: #e91e63;">tivoli-cloud-vr-bin</span>
 					</a>
 				</mat-menu>
 			</mat-card>
+			<div style="opacity: 0.7; width: 150px;">
+				<button
+					mat-icon-button
+					style="transform: scale(1.5);"
+					(click)="showExperimental = !showExperimental"
+				>
+					<mat-icon *ngIf="!showExperimental">
+						arrow_forward_ios
+					</mat-icon>
+					<mat-icon *ngIf="showExperimental">
+						arrow_back_ios_new
+					</mat-icon>
+				</button>
+				<p
+					style="font-weight: 500; cursor: pointer;"
+					(click)="showExperimental = !showExperimental"
+				>
+					Experimental
+					<br />
+					and may not work
+				</p>
+			</div>
+			<ng-container *ngIf="showExperimental">
+				<mat-card class="mat-elevation-z2">
+					<img src="/assets/logos/macos.svg" />
+					<h2>macOS</h2>
+					<a
+						mat-flat-button
+						color="primary"
+						[href]="release.platforms.macos.url"
+					>
+						Download for macOS
+					</a>
+					<p class="under-text">
+						<b>macOS 10.13</b> or higher ({{
+							release.platforms.macos.size
+						}})
+						<br />
+						<b>macOS 11 Big Sur not supported!</b>
+					</p>
+				</mat-card>
+			</ng-container>
 		</div>
 		<div class="current-info">
 			<h3>
-				<span style="font-size: 1.25em"
+				<span style="font-size: 1.25em;"
 					>Version {{ release.version }}</span
 				>
 				<br />

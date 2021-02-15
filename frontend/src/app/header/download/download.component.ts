@@ -26,6 +26,7 @@ export class DownloadComponent implements OnInit {
 	// os: Platform = "windows";
 
 	loaded = false;
+	showExperimental = false;
 
 	release: Release = null;
 
