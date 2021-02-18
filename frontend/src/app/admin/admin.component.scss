@@ -5,6 +5,16 @@
 }
 
 .menu {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+
+	.pipe {
+		font-size: 24px;
+		opacity: 0.2;
+		margin: 0 8px;
+	}
+
 	button {
 		margin: 0 4px;
 

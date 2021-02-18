@@ -16,11 +16,17 @@ const routes: Routes = [
 		path: "",
 		component: AdminComponent,
 		children: [
-			{ path: "users", component: UsersComponent },
-			{ path: "online-users", component: UsersComponent },
+			{
+				path: "users",
+				children: [
+					{ path: "all", component: UsersComponent },
+					{ path: "online", component: UsersComponent },
+					{ path: "banned", component: UsersComponent },
+				],
+			},
 			{ path: "user/:username", component: UserComponent },
 			{ path: "openai-tokens", component: OpenaiTokensComponent },
-			{ path: "**", redirectTo: "users" },
+			{ path: "**", redirectTo: "users/all" },
 		],
 	},
 ];

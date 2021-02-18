@@ -13,6 +13,9 @@
 	&.not {
 		background-color: #f44336;
 	}
+	&.big {
+		font-size: 1.5em;
+	}
 }
 
 mdc-data-table {

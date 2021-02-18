@@ -12,6 +12,7 @@ import {
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from "@nestjs/swagger";
+import { MetaverseUnverifiedAuthGuard } from "../auth/auth-unverified.guard";
 import { MetaverseAuthGuard } from "../auth/auth.guard";
 import { CurrentUser } from "../auth/user.decorator";
 import { MulterFile } from "../common/multer-file.model";
@@ -30,7 +31,7 @@ export class FilesController {
 
 	@Get("")
 	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard)
+	@UseGuards(MetaverseUnverifiedAuthGuard) // allow banned users to get their files
 	getFiles(
 		@CurrentUser() user: User,
 		//@Query("path") path: string
@@ -40,7 +41,7 @@ export class FilesController {
 
 	@Get("status")
 	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard)
+	@UseGuards(MetaverseUnverifiedAuthGuard) // allow banned users to get their files
 	getStatus(@CurrentUser() user: User) {
 		return this.filesService.getStatus(user);
 	}
@@ -125,14 +126,14 @@ export class FilesController {
 
 	@Post("tea-only")
 	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard)
+	@UseGuards(MetaverseUnverifiedAuthGuard) // allow banned users to access their tea files
 	toggleTeaOnlyFile(@CurrentUser() user: User, @Query("path") path: string) {
 		return this.filesService.toggleTeaOnlyFile(user, path);
 	}
 
 	@Post("folder/tea-only")
 	@ApiBearerAuth()
-	@UseGuards(MetaverseAuthGuard)
+	@UseGuards(MetaverseUnverifiedAuthGuard) // allow banned users to access their tea files
 	toggleTeaOnlyFolder(
 		@CurrentUser() user: User,
 		@Query("path") path: string,

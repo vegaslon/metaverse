@@ -9,6 +9,7 @@ export interface AdminUser {
 	username: string;
 	email: string;
 	emailVerified: boolean;
+	banned: boolean;
 	domains: { name: string; id: string }[];
 	admin: boolean;
 	created: string;
@@ -75,6 +76,17 @@ export class AdminService {
 			.pipe(catchError(this.handleError));
 	}
 
+	getBannedUsers(offset = 0, search = "") {
+		return this.http
+			.get<AdminUser[]>(
+				"/api/admin/users/banned?offset=" +
+					offset +
+					"&search=" +
+					search,
+			)
+			.pipe(catchError(this.handleError));
+	}
+
 	impersonateUser(userId: string) {
 		return this.http
 			.post<AuthToken>("/api/admin/user/" + userId + "/impersonate", {})
@@ -108,6 +120,12 @@ export class AdminService {
 	toggleDevUser(userId: string) {
 		return this.http
 			.post<AdminUser>("/api/admin/user/" + userId + "/dev", {})
+			.pipe(catchError(this.handleError));
+	}
+
+	toggleBannedUser(userId: string) {
+		return this.http
+			.post<AdminUser>("/api/admin/user/" + userId + "/ban", {})
 			.pipe(catchError(this.handleError));
 	}
 

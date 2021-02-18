@@ -14,7 +14,7 @@ export class UsersComponent implements OnInit {
 	users: AdminUser[] = [];
 	search = "";
 
-	onlineUsers = false;
+	type: "all" | "online" | "banned" = "all";
 
 	@ViewChild(CdkVirtualScrollViewport)
 	viewport: CdkVirtualScrollViewport;
@@ -28,25 +28,27 @@ export class UsersComponent implements OnInit {
 
 	ngOnInit() {
 		this.route.url.subscribe(url => {
-			this.onlineUsers = url.some(segment =>
-				segment.path.includes("online"),
-			);
+			if (url.some(segment => segment.path.includes("online"))) {
+				this.type = "online";
+			}
+			if (url.some(segment => segment.path.includes("banned"))) {
+				this.type = "banned";
+			}
 			this.loadMore();
 		});
 	}
 
 	loadMore(offset = 0) {
-		if (this.onlineUsers) {
-			this.adminService
-				.getOnlineUsers(offset, this.search)
-				.subscribe(users => {
-					this.users =
-						offset === 0 ? users : [...this.users, ...users];
-				});
-		} else {
-			this.adminService.getUsers(offset, this.search).subscribe(users => {
-				this.users = offset === 0 ? users : [...this.users, ...users];
-			});
+		const h = (users: AdminUser[]) => {
+			this.users = offset === 0 ? users : [...this.users, ...users];
+		};
+
+		if (this.type == "all") {
+			this.adminService.getUsers(offset, this.search).subscribe(h);
+		} else if (this.type == "online") {
+			this.adminService.getOnlineUsers(offset, this.search).subscribe(h);
+		} else if (this.type == "banned") {
+			this.adminService.getBannedUsers(offset, this.search).subscribe(h);
 		}
 	}
 

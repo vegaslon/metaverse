@@ -65,6 +65,7 @@ export class AdminController {
 			username: user.username,
 			email: user.email,
 			emailVerified: user.emailVerified,
+			banned: user.banned,
 			domains,
 			admin: user.admin,
 			created: user.created,
@@ -101,10 +102,25 @@ export class AdminController {
 		@Query("offset") offset: number,
 		@Query("search") search: string,
 	) {
-		const users = await this.userService.findUsers(
+		const users = await this.userService.findUsersOnlineSorted(
 			Number(offset),
 			search,
-			true,
+		);
+		return Promise.all(
+			users.map(async user => this.renderUser(user, true)),
+		);
+	}
+
+	@Get("users/banned")
+	@ApiBearerAuth()
+	@UseGuards(AdminAuthGuard)
+	async getBannedUsers(
+		@Query("offset") offset: number,
+		@Query("search") search: string,
+	) {
+		const users = await this.userService.findBannedUsers(
+			Number(offset),
+			search,
 		);
 		return Promise.all(
 			users.map(async user => this.renderUser(user, true)),
@@ -156,6 +172,19 @@ export class AdminController {
 		await user.save();
 
 		return user.emailVerified;
+	}
+
+	@Post("user/:id/ban")
+	@ApiBearerAuth()
+	@UseGuards(AdminAuthGuard)
+	async toggleBan(@Param("id") id: string) {
+		const user = await this.userService.findById(id);
+		if (user == null) throw new NotFoundException("User not found");
+
+		user.banned = !user.banned;
+		await user.save();
+
+		return user.banned;
 	}
 
 	@Post("user/:id/admin")

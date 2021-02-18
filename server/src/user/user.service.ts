@@ -587,21 +587,50 @@ export class UserService implements OnModuleInit {
 			};
 		}
 
-		if (onlineSorted) {
-			const sessions = await this.sessionService.userSessionModel
-				.find()
-				.sort({ minutes: -1 })
-				.skip(offset)
-				.limit(amount)
-				.populate("user");
-			return sessions.map(session => session.user);
-		} else {
-			return this.userModel
-				.find(find)
-				.sort({ created: -1 })
-				.skip(offset)
-				.limit(amount);
+		return this.userModel
+			.find(find)
+			.sort({ created: -1 })
+			.skip(offset)
+			.limit(amount);
+	}
+
+	async findUsersOnlineSorted(offset = 0, search = "") {
+		if (offset < 0) offset = 0;
+		const amount = 50;
+
+		let find = {};
+		if (search) {
+			const queryRegExp = this.regexForFinding(search, false);
+			find = {
+				$or: [{ username: queryRegExp }, { email: queryRegExp }],
+			};
 		}
+
+		const sessions = await this.sessionService.userSessionModel
+			.find()
+			.sort({ minutes: -1 })
+			.skip(offset)
+			.limit(amount)
+			.populate("user");
+		return sessions.map(session => session.user);
+	}
+
+	async findBannedUsers(offset = 0, search = "") {
+		if (offset < 0) offset = 0;
+		const amount = 50;
+
+		let find = {};
+		if (search) {
+			const queryRegExp = this.regexForFinding(search, false);
+			find = {
+				$or: [{ username: queryRegExp }, { email: queryRegExp }],
+			};
+		}
+
+		return this.userModel
+			.find({ ...find, banned: true })
+			.skip(offset)
+			.limit(amount);
 	}
 
 	// TODO: friends requests implemented with new schema { to, from }

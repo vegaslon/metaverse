@@ -73,6 +73,13 @@ export class UserComponent implements OnInit {
 			});
 	}
 
+	onToggleBanned() {
+		if (window.confirm("Are you sure you want to toggle banned?"))
+			this.adminService.toggleBannedUser(this.user.id).subscribe(() => {
+				this.refreshUser();
+			});
+	}
+
 	onUpdateMaxFilesSize(maxFilesSizeInput: HTMLInputElement) {
 		const maxFilesSize = Number(maxFilesSizeInput.value);
 		if (Number.isNaN(maxFilesSize))

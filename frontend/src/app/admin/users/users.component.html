@@ -1,5 +1,5 @@
 <div style="display: flex; align-items: center; margin-bottom: 16px;">
-	<ng-container *ngIf="!onlineUsers">
+	<ng-container *ngIf="type == 'all'">
 		<mdc-form-field>
 			<mdc-text-field
 				label="Search for user"
@@ -45,7 +45,12 @@
 							[online]="user.session"
 						></app-user-image>
 					</td>
-					<td mdcDataTableCell>{{ user.username }}</td>
+					<td mdcDataTableCell>
+						{{ user.username }}
+						<span *ngIf="user.banned" class="not verified">
+							banned
+						</span>
+					</td>
 					<td mdcDataTableCell>
 						{{ user.email }}
 						<span *ngIf="user.emailVerified" class="verified">

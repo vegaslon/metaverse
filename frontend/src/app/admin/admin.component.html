@@ -5,20 +5,42 @@
 	>
 		<h2 style="margin-right: 32px;">🌸🎉🍣 Secret fairy admin page</h2>
 		<div class="menu">
+			<div
+				style="
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					margin-right: 8px;
+				"
+			>
+				<mat-icon>people</mat-icon>
+				<h4 style="margin: 0; margin-left: 4px;">Users</h4>
+			</div>
 			<button
 				mat-button
-				routerLink="/admin/users"
+				routerLink="/admin/users/all"
 				routerLinkActive="active"
+				style="margin: 0;"
 			>
-				<mat-icon>people</mat-icon> Users
+				All
 			</button>
 			<button
 				mat-button
-				routerLink="/admin/online-users"
+				routerLink="/admin/users/online"
 				routerLinkActive="active"
+				style="margin: 0;"
 			>
-				<mat-icon>people</mat-icon> Online users
+				Online
 			</button>
+			<button
+				mat-button
+				routerLink="/admin/users/banned"
+				routerLinkActive="active"
+				style="margin: 0;"
+			>
+				Banned
+			</button>
+			<span class="pipe">|</span>
 			<button
 				mat-button
 				routerLink="/admin/openai-tokens"

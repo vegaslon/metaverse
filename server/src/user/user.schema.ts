@@ -9,6 +9,8 @@ export const UserSchema = new Schema({
 	email: { type: String, required: true },
 	emailVerified: { type: Boolean, default: false },
 
+	banned: { type: Boolean, default: false },
+
 	emailVerifySecret: { type: String, default: "" },
 	resetPasswordSecret: { type: String, default: "" },
 
@@ -53,6 +55,8 @@ export interface User extends Document {
 
 	email: string;
 	emailVerified: boolean;
+
+	banned: boolean;
 
 	emailVerifySecret: string;
 	resetPasswordSecret: string;
