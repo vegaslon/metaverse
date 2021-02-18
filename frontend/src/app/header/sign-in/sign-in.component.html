@@ -1,5 +1,7 @@
 <div class="login">
-	<div class="sidebar"></div>
+	<div class="sidebar">
+		<div class="logo"></div>
+	</div>
 	<div>
 		<h2 *ngIf="mode == 'signIn'" style="margin-top: 0;">Sign in</h2>
 		<h2 *ngIf="mode == 'signUp'" style="margin-top: 0;">
@@ -216,14 +218,21 @@
 				"
 			>
 				<mdc-checkbox #agreeToTermsSignUp></mdc-checkbox>
-				<p>
+				<p style="margin-left: 8px;">
 					<span
 						(click)="agreeToTermsSignUp.toggle()"
 						style="cursor: pointer;"
 					>
 						I have read and agree to the
 					</span>
-					<a href="/privacy-policy" target="_blank">Privacy Policy</a>
+					<br />
+					<a href="/privacy-policy" target="_blank">
+						Privacy Policy
+					</a>
+					and
+					<a href="/code-of-conduct" target="_blank">
+						Code of Conduct
+					</a>
 				</p>
 			</div>
 
@@ -335,14 +344,21 @@
 				"
 			>
 				<mdc-checkbox #agreeToTermsExtSignUp></mdc-checkbox>
-				<p>
+				<p style="margin-left: 8px;">
 					<span
 						(click)="agreeToTermsExtSignUp.toggle()"
 						style="cursor: pointer;"
 					>
 						I have read and agree to the
 					</span>
-					<a href="/privacy-policy" target="_blank">Privacy Policy</a>
+					<br />
+					<a href="/privacy-policy" target="_blank">
+						Privacy Policy
+					</a>
+					and
+					<a href="/code-of-conduct" target="_blank">
+						Code of Conduct
+					</a>
 				</p>
 			</div>
 

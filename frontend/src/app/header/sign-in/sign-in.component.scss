@@ -19,11 +19,25 @@
 		margin-bottom: -24px;
 		margin-right: 24px;
 		background-color: #e91e63;
-		background-image: url(/assets/login-sidebar.jpg);
+		background-image: url(/assets/header.jpg);
 		background-size: auto 100%;
-		background-position: 100%;
+		background-position: right;
 		background-repeat: no-repeat;
 		align-self: stretch;
+		position: relative;
+
+		.logo {
+			position: absolute;
+			margin: auto;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			background-image: url(/assets/logo-light-90.svg);
+			background-size: auto 100%;
+			background-repeat: no-repeat;
+			width: 100px;
+			height: 280px;
+		}
 
 		@media only screen and (max-width: $mobileWidth) {
 			// margin-left: -24px;

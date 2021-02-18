@@ -85,6 +85,13 @@ const routes: Routes = [
 				m => m.PrivacyPolicyModule,
 			),
 	},
+	{
+		path: "code-of-conduct",
+		loadChildren: () =>
+			import("./code-of-conduct/code-of-conduct.module").then(
+				m => m.CodeOfConductModule,
+			),
+	},
 	{ path: "**", redirectTo: "/" },
 ];
 
