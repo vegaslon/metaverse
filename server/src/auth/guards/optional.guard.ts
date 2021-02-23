@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
-import { User } from "../user/user.schema";
+import { User } from "../../user/user.schema";
 
 @Injectable()
 export class OptionalAuthGuard extends AuthGuard() {

@@ -1,7 +1,7 @@
 import { Controller, Get, Param, Query, UseGuards } from "@nestjs/common";
 import { HttpException } from "@nestjs/common/exceptions";
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
-import { OptionalAuthGuard } from "../../auth/optional.guard";
+import { OptionalAuthGuard } from "../../auth/guards/optional.guard";
 import { CurrentUser } from "../../auth/user.decorator";
 import {
 	objectIdToUuid,

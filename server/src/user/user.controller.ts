@@ -17,8 +17,8 @@ import {
 import { FileInterceptor } from "@nestjs/platform-express";
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { Response } from "express";
-import { MetaverseUnverifiedAuthGuard } from "../auth/auth-unverified.guard";
-import { MetaverseAuthGuard } from "../auth/auth.guard";
+import { MetaverseUnverifiedAuthGuard } from "../auth/guards/auth-unverified.guard";
+import { MetaverseAuthGuard } from "../auth/guards/auth.guard";
 import { AuthService } from "../auth/auth.service";
 import { CurrentUser } from "../auth/user.decorator";
 import { MulterFile } from "../common/multer-file.model";

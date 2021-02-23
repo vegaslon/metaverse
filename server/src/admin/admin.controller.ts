@@ -12,7 +12,7 @@ import {
 	UseGuards,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
-import { AdminAuthGuard } from "../auth/admin.guard";
+import { AdminAuthGuard } from "../auth/guards/admin.guard";
 import { AuthService } from "../auth/auth.service";
 import { DomainService } from "../domain/domain.service";
 import { OpenaiService } from "../openai/openai.service";

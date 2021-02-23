@@ -2,6 +2,19 @@
 	"collection": "@nestjs/schematics",
 	"sourceRoot": "src",
 	"compilerOptions": {
-		"plugins": ["@nestjs/swagger/plugin"]
+		"plugins": [
+			"@nestjs/swagger/plugin",
+			{
+				"name": "@nestjs/graphql",
+				"options": {
+					"typeFileNameSuffix": [
+						".schema.ts",
+						".resolver.ts",
+						".service.ts"
+					],
+					"introspectComments": true
+				}
+			}
+		]
 	}
 }

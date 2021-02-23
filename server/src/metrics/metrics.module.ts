@@ -1,10 +1,6 @@
-import { Module, MiddlewareConsumer } from "@nestjs/common";
-import { MetricsService } from "./metrics.service";
+import { MiddlewareConsumer, Module } from "@nestjs/common";
 import { MetricsMiddleware } from "./metrics.middleware";
-import { MongooseModule } from "@nestjs/mongoose";
-import { MetricsSchema } from "./metrics.schema";
-import { MetricsController } from "./metrics.controller";
-import { SessionModule } from "../session/session.module";
+import { MetricsService } from "./metrics.service";
 
 @Module({
 	// imports: [

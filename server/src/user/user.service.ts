@@ -575,7 +575,7 @@ export class UserService implements OnModuleInit {
 		return { user };
 	}
 
-	async findUsers(offset = 0, search = "", onlineSorted = false) {
+	async findUsers(offset = 0, search = "") {
 		if (offset < 0) offset = 0;
 		const amount = 50;
 

@@ -11,8 +11,8 @@ import {
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { Response } from "express";
-import { MetaverseAuthGuard } from "../auth/auth.guard";
-import { OptionalAuthGuard } from "../auth/optional.guard";
+import { MetaverseAuthGuard } from "../auth/guards/auth.guard";
+import { OptionalAuthGuard } from "../auth/guards/optional.guard";
 import { CurrentUser } from "../auth/user.decorator";
 import { renderDomain } from "../common/utils";
 import { SessionService } from "../session/session.service";

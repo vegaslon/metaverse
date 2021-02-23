@@ -1,7 +1,8 @@
+import { Field, HideField, ObjectType } from "@nestjs/graphql";
 import { ObjectId } from "bson";
 import { Document, Schema, Types } from "mongoose";
 import { MongooseFilterUnused } from "../common/mongoose-filter-unused";
-import { Domain } from "../domain/domain.schema";
+import { Domain, GqlDomain } from "../domain/domain.schema";
 
 export const UserSchema = new Schema({
 	username: { type: String, required: true },
@@ -77,6 +78,47 @@ export interface User extends Document {
 		displayName: string;
 		genderPronoun: string;
 	};
+
+	maxFilesSize: number;
+
+	created: Date;
+	minutes: number;
+}
+
+@ObjectType("UserNametag")
+class GqlUserNametag {
+	displayName: string;
+	genderPronoun: string;
+}
+
+@ObjectType("User")
+export class GqlUser {
+	_id: string;
+
+	username: string;
+
+	email: string;
+	emailVerified: boolean;
+
+	banned: boolean;
+
+	emailVerifySecret: string;
+	resetPasswordSecret: string;
+
+	domains: GqlDomain[];
+
+	admin: boolean;
+	@HideField()
+	hash: string;
+	publicKey: string;
+
+	domainLikes: GqlDomain[];
+
+	friends: GqlUser[];
+
+	supporter: boolean;
+	dev: boolean;
+	nametag: GqlUserNametag;
 
 	maxFilesSize: number;
 

@@ -6,6 +6,7 @@ import {
 	Injectable,
 	InternalServerErrorException,
 } from "@nestjs/common";
+import { Field, ObjectType } from "@nestjs/graphql";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
 import * as mailchecker from "mailchecker";
@@ -18,12 +19,16 @@ import { AuthExtSignUpDto, AuthSignUpDto, AuthTokenDto } from "./auth.dto";
 import { JwtPayload, JwtPayloadType } from "./jwt.strategy";
 
 // aaah... cant camel case here
-export interface InterfaceAuthToken {
+
+@ObjectType()
+export class InterfaceAuthToken {
 	access_token: string;
 	created_at: number;
 	expires_in: number;
 	refresh_token: string;
+	@Field(() => String)
 	scope: "owner";
+	@Field(() => String)
 	token_type: "Bearer";
 }
 

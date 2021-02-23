@@ -1,8 +1,9 @@
+import { HideField, ObjectType, registerEnumType } from "@nestjs/graphql";
 import { ObjectId } from "bson";
 import { Document, Schema, Types } from "mongoose";
 import { MongooseFilterUnused } from "../common/mongoose-filter-unused";
 import { docInsideDocArray } from "../common/utils";
-import { User } from "../user/user.schema";
+import { GqlUser, User } from "../user/user.schema";
 
 export enum DomainAutomaticNetworking {
 	full = "full",
@@ -10,11 +11,19 @@ export enum DomainAutomaticNetworking {
 	disabled = "disabled",
 }
 
+registerEnumType(DomainAutomaticNetworking, {
+	name: "DomainAutomaticNetworking",
+});
+
 export enum DomainRestriction {
 	acl = "acl", // whitelist
 	hifi = "hifi", // whitelist, logged in
 	open = "open", // whitelist, logged in, anonymous
 }
+
+registerEnumType(DomainRestriction, {
+	name: "DomainRestriction",
+});
 
 export const DomainSchema = new Schema(
 	{
@@ -85,7 +94,7 @@ export interface Domain extends Document {
 	restriction: DomainRestriction;
 	whitelist: Types.Array<User>;
 	maturity: string;
-	hosts: string;
+	hosts: string[];
 	tags: Types.Array<string>;
 
 	version: string;
@@ -98,6 +107,43 @@ export interface Domain extends Document {
 	path: string;
 	ownerPlaces: Types.Array<string>;
 	userLikes: Types.Array<User>;
+}
+
+@ObjectType("Domain")
+export class GqlDomain {
+	_id: string;
+
+	lastUpdated: Date;
+
+	author: GqlUser;
+	@HideField()
+	secret: string;
+
+	iceServerAddress: string;
+	//cloudDomain: boolean;
+	automaticNetworking: DomainAutomaticNetworking;
+
+	networkAddress: string;
+	networkPort: number;
+
+	description: string;
+	capacity: number;
+	restriction: DomainRestriction;
+	whitelist: GqlUser[];
+	maturity: string;
+	hosts: string[];
+	tags: string[];
+
+	version: string;
+	protocol: string;
+
+	publicKey: string;
+
+	// not from hifi
+	label: string;
+	path: string;
+	ownerPlaces: string[];
+	userLikes: GqlUser[];
 }
 
 MongooseFilterUnused(DomainSchema);

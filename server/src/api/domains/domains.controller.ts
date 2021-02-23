@@ -14,7 +14,7 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import * as uuid from "uuid";
 import { CurrentDomain } from "../../auth/domain.decorator";
-import { DomainAuthGuard } from "../../auth/domain.guard";
+import { DomainAuthGuard } from "../../auth/guards/domain.guard";
 import { MulterFile } from "../../common/multer-file.model";
 import { renderDomainForHifi, uuidToObjectId } from "../../common/utils";
 import { UpdateDomainDto } from "../../domain/domain.dto";

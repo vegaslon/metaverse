@@ -2,7 +2,7 @@ import { Controller, Get, Res, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { Response } from "express";
 import { User } from "../user/user.schema";
-import { MetaverseAuthGuard } from "./auth.guard";
+import { MetaverseAuthGuard } from "./guards/auth.guard";
 import { AuthService } from "./auth.service";
 import { CurrentUser } from "./user.decorator";
 

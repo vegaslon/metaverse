@@ -34,6 +34,8 @@ class NotFoundExceptionFilter extends BaseExceptionFilter {
 	private readonly teaHost = new URL(TEA_URL).hostname;
 
 	catch(exception: NotFoundException, host: ArgumentsHost) {
+		if ((host.getType() as string) == "graphql") return;
+
 		const ctx = host.switchToHttp();
 		const req: Request = ctx.getRequest();
 
@@ -60,6 +62,8 @@ class NotFoundExceptionFilter extends BaseExceptionFilter {
 @Catch(UnauthorizedException)
 class UnauthorizedExceptionFilter extends BaseExceptionFilter {
 	catch(exception: UnauthorizedException, host: ArgumentsHost) {
+		if ((host.getType() as string) == "graphql") return;
+
 		const ctx = host.switchToHttp();
 		const req: Request = ctx.getRequest();
 
