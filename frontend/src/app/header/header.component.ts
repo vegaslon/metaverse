@@ -12,6 +12,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { ActivationEnd, Router } from "@angular/router";
 import { Subscription } from "rxjs";
 import { AuthService, User } from "../auth/auth.service";
+import { HomeComponent } from "../home/home.component";
 import { SignInComponent } from "./sign-in/sign-in.component";
 
 @Component({
@@ -68,8 +69,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
 			}),
 			this.router.events.subscribe(val => {
 				if (val instanceof ActivationEnd) {
-					this.ontop =
-						val?.snapshot?.component?.["name"] == "HomeComponent";
+					this.ontop = (() => {
+						const component = val?.snapshot?.component as any;
+						if (component == null) return false;
+						const isHome = component?.prototype?.isHomeComponent;
+						if (typeof isHome != "function") return false;
+						return isHome();
+					})();
 				}
 			}),
 			this.authService.loggingIn$.subscribe(loggingIn => {

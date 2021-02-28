@@ -23,6 +23,11 @@ import { UtilsService } from "../utils.service";
 	styleUrls: ["./home.component.scss"],
 })
 export class HomeComponent implements OnInit, OnDestroy {
+	// for header component
+	isHomeComponent() {
+		return true;
+	}
+
 	@ViewChild("video", { static: true }) videoRef: ElementRef<
 		HTMLVideoElement
 	>;
