@@ -1,6 +1,9 @@
-import { Component, OnInit } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
+import { Component, OnInit } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
+import { ActivatedRoute } from "@angular/router";
 import { map } from "rxjs/operators";
+import { AmdComplicationsComponent } from "./amd-complications/amd-complications.component";
 
 type Platform = "windows" | "macos" | "linux";
 interface Release {
@@ -30,7 +33,10 @@ export class DownloadComponent implements OnInit {
 
 	release: Release = null;
 
-	constructor(private http: HttpClient) {}
+	constructor(
+		private readonly http: HttpClient,
+		private readonly dialog: MatDialog,
+	) {}
 
 	ngOnInit() {
 		// TODO: preload if on home component so download is more instant
@@ -62,5 +68,12 @@ export class DownloadComponent implements OnInit {
 				this.release = release;
 				this.loaded = true;
 			});
+	}
+
+	onAmdComplications() {
+		this.dialog.open(AmdComplicationsComponent, {
+			maxWidth: "75vw",
+			maxHeight: "90vh",
+		});
 	}
 }

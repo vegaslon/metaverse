@@ -12,6 +12,7 @@ import {
 import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
 import { interval, Subscription } from "rxjs";
+import { AmdComplicationsComponent } from "../header/download/amd-complications/amd-complications.component";
 import { DownloadComponent } from "../header/download/download.component";
 import { SignInComponent } from "../header/sign-in/sign-in.component";
 import { UtilsService } from "../utils.service";
@@ -74,12 +75,20 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 		this.route.url.subscribe(url => {
 			if (url.length === 0) return;
-			if (url[0].path !== "download") return;
-
-			const dialog = this.dialog.open(DownloadComponent);
-			dialog.afterClosed().subscribe(() => {
-				this.router.navigateByUrl("/");
-			});
+			if (url[0].path == "download") {
+				const dialog = this.dialog.open(DownloadComponent);
+				dialog.afterClosed().subscribe(() => {
+					this.router.navigateByUrl("/");
+				});
+			} else if (url[0].path == "amd-complications") {
+				const dialog = this.dialog.open(AmdComplicationsComponent, {
+					maxWidth: "75vw",
+					maxHeight: "90vh",
+				});
+				dialog.afterClosed().subscribe(() => {
+					this.router.navigateByUrl("/");
+				});
+			}
 		});
 
 		const video = this.videoRef.nativeElement;

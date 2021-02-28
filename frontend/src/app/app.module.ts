@@ -11,6 +11,7 @@ import { AuthInterceptorService } from "./auth/auth-interceptor.service";
 import { AuthGuard } from "./auth/auth.guard";
 import { AuthService } from "./auth/auth.service";
 import { CookieConsentComponent } from "./cookie-consent/cookie-consent.component";
+import { AmdComplicationsComponent } from "./header/download/amd-complications/amd-complications.component";
 import { DownloadComponent } from "./header/download/download.component";
 import { HeaderComponent } from "./header/header.component";
 import { SignInComponent } from "./header/sign-in/sign-in.component";
@@ -36,6 +37,10 @@ const routes: Routes = [
 	{ path: "", component: HomeComponent },
 	{
 		path: "download",
+		component: HomeComponent,
+	},
+	{
+		path: "amd-complications",
 		component: HomeComponent,
 	},
 	{
@@ -103,6 +108,7 @@ const routes: Routes = [
 		HomeComponent,
 		DownloadComponent,
 		CookieConsentComponent,
+		AmdComplicationsComponent,
 	],
 	imports: [
 		BrowserModule.withServerTransition({ appId: "serverApp" }),

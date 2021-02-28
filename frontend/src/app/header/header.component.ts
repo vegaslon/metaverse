@@ -9,7 +9,7 @@ import {
 	ViewChild,
 } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import { NavigationEnd, Router } from "@angular/router";
+import { ActivationEnd, Router } from "@angular/router";
 import { Subscription } from "rxjs";
 import { AuthService, User } from "../auth/auth.service";
 import { SignInComponent } from "./sign-in/sign-in.component";
@@ -67,14 +67,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 				this.impersonating = impersonating;
 			}),
 			this.router.events.subscribe(val => {
-				if (val instanceof NavigationEnd) {
-					this.onToggleMobileMenu(true);
-					const url = val.url.toLowerCase();
+				if (val instanceof ActivationEnd) {
 					this.ontop =
-						url === "/" ||
-						/^\/\?/.test(url) ||
-						url === "/download" ||
-						/^\/download\?/.test(url);
+						val?.snapshot?.component?.["name"] == "HomeComponent";
 				}
 			}),
 			this.authService.loggingIn$.subscribe(loggingIn => {
