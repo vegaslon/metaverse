@@ -14,6 +14,7 @@ import { InjectConnection, InjectModel } from "@nestjs/mongoose";
 import * as bcrypt from "bcrypt";
 import { ObjectId } from "bson";
 import crypto from "crypto";
+import { Request } from "express";
 import * as fs from "fs";
 import JSZip from "jszip";
 import * as mailchecker from "mailchecker";
@@ -508,7 +509,7 @@ export class UserService implements OnModuleInit {
 		}
 	}
 
-	async sendResetPassword(email: string) {
+	async sendResetPassword(email: string, req: Request) {
 		if (email == null) throw new BadRequestException();
 
 		const user = await this.findByEmail(email);
@@ -531,7 +532,7 @@ export class UserService implements OnModuleInit {
 		);
 
 		try {
-			this.emailService.sendResetPassword(user, token);
+			this.emailService.sendResetPassword(user, token, req);
 		} catch (err) {
 			throw new InternalServerErrorException();
 		}

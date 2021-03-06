@@ -9,6 +9,7 @@ import {
 	Post,
 	Put,
 	Query,
+	Req,
 	Res,
 	UploadedFile,
 	UseGuards,
@@ -16,10 +17,10 @@ import {
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from "@nestjs/swagger";
-import { Response } from "express";
+import { Request, Response } from "express";
+import { AuthService } from "../auth/auth.service";
 import { MetaverseUnverifiedAuthGuard } from "../auth/guards/auth-unverified.guard";
 import { MetaverseAuthGuard } from "../auth/guards/auth.guard";
-import { AuthService } from "../auth/auth.service";
 import { CurrentUser } from "../auth/user.decorator";
 import { MulterFile } from "../common/multer-file.model";
 import { GetDomainsDto } from "../domain/domain.dto";
@@ -96,8 +97,8 @@ export class UserController {
 	}
 
 	@Post("reset-password")
-	sendResetPassword(@Body("email") email: string) {
-		return this.userService.sendResetPassword(email);
+	sendResetPassword(@Body("email") email: string, @Req() req: Request) {
+		return this.userService.sendResetPassword(email, req);
 	}
 
 	@Get("reset-password/:token")
