@@ -1,8 +1,13 @@
 import baseX from "base-x";
 import { ObjectId } from "bson";
+import { Request } from "express";
+import * as geoip from "geoip-lite";
+import iso_3166_1 from "iso-3166/1.json";
+import iso_3166_2 from "iso-3166/2.json";
 import mimeTypes from "mime-db";
 import { Types } from "mongoose";
 import { Readable } from "stream";
+import { UAParser } from "ua-parser-js";
 import * as uuid from "uuid";
 import { Domain, DomainRestriction } from "../domain/domain.schema";
 import { URL, WORLD_URL } from "../environment";
@@ -358,4 +363,59 @@ export const docInsideDocArray = <T>(
 			return idStr == doc;
 		}
 	});
+};
+
+export const getIpFromReq = (req: Request) => {
+	const forwardedFor = req.header("X-Forwarded-For");
+	const maybeIpv6 = forwardedFor == null ? req.ip : forwardedFor;
+	return maybeIpv6.startsWith("::ffff:")
+		? maybeIpv6.slice("::ffff:".length)
+		: maybeIpv6;
+};
+
+export const getLocationString = (ip: string) => {
+	const ipLookup = geoip.lookup(ip);
+	if (ipLookup == null) {
+		return "Unknown";
+	} else {
+		const alpha2 = ipLookup.country;
+		const countryLookup = iso_3166_1.find(x => x.alpha2 == alpha2);
+		const regionCode = ipLookup.country + "-" + ipLookup.region;
+		const regionLookup = iso_3166_2.find(x => x.code == regionCode);
+
+		// city, state, country
+		return [
+			ipLookup.city.trim(),
+			regionLookup == null ? "" : regionLookup.name.trim(),
+			countryLookup == null ? "" : countryLookup.name.trim(),
+		]
+			.filter(x => x != "")
+			.join(", ");
+	}
+};
+
+export const getBrowserFromReq = (req: Request) => {
+	const userAgent = req.header("user-agent");
+	if (userAgent == null) {
+		return "Unknown";
+	}
+
+	const result = new UAParser(userAgent).getResult();
+
+	const browser = [
+		result.browser.name == null ? "" : result.browser.name,
+		result.browser.version == null ? "" : result.browser.version,
+	]
+		.filter(x => x != "")
+		.join(" ");
+
+	const os = [
+		result.os.name == null ? "" : result.os.name,
+		result.os.version == null ? "" : result.os.version,
+	]
+		.filter(x => x != "")
+		.join(" ");
+
+	const final = [browser, os].filter(x => x != "").join(", ");
+	return final == "" ? "Unknown" : final;
 };

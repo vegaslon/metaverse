@@ -60,8 +60,13 @@ export class UserController {
 	async updateUserPassword(
 		@CurrentUser() user,
 		@Body() userUpdatePasswordDto: UserUpdatePasswordDto,
+		@Req() req: Request,
 	) {
-		return this.userService.updateUserPassword(user, userUpdatePasswordDto);
+		return this.userService.updateUserPassword(
+			user,
+			userUpdatePasswordDto,
+			req,
+		);
 	}
 
 	@Put("image")

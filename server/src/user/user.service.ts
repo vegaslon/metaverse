@@ -179,6 +179,7 @@ export class UserService implements OnModuleInit {
 	async updateUserPassword(
 		user: User,
 		userUpdatePasswordDto: UserUpdatePasswordDto,
+		req: Request,
 	) {
 		const { token, currentPassword, newPassword } = userUpdatePasswordDto;
 
@@ -206,6 +207,12 @@ export class UserService implements OnModuleInit {
 
 		user.hash = await this.authService.hashPassword(newPassword);
 		await user.save();
+
+		try {
+			this.emailService.sendPasswordChanged(user, req);
+		} catch (err) {
+			// throw new InternalServerErrorException();
+		}
 
 		return { message: "Password has been changed" };
 	}
@@ -503,7 +510,7 @@ export class UserService implements OnModuleInit {
 		);
 
 		try {
-			this.emailService.sendVerify(user, email, token);
+			this.emailService.sendEmailVerify(user, email, token);
 		} catch (err) {
 			throw new InternalServerErrorException();
 		}
