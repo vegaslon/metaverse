@@ -120,6 +120,7 @@ const routes: Routes = [
 			initialNavigation: "enabled",
 			scrollPositionRestoration: "enabled",
 			relativeLinkResolution: "legacy",
+			anchorScrolling: "enabled",
 		}),
 		// RecaptchaModule,
 		// RecaptchaFormsModule,
