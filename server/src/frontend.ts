@@ -7,6 +7,7 @@ import {
 import { BaseExceptionFilter, HttpAdapterHost } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { Request, Response } from "express";
+import * as express from "express";
 import expressStaticGzip from "express-static-gzip";
 import * as fs from "fs";
 import * as path from "path";
@@ -97,32 +98,42 @@ export function initFrontend(app: NestExpressApplication) {
 		app.set("views", frontend.browser);
 	}
 
-	const acceptWebp = (req, res, next) => {
+	const fileExists = (fileExistsPath: string) => {
 		try {
-			const accept = (req.header("accept") ?? "").toLowerCase();
-			if (!accept.includes("image/webp")) return next();
-
-			const filePath = req.path.replace(/^\//, "");
-			if (!/\.(jpe?g|png)$/i.test(filePath)) return next();
-
-			const webpFilePath = filePath.replace(/\.(jpe?g|png)$/i, ".webp");
-			if (
-				!fs
-					.statSync(path.resolve(frontend.browser, webpFilePath))
-					.isFile()
-			) {
-				return next();
-			}
-
-			req.url = req.url.replace(filePath, webpFilePath);
-			return next();
+			return fs.statSync(fileExistsPath).isFile();
 		} catch (err) {
-			return next();
+			return false;
 		}
 	};
 
+	const acceptAvifOrWebp = (req: Request, res: Response, next: () => {}) => {
+		const filePath = req.path.replace(/^\//, "");
+		if (!/\.(jpe?g|png)$/i.test(filePath)) return next();
+
+		const accept = (req.header("accept") ?? "").toLowerCase();
+
+		if (accept.includes("image/avif")) {
+			const avifFilePath = filePath.replace(/\.(jpe?g|png)$/i, ".avif");
+			if (fileExists(path.resolve(frontend.browser, avifFilePath))) {
+				req.url = req.url.replace(filePath, avifFilePath);
+				return next();
+			}
+		}
+
+		if (accept.includes("image/webp")) {
+			const webpFilePath = filePath.replace(/\.(jpe?g|png)$/i, ".webp");
+			if (fileExists(path.resolve(frontend.browser, webpFilePath))) {
+				req.url = req.url.replace(filePath, webpFilePath);
+				return next();
+			}
+		}
+
+		return next();
+	};
+
+	express.static.mime.define({ "image/avif": ["avif"] });
 	app.use(
-		acceptWebp,
+		acceptAvifOrWebp,
 		expressStaticGzip(frontend.browser, {
 			enableBrotli: true,
 			orderPreference: ["br"],

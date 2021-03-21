@@ -48,8 +48,8 @@
 		"@nguniversal/builders": "^11.1.2",
 		"@types/express": "^4.17.4",
 		"@types/socket.io-client": "^1.4.32",
-		"cwebp-bin": "^6.1.1",
 		"gulp": "^4.0.2",
+		"sharp": "^0.27.2",
 		"through2-concurrent": "^2.0.0",
 		"ts-loader": "^6.2.2",
 		"webpack-cli": "^3.3.11"

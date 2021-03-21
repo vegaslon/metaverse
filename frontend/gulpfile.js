@@ -9,13 +9,14 @@ const {
 	BROTLI_PARAM_SIZE_HINT,
 } = require("zlib").constants;
 const prettyBytes = require("pretty-bytes");
-const { execFile } = require("child_process");
-const cwebp = require("cwebp-bin");
-const path = require("path");
+const sharp = require("sharp");
 
 const maxConcurrency = os.cpus().length;
 
-function webp(quality, keepPngLossless) {
+function avifOrWebp(type, quality, keepPngLossless) {
+	if (type != "avif" && type != "webp")
+		throw new Error('Please specify type "avif" or "webp"');
+
 	let totalFiles = 0;
 	let totalBytes = 0;
 	let totalSavedBytes = 0;
@@ -41,35 +42,33 @@ function webp(quality, keepPngLossless) {
 			totalFiles++;
 			totalBytes += file.contents.length;
 
-			const inputPath = file.path;
 			const lossless = keepPngLossless && lowerPath.endsWith(".png");
 
-			execFile(
-				cwebp,
-				[
-					inputPath,
-					...(lossless ? ["-lossless"] : ["-q", String(quality)]),
-					"-o",
-					"-",
-				],
-				{
-					maxBuffer: 1024 * 1024 * 16, // MiB
-					encoding: "buffer",
-				},
-				(error, data) => {
-					if (error) return callback(error);
+			let sharpFile = sharp(file.contents);
+			sharpFile =
+				type == "webp"
+					? sharpFile.webp({ quality, lossless })
+					: sharpFile.avif({ quality, lossless, speed: 0 });
 
+			sharpFile
+				.toBuffer()
+				.then(data => {
 					totalSavedBytes += file.contents.length - data.length;
 					file.contents = data;
-					file.path = file.path.replace(/\.(jpe?g|png)$/i, ".webp");
+					file.path = file.path.replace(
+						/\.(jpe?g|png)$/i,
+						"." + type,
+					);
 
 					callback(null, file);
-				},
-			);
+				})
+				.catch(error => {
+					return callback(error);
+				});
 		},
 		callback => {
 			log(
-				`webp: ${totalFiles} images, saved ${chalk.green(
+				`${type}: ${totalFiles} images, saved ${chalk.green(
 					prettyBytes(totalSavedBytes),
 				)}, ${chalk.gray(
 					`${prettyBytes(totalBytes)} => ${prettyBytes(
@@ -139,7 +138,7 @@ function brotli(quality) {
 // function statsForExt(extSizeMap, type) {
 // 	if (type == "before") {
 // 		return through2.obj((file, _, callback) => {
-// 			file.ext = path.extname(file.path).toLowerCase();
+// 			file.ext = require("path").extname(file.path).toLowerCase();
 // 			if (extSizeMap[file.ext] == null) {
 // 				extSizeMap[file.ext] = [0, 0];
 // 			}
@@ -180,13 +179,13 @@ function listForBrotli(input) {
 }
 
 function optimize(callback) {
-	const optimizeImages = () =>
+	const optimizeImages = type =>
 		src([
 			"dist/browser/**/*.jpg",
 			"dist/browser/**/*.jpeg",
 			"dist/browser/**/*.png",
 		])
-			.pipe(webp(80, false))
+			.pipe(avifOrWebp(type, 80, false))
 			.pipe(dest("dist/browser/"));
 
 	// const extSizeMap = {};
@@ -202,12 +201,14 @@ function optimize(callback) {
 			.pipe(brotli(11))
 			.pipe(dest("dist/browser/"));
 
-	optimizeImages().on("finish", () => {
+	// optimizeImages("avif").on("finish", () => {
+	optimizeImages("webp").on("finish", () => {
 		optimizeFiles().on("finish", () => {
 			// printStatsForExt(extSizeMap);
 			callback();
 		});
 	});
+	// });
 }
 
 exports.optimize = optimize;
