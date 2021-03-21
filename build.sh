@@ -17,5 +17,6 @@ cd frontend
 rm -rf dist
 yarn install
 yarn build:ssr
+yarn optimize
 cp -R dist ../app/frontend
 cd ..
