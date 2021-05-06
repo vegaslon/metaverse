@@ -50,6 +50,7 @@
 							"src/favicon.png",
 							"src/manifest.json",
 							"src/sitemap.xml",
+							"src/66c2e6a0f3149850fd26.js",
 							{
 								"glob": "**/*",
 								"input": "node_modules/monaco-editor/min",

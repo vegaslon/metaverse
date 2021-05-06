@@ -1,9 +1,10 @@
 {
 	"scripts": {
-		"start": "ng build --watch",
-		"build": "ng build --prod",
-		"dev:ssr": "ng run frontend:serve-ssr",
-		"build:ssr": "ng build --prod && ng run frontend:server:production",
+		"pre": "node download-plausible.js",
+		"start": "npm run pre && ng build --watch",
+		"build": "npm run pre && ng build --prod",
+		"dev:ssr": "npm run pre && ng run frontend:serve-ssr",
+		"build:ssr": "npm run pre && ng build --prod && ng run frontend:server:production",
 		"prerender": "ng run frontend:prerender",
 		"optimize": "gulp optimize"
 	},
@@ -49,6 +50,7 @@
 		"@types/express": "^4.17.4",
 		"@types/socket.io-client": "^1.4.32",
 		"gulp": "^4.0.2",
+		"node-fetch": "^2.6.1",
 		"sharp": "^0.27.2",
 		"through2-concurrent": "^2.0.0",
 		"ts-loader": "^6.2.2",
