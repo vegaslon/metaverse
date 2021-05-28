@@ -2,7 +2,7 @@ module.exports = {
 	apps: [
 		{
 			script: "dist/main.js",
-			instances: "max",
+			instances: parseInt(process.env.INSTANCES) ?? "max",
 		},
 	],
 };
