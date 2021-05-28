@@ -83,25 +83,25 @@ build all:
         paths:
             - app
 
-# deploy docker image:
-#     stage: deploy
-#     image: docker:latest
+deploy docker image:
+    stage: deploy
+    image: docker:latest
 
-#     # when: manual
+    # when: manual
 
-#     dependencies:
-#         - build all
+    dependencies:
+        - build all
 
-#     variables:
-#         DOCKER_TLS_CERTDIR: ""
+    variables:
+        DOCKER_TLS_CERTDIR: ""
 
-#     services:
-#         - docker:dind
+    services:
+        - docker:dind
 
-#     script:
-#         - docker build -t $CI_REGISTRY/tivolicloud-private/metaverse:latest .
-#         - docker login $CI_REGISTRY -u gitlab-ci-token -p $CI_JOB_TOKEN
-#         - docker push $CI_REGISTRY/tivolicloud-private/metaverse:latest
+    script:
+        - docker build -t $CI_REGISTRY/tivolicloud-private/metaverse:latest .
+        - docker login $CI_REGISTRY -u gitlab-ci-token -p $CI_JOB_TOKEN
+        - docker push $CI_REGISTRY/tivolicloud-private/metaverse:latest
 
 # deploy app engine:
 #     stage: deploy
@@ -120,45 +120,24 @@ build all:
 #         - gcloud auth activate-service-account --key-file $GCP_AUTH_JSON
 #         - gcloud --quiet --project tivolicloud app deploy --version $CI_PIPELINE_ID
 
-build base image:
-    stage: build
-    image: docker:latest
+# deploy eb:
+#     stage: deploy
+#     # TODO: replace with own image
+#     image: agoncaruks/aws-elastic-beanstalk-cli
 
-    only:
-        refs:
-            - master@tivolicloud-private/metaverse
-        changes:
-            - Dockerfile.base
+#     when: manual
+#     allow_failure: false
 
-    variables:
-        DOCKER_TLS_CERTDIR: ""
+#     needs:
+#         - job: build all
+#           artifacts: true
 
-    services:
-        - docker:dind
+#     script:
+#         - mkdir -p ~/.aws/
+#         - echo "[profile eb-cli]" > ~/.aws/config
+#         - echo "aws_access_key_id = $AWS_ACCESS_KEY_ID" >> ~/.aws/config
+#         - echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" >> ~/.aws/config
 
-    script:
-        - docker login -u makitsune -p $DOCKER_HUB_ACCESS_TOKEN
-        - docker build -t tivolicloud/metaverse-base:latest -f Dockerfile.base .
-        - docker push tivolicloud/metaverse-base:latest
-
-deploy eb:
-    stage: deploy
-    # TODO: replace with own image
-    image: agoncaruks/aws-elastic-beanstalk-cli
-
-    when: manual
-    allow_failure: false
-
-    needs:
-        - job: build all
-          artifacts: true
-
-    script:
-        - mkdir -p ~/.aws/
-        - echo "[profile eb-cli]" > ~/.aws/config
-        - echo "aws_access_key_id = $AWS_ACCESS_KEY_ID" >> ~/.aws/config
-        - echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" >> ~/.aws/config
-
-        # no codecommit or exit code 1
-        - yes n | eb init tivolicloud -r us-east-1 || if [ $? -eq 1 ]; then echo ""; else echo ""; fi
-        - eb deploy tivolicloud --timeout 60
+#         # no codecommit or exit code 1
+#         - yes n | eb init tivolicloud -r us-east-1 || if [ $? -eq 1 ]; then echo ""; else echo ""; fi
+#         - eb deploy tivolicloud --timeout 60
