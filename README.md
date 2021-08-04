@@ -28,6 +28,7 @@ They will both incrementally watch for file changes. The metaverse should now be
 ### Deploy
 
 ```bash
+./build.sh
 docker build -t tivolicloud/metaverse .
 ```
 
