@@ -1,4 +1,4 @@
-FROM tivolicloud-private/metaverse:base
+FROM registry.tivolicloud.com/tivolicloud-private/metaverse:base
 
 COPY \
 app/server/package.json \

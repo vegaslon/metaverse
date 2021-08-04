@@ -2,7 +2,7 @@ stages:
     - dependencies
     - test
     - build
-    - upload
+    - predeploy
     - deploy
 
 before_script:
@@ -85,7 +85,7 @@ build all:
             - app
 
 deploy docker image:
-    stage: upload
+    stage: predeploy
     image: docker:latest
 
     only:
