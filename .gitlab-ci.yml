@@ -102,7 +102,7 @@ deploy docker image:
 
     script:
         - docker login $CI_REGISTRY -u gitlab-ci-token -p $CI_JOB_TOKEN
-        - docker build -t $CI_REGISTRY/tivolicloud-private/metaverse:base .
+        - docker build -t $CI_REGISTRY/tivolicloud-private/metaverse:base -f Dockerfile.base .
         - docker push $CI_REGISTRY/tivolicloud-private/metaverse:base
 
 deploy latest image:
@@ -121,7 +121,7 @@ deploy latest image:
 
     script:
         - docker login $CI_REGISTRY -u gitlab-ci-token -p $CI_JOB_TOKEN
-        - docker build -t $CI_REGISTRY/tivolicloud-private/metaverse:latest .
+        - docker build -t $CI_REGISTRY/tivolicloud-private/metaverse:latest -f Dockerfile .
         - docker push $CI_REGISTRY/tivolicloud-private/metaverse:latest
 # deploy app engine:
 #     stage: deploy
