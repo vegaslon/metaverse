@@ -100,7 +100,7 @@ export class WorldController {
 
 	private async renderImage(domainId: string) {
 		const html = await this.renderHtml(domainId, true);
-		return this.puppeteerService.renderHTML(html, 600, 280, false);
+		return this.puppeteerService.renderHTML(html, 560, 240, false);
 	}
 
 	@Get(":id.png")
