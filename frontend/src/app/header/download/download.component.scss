@@ -1,11 +1,11 @@
 @function hsv($h-hsv, $s-hsv, $v-hsv, $a: 1) {
 	@if $v-hsv == 0 {
-		@return hsla(0, 0, 0, $a);
+		@return hsla(0, 0%, 0, $a);
 	} @else {
 		$l-hsl: ($v-hsv/2) * (2 - ($s-hsv/100));
 		$s-hsl: ($v-hsv * $s-hsv) /
 			if($l-hsl < 50, $l-hsl * 2, 200 - $l-hsl * 2);
-		@return hsla($h-hsv, $s-hsl, $l-hsl, $a);
+		@return hsla($h-hsv, $s-hsl * 1%, $l-hsl, $a);
 	}
 }
 
@@ -29,7 +29,7 @@
 	@keyframes rainbow {
 		@for $i from 0 to 24 {
 			#{$i/23*100 + "%"} {
-				color: hsv($i * 360/23, 50, 80);
+				color: hsv($i * 360/23, 50%, 80);
 			}
 		}
 	}
