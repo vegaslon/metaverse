@@ -1,9 +1,9 @@
-<img height="80" alt="metaverse" src="https://git.tivolicloud.com/tivolicloud/metaverse/raw/master/logo.png"/>
+<img height="80" alt="metaverse" src="https://git.tivolicloud.com/tivolicloud-private/metaverse/-/raw/master/logo.svg"/>
 
 ---
 
-![pipeline status](https://git.tivolicloud.com/tivolicloud/metaverse/badges/master/pipeline.svg)
-![coverage report](https://git.tivolicloud.com/tivolicloud/metaverse/badges/master/coverage.svg)
+![pipeline status](https://git.tivolicloud.com/tivolicloud-private/metaverse/badges/master/pipeline.svg)
+![coverage report](https://git.tivolicloud.com/tivolicloud-private/metaverse/badges/master/coverage.svg)
 
 ### Develop
 
