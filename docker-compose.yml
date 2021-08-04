@@ -3,7 +3,8 @@ services:
     db:
         image: mongo:latest
         restart: always
-        network_mode: host
+        ports:
+            - 27017:27017
         volumes:
             - ./db:/data/db
             - ./mongodump:/mongodump
