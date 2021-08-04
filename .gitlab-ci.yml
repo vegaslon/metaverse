@@ -2,6 +2,7 @@ stages:
     - dependencies
     - test
     - build
+    - upload
     - deploy
 
 before_script:
@@ -67,7 +68,7 @@ build all:
     image: node:lts
 
     needs:
-        - server tests
+        - job: server tests
 
     cache:
         policy: pull
@@ -84,13 +85,14 @@ build all:
             - app
 
 deploy docker image:
-    stage: deploy
+    stage: upload
     image: docker:latest
 
-    # when: manual
-
-    dependencies:
-        - build all
+    only:
+        refs:
+            - master@tivolicloud-private/metaverse
+        changes:
+            - Dockerfile.base
 
     variables:
         DOCKER_TLS_CERTDIR: ""
@@ -99,10 +101,28 @@ deploy docker image:
         - docker:dind
 
     script:
-        - docker build -t $CI_REGISTRY/tivolicloud-private/metaverse:latest .
         - docker login $CI_REGISTRY -u gitlab-ci-token -p $CI_JOB_TOKEN
-        - docker push $CI_REGISTRY/tivolicloud-private/metaverse:latest
+        - docker build -t $CI_REGISTRY/tivolicloud-private/metaverse:base .
+        - docker push $CI_REGISTRY/tivolicloud-private/metaverse:base
 
+deploy latest image:
+    stage: deploy
+    image: docker:latest
+
+    needs:
+        - job: build all
+          artifacts: true
+
+    variables:
+        DOCKER_TLS_CERTDIR: ""
+
+    services:
+        - docker:dind
+
+    script:
+        - docker login $CI_REGISTRY -u gitlab-ci-token -p $CI_JOB_TOKEN
+        - docker build -t $CI_REGISTRY/tivolicloud-private/metaverse:latest .
+        - docker push $CI_REGISTRY/tivolicloud-private/metaverse:latest
 # deploy app engine:
 #     stage: deploy
 #     image: google/cloud-sdk:alpine
