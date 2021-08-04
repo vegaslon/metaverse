@@ -7,11 +7,10 @@ services:
             - 27017:27017
         volumes:
             - ./db:/data/db
-            - ./mongodump:/mongodump
     # web:
     #     image: tivolicloud/metaverse:latest
     #     restart: always
     #     ports:
     #         - 3000:3000/tcp
     #     environment:
-    #         DB_HOST: db
+    #         DB_URI = "mongodb://db",

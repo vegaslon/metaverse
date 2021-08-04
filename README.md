@@ -27,8 +27,18 @@ They will both incrementally watch for file changes. The metaverse should now be
 
 ### Deploy
 
+```bash
+docker build -t tivolicloud/metaverse .
+```
+
+Fill out `docker-compose.yml`
+
+Environment variables can be found in [server/src/environment.ts](server/src/environment.ts)
+
+<!-- ### Deploy
+
 Make sure to **disable Nginx** when deploying to **Elastic Beanstalk**.
 
 ### Docs
 
-https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/platforms-linux-extend.html
+https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/platforms-linux-extend.html -->
