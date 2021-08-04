@@ -20,6 +20,8 @@
 		{{/if}}
 		<meta property="og:type" content="website" />
 		<meta property="og:image" content="{{{ openGraphImage }}}" />
+		<meta property="og:url" content="{{ worldUrl }}" />
+		<meta name="twitter:card" content="summary_large_image" />
 		<link rel="icon" type="image/x-icon" href="{{ url }}/favicon.png" />
 		<meta charset="utf-8" />
 		<meta name="robots" content="noindex, nofollow" />
@@ -65,11 +67,11 @@
 				background-position: center;
 				background-repeat: no-repeat;
 				background-size: cover;
-				filter: blur(1em);
+				filter: blur(0.5em);
 			}
 
 			.background.offline {
-				filter: blur(1em) grayscale();
+				filter: blur(0.5em) grayscale();
 			}
 
 			.content {
@@ -159,10 +161,10 @@
 		</style>
 	</head>
 	<body>
-		{{#if online}}
-		<div class="background"></div>
+		{{#if renderPage}}
+		<div class="background {{#if online}}{{else}}offline{{/if}}"></div>
 		{{else}}
-		<div class="background offline"></div>
+		<div class="background"></div>
 		{{/if}}
 		<div class="content">
 			{{#if notFound}}
@@ -205,13 +207,11 @@
 			<p class="description">{{ description }}</p>
 			{{/if}} {{#if renderPage}}
 			<div style="margin: 30px 0"></div>
-			{{else}}
-			<div style="margin: 15px 0"></div>
-			{{/if}} {{#if online}}
+			{{#if online}}
 			<div class="status online">{{ users }}</div>
 			{{else}}
 			<div class="status offline">{{ users }}</div>
-			{{/if}} {{#if renderPage}}
+			{{/if}}
 			<div style="margin: 30px 0"></div>
 			<a class="button" href="tivoli://{{ id }}">
 				Launch Tivoli to world
@@ -224,7 +224,7 @@
 			>
 				If you don't have Tivoli, get started here
 			</a>
-			{{/if}}{{/if}}
+			{{/if}} {{/if}}
 		</div>
 	</body>
 </html>

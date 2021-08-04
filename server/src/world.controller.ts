@@ -45,16 +45,14 @@ export class WorldController {
 			const session = await this.sessionService.findDomainById(domain.id);
 			const author = domain.author;
 
+			const worldUrl = WORLD_URL + "/" + encodeObjectId(domain._id);
+
 			data = {
 				notFound: false,
 				renderPage: !renderImage,
 				url: METAVERSE_URL,
-				openGraphImage:
-					WORLD_URL +
-					"/" +
-					encodeObjectId(domain._id) +
-					".png?" +
-					Date.now(),
+				worldUrl,
+				openGraphImage: worldUrl + ".png?" + Date.now(),
 				id: domain.id,
 				name: domain.label,
 				description: domain.description,
@@ -102,13 +100,12 @@ export class WorldController {
 
 	private async renderImage(domainId: string) {
 		const html = await this.renderHtml(domainId, true);
-		return this.puppeteerService.renderHTML(html, 600, 360, false);
+		return this.puppeteerService.renderHTML(html, 600, 280, false);
 	}
 
 	@Get(":id.png")
 	async getWorldImage(@Param("id") id: string, @Res() res: Response) {
 		const buffer = await this.renderImage(id);
-		console.log(buffer);
 		res.set("Content-Type", "image/png");
 		res.send(buffer);
 	}
