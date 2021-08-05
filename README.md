@@ -28,8 +28,12 @@ They will both incrementally watch for file changes. The metaverse should now be
 ### Deploy
 
 ```bash
+docker build -t tivolicloud/metaverse:base -f Dockerfile.base .
+```
+
+```bash
 ./build.sh
-docker build -t tivolicloud/metaverse .
+docker build -t tivolicloud/metaverse:latest -f Dockerfile .
 ```
 
 Fill out `docker-compose.yml`
