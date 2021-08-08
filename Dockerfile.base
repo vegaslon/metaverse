@@ -19,6 +19,7 @@ npm i -g yarn node-gyp pm2 && \
 cd /usr/share/fonts/truetype/ && \
 curl -Lo TwemojiMozilla.ttf https://github.com/mozilla/twemoji-colr/releases/download/v0.6.0/TwemojiMozilla.ttf && \
 curl -Lo Roboto.zip https://fonts.google.com/download?family=Roboto && \
+curl -Lo Roboto_Condensed.zip https://fonts.google.com/download?family=Roboto%20Condensed && \
 curl -Lo Noto_Sans.zip https://fonts.google.com/download?family=Noto%20Sans && \
 # these are otf but its okay they're in truetype/
 curl -Lo Noto_Sans_JP.zip https://fonts.google.com/download?family=Noto%20Sans%20JP && \
@@ -26,7 +27,9 @@ curl -Lo Noto_Sans_KR.zip https://fonts.google.com/download?family=Noto%20Sans%2
 curl -Lo Noto_Sans_TC.zip https://fonts.google.com/download?family=Noto%20Sans%20TC && \
 curl -Lo Noto_Sans_SC.zip https://fonts.google.com/download?family=Noto%20Sans%20SC && \
 curl -Lo Noto_Sans_HK.zip https://fonts.google.com/download?family=Noto%20Sans%20HK && \
+# unzip and cache
 unzip -o Roboto.zip && \
+unzip -o Roboto_Condensed.zip && \
 unzip -o Noto_Sans.zip && \
 unzip -o Noto_Sans_JP.zip && \
 unzip -o Noto_Sans_KR.zip && \
