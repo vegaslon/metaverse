@@ -2,6 +2,7 @@ import { isPlatformServer } from "@angular/common";
 import { Component, Inject, OnInit, PLATFORM_ID } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
+import { filter, take } from "rxjs/operators";
 import { AuthService } from "./auth/auth.service";
 import { SignInComponent } from "./header/sign-in/sign-in.component";
 
@@ -35,6 +36,10 @@ export class AppComponent implements OnInit {
 
 		const query = new URLSearchParams(window.location.search);
 		let removeQuery = false;
+
+		if (!query.has("token") && !query.has("signUp")) {
+			this.authService.autoLogin(); // has window
+		}
 
 		if (query.has("hideHeader")) {
 			this.showHeader = false;
@@ -80,6 +85,44 @@ export class AppComponent implements OnInit {
 					mode: "signIn",
 				},
 			});
+			removeQuery = true;
+		}
+
+		if (query.has("launcherSignInPort")) {
+			this.authService.loggingIn$
+				.pipe(
+					// only when logging is has finished
+					filter(loggingIn => loggingIn == false),
+					take(1),
+				)
+				.subscribe(() => {
+					const user = this.authService.user$.getValue();
+					const launcherSignInPort = parseInt(
+						query.get("launcherSignInPort"),
+					);
+
+					if (user != null) {
+						this.authService.launcherSignIn(launcherSignInPort);
+					} else {
+						// open sign in and wait for a user
+						this.dialog.open(SignInComponent, {
+							data: {
+								mode: "signIn",
+							},
+						});
+						this.authService.user$
+							.pipe(
+								filter(user => user != null),
+								take(1),
+							)
+							.subscribe(user => {
+								this.authService.launcherSignIn(
+									launcherSignInPort,
+								);
+							});
+					}
+				});
+
 			removeQuery = true;
 		}
 

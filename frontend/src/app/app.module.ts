@@ -140,15 +140,5 @@ const routes: Routes = [
 	entryComponents: [SignInComponent, DownloadComponent],
 })
 export class AppModule {
-	constructor(
-		private authService: AuthService,
-		@Inject(PLATFORM_ID) private platformId: Object,
-	) {
-		if (isPlatformBrowser(platformId)) {
-			const query = new URLSearchParams(window.location.search);
-
-			if (!query.has("token") && !query.has("signUp"))
-				this.authService.autoLogin(); // has window
-		}
-	}
+	constructor() {}
 }

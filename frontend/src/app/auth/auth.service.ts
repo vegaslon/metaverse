@@ -227,8 +227,9 @@ export class AuthService {
 
 	autoLogin() {
 		const token = this.getToken();
-		if (token == null) return;
-		this.handleAuthentication(token);
+		if (token != null) {
+			this.handleAuthentication(token);
+		}
 	}
 
 	logout() {
@@ -275,5 +276,16 @@ export class AuthService {
 		} else {
 			this.logout();
 		}
+	}
+
+	launcherSignIn(port: number) {
+		window.location.replace(
+			"http://127.0.0.1:" +
+				port +
+				"/signIn?" +
+				new URLSearchParams({
+					token: JSON.stringify(this.user$.getValue().token),
+				}),
+		);
 	}
 }
