@@ -77,10 +77,11 @@ export class PuppeteerService implements OnModuleInit {
 			"data:" + contentType + ";base64," + buffer.toString("base64");
 
 		const displayName = user.nametag.displayName.trim();
-		const showUsernameUnderneath =
-			displayName == ""
-				? false
-				: !displayName.toLowerCase().includes(username.toLowerCase());
+		// const showUsernameUnderneath =
+		// 	displayName == ""
+		// 		? false
+		// 		: !displayName.toLowerCase().includes(username.toLowerCase());
+		const showUsernameUnderneath = displayName != ""; // always show, privacy concern
 
 		const genderPronoun = user.nametag.genderPronoun.toLowerCase();
 
