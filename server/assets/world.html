@@ -16,12 +16,11 @@
 		<meta name="author" content="{{ username }}" />
 		<meta property="og:title" content="{{ name }}" />
 		<meta property="og:description" content="{{ description }}" />
+		<meta property="og:image" content="{{ worldImage }}" />
 		<meta property="profile:username" content="{{ username }}" />
-		{{/if}}
-		<meta property="og:type" content="website" />
-		<meta property="og:image" content="{{{ openGraphImage }}}" />
+		{{/if}} {{#if worldUrl}}
 		<meta property="og:url" content="{{ worldUrl }}" />
-		<meta name="twitter:card" content="summary_large_image" />
+		{{/if}}
 		<link rel="icon" type="image/x-icon" href="{{ url }}/favicon.png" />
 		<meta charset="utf-8" />
 		<meta name="robots" content="noindex, nofollow" />
@@ -162,19 +161,18 @@
 		</style>
 	</head>
 	<body>
-		{{#if renderPage}}
-		<div class="background {{#if online}}{{else}}offline{{/if}}"></div>
-		{{else}}
+		{{#if online}}
 		<div class="background"></div>
+		{{else}}
+		<div class="background offline"></div>
 		{{/if}}
 		<div class="content">
 			{{#if notFound}}
 			<p style="font-size: 4em; font-weight: 500">World not found</p>
 			<p style="font-size: 2em">Perhaps the link was mistyped</p>
-			{{#if renderPage}}
 			<div style="margin: 30px 0"></div>
 			<a class="button lighter" href="{{ url }}"> Return to Tivoli </a>
-			{{/if}} {{else}}
+			{{else}}
 			<p style="font-size: 4em; font-weight: 500">
 				{{#if private}}
 				<svg
@@ -198,7 +196,7 @@
 				Created by
 				<img
 					class="avatar"
-					src="{{{ userImage }}}"
+					src="{{ userImage }}"
 					alt="{{ username }}"
 				/>
 				<b>{{ username }}</b>
@@ -206,7 +204,7 @@
 			{{#if description}}
 			<div style="margin: 15px 0"></div>
 			<p class="description">{{ description }}</p>
-			{{/if}} {{#if renderPage}}
+			{{/if}}
 			<div style="margin: 30px 0"></div>
 			{{#if online}}
 			<div class="status online">{{ users }}</div>
@@ -225,7 +223,7 @@
 			>
 				If you don't have Tivoli, get started here
 			</a>
-			{{/if}} {{/if}}
+			{{/if}}
 		</div>
 	</body>
 </html>
