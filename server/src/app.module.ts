@@ -72,7 +72,6 @@ import { WorldController } from "./world.controller";
 
 		// extras
 		// VideoStreamModule,
-		// ZoomModule,
 		OpenaiModule,
 	],
 	providers: [],
