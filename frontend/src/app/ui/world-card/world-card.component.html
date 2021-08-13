@@ -67,7 +67,7 @@
 		>
 			<mat-icon>settings</mat-icon> Open settings
 			<span style="opacity: 0.5; font-size: 0.8em; padding-left: 8px;">
-				{{ world.networkAddress + ":" + world.networkPort }}
+				{{ world.networkAddress + ":" + (world.networkPort - 2) }}
 			</span>
 		</a>
 		<button mat-button *ngIf="editMode" (click)="onGenerateToken()">
