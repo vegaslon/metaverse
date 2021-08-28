@@ -6,6 +6,7 @@ import iso_3166_1 from "iso-3166/1.json";
 import iso_3166_2 from "iso-3166/2.json";
 import mimeTypes from "mime-db";
 import { Types } from "mongoose";
+import sharp from "sharp";
 import { Readable } from "stream";
 import { UAParser } from "ua-parser-js";
 import * as uuid from "uuid";
@@ -418,4 +419,22 @@ export const getBrowserFromReq = (req: Request) => {
 
 	const final = [browser, os].filter(x => x != "").join(", ");
 	return final == "" ? "Unknown" : final;
+};
+
+export const rgbToHex = (r: number, g: number, b: number) =>
+	"#" +
+	Number(Math.round(Math.max(0, Math.min(255, r))))
+		.toString(16)
+		.padStart(2, "0") +
+	Number(Math.round(Math.max(0, Math.min(255, g))))
+		.toString(16)
+		.padStart(2, "0") +
+	Number(Math.round(Math.max(0, Math.min(255, b))))
+		.toString(16)
+		.padStart(2, "0");
+
+export const getAverageColor = async (image: sharp.Sharp) => {
+	const stats = await image.stats();
+	const [r, g, b] = stats.channels;
+	return rgbToHex(r.mean, g.mean, b.mean);
 };

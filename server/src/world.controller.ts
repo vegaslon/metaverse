@@ -3,7 +3,8 @@ import { ApiTags } from "@nestjs/swagger";
 import fs from "fs";
 import Handlebars from "handlebars";
 import path from "path";
-import { displayPlural, encodeObjectId } from "./common/utils";
+import sharp from "sharp";
+import { displayPlural, encodeObjectId, getAverageColor } from "./common/utils";
 import { DomainService } from "./domain/domain.service";
 import { URL as METAVERSE_URL, WORLD_URL } from "./environment";
 import { SessionService } from "./session/session.service";
@@ -39,6 +40,16 @@ export class WorldController {
 			const session = await this.sessionService.findDomainById(domain.id);
 			const author = domain.author;
 
+			let themeColor = null;
+			try {
+				const domainImage = await this.domainService.getDomainImage(
+					domainId,
+				);
+				themeColor = await getAverageColor(sharp(domainImage.buffer));
+			} catch (error) {
+				console.error(error);
+			}
+
 			data = {
 				notFound: false,
 				url: METAVERSE_URL,
@@ -56,6 +67,7 @@ export class WorldController {
 				worldImage:
 					METAVERSE_URL + "/api/domain/" + domain.id + "/image",
 				userImage: METAVERSE_URL + "/api/user/" + author.id + "/image",
+				themeColor,
 			};
 		}
 

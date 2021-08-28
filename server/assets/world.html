@@ -18,7 +18,9 @@
 		<meta property="og:description" content="{{ description }}" />
 		<meta property="og:image" content="{{ worldImage }}" />
 		<meta property="profile:username" content="{{ username }}" />
-		{{/if}} {{#if worldUrl}}
+		{{#if themeColor}}
+		<meta name="theme-color" content="{{ themeColor }}" />
+		{{/if}}{{/if}}{{#if worldUrl}}
 		<meta property="og:url" content="{{ worldUrl }}" />
 		{{/if}}
 		<link rel="icon" type="image/x-icon" href="{{ url }}/favicon.png" />
