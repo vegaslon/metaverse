@@ -65,16 +65,16 @@ export class DomainService implements OnModuleInit {
 
 	findById(id: ObjectId | string) {
 		if (typeof id === "string") {
-			if (uuid.validate(id)) {
-				return this.domainModel.findById(uuidToObjectId(id));
-			} else if (ObjectId.isValid(id)) {
-				return this.domainModel.findById(new ObjectId(id));
-			} else {
-				try {
+			try {
+				if (uuid.validate(id)) {
+					return this.domainModel.findById(uuidToObjectId(id));
+				} else if (ObjectId.isValid(id)) {
+					return this.domainModel.findById(new ObjectId(id));
+				} else {
 					return this.domainModel.findById(decodeObjectId(id));
-				} catch (err) {
-					throw new BadRequestException();
 				}
+			} catch (err) {
+				return null;
 			}
 		} else {
 			return this.domainModel.findById(id);
