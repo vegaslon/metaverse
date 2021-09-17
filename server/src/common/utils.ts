@@ -1,9 +1,8 @@
 import baseX from "base-x";
 import { ObjectId } from "bson";
 import { Request } from "express";
-import * as geoip from "geoip-lite";
-import iso_3166_1 from "iso-3166/1.json";
-import iso_3166_2 from "iso-3166/2.json";
+import * as fs from "fs";
+import maxmind, { CityResponse } from "maxmind";
 import mimeTypes from "mime-db";
 import { Types } from "mongoose";
 import sharp from "sharp";
@@ -11,7 +10,7 @@ import { Readable } from "stream";
 import { UAParser } from "ua-parser-js";
 import * as uuid from "uuid";
 import { Domain, DomainRestriction } from "../domain/domain.schema";
-import { URL, WORLD_URL } from "../environment";
+import { GEOLITE2_CITY_DB, URL, WORLD_URL } from "../environment";
 import { DomainSession, UserSession } from "../session/session.schema";
 import { User } from "../user/user.schema";
 
@@ -374,24 +373,32 @@ export const getIpFromReq = (req: Request) => {
 		: maybeIpv6;
 };
 
-export const getLocationString = (ip: string) => {
-	const ipLookup = geoip.lookup(ip);
-	if (ipLookup == null) {
-		return "Unknown";
-	} else {
-		const alpha2 = ipLookup.country;
-		const countryLookup = iso_3166_1.find(x => x.alpha2 == alpha2);
-		const regionCode = ipLookup.country + "-" + ipLookup.region;
-		const regionLookup = iso_3166_2.find(x => x.code == regionCode);
+export const getLocationString = async (ip: string) => {
+	try {
+		if (!fs.existsSync(GEOLITE2_CITY_DB)) {
+			throw new Error("Database not found at " + GEOLITE2_CITY_DB);
+		}
 
-		// city, state, country
-		return [
-			ipLookup.city.trim(),
-			regionLookup == null ? "" : regionLookup.name.trim(),
-			countryLookup == null ? "" : countryLookup.name.trim(),
-		]
-			.filter(x => x != "")
-			.join(", ");
+		const database = await maxmind.open<CityResponse>(GEOLITE2_CITY_DB);
+		const ipLookup = database.get(ip);
+		if (ipLookup == null) {
+			throw new Error("Database response was null for " + ip);
+		}
+
+		const city = ipLookup?.city?.names?.en;
+		const state = ipLookup?.subdivisions?.[0].names?.en;
+		const country = ipLookup?.country?.names?.en;
+
+		const result = [
+			city == null ? "" : city.trim(),
+			state == null ? "" : state.trim(),
+			country == null ? "" : country.trim(),
+		];
+
+		return result.filter(x => x != "").join(", ");
+	} catch (error) {
+		console.error(error);
+		return "Unknown";
 	}
 };
 

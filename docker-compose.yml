@@ -7,10 +7,23 @@ services:
             - 27017:27017
         volumes:
             - ./db:/data/db
+    # geoip:
+    #     image: maxmindinc/geoipupdate
+    #     restart: always
+    #     environment:
+    #         - GEOIPUPDATE_EDITION_IDS=GeoLite2-City
+    #         - GEOIPUPDATE_FREQUENCY=168 # update every 7 days
+    #         - GEOIPUPDATE_ACCOUNT_ID=
+    #         - GEOIPUPDATE_LICENSE_KEY=
+    #     volumes:
+    #         - ./geoip:/usr/share/GeoIP
     # web:
     #     image: tivolicloud/metaverse:latest
     #     restart: always
     #     ports:
     #         - 3000:3000/tcp
     #     environment:
-    #         DB_URI = "mongodb://db",
+    #         - DB_URI=mongodb://db
+    #         - GEOLITE2_CITY_DB=/geoip/GeoLite2-City.mmdb
+    #     volumes:
+    #         - ./geoip:/geoip:ro

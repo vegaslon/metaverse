@@ -26,6 +26,8 @@ export const {
 	EMAIL_PASS = "",
 	EMAIL_FROM = "",
 
+	GEOLITE2_CITY_DB = "",
+
 	FILES_URL = "http://files.localhost:3000",
 	FILES_GCP_PROJECT_ID = "tivolicloud",
 	FILES_GCP_BUCKET = "tivolicloud-dev",

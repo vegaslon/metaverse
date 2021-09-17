@@ -29,7 +29,7 @@ export class EmailService {
 
 	async sendResetPassword(user: User, token: string, req: Request) {
 		const ip = getIpFromReq(req);
-		const location = getLocationString(ip);
+		const location = await getLocationString(ip);
 		const browser = getBrowserFromReq(req);
 
 		return this.mailerService.sendMail({
@@ -49,7 +49,7 @@ export class EmailService {
 
 	async sendPasswordChanged(user: User, req: Request) {
 		const ip = getIpFromReq(req);
-		const location = getLocationString(ip);
+		const location = await getLocationString(ip);
 		const browser = getBrowserFromReq(req);
 
 		return this.mailerService.sendMail({
