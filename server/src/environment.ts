@@ -20,15 +20,24 @@ export const {
 	DB_URI = "mongodb://localhost",
 	DB_NAME = "metaverse",
 
+	EMAIL_HOST = "",
+	EMAIL_PORT = "587",
 	EMAIL_USER = "",
 	EMAIL_PASS = "",
-	EMAIL_NAME = "",
+	EMAIL_FROM = "",
 
 	FILES_URL = "http://files.localhost:3000",
 	FILES_GCP_PROJECT_ID = "tivolicloud",
 	FILES_GCP_BUCKET = "tivolicloud-dev",
 	// https://console.cloud.google.com/apis/credentials/wizard?api=storage-api.googleapis.com
 	FILES_GCP_AUTH_JSON = "{}",
+
+	INVENTORY_URL = "http://inventory.localhost:3000",
+	INVENTORY_S3_ENDPOINT = "",
+	INVENTORY_S3_REGION = "",
+	INVENTORY_S3_BUCKET_NAME = "",
+	INVENTORY_S3_ACCESS_KEY_ID = "",
+	INVENTORY_S3_SECRET_ACCESS_KEY = "",
 
 	WORLD_URL = "http://world.localhost:3000",
 	TEA_URL = "http://tea.localhost:3000",
