@@ -37,10 +37,6 @@ export class AppComponent implements OnInit {
 		const query = new URLSearchParams(window.location.search);
 		let removeQuery = false;
 
-		if (!query.has("token") && !query.has("signUp")) {
-			this.authService.autoLogin(); // has window
-		}
-
 		if (query.has("hideHeader")) {
 			this.showHeader = false;
 			// removeQuery = true;
