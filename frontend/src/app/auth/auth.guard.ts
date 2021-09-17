@@ -46,8 +46,6 @@ export class AuthGuard implements CanActivate {
 					// if user, continue to page!
 					const user = this.authService.user$.value;
 
-					console.log(user);
-
 					if (user != null)
 						return new Observable(sub => sub.next(true));
 
