@@ -50,17 +50,19 @@
 }
 
 .platforms {
-	width: 1000px;
+	width: 800px;
 	text-align: center;
 	margin-top: 32px;
 	margin-bottom: 16px;
 
 	display: flex;
-	justify-content: space-evenly;
+	// justify-content: space-evenly;
+	justify-content: center;
 	align-items: center;
 
 	mat-card {
 		width: 250px;
+		margin: 0 16px;
 
 		img {
 			height: 80px;
@@ -125,7 +127,14 @@
 	display: flex;
 	width: 100%;
 	align-items: center;
-	justify-content: space-evenly;
-	opacity: 0.75;
-	text-align: center;
+	justify-content: center;
+
+	.version {
+		padding: 4px 6px;
+		font-weight: 500;
+		background-color: rgba(#000, 0.05);
+		color: #000;
+		border-radius: 4px;
+		margin-left: 4px;
+	}
 }

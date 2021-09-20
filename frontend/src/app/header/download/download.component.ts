@@ -4,8 +4,10 @@ import { MatDialog } from "@angular/material/dialog";
 import { map } from "rxjs/operators";
 import { AmdComplicationsComponent } from "./amd-complications/amd-complications.component";
 
-type Platform = "windows" | "macos" | "linux";
-interface Release {
+// type Platform = "windows" | "macos" | "linux";
+type Platform = "windows" | "linux";
+
+interface LauncherRelease {
 	version: string;
 	releaseDate: Date;
 	platforms: Record<
@@ -19,6 +21,18 @@ interface Release {
 	>;
 }
 
+type InterfaceRelease = {
+	version: string;
+	date: Date;
+} & Record<
+	Platform,
+	{
+		filename: string;
+		sha512: string;
+		size: number;
+	}
+>;
+
 @Component({
 	selector: "app-download",
 	templateUrl: "./download.component.html",
@@ -30,7 +44,8 @@ export class DownloadComponent implements OnInit {
 	loaded = false;
 	showExperimental = false;
 
-	release: Release = null;
+	launcherRelease: LauncherRelease = null;
+	interfaceRelease: InterfaceRelease = null;
 
 	constructor(
 		private readonly http: HttpClient,
@@ -51,7 +66,7 @@ export class DownloadComponent implements OnInit {
 		// if (navigator.platform.indexOf("Mac") !== -1) this.os = "macos";
 
 		this.http
-			.get<Release>("/api/releases/latest")
+			.get<LauncherRelease>("/api/releases/launcher/latest")
 			.pipe(
 				map(release => {
 					release.releaseDate = new Date(release.releaseDate);
@@ -63,9 +78,15 @@ export class DownloadComponent implements OnInit {
 					return release;
 				}),
 			)
-			.subscribe(release => {
-				this.release = release;
+			.subscribe(launcherRelease => {
+				this.launcherRelease = launcherRelease;
 				this.loaded = true;
+			});
+
+		this.http
+			.get<InterfaceRelease>("/api/releases/interface/latest")
+			.subscribe(interfaceRelease => {
+				this.interfaceRelease = interfaceRelease;
 			});
 	}
 

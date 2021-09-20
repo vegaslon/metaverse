@@ -8,8 +8,8 @@ import { ApiTags } from "@nestjs/swagger";
 import fetch from "node-fetch";
 import * as YAML from "yaml";
 
-async function getRelease(channel: string) {
-	const releasesUrl = "https://cdn.tivolicloud.com/releases/";
+async function getLauncherRelease(channel: string) {
+	const releasesUrl = "https://cdn.tivolicloud.com/releases/launcher/";
 
 	const yamlStr = await (
 		await fetch(releasesUrl + channel + ".yml?" + Date.now())
@@ -48,14 +48,14 @@ export class AppController {
 
 	constructor() {}
 
-	@Get("releases/latest")
-	async getLatest() {
-		const release = await getRelease("latest");
+	@Get("releases/launcher/latest")
+	async getLauncherLatest() {
+		const release = await getLauncherRelease("latest");
 
 		const platforms = {
 			windows: release.file,
-			macos: (await getRelease("latest-mac")).file,
-			linux: (await getRelease("latest-linux")).file,
+			// macos: (await getRelease("latest-mac")).file,
+			linux: (await getLauncherRelease("latest-linux")).file,
 		};
 
 		return {
@@ -63,6 +63,18 @@ export class AppController {
 			releaseDate: release.releaseDate,
 			platforms,
 		};
+	}
+
+	@Get("releases/interface/latest")
+	async getInterfaceLatest() {
+		return JSON.parse(
+			await (
+				await fetch(
+					"https://cdn.tivolicloud.com/releases/interface/latest.json?" +
+						Date.now(),
+				)
+			).text(),
+		);
 	}
 
 	@Get("events")
