@@ -1,6 +1,6 @@
 {
 	"scripts": {
-		"pre": "node download-plausible.js",
+		"pre": "node download-plausible.mjs",
 		"start": "npm run pre && ng build --watch",
 		"build": "npm run pre && ng build --configuration production",
 		"dev:ssr": "npm run pre && ng run frontend:serve-ssr",
