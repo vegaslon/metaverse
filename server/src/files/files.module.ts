@@ -5,6 +5,7 @@ import { DomainModule } from "../domain/domain.module";
 import { JWT_SECRET } from "../environment";
 import { MetricsModule } from "../metrics/metrics.module";
 import { UserModule } from "../user/user.module";
+import { AttachmentsController } from "./attachments.controller";
 import { FilesHostController } from "./files-host.controller";
 import { FilesHostService } from "./files-host.service";
 import { FilesController } from "./files.controller";
@@ -27,6 +28,11 @@ import { TeaService } from "./tea.service";
 	],
 	providers: [FilesService, FilesHostService, TeaService],
 	exports: [FilesService],
-	controllers: [FilesController, FilesHostController, TeaController],
+	controllers: [
+		FilesController,
+		FilesHostController,
+		TeaController,
+		AttachmentsController,
+	],
 })
 export class FilesModule {}

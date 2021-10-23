@@ -31,6 +31,7 @@ export const {
 	FILES_URL = "http://files.localhost:3000",
 	FILES_GCP_PROJECT_ID = "tivolicloud",
 	FILES_GCP_BUCKET = "tivolicloud-dev",
+	FILES_GCP_ATTACHMENTS_BUCKET = "tivolicloud-attachments",
 	// https://console.cloud.google.com/apis/credentials/wizard?api=storage-api.googleapis.com
 	FILES_GCP_AUTH_JSON = "{}",
 

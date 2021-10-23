@@ -3,6 +3,7 @@ import {
 	BadRequestException,
 	Injectable,
 	InternalServerErrorException,
+	UnauthorizedException,
 } from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
 import fetch from "node-fetch";
@@ -13,12 +14,14 @@ import { map } from "rxjs/operators";
 import sharp from "sharp";
 import { Readable } from "stream";
 import { MulterStream } from "../common/multer-file.model";
-import { getMimeType } from "../common/utils";
+import { generateRandomString, getMimeType } from "../common/utils";
 import {
+	FILES_GCP_ATTACHMENTS_BUCKET,
 	FILES_GCP_AUTH_JSON,
 	FILES_GCP_BUCKET,
 	FILES_GCP_PROJECT_ID,
 	FILES_URL,
+	URL as METAVERSE_URL,
 } from "../environment";
 import { MetricsService } from "../metrics/metrics.service";
 import { User } from "../user/user.schema";
@@ -27,6 +30,11 @@ export class UserFileUploadDto {
 	@ApiProperty({ type: "string", required: true })
 	path: string;
 
+	@ApiProperty({ type: "string", required: true, format: "binary" })
+	file: any;
+}
+
+export class AttachmentUploadDto {
 	@ApiProperty({ type: "string", required: true, format: "binary" })
 	file: any;
 }
@@ -66,6 +74,7 @@ export class FilesService {
 
 	private readonly storage: Storage;
 	private readonly bucket: Bucket;
+	private readonly attachmentsBucket: Bucket;
 
 	constructor(private readonly metricsService: MetricsService) {
 		// this.bucket = FILES_S3_BUCKET;
@@ -92,7 +101,12 @@ export class FilesService {
 			projectId: FILES_GCP_PROJECT_ID,
 			credentials: JSON.parse(FILES_GCP_AUTH_JSON),
 		});
+
 		this.bucket = this.storage.bucket(FILES_GCP_BUCKET);
+
+		this.attachmentsBucket = this.storage.bucket(
+			FILES_GCP_ATTACHMENTS_BUCKET,
+		);
 	}
 
 	private getMaxUserSize(user: User) {
@@ -166,6 +180,10 @@ export class FilesService {
 				user.username.toLowerCase() + "/",
 			)
 		);
+	}
+
+	private getAttachmentUrl(key: string) {
+		return METAVERSE_URL + "/api/attachments/" + key;
 	}
 
 	async getFiles(
@@ -271,6 +289,48 @@ export class FilesService {
 
 		return {
 			url: this.getUrl(user, key),
+			size: bodyLength,
+		};
+	}
+
+	async uploadAttachment(user: User, file: MulterStream) {
+		if (user == null) {
+			throw new UnauthorizedException("You need to be logged in");
+		}
+
+		let bodyLength = 0;
+		const body = rxToStream(
+			streamToRx(file.stream).pipe(
+				map(buffer => {
+					bodyLength += buffer.length;
+					return buffer;
+				}),
+			),
+			{
+				objectMode: true,
+			},
+		);
+
+		const key = generateRandomString(8) + path.extname(file.originalname);
+
+		const blob = this.attachmentsBucket.file(key);
+		const stream = blob.createWriteStream({
+			private: true,
+			contentType: getMimeType(key),
+			gzip: false,
+		});
+
+		stream.on("error", error => {
+			console.error(error);
+		});
+
+		body.pipe(stream);
+		await new Promise(resolve => stream.on("finish", resolve));
+
+		// this.metricsService.metrics.fileWritesPerMinute++;
+
+		return {
+			url: this.getAttachmentUrl(key),
 			size: bodyLength,
 		};
 	}
@@ -493,6 +553,17 @@ export class FilesService {
 		} else {
 			return { url, metadata: {} };
 		}
+	}
+
+	async getAttachmentObjectUrl(key: string) {
+		const file = this.attachmentsBucket.file(key);
+		const url = (
+			await file.getSignedUrl({
+				action: "read",
+				expires: Date.now() + 1000 * 60,
+			})
+		)[0];
+		return url;
 	}
 
 	async readyPlayerMe(user: User, name: string, avatarUrl: string) {
