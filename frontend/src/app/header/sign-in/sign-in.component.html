@@ -236,6 +236,26 @@
 				</p>
 			</div>
 
+			<div
+				style="
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					margin-left: -8px;
+					margin-top: -16px;
+				"
+			>
+				<mdc-checkbox #agreeToAgeSignUp></mdc-checkbox>
+				<p style="margin-left: 8px;">
+					<span
+						(click)="agreeToAgeSignUp.toggle()"
+						style="cursor: pointer;"
+					>
+						I confirm that I am 18 years or older
+					</span>
+				</p>
+			</div>
+
 			<div style="margin: 16px 0;"></div>
 
 			<button
@@ -244,6 +264,7 @@
 				color="primary"
 				[disabled]="
 					!agreeToTermsSignUp.checked ||
+					!agreeToAgeSignUp.checked ||
 					signUpForm.invalid ||
 					isLoading
 				"
@@ -362,6 +383,26 @@
 				</p>
 			</div>
 
+			<div
+				style="
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					margin-left: -8px;
+					margin-top: -16px;
+				"
+			>
+				<mdc-checkbox #agreeToAgeExtSignUp></mdc-checkbox>
+				<p style="margin-left: 8px;">
+					<span
+						(click)="agreeToAgeExtSignUp.toggle()"
+						style="cursor: pointer;"
+					>
+						I confirm that I am 18 years or older
+					</span>
+				</p>
+			</div>
+
 			<div style="margin: 16px 0;"></div>
 
 			<button
@@ -370,6 +411,7 @@
 				color="primary"
 				[disabled]="
 					!agreeToTermsExtSignUp.checked ||
+					!agreeToAgeExtSignUp.checked ||
 					extSignUpForm.invalid ||
 					isLoading
 				"
