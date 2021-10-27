@@ -220,7 +220,7 @@ export class UserService implements OnModuleInit {
 	async deleteUserImage(user: User) {
 		await new Promise(resolve => {
 			this.images.delete(user._id, err => {
-				resolve();
+				resolve(null);
 			});
 		});
 	}
@@ -251,7 +251,7 @@ export class UserService implements OnModuleInit {
 			});
 
 			uploadStream.on("finish", () => {
-				return resolve();
+				return resolve(null);
 			});
 
 			imageStream.pipe(uploadStream);
