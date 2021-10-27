@@ -2,15 +2,16 @@ import { forwardRef, Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
 import { MongooseModule } from "@nestjs/mongoose";
 import { AuthModule } from "../auth/auth.module";
+import { CaptchaModule } from "../captcha/captcha.module";
 import { DomainModule } from "../domain/domain.module";
-import { SessionModule } from "../session/session.module";
 import { EmailModule } from "../email/email.module";
 import { JWT_SECRET } from "../environment";
+import { PuppeteerModule } from "../puppeteer/puppeteer.module";
+import { SessionModule } from "../session/session.module";
 import { UserSettingsSchema } from "./user-settings.schema";
 import { UserController } from "./user.controller";
 import { UserSchema } from "./user.schema";
 import { UserService } from "./user.service";
-import { PuppeteerModule } from "../puppeteer/puppeteer.module";
 
 @Module({
 	imports: [
@@ -33,6 +34,7 @@ import { PuppeteerModule } from "../puppeteer/puppeteer.module";
 		forwardRef(() => SessionModule),
 		forwardRef(() => PuppeteerModule),
 		EmailModule,
+		CaptchaModule,
 	],
 	controllers: [UserController],
 	providers: [UserService],

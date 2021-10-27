@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from "@nestjs/common";
+import { forwardRef, Inject, Injectable, OnModuleInit } from "@nestjs/common";
 import * as fs from "fs";
 import * as Handlebars from "handlebars";
 import * as path from "path";
@@ -13,7 +13,10 @@ import { UserService } from "../user/user.service";
 export class PuppeteerService implements OnModuleInit {
 	browser$: ReplaySubject<Puppeteer.Browser> = new ReplaySubject();
 
-	constructor(private readonly userService: UserService) {}
+	constructor(
+		@Inject(forwardRef(() => UserService))
+		private readonly userService: UserService,
+	) {}
 
 	async onModuleInit() {
 		// https://github.com/puppeteer/puppeteer/issues/1793
@@ -61,6 +64,41 @@ export class PuppeteerService implements OnModuleInit {
 		page.close();
 
 		return buffer;
+	}
+
+	// TODO: merge this with above and fix all return values
+
+	async renderHTMLExpectLog(
+		html: string,
+		width?: number,
+		height?: number,
+		waitUntil = false,
+	): Promise<{ buffer: Buffer; result: string }> {
+		const browser = await this.browser$.pipe(take(1)).toPromise();
+
+		const page = await browser.newPage();
+		page.setViewport({
+			width: width != null ? width : 1920,
+			height: height != null ? height : 1920,
+			deviceScaleFactor: 1,
+		});
+
+		let result = null;
+		page.on("console", message => {
+			result = message.text();
+		});
+
+		await page.setContent(
+			html,
+			waitUntil ? { waitUntil: "networkidle0" } : {},
+		);
+		const buffer = await page.screenshot({
+			type: "png",
+			omitBackground: true,
+		});
+		page.close();
+
+		return { buffer, result };
 	}
 
 	async renderNametag(user: User, admin = false, friend = false) {

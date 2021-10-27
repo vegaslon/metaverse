@@ -1,0 +1,158 @@
+<html>
+	<head>
+		<meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
+		<meta content="utf-8" http-equiv="encoding" />
+		<style>
+			body {
+				margin: 0;
+			}
+
+			canvas {
+				display: block;
+				/* margin: 0 auto;
+				margin-top: 128px;
+				border-radius: 16px;
+				box-shadow: 0 0 32px rgba(0, 0, 0, 0.1);
+				image-rendering: pixelated; */
+			}
+		</style>
+	</head>
+	<body>
+		<script>
+			const canvas = document.createElement("canvas");
+			canvas.width = 256;
+			canvas.height = 96;
+			document.body.appendChild(canvas);
+
+			const ctx = canvas.getContext("2d");
+
+			ctx.fillStyle = "#fff";
+			ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+			// number from 1 to 9
+			const a = Math.floor(Math.random() * 9) + 1;
+			const b = Math.floor(Math.random() * 9) + 1;
+
+			ctx.textAlign = "center";
+			ctx.lineWidth = 2;
+
+			const xFromCenter = 80;
+			const yFromCenter = 22;
+
+			let currentColor = Math.floor(Math.random() * 360);
+			const totalHueRots = 3;
+			const updateHueAndColor = () => {
+				currentColor = Math.floor(currentColor + 360 / totalHueRots);
+				ctx.strokeStyle = "hsl(" + currentColor + "deg, 60%, 60%)";
+			};
+
+			// from -1 to 1
+			const rand = range => (Math.random() - 0.5) * 2 * range;
+
+			// a
+			ctx.font = 64 + rand(24) + "px serif";
+			updateHueAndColor();
+			ctx.strokeText(
+				a,
+				canvas.width / 2 - xFromCenter + rand(32),
+				canvas.height / 2 + yFromCenter,
+			);
+
+			// b
+			ctx.font = 64 + rand(24) + "px serif";
+			updateHueAndColor();
+			ctx.strokeText(
+				b,
+				canvas.width / 2 + xFromCenter + rand(32),
+				canvas.height / 2 + yFromCenter,
+			);
+
+			// plus
+			ctx.font = "36px serif";
+			updateHueAndColor();
+			ctx.strokeText(
+				"plus",
+				canvas.width / 2,
+				canvas.height / 2 + yFromCenter - 12,
+			);
+
+			const getIndexForCoords = (x, y) => {
+				if (x < 0) x = 0;
+				else if (x >= canvas.width) x = canvas.width - 1;
+				if (y < 0) y = 0;
+				else if (y >= canvas.height) y = canvas.height - 1;
+				return (y * canvas.width + x) * 4;
+			};
+
+			const applySin = (sinWidth, sinHeight) => {
+				const image = ctx.getImageData(
+					0,
+					0,
+					canvas.width,
+					canvas.height,
+				);
+
+				const newImage = new ImageData(image.width, image.height);
+
+				const offset = Math.random() * (image.width / 2);
+
+				for (let y = 0; y < image.height; y++) {
+					for (let x = 0; x < image.width; x++) {
+						const sinOfX = Math.sin(x / sinWidth + offset); // -1 to 1
+						const i = getIndexForCoords(x, y);
+						const newI = getIndexForCoords(
+							x,
+							Math.round(y + sinOfX * sinHeight),
+						);
+
+						newImage.data[i] = image.data[newI];
+						newImage.data[i + 1] = image.data[newI + 1];
+						newImage.data[i + 2] = image.data[newI + 2];
+						newImage.data[i + 3] = 255; // alpha
+					}
+				}
+
+				ctx.putImageData(newImage, 0, 0);
+			};
+
+			applySin(20, 15);
+			applySin(5, 5);
+
+			// const applyNoise = (baseAmount, extraAmount) => {
+			// 	const image = ctx.getImageData(
+			// 		0,
+			// 		0,
+			// 		canvas.width,
+			// 		canvas.height,
+			// 	);
+
+			// 	const newImage = new ImageData(image.width, image.height);
+
+			// 	const offset = Math.random() * (image.width / 2);
+
+			// 	for (let y = 0; y < image.height; y++) {
+			// 		for (let x = 0; x < image.width; x++) {
+			// 			const i = getIndexForCoords(x, y);
+
+			// 			const multiplier =
+			// 				Math.sin((x + y + offset) / 20) * 0.5 + 0.5;
+			// 			const noise =
+			// 				Math.random() *
+			// 				(baseAmount + extraAmount * multiplier);
+
+			// 			newImage.data[i] = image.data[i] - noise;
+			// 			newImage.data[i + 1] = image.data[i + 1] - noise;
+			// 			newImage.data[i + 2] = image.data[i + 2] - noise;
+			// 			newImage.data[i + 3] = 255; // alpha
+			// 		}
+			// 	}
+
+			// 	ctx.putImageData(newImage, 0, 0);
+			// };
+
+			// applyNoise(16, 16);
+
+			console.log(a + b);
+		</script>
+	</body>
+</html>

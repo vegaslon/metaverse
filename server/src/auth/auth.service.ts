@@ -141,8 +141,11 @@ export class AuthService {
 				username,
 				email,
 				password: "",
+				captchaId: "",
+				captchaResponse: "",
 			},
 			"",
+			true,
 			true,
 		);
 		await this.userService.changeUserImageFromUrl(user, imageUrl);

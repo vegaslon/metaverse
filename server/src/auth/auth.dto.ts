@@ -68,6 +68,16 @@ export class AuthSignUpDto extends AuthDto {
 		message: "Username needs to use letters, numbers and underscores only",
 	})
 	username: string = "";
+
+	@ApiProperty({})
+	@IsNotEmpty({ message: "Captcha ID is required" })
+	@IsString({ message: "Captcha ID is not a string" })
+	captchaId: string = "";
+
+	@ApiProperty({})
+	@IsNotEmpty({ message: "Captcha response is required" })
+	@IsString({ message: "Captcha response is not a string" })
+	captchaResponse: string = "";
 }
 
 export class AuthExtSignUpDto {

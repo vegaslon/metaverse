@@ -209,6 +209,61 @@
 				</mat-error>
 			</mat-form-field>
 
+			<div style="margin: 16px 0;"></div>
+
+			<img
+				width="256"
+				height="96"
+				style="
+					border-radius: 16px;
+					box-shadow: 0 0 32px rgba(0, 0, 0, 0.15);
+				"
+				*ngIf="currentCaptcha"
+				[src]="currentCaptcha.imageUrl"
+			/>
+
+			<div style="margin: 8px 0;"></div>
+
+			<div
+				style="
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					width: 256px;
+				"
+			>
+				<mat-form-field style="flex-grow: 1;">
+					<input
+						matInput
+						type="text"
+						placeholder="Captcha response"
+						required
+						formControlName="captchaResponse"
+					/>
+					<mat-error
+						*ngIf="
+							signUpForm.hasError('required', 'captchaResponse')
+						"
+					>
+						Captcha response is required
+					</mat-error>
+					<mat-error
+						*ngIf="signUpForm.hasError('nan', 'captchaResponse')"
+					>
+						Captcha response must be a number
+					</mat-error>
+				</mat-form-field>
+				<button
+					type="button"
+					mat-icon-button
+					(click)="reloadCaptcha()"
+					[disabled]="isLoading"
+					style="margin-left: 8px;"
+				>
+					<mat-icon>refresh</mat-icon>
+				</button>
+			</div>
+
 			<div
 				style="
 					display: flex;

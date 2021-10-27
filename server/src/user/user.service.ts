@@ -25,6 +25,7 @@ import * as path from "path";
 import sharp from "sharp";
 import { AuthSignUpDto } from "../auth/auth.dto";
 import { AuthService } from "../auth/auth.service";
+import { CaptchaService } from "../captcha/captcha.service";
 import { derPublicKeyHeader } from "../common/der-public-key-header";
 import { MulterFile } from "../common/multer-file.model";
 import {
@@ -75,6 +76,7 @@ export class UserService implements OnModuleInit {
 		@Inject(forwardRef(() => SessionService))
 		private readonly sessionService: SessionService,
 		private readonly emailService: EmailService,
+		private readonly captchaService: CaptchaService,
 
 		// external services
 		private readonly jwtService: JwtService,
@@ -145,8 +147,21 @@ export class UserService implements OnModuleInit {
 		authSignUpDto: AuthSignUpDto,
 		hash: string,
 		emailVerified = false,
+		ignoreCaptcha = false,
 	) {
-		if (DEV) emailVerified = true;
+		if (DEV) {
+			emailVerified = true;
+		} else {
+			if (!ignoreCaptcha) {
+				const isCaptchaValid = await this.captchaService.validateCaptchaAndDelete(
+					authSignUpDto.captchaId,
+					authSignUpDto.captchaResponse,
+				);
+				if (!isCaptchaValid) {
+					throw new BadRequestException("Invalid captcha response");
+				}
+			}
+		}
 
 		return await new this.userModel({
 			username: authSignUpDto.username,

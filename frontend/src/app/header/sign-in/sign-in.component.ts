@@ -1,3 +1,4 @@
+import { HttpClient } from "@angular/common/http";
 import { Component, Inject, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
@@ -37,9 +38,15 @@ export class SignInComponent implements OnInit {
 			mode: "signIn" | "signUp" | "extSignUp";
 		},
 		public readonly utilsService: UtilsService,
+		private readonly http: HttpClient,
 	) {
 		if (data != null) {
-			if (data.mode != null) this.mode = data.mode;
+			if (data.mode != null) {
+				this.mode = data.mode;
+				if (this.mode == "signUp") {
+					this.reloadCaptcha();
+				}
+			}
 		}
 	}
 
@@ -47,6 +54,14 @@ export class SignInComponent implements OnInit {
 		let value: string = control.value + "";
 
 		if (!/^[a-zA-Z0-9\_]+$/.test(value)) return { badCharacters: true };
+
+		return null;
+	}
+
+	captchaValidator(control: FormControl): { [s: string]: boolean } | null {
+		let value: string = control.value + "";
+
+		if (!/^[0-9]+$/.test(value)) return { nan: true };
 
 		return null;
 	}
@@ -86,6 +101,10 @@ export class SignInComponent implements OnInit {
 				Validators.minLength(6),
 				Validators.maxLength(64),
 			]),
+			captchaResponse: new FormControl(null, [
+				Validators.required,
+				this.captchaValidator,
+			]),
 		});
 
 		this.extSignUpForm = new FormGroup({
@@ -108,7 +127,7 @@ export class SignInComponent implements OnInit {
 		});
 	}
 
-	onSubmit(captcha?: string, captchaRef?: any) {
+	onSubmit() {
 		let form = null;
 		if (this.mode === "signIn") form = this.signInForm;
 		if (this.mode === "signUp") form = this.signUpForm;
@@ -116,6 +135,13 @@ export class SignInComponent implements OnInit {
 		if (this.mode === "resetPassword") form = this.resetPasswordForm;
 		if (form == null) return;
 		if (form.invalid) return;
+
+		// inject captcha id
+		if (this.mode == "signUp") {
+			// if it doesnt exist, we're probably in dev mode
+			form.value.captchaId =
+				this.currentCaptcha?.id ?? "we dont have an id";
+		}
 
 		let service = null;
 		if (this.mode === "signIn")
@@ -148,6 +174,15 @@ export class SignInComponent implements OnInit {
 				this.errorMessage = err;
 				this.isLoading = false;
 				form.enable();
+
+				// reload captcha because it will destroy it if wrong
+				if (this.mode == "signUp") {
+					this.reloadCaptcha();
+					this.signUpForm.setValue({
+						...this.signUpForm.value,
+						captchaResponse: "",
+					});
+				}
 
 				//if (captchaRef)
 				//	(captchaRef.grecaptcha as RecaptchaComponent).reset();
@@ -226,9 +261,21 @@ export class SignInComponent implements OnInit {
 		}, 100);
 	}
 
+	currentCaptcha: { id: string; imageUrl: string } = null;
+	reloadCaptcha() {
+		this.http
+			.post<{ id: string; imageUrl: string }>("/api/captcha", {})
+			.subscribe(captcha => {
+				this.currentCaptcha = captcha;
+			});
+	}
+
 	onToggleSignUp() {
 		this.errorMessage = "";
 		this.mode = this.mode == "signIn" ? "signUp" : "signIn";
+		if (this.mode == "signUp") {
+			this.reloadCaptcha();
+		}
 	}
 
 	onToggleResetPassword() {

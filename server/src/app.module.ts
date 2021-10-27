@@ -22,6 +22,7 @@ import { PuppeteerModule } from "./puppeteer/puppeteer.module";
 import { SessionModule } from "./session/session.module";
 import { UserModule } from "./user/user.module";
 import { WorldController } from "./world.controller";
+import { CaptchaModule } from "./captcha/captcha.module";
 
 @Module({
 	imports: [
@@ -63,6 +64,7 @@ import { WorldController } from "./world.controller";
 		EmailModule,
 		PuppeteerModule,
 		FilesModule,
+		CaptchaModule,
 
 		ApiUserModule,
 		ApiUsersModule,
