@@ -8,12 +8,15 @@ import * as path from "path";
 import * as uuid from "uuid";
 import { AuthSignUpDto } from "../auth/auth.dto";
 import { AuthService } from "../auth/auth.service";
+import { Captcha, CaptchaSchema } from "../captcha/captcha.schema";
+import { CaptchaService } from "../captcha/captcha.service";
 import { generateRandomString, uuidToObjectId } from "../common/utils";
 import { Domain, DomainSchema } from "../domain/domain.schema";
 import { DomainService } from "../domain/domain.service";
 import { EmailModule } from "../email/email.module";
 import { JWT_SECRET } from "../environment";
 import { MetricsService } from "../metrics/metrics.service";
+import { PuppeteerService } from "../puppeteer/puppeteer.service";
 import {
 	DomainSessionSchema,
 	UserSession,
@@ -39,6 +42,7 @@ describe("UserService", () => {
 	let userSettingsModel: Model<UserSettings, {}>;
 	let userSessionModel: Model<UserSession, {}>;
 	let domainSessionModel: Model<UserSession, {}>;
+	let captchaModel: Model<Captcha, {}>;
 
 	let userService: UserService;
 	let sessionService: SessionService;
@@ -60,6 +64,7 @@ describe("UserService", () => {
 		userSettingsModel = makeModel("users.settings", UserSettingsSchema);
 		userSessionModel = makeModel("users.sessions", UserSessionSchema);
 		domainSessionModel = makeModel("domains.sessions", DomainSessionSchema);
+		captchaModel = makeModel("captchas", CaptchaSchema);
 
 		const module = await Test.createTestingModule({
 			imports: [
@@ -93,6 +98,10 @@ describe("UserService", () => {
 					useValue: domainSessionModel,
 				},
 				{
+					provide: getModelToken("captchas"),
+					useValue: captchaModel,
+				},
+				{
 					provide: getConnectionToken(""),
 					useValue: mongoose.connection,
 				},
@@ -104,6 +113,8 @@ describe("UserService", () => {
 				DomainService,
 				AuthService,
 				SessionService,
+				PuppeteerService,
+				CaptchaService,
 			],
 		}).compile();
 
@@ -124,7 +135,8 @@ describe("UserService", () => {
 			email == null ? generateRandomString(6) + "@gmail.com" : email;
 		dto.username = username == null ? generateRandomString(6) : username;
 
-		return userService.createUser(dto, "password hash");
+		// ignore captcha
+		return userService.createUser(dto, "password hash", false, true);
 	};
 
 	it("should create a new user and find it", async () => {
