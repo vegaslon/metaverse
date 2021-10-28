@@ -40,28 +40,28 @@ frontend deps:
         changes:
             - frontend/yarn.lock
 
-server tests:
-    stage: test
-    image: node:lts
+# server tests:
+#     stage: test
+#     image: node:lts
 
-    cache:
-        policy: pull
-        paths:
-            - server/node_modules/
+#     cache:
+#         policy: pull
+#         paths:
+#             - server/node_modules/
 
-    script:
-        - cd server
-        - yarn install
-        - yarn run test:cov
+#     script:
+#         - cd server
+#         - yarn install
+#         - yarn run test:cov
 
-    coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
+#     coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
 
-    artifacts:
-        expire_in: 7 days
-        paths:
-            - server/coverage/
-        reports:
-            junit: server/junit.xml
+#     artifacts:
+#         expire_in: 7 days
+#         paths:
+#             - server/coverage/
+#         reports:
+#             junit: server/junit.xml
 
 build all:
     stage: build
