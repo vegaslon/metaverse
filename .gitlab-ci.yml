@@ -67,8 +67,8 @@ build all:
     stage: build
     image: node:lts
 
-    needs:
-        - job: server tests
+    # needs:
+    #     - job: server tests
 
     cache:
         policy: pull
