@@ -147,6 +147,7 @@
 			*ngIf="mode == 'signUp'"
 			[formGroup]="signUpForm"
 			(ngSubmit)="onSubmit()"
+			autocomplete="off"
 		>
 			<mat-form-field style="width: 100%;">
 				<input
@@ -364,6 +365,7 @@
 			*ngIf="mode == 'extSignUp'"
 			[formGroup]="extSignUpForm"
 			(ngSubmit)="onSubmit()"
+			autocomplete="off"
 		>
 			<table style="margin-bottom: 16px;">
 				<tr>
