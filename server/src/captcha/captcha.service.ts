@@ -38,17 +38,15 @@ export class CaptchaService {
 			false,
 		);
 
-		const id = generateRandomString(16);
 		const captcha = new this.captchaModel({
-			_id: id,
 			image: buffer,
 			result,
 		});
 		await captcha.save();
 
-		const imageUrl = METAVERSE_URL + "/api/captcha/" + id;
+		const imageUrl = METAVERSE_URL + "/api/captcha/" + captcha.id;
 
-		return { id, imageUrl };
+		return { id: captcha.id, imageUrl };
 	}
 
 	async getCaptchaImage(id: string) {

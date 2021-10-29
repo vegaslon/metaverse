@@ -1,14 +1,15 @@
 import { Document, Query, Schema } from "mongoose";
 import { MongooseFilterUnused } from "../common/mongoose-filter-unused";
+import { generateRandomString } from "../common/utils";
 
 export const CaptchaSchema = new Schema({
-	_id: { type: String, required: true },
+	_id: { type: String, default: () => generateRandomString(16) },
 
 	image: { type: Buffer, required: true },
 	result: { type: String, required: true },
 
 	// 5 minutes
-	expireAt: { type: Date, default: Date.now() + 1000 * 60 * 5 },
+	expireAt: { type: Date, default: () => Date.now() + 1000 * 60 * 5 },
 });
 
 export interface Captcha extends Document {
