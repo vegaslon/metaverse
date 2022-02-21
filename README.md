@@ -1,4 +1,4 @@
-<img height="80" alt="metaverse" src="https://git.tivolicloud.com/tivolicloud-private/metaverse/-/raw/master/logo.svg"/>
+<img height="80" alt="metaverse" src="https://raw.githubusercontent.com/tivolicloud/metaverse/master/logo.svg"/>
 
 ---
 
